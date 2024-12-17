@@ -70,14 +70,6 @@
     @return map.get($font-weights, $key);
 }
 
-/*
-    * Retrieves a spacing value from the $spacing map.
-    * Examples: spacing("sm"), spacing("md"), spacing("lg")
-*/
-@function spacing($key) {
-    @return map.get($spacing, $key);
-}
-
 /* Retrieves a line height from the $line-heights map.
    Examples: line-height("normal"), line-height("tight"), line-height("loose") */
 @function line-height($key) {
@@ -93,4 +85,16 @@
         @warn "Unknown `#{$key}` in $border-radius.";
         @return null;
     }
+}
+
+/*
+    * Retrieves a spacing value from the $spacing map.
+    * Examples: spacing("sm"), spacing("md"), spacing("lg")
+*/
+@function spacing($key) {
+    @return map.get($spacing, $key);
+}
+
+@function padding($key) {
+    @return spacing($key);
 }

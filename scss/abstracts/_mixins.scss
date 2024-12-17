@@ -37,3 +37,9 @@
             0 15px 12px rgba(0, 0, 0, 0.22);
     }
 }
+
+@mixin text-style($size, $weight: "regular", $color: "text-primary") {
+    font-size: font-size($size);
+    font-weight: font-weight($weight);
+    color: color($color);
+}

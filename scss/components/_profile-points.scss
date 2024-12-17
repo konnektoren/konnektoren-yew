@@ -1,0 +1,56 @@
+.profile-points {
+    @include card(
+        (
+            padding: "sm",
+            radius: "lg",
+            shadow: "soft",
+        )
+    );
+    position: fixed;
+    top: padding("sm");
+    left: padding("sm");
+
+    font-family: font("secondary");
+    color: color("primary");
+    z-index: z-index("10");
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
+
+    .icon {
+        @include text-style("500");
+    }
+    .profile-name {
+        @include text-style("200", "regular", "secondary");
+    }
+    .points {
+        @include text-style("400", "bold", "secondary");
+    }
+
+    &:hover {
+        background-color: color("dark");
+        color: color("light");
+        transform: translateY(-3px);
+
+        .profile-name {
+            color: color("primary");
+        }
+
+        .points {
+            color: color("primary");
+        }
+    }
+
+    @include respond-to("small") {
+        padding: padding("lg") * 0.5;
+        .icon {
+            @include text-style("400");
+        }
+        .profile-name {
+            @include text-style("100");
+        }
+        .points {
+            @include text-style("300");
+        }
+    }
+}
