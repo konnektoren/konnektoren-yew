@@ -1,0 +1,63 @@
+@use "sass:map";
+
+$badge-configs: (
+    "size": (
+        "sm": 24px,
+        "md": 36px,
+        "lg": 56px,
+    ),
+    "counter": (
+        "sm": 16px,
+        "md": 20px,
+        "lg": 24px,
+    ),
+);
+
+@mixin badge-base($radius: "full") {
+    border-radius: border-radius($radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin badge-circular($size: "md", $config: ()) {
+    $default-config: (
+        shadow: "default",
+        theme: "primary",
+        text: "light",
+    );
+    $config: map-merge($default-config, $config);
+
+    $badge-size: map.get($badge-configs, "size", $size);
+
+    @include badge-base("full");
+    width: $badge-size;
+    height: $badge-size;
+    background-color: color(map.get($config, theme));
+    color: color(map.get($config, text));
+    @include card-shadow(map.get($config, shadow));
+}
+
+@mixin badge-counter($size: "sm", $config: ()) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    $default-config: (
+        theme: "danger",
+        text: "light",
+        shadow: "soft",
+    );
+    $config: map-merge($default-config, $config);
+
+    $counter-size: map.get($badge-configs, "counter", $size);
+
+    min-width: $counter-size;
+    height: $counter-size;
+    background-color: color(map.get($config, theme));
+    color: color(map.get($config, text));
+    font-size: font-size("300");
+    font-weight: font-weight("bold");
+    border-radius: $counter-size;
+    @include card-shadow(map.get($config, shadow));
+}

@@ -17,9 +17,9 @@ pub fn cart_badge(props: &CartBadgeProps) -> Html {
     });
 
     html! {
-        <div class="cart-badge" {onclick}>
-            <i class="fas fa-shopping-cart"></i>
-            <span>{ num_products }</span>
+        <div class="cart__badge" {onclick}>
+            <i class="cart__icon fas fa-shopping-cart"></i>
+            <span class="cart__counter">{ num_products }</span>
         </div>
     }
 }
@@ -52,5 +52,13 @@ mod preview {
             },
             ..Default::default()
         },
+        (
+            "Empty cart",
+            CartBadgeProps {
+                on_click: Callback::noop(),
+                cart: Cart { products: vec![] },
+                ..Default::default()
+            }
+        )
     );
 }
