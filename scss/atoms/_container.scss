@@ -18,3 +18,20 @@
 %flex-container {
     @include flex-container;
 }
+
+@mixin fluid-container($margin-top: spacing("xs")) {
+    position: relative;
+    width: 100%;
+    margin: $margin-top 0 0 0;
+    padding: 0;
+    border-radius: border-radius("md");
+    overflow: hidden;
+}
+
+%fluid-container {
+    @include fluid-container;
+}
+
+%fluid-container-flush {
+    @include fluid-container(0);
+}

@@ -15,9 +15,14 @@ pub fn progress_bar(props: &ProgressBarProps) -> Html {
     };
 
     html! {
-        <div class="progress-container">
-            <div class="progress-bar" style={format!("width: {:.2}%;", progress)}>
-                {props.label.clone()}
+        <div class="progress">
+            <div
+                class="progress__bar"
+                style={format!("width: {:.2}%;", progress)}
+            >
+                <span class="progress__label">
+                    {props.label.clone()}
+                </span>
             </div>
         </div>
     }

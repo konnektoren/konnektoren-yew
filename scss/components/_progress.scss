@@ -1,0 +1,43 @@
+.progress {
+    $height: spacing("xl");
+    $height-small: spacing("lg");
+
+    @extend %fluid-container;
+    height: $height;
+    background-color: color("tertiary");
+    z-index: z-index("progress");
+
+    &__bar {
+        height: 100%;
+        text-align: center;
+        line-height: $height;
+        transition: width 0.4s ease;
+
+        animation:
+            moveGradient 3s linear infinite,
+            glowing 3s infinite alternate;
+        background: linear-gradient(
+            90deg,
+            color("danger"),
+            color("warning"),
+            color("success"),
+            color("info")
+        );
+        background-size: 300% 100%;
+    }
+
+    &__label {
+        color: light-color("text-primary");
+    }
+
+    @include respond-to("small") {
+        height: $height-small;
+
+        &__bar {
+            line-height: $height-small;
+        }
+    }
+}
+
+@include glow-animation("danger", "warning");
+@include gradient-animation;
