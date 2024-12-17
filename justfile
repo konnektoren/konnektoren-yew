@@ -65,10 +65,6 @@ fmt:
 fmt-check:
     cargo fmt --check
 
-# Run clippy lints
-lint:
-    cargo clippy -- -D warnings
-
 # Show current configuration
 config:
     @echo "Current configuration:"
@@ -92,3 +88,10 @@ update-styles:
 # Show styles status
 styles-status:
     cd {{styles}} && just vendor-status
+
+lint-style:
+    npx stylelint "scss/**/*.{css,scss}" --config scss/.stylelintrc.json --ignore-path scss/.stylelintignore
+
+# You might want to update your existing lint command to include style linting
+lint: lint-style
+    cargo clippy -- -D warnings
