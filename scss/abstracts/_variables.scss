@@ -1,41 +1,31 @@
 /* Font Family Map */
+$font-stack-sans:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+$font-stack-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+$font-stack-mono: "Fira Code", "Courier New", Courier, monospace;
+$font-stack-ui:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
 $font-families: (
-    "primary": (
-        "Grotley",
-        sans-serif,
-    ),
-    "secondary": (
-        "Merriweather",
-        serif,
-    ),
-    "heading": (
-        "SuperBubble",
-        sans-serif,
-    ),
-    "certificate-heading": (
-        "Orange Juice",
-        cursive,
-    ),
-    "certificate": (
-        "Ballonku",
-        sans-serif,
-    ),
-    "button": (
-        "OugkehRound",
-        sans-serif,
-    ),
-    "navigation": (
-        "Barlow",
-        sans-serif,
-    ),
-    "footer": (
-        "Tangerine",
-        cursive,
-    ),
-    "info": (
-        "Varela Round",
-        sans-serif,
-    ),
+    "primary": $font-stack-sans,
+    "secondary": $font-stack-serif,
+    "mono": $font-stack-mono,
+    "ui": $font-stack-ui,
+    "heading": $font-stack-serif,
+    "button": $font-stack-ui,
+    "navigation": $font-stack-ui,
 );
 
 /* Font Sizes */

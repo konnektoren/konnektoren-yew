@@ -26,7 +26,7 @@ setup-styles:
 
 # Start development server
 serve:
-    trunk serve
+    trunk serve --features=yew-preview
 
 # Build the project for release
 build: styles-check

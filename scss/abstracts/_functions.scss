@@ -1,17 +1,117 @@
 @use "sass:map";
+@use "sass:color";
+@use "sass:string";
 
-@function color($key) {
-    @return map.get($colors, $key);
+/* Helper function to check if a value is a valid color */
+@function is-color($value) {
+    @return type-of($value) == "color" or string.index(#{$value}, "#") != null;
 }
 
+/* Retrieves a color from the $colors map */
+@function color($key) {
+    $color: map.get($colors, $key);
+    @if not $color {
+        @warn "Color `#{$key}` not found in $colors map.";
+        @return null;
+    }
+    @return $color;
+}
+
+/* Generates a lighter version of a color */
+@function lighten-color($key, $amount: 10%) {
+    $color: map.get($colors, $key);
+
+    @if not $color {
+        @warn "Color `#{$key}` not found in $colors map.";
+        @return null;
+    }
+
+    // Default fallback colors for CSS variables
+    $fallback-colors: (
+        "primary": #ffa500,
+        "secondary": #9932cc,
+        "tertiary": #a0a0a0,
+        "background-primary": #ffffff,
+        "text-primary": #000000,
+    );
+
+    // If it's a CSS variable, use fallback color
+    @if string.index(#{$color}, "var(--") {
+        $color-name: string.slice($key, 1);
+        $fallback: map.get($fallback-colors, $color-name);
+
+        @if $fallback {
+            @return lighten($fallback, $amount);
+        } @else {
+            @warn "No fallback color defined for `#{$key}`.";
+            @return null;
+        }
+    }
+
+    // If it's a direct color value
+    @if is-color($color) {
+        @return lighten($color, $amount);
+    }
+
+    @warn "Invalid color value for `#{$key}`: #{$color}";
+    @return null;
+}
+
+/* Generates a darker version of a color */
+@function darken-color($key, $amount: 10%) {
+    $color: map.get($colors, $key);
+
+    @if not $color {
+        @warn "Color `#{$key}` not found in $colors map.";
+        @return null;
+    }
+
+    // Default fallback colors for CSS variables
+    $fallback-colors: (
+        "primary": #ffa500,
+        "secondary": #9932cc,
+        "tertiary": #a0a0a0,
+        "background-primary": #ffffff,
+        "text-primary": #000000,
+    );
+
+    // If it's a CSS variable, use fallback color
+    @if string.index(#{$color}, "var(--") {
+        $color-name: string.slice($key, 1);
+        $fallback: map.get($fallback-colors, $color-name);
+
+        @if $fallback {
+            @return darken($fallback, $amount);
+        } @else {
+            @warn "No fallback color defined for `#{$key}`.";
+            @return null;
+        }
+    }
+
+    // If it's a direct color value
+    @if is-color($color) {
+        @return darken($color, $amount);
+    }
+
+    @warn "Invalid color value for `#{$key}`: #{$color}";
+    @return null;
+}
+
+/* Retrieves a z-index value from the $z-index map.
+   Examples: z-index("modal"), z-index("header"), z-index("footer") */
 @function z-index($key) {
     @return map.get($z-index, $key);
 }
 
+/* Retrieves a font family from the $font-families map.
+   Examples: font("primary"), font("heading"), font("button") */
 @function font($key) {
     @return map.get($font-families, $key);
 }
 
+/* Retrieves a font size from the $font-sizes map.
+   Returns null and issues a warning if the key is not found.
+   Examples: font-size("md"), font-size("xl"), font-size("200") */
 @function font-size($key) {
     @if map.has-key($font-sizes, $key) {
         @return map.get($font-sizes, $key);
@@ -21,10 +121,14 @@
     }
 }
 
+/* Retrieves a font weight from the $font-weights map.
+   Examples: font-weight("light"), font-weight("bold"), font-weight("normal") */
 @function font-weight($key) {
     @return map.get($font-weights, $key);
 }
 
+/* Retrieves a line height from the $line-heights map.
+   Examples: line-height("normal"), line-height("tight"), line-height("loose") */
 @function line-height($key) {
     @return map.get($line-heights, $key);
 }
