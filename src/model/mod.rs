@@ -6,5 +6,5 @@ mod settings;
 
 pub use design::Design;
 pub use inbox::Inbox;
-pub use session_initializer::SessionInitializer;
+pub use session_initializer::{DefaultSessionInitializer, SessionInitializer};
 pub use settings::Settings;

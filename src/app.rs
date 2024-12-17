@@ -21,16 +21,19 @@ use crate::components::challenge::{
 use crate::components::{AchievementsComponent, CertificateComponent, CertificateImageComponent};
 #[cfg(feature = "effects")]
 use crate::effects::BlinkAnimation;
+use crate::i18n::{I18nConfig, I18nProvider};
+use crate::model::DefaultSessionInitializer;
 use crate::prelude::{
     BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,
     ChallengeReviewComponent, GameControllerProvider, InformativeComponent,
     InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
     QuestionComponent, ReadText, RepositoryProvider, SelectLanguage, SelectLevelComp,
 };
-
-use crate::i18n::{I18nConfig, I18nProvider};
+use crate::providers::create_repositories;
+use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
 use log;
+use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
 use yew_preview::{create_component_item, prelude::*};
@@ -181,9 +184,13 @@ pub fn App() -> Html {
         create_component_item!("Example", Example, vec![("default", ())]),
     ];
 
+    let storage = LocalStorage::new(None);
+    let session_initilizer = DefaultSessionInitializer;
+    let repository_config = create_repositories(storage, Arc::new(session_initilizer));
+
     #[cfg(feature = "yew-preview")]
     html! {
-        <RepositoryProvider>
+        <RepositoryProvider config={repository_config}>
         <I18nProvider config={i18n_config}>
             <GameControllerProvider>
                 <PreviewPage components={component_list} />

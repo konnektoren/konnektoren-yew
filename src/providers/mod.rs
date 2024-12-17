@@ -24,6 +24,8 @@ pub use repository_hooks::{
     use_profile_repository, use_session, use_session_repository, use_settings,
     use_settings_repository,
 };
-pub use repository_provider::{RepositoryConfig, RepositoryProvider, RepositoryProviderProps};
+pub use repository_provider::{
+    create_repositories, RepositoryConfig, RepositoryProvider, RepositoryProviderProps,
+};
 pub use session_provider::{SessionContext, SessionProvider};
 pub use settings_provider::{SettingsContext, SettingsProvider};
