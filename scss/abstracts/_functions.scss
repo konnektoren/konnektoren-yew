@@ -23,42 +23,21 @@
 
     @if not $color {
         @warn "Color `#{$key}` not found in $colors map.";
-        @return null;
+        @return get-fallback-color($key);
     }
 
-    @if string.index(#{$color}, "var(--") {
-        $color-name: string.slice($key, 1);
-        @return get-fallback-color($color-name);
-    }
-
-    @if is-color($color) {
-        @return $color;
-    }
-
-    @warn "Invalid color value for `#{$key}`: #{$color}";
-    @return get-fallback-color($key);
+    @return $color;
 }
 
 /* Generates a lighter version of a color */
-@function lighten-color($key, $amount: 10%) {
+@function lighten-color($key, $amount: 1.1) {
     $color: color($key);
-
-    @if not $color {
-        @return null;
-    }
-
-    @return lighten($color, $amount);
+    @return color-mix(in srgb, white calc(($amount - 1) * 100%), $color);
 }
 
-/* Generates a darker version of a color */
-@function darken-color($key, $amount: 10%) {
+@function darken-color($key, $amount: 0.9) {
     $color: color($key);
-
-    @if not $color {
-        @return null;
-    }
-
-    @return darken($color, $amount);
+    @return color-mix(in srgb, black calc((1 - $amount) * 100%), $color);
 }
 
 /* Retrieves a z-index value from the $z-index map.

@@ -1,0 +1,20 @@
+@mixin centered-input {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("border-primary");
+    border-radius: border-radius("sm");
+    font-size: font-size("md");
+    color: color("text-primary");
+    background-color: light-color("background-primary");
+    text-align: center;
+
+    &:focus {
+        border-color: color("primary");
+        box-shadow: 0 0 5px rgba(color("primary"), 0.5);
+        outline: none;
+    }
+
+    &:hover {
+        border-color: light-color("primary");
+    }
+}

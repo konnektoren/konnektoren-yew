@@ -10,13 +10,13 @@
     margin-bottom: $margin-bottom;
 }
 
-%base-container {
-    @include base-container;
-    background-color: color("background-primary");
-}
-
-%flex-container {
-    @include flex-container;
+@mixin centered-container($max-width: 400px) {
+    max-width: $max-width;
+    margin: spacing("md") auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 @mixin fluid-container($margin-top: spacing("xs")) {
@@ -26,6 +26,15 @@
     padding: 0;
     border-radius: border-radius("md");
     overflow: hidden;
+}
+
+%base-container {
+    @include base-container;
+    background-color: color("background-primary");
+}
+
+%flex-container {
+    @include flex-container;
 }
 
 %fluid-container {
