@@ -1,0 +1,15 @@
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == "small" {
+        @include gls-breakpoint(min, small) {
+            @content;
+        }
+    } @else if $breakpoint == "medium" {
+        @include gls-breakpoint(min, medium) {
+            @content;
+        }
+    } @else if $breakpoint == "large" {
+        @include gls-breakpoint(min, large) {
+            @content;
+        }
+    }
+}

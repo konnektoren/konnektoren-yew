@@ -1,8 +1,14 @@
 @charset "UTF-8";
 
-/* https://github.com/konnektoren/konnektoren-yew
+/** https://github.com/konnektoren/konnektoren-yew
 * Following styleguide:
 * * https://sass-guidelin.es/#the-7-1-pattern
 */
 
-@forward "vendors";
+// import vendors first
+@import "vendors";
+
+@import "abstracts";
+
+// import components last
+@import "components";
