@@ -1,0 +1,20 @@
+@mixin flex-container($gap: 1rem) {
+    display: flex;
+    align-items: center;
+    gap: $gap;
+}
+
+@mixin base-container($padding: 1rem, $margin-bottom: 1rem) {
+    padding: $padding;
+    border-radius: 0.5rem;
+    margin-bottom: $margin-bottom;
+}
+
+%base-container {
+    @include base-container;
+    background-color: color("background-primary");
+}
+
+%flex-container {
+    @include flex-container;
+}

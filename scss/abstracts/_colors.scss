@@ -2,6 +2,22 @@
     @return var(--#{$key});
 }
 
+/* Fallback colors map */
+$fallback-colors: (
+    "primary": #ffa500,
+    "secondary": #9932cc,
+    "tertiary": #a0a0a0,
+    "background-primary": #ffffff,
+    "text-primary": #000000,
+    "text-secondary": #666666,
+    "success": #28a745,
+    "warning": #ffc107,
+    "danger": #dc3545,
+    "info": #17a2b8,
+    "light": #f8f9fa,
+    "dark": #343a40,
+);
+
 /* Color map - reorganized, duplicates removed, and categorized */
 $colors: (
     "primary": theme-color("primary-color"),

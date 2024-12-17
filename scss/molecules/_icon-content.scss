@@ -1,0 +1,31 @@
+@mixin icon-title-content {
+    @extend %base-container;
+    @extend %flex-container;
+
+    &__icon {
+        font-size: font-size("2xl");
+        flex-shrink: 0;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    &__title {
+        margin-bottom: 0.5rem;
+        font-weight: font-weight("bold");
+        color: color("text-primary");
+    }
+
+    &__text {
+        font-weight: font-weight("medium");
+        color: color("text-secondary");
+    }
+
+    @include respond-to("small") {
+        font-size: font-size("md");
+        padding: 0.5rem;
+    }
+}

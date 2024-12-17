@@ -7,94 +7,58 @@
     @return type-of($value) == "color" or string.index(#{$value}, "#") != null;
 }
 
-/* Retrieves a color from the $colors map */
+/* Helper function to get fallback color */
+@function get-fallback-color($key) {
+    $fallback: map.get($fallback-colors, $key);
+    @if not $fallback {
+        @warn "No fallback color defined for `#{$key}`.";
+        @return null;
+    }
+    @return $fallback;
+}
+
+/* Retrieves a color from the $colors map with fallback */
 @function color($key) {
     $color: map.get($colors, $key);
+
     @if not $color {
         @warn "Color `#{$key}` not found in $colors map.";
         @return null;
     }
-    @return $color;
+
+    @if string.index(#{$color}, "var(--") {
+        $color-name: string.slice($key, 1);
+        @return get-fallback-color($color-name);
+    }
+
+    @if is-color($color) {
+        @return $color;
+    }
+
+    @warn "Invalid color value for `#{$key}`: #{$color}";
+    @return get-fallback-color($key);
 }
 
 /* Generates a lighter version of a color */
 @function lighten-color($key, $amount: 10%) {
-    $color: map.get($colors, $key);
+    $color: color($key);
 
     @if not $color {
-        @warn "Color `#{$key}` not found in $colors map.";
         @return null;
     }
 
-    // Default fallback colors for CSS variables
-    $fallback-colors: (
-        "primary": #ffa500,
-        "secondary": #9932cc,
-        "tertiary": #a0a0a0,
-        "background-primary": #ffffff,
-        "text-primary": #000000,
-    );
-
-    // If it's a CSS variable, use fallback color
-    @if string.index(#{$color}, "var(--") {
-        $color-name: string.slice($key, 1);
-        $fallback: map.get($fallback-colors, $color-name);
-
-        @if $fallback {
-            @return lighten($fallback, $amount);
-        } @else {
-            @warn "No fallback color defined for `#{$key}`.";
-            @return null;
-        }
-    }
-
-    // If it's a direct color value
-    @if is-color($color) {
-        @return lighten($color, $amount);
-    }
-
-    @warn "Invalid color value for `#{$key}`: #{$color}";
-    @return null;
+    @return lighten($color, $amount);
 }
 
 /* Generates a darker version of a color */
 @function darken-color($key, $amount: 10%) {
-    $color: map.get($colors, $key);
+    $color: color($key);
 
     @if not $color {
-        @warn "Color `#{$key}` not found in $colors map.";
         @return null;
     }
 
-    // Default fallback colors for CSS variables
-    $fallback-colors: (
-        "primary": #ffa500,
-        "secondary": #9932cc,
-        "tertiary": #a0a0a0,
-        "background-primary": #ffffff,
-        "text-primary": #000000,
-    );
-
-    // If it's a CSS variable, use fallback color
-    @if string.index(#{$color}, "var(--") {
-        $color-name: string.slice($key, 1);
-        $fallback: map.get($fallback-colors, $color-name);
-
-        @if $fallback {
-            @return darken($fallback, $amount);
-        } @else {
-            @warn "No fallback color defined for `#{$key}`.";
-            @return null;
-        }
-    }
-
-    // If it's a direct color value
-    @if is-color($color) {
-        @return darken($color, $amount);
-    }
-
-    @warn "Invalid color value for `#{$key}`: #{$color}";
-    @return null;
+    @return darken($color, $amount);
 }
 
 /* Retrieves a z-index value from the $z-index map.
