@@ -5,10 +5,11 @@
 * * https://sass-guidelin.es/#the-7-1-pattern
 */
 
-// import vendors first
+/* import vendors first */
 @import "vendors";
 
 @import "abstracts";
+@import "base";
 
-// import components last
+/* import components last */
 @import "components";

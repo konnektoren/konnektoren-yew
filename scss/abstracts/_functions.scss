@@ -1,0 +1,30 @@
+@use "sass:map";
+
+@function color($key) {
+    @return map.get($colors, $key);
+}
+
+@function z-index($key) {
+    @return map.get($z-index, $key);
+}
+
+@function font($key) {
+    @return map.get($font-families, $key);
+}
+
+@function font-size($key) {
+    @if map.has-key($font-sizes, $key) {
+        @return map.get($font-sizes, $key);
+    } @else {
+        @warn "Unknown `#{$key}` in $font-sizes.";
+        @return null;
+    }
+}
+
+@function font-weight($key) {
+    @return map.get($font-weights, $key);
+}
+
+@function line-height($key) {
+    @return map.get($line-heights, $key);
+}
