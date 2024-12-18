@@ -2,16 +2,7 @@
     @extend %base-container;
     @extend %flex-container;
 
-    &__icon {
-        font-size: font-size("2xl");
-        flex-shrink: 0;
-    }
-
-    &__content {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    }
+    @include content-layout;
 
     &__title {
         margin-bottom: 0.5rem;
