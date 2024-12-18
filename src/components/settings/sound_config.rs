@@ -41,3 +41,20 @@ pub fn sound_config(props: &SoundConfigProps) -> Html {
         </div>
     }
 }
+
+#[cfg(feature = "yew-preview")]
+mod preview {
+    use super::*;
+    use yew_preview::prelude::*;
+
+    yew_preview::create_preview!(
+        SoundConfig,
+        SoundConfigProps {
+            settings: Settings {
+                sound_volume: 0.5,
+                ..Settings::default()
+            },
+            on_change: Callback::noop()
+        },
+    );
+}

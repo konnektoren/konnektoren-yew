@@ -1,0 +1,7 @@
+.settings {
+    @include vertical-layout;
+
+    button {
+        @include action-button("md");
+    }
+}
