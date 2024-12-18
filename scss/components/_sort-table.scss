@@ -1,0 +1,143 @@
+.sort-table {
+    @include card(
+        (
+            padding: "lg",
+            shadow: "medium",
+            theme: "background-primary",
+        )
+    );
+    @include vertical-layout(
+        (
+            gap: "lg",
+            align: stretch,
+        )
+    );
+    max-width: 800px;
+    margin: 0 auto;
+
+    &__title {
+        @include material-h3;
+        color: color("text-primary");
+    }
+
+    &__description {
+        font-size: font-size("400");
+        color: color("text-secondary");
+        line-height: line-height("normal");
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: border-radius("md");
+        overflow: hidden;
+        @include card-shadow("soft");
+    }
+
+    &__header {
+        background-color: color("primary");
+
+        &-cell {
+            padding: spacing("sm");
+            font-size: font-size("500");
+            color: color("light");
+            text-align: left;
+            font-weight: font-weight("bold");
+            font-family: font("ui");
+        }
+    }
+
+    &__body {
+        &-row {
+            transition: background-color 0.3s ease;
+
+            &:nth-child(even) {
+                background-color: color("background-primary");
+            }
+
+            &:nth-child(odd) {
+                background-color: color("background-secondary");
+            }
+
+            &:hover,
+            &--selected {
+                background-color: lighten-color("hover", 1.8);
+            }
+        }
+
+        &-cell {
+            padding: spacing("sm");
+            font-size: font-size("400");
+            color: color("text-primary");
+            border-bottom: 1px solid color("border-primary");
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: lighten-color("hover", 1.9);
+            }
+
+            &--selected {
+                background-color: lighten-color("primary", 1.8);
+                color: color("text-primary");
+            }
+
+            &--dragging {
+                opacity: 0.5;
+                background-color: lighten-color("primary", 1.9);
+            }
+        }
+    }
+
+    &__actions {
+        @include horizontal-layout(
+            (
+                justify: center,
+                gap: "md",
+            )
+        );
+
+        &-button {
+            @include action-button;
+        }
+    }
+
+    @include responsive-layout("small") {
+        padding: spacing("md");
+        gap: spacing("md");
+
+        &__title {
+            font-size: font-size("600");
+        }
+
+        &__description {
+            font-size: font-size("300");
+        }
+
+        &__table {
+            border-radius: border-radius("sm");
+        }
+
+        &__header {
+            &-cell {
+                padding: spacing("xs");
+                font-size: font-size("400");
+            }
+        }
+
+        &__body {
+            &-cell {
+                padding: spacing("xs");
+                font-size: font-size("300");
+            }
+        }
+
+        &__actions {
+            &-button {
+                @include action-button("sm");
+            }
+        }
+    }
+}
