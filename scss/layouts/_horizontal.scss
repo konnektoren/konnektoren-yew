@@ -1,0 +1,16 @@
+@mixin horizontal-layout($config: ()) {
+    $default-config: (
+        justify: center,
+        gap: "md",
+        wrap: nowrap,
+        align: center,
+    );
+    $config: map-merge($default-config, $config);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: map-get($config, justify);
+    align-items: map-get($config, align);
+    flex-wrap: map-get($config, wrap);
+    gap: spacing(map-get($config, gap));
+}

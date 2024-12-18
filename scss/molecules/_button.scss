@@ -1,0 +1,130 @@
+@mixin primary-button($size: "md") {
+    @include button(
+        (
+            variant: "primary",
+            size: $size,
+            elevation: true,
+        )
+    );
+}
+
+@mixin secondary-button($size: "md") {
+    @include button(
+        (
+            variant: "secondary",
+            size: $size,
+            elevation: true,
+        )
+    );
+}
+
+@mixin tertiary-button($size: "md") {
+    @include button(
+        (
+            variant: "tertiary",
+            size: $size,
+            elevation: false,
+        )
+    );
+}
+
+@mixin action-button($size: "lg") {
+    @include button(
+        (
+            variant: "primary",
+            size: $size,
+            elevation: true,
+            uppercase: true,
+            full-width: true,
+        )
+    );
+}
+
+@mixin icon-button($size: "md") {
+    @include button(
+        (
+            variant: "secondary",
+            size: $size,
+            elevation: false,
+        )
+    );
+    padding: spacing("xs");
+    border-radius: border-radius("full");
+}
+
+@mixin text-button {
+    @include button(
+        (
+            variant: "tertiary",
+            size: "sm",
+            elevation: false,
+        )
+    );
+    background: transparent;
+    text-decoration: underline;
+
+    &:hover {
+        background: transparent;
+        color: color("hover");
+        transform: none;
+    }
+}
+
+@mixin submit-button {
+    @include button(
+        (
+            variant: "primary",
+            size: "lg",
+            elevation: true,
+            uppercase: true,
+        )
+    );
+    font-weight: font-weight("bold");
+}
+
+@mixin navigation-button($size: "md") {
+    @include button(
+        (
+            variant: "secondary",
+            size: $size,
+            elevation: false,
+            uppercase: true,
+        )
+    );
+    letter-spacing: 1px;
+}
+
+@mixin danger-button($size: "md") {
+    @include button(
+        (
+            variant: "primary",
+            size: $size,
+            elevation: true,
+        )
+    );
+    background-color: color("danger");
+
+    &:hover {
+        background-color: darken-color("danger", 0.1);
+    }
+}
+
+@mixin outline-button($variant: "primary") {
+    @include button(
+        (
+            variant: $variant,
+            size: "md",
+            elevation: false,
+        )
+    );
+    background: transparent;
+    border: 2px solid color(map.get($button-configs, "variant", $variant, "bg"));
+    color: color(map.get($button-configs, "variant", $variant, "bg"));
+
+    &:hover {
+        background-color: color(
+            map.get($button-configs, "variant", $variant, "bg")
+        );
+        color: color(map.get($button-configs, "variant", $variant, "text"));
+    }
+}

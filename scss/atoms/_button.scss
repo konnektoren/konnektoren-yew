@@ -1,0 +1,103 @@
+@use "sass:map";
+
+$button-configs: (
+    "size": (
+        "sm": (
+            padding: (
+                "xs" "sm",
+            ),
+            font: "200",
+        ),
+        "md": (
+            padding: (
+                "sm" "md",
+            ),
+            font: "300",
+        ),
+        "lg": (
+            padding: (
+                "md" "lg",
+            ),
+            font: "400",
+        ),
+    ),
+    "variant": (
+        "primary": (
+            bg: "primary",
+            text: "button-text",
+            hover: "button-hover",
+        ),
+        "secondary": (
+            bg: "secondary",
+            text: "button-text",
+            hover: "button-hover",
+        ),
+        "tertiary": (
+            bg: "tertiary",
+            text: "button-text",
+            hover: "button-hover",
+        ),
+    ),
+);
+
+@mixin button($config: ()) {
+    $default-config: (
+        size: "md",
+        variant: "primary",
+        elevation: true,
+        uppercase: false,
+        full-width: false,
+    );
+    $config: map-merge($default-config, $config);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-family: font("button");
+    font-weight: font-weight("medium");
+    border-radius: border-radius("md");
+    transition: all 0.3s ease;
+
+    $size-config: map.get($button-configs, "size", map.get($config, size));
+    $padding: map.get($size-config, "padding");
+    padding: spacing(nth($padding, 1)) spacing(nth($padding, 1));
+    font-size: font-size(map.get($size-config, "font"));
+
+    $variant-config: map.get(
+        $button-configs,
+        "variant",
+        map.get($config, variant)
+    );
+    background-color: color(map.get($variant-config, "bg"));
+    color: color(map.get($variant-config, "text"));
+
+    @if map.get($config, elevation) {
+        @include elevation(2);
+    }
+
+    @if map.get($config, uppercase) {
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    @if map.get($config, full-width) {
+        width: 100%;
+    }
+
+    &:hover {
+        background-color: color(map.get($variant-config, "hover"));
+        @if map.get($config, elevation) {
+            @include elevation(4);
+        }
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0);
+        @if map.get($config, elevation) {
+            @include elevation(8);
+        }
+    }
+}
