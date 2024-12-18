@@ -1,0 +1,55 @@
+/* Apply adaptive layout and basic reset */
+body {
+    @include gls-adaptive();
+    font-family: font("primary");
+    font-size: font-size("base");
+    line-height: line-height("normal");
+    font-weight: font-weight("normal");
+    color: color("text-primary");
+    background-color: color("background-primary");
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Basic heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: font("heading");
+    font-weight: font-weight("bold");
+    line-height: line-height("tight");
+    color: color("text-primary");
+}
+
+/* Links */
+a {
+    color: color("primary");
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+        color: darken-color("primary");
+    }
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1rem;
+}
+
+/* Code blocks */
+code,
+pre {
+    font-family: font("mono");
+    font-size: font-size("sm");
+}
+
+/* Selection styling */
+::selection {
+    background-color: color("primary");
+    color: color("text-primary");
+}

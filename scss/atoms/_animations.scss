@@ -1,0 +1,21 @@
+@mixin gradient-animation {
+    @keyframes moveGradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        100% {
+            background-position: 300% 50%;
+        }
+    }
+}
+
+@mixin glow-animation($from-color, $to-color) {
+    @keyframes glowing {
+        0% {
+            box-shadow: 0 0 5px color($from-color);
+        }
+        100% {
+            box-shadow: 0 0 20px color($to-color);
+        }
+    }
+}

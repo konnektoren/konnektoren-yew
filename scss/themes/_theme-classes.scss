@@ -1,0 +1,10 @@
+@import "light";
+@import "dark";
+
+.theme-light {
+    @include light-theme;
+}
+
+.theme-dark {
+    @include dark-theme;
+}

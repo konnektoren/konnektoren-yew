@@ -1,0 +1,61 @@
+.product {
+    @include card(());
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @include card-layout;
+    @include content-layout;
+
+    &__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: spacing("sm");
+    }
+
+    &__tag {
+        padding: spacing("xs") spacing("sm");
+        border-radius: border-radius("sm");
+        background-color: color("background-secondary");
+
+        &:hover {
+            background-color: color("hover");
+        }
+    }
+
+    &__price {
+        font-size: font-size("500");
+        font-weight: font-weight("bold");
+        color: color("primary");
+    }
+
+    &__button {
+        width: 100%;
+        max-width: 200px;
+        padding: spacing("sm") spacing("md");
+        border-radius: border-radius("md");
+        background-color: color("button-primary");
+        color: color("button-text");
+
+        &:hover {
+            background-color: color("button-hover");
+        }
+    }
+
+    @include respond-to("small") {
+        &__title {
+            font-size: font-size("500");
+        }
+
+        &__description {
+            font-size: font-size("300");
+        }
+
+        &__button {
+            font-size: font-size("300");
+            padding: spacing("xs") spacing("sm");
+        }
+    }
+}

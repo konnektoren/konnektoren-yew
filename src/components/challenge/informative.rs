@@ -32,7 +32,7 @@ pub fn informative_component(props: &InformativeComponentProps) -> Html {
     };
 
     html! {
-        <div>
+        <div class="informative">
             <h1>{&props.challenge.description}</h1>
             <p>{text}</p>
             <button onclick={on_finish}>{"Finish"}</button>

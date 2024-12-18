@@ -1,0 +1,24 @@
+name: Stylelint
+
+on:
+  push:
+    paths:
+      - "**/*.scss"
+      - "**/*.css"
+  pull_request:
+    paths:
+      - "**/*.scss"
+      - "**/*.css"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Stylelint
+        uses: actions-hub/stylelint@master
+        env:
+          PATTERN: "scss/**/*.{css,scss}"
+          IGNORE_PATH: "scss/.stylelintignore"
+          CONFIG_PATH: "scss/.stylelintrc.json"

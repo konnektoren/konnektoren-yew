@@ -1,0 +1,38 @@
+.cart {
+    &__badge {
+        position: relative;
+
+        @include badge-circular(
+            "lg",
+            (
+                theme: "secondary",
+            )
+        );
+
+        &:hover {
+            @include elevation(4);
+        }
+
+        &:active {
+            @include elevation(8);
+        }
+    }
+
+    &__icon {
+        color: color("light");
+        font-size: font-size("700");
+    }
+
+    &__counter {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+
+        @include badge-counter(
+            "lg",
+            (
+                theme: "danger",
+            )
+        );
+    }
+}

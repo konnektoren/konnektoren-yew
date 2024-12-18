@@ -42,3 +42,20 @@ pub fn music_config(props: &MusicConfigProps) -> Html {
         </div>
     }
 }
+
+#[cfg(feature = "yew-preview")]
+mod preview {
+    use super::*;
+    use yew_preview::prelude::*;
+
+    yew_preview::create_preview!(
+        MusicConfig,
+        MusicConfigProps {
+            settings: Settings {
+                music_volume: 0.5,
+                ..Settings::default()
+            },
+            on_change: Callback::noop()
+        },
+    );
+}

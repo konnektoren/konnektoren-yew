@@ -12,9 +12,9 @@ pub fn profile_points_component(props: &ProfilePointsProps) -> Html {
 
     html! {
         <div class="profile-points">
-            <div class="icon">{"⭐️"}</div>
-            <div class="profile-name">{ &props.profile.name }</div>
-            <div class="points">{ points }</div>
+            <div class="profile-points__icon">{"⭐️"}</div>
+            <div class="profile-points__name">{ &props.profile.name }</div>
+            <div class="profile-points__points">{ points }</div>
         </div>
     }
 }
@@ -33,5 +33,15 @@ mod preview {
                 xp: 100,
             },
         },
+        (
+            "long name",
+            ProfilePointsProps {
+                profile: PlayerProfile {
+                    id: "2".to_string(),
+                    name: "Test Player with a long name".to_string(),
+                    xp: 0,
+                },
+            }
+        ),
     );
 }

@@ -31,7 +31,7 @@ pub fn settings_component() -> Html {
     };
 
     html! {
-        <div class="settings-component">
+        <div class="settings">
         <h2>{ "Settings" }</h2>
 
         <MusicConfig settings={(*settings).clone()} on_change={on_change.clone()} />

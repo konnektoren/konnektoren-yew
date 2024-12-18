@@ -1,0 +1,147 @@
+@use "sass:map";
+
+$button-configs: (
+    "size": (
+        "sm": (
+            "padding": (
+                "xs",
+                "sm",
+            ),
+            "font": "200",
+        ),
+        "md": (
+            "padding": (
+                "sm",
+                "md",
+            ),
+            "font": "300",
+        ),
+        "lg": (
+            "padding": (
+                "md",
+                "lg",
+            ),
+            "font": "400",
+        ),
+    ),
+    "variant": (
+        "primary": (
+            "bg": "primary",
+            "text": "button-text",
+            "hover": "button-hover",
+        ),
+        "secondary": (
+            "bg": "secondary",
+            "text": "button-text",
+            "hover": "button-hover",
+        ),
+        "tertiary": (
+            "bg": "tertiary",
+            "text": "button-text",
+            "hover": "button-hover",
+        ),
+        "disabled": (
+            "bg": "button-disabled",
+            "text": "button-text",
+            "hover": "button-disabled",
+        ),
+    ),
+);
+
+@mixin button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-family: font("button");
+    font-weight: font-weight("medium");
+    border-radius: border-radius("md");
+    transition: all 0.3s ease;
+}
+
+@mixin button($config: ()) {
+    $default-config: (
+        "size": "md",
+        "variant": "primary",
+        "elevation": true,
+        "uppercase": false,
+        "full-width": false,
+    );
+    $config: map.merge($default-config, $config);
+
+    @include button-base;
+
+    $size-config: map.get($button-configs, "size", map.get($config, "size"));
+    @if $size-config {
+        $padding: map.get($size-config, "padding");
+        @if $padding {
+            padding: spacing(nth($padding, 1)) spacing(nth($padding, 2));
+        }
+
+        $font: map.get($size-config, "font");
+        @if $font {
+            font-size: font-size($font);
+        }
+    }
+
+    $variant-config: map.get(
+        $button-configs,
+        "variant",
+        map.get($config, "variant")
+    );
+    @if $variant-config {
+        $bg: map.get($variant-config, "bg");
+        @if $bg {
+            background-color: color($bg);
+        }
+
+        $text: map.get($variant-config, "text");
+        @if $text {
+            color: color($text);
+        }
+    }
+
+    @if map.get($config, "elevation") {
+        @include elevation(2);
+    }
+
+    @if map.get($config, "uppercase") {
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    @if map.get($config, "full-width") {
+        width: 100%;
+    }
+
+    &:hover:not(:disabled) {
+        @if $variant-config {
+            $hover: map.get($variant-config, "hover");
+            @if $hover {
+                background-color: color($hover);
+            }
+        }
+
+        @if map.get($config, "elevation") {
+            @include elevation(4);
+        }
+        transform: translateY(-2px);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+        @if map.get($config, "elevation") {
+            @include elevation(8);
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+        $disabled-config: map.get($button-configs, "variant", "disabled");
+        @if $disabled-config {
+            background-color: color(map.get($disabled-config, "bg"));
+        }
+    }
+}

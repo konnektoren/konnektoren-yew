@@ -1,0 +1,8 @@
+@mixin responsive-layout($breakpoint) {
+    @include respond-to($breakpoint) {
+        gap: spacing("sm");
+        padding: spacing("sm");
+
+        @content;
+    }
+}

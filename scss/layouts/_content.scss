@@ -1,0 +1,35 @@
+@mixin content-layout {
+    &__title {
+        font-size: font-size("600");
+        font-weight: font-weight("bold");
+        color: color("text-primary");
+        margin-bottom: spacing("sm");
+    }
+
+    &__icon {
+        font-size: font-size("2xl");
+        flex-shrink: 0;
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: border-radius("md");
+        margin-bottom: spacing("md");
+    }
+
+    &__text,
+    &__description {
+        font-size: font-size("400");
+        color: color("text-secondary");
+        line-height: line-height("normal");
+        margin-bottom: spacing("md");
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+}
