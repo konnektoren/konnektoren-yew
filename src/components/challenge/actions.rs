@@ -33,7 +33,7 @@ pub fn challenge_actions_component(props: &ChallengeActionsComponentProps) -> Ht
             <button class="challenge-actions__button challenge-actions__button--previous" onclick={on_previous}>
                 {"Previous"}
             </button>
-            <button class="challenge-actions__button" onclick={on_next}>
+            <button class="challenge-actions__button challenge-actions__button--next" onclick={on_next}>
                 {"Next"}
             </button>
             <button class="challenge-actions__button challenge-actions__button--help" onclick={on_help}>
