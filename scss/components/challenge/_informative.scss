@@ -1,0 +1,7 @@
+.informative {
+    @include card;
+
+    button {
+        @include action-button("md");
+    }
+}
