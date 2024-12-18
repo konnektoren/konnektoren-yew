@@ -5,11 +5,13 @@ use yew::prelude::*;
 pub struct ChallengeRatingProps {
     pub challenge_id: String,
     pub api_url: String,
+    #[prop_or_default]
+    pub default_rating: Option<f64>,
 }
 
 #[function_component(ChallengeRatingComponent)]
 pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
-    let average = use_state(|| None as Option<f64>);
+    let average = use_state(|| props.default_rating);
     {
         let challenge_id = props.challenge_id.clone();
         let api_url = props.api_url.clone();
@@ -38,7 +40,7 @@ pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
 
     html! {
         <div class="challenge-rating">
-            <span class="star-symbol">{"★"}</span>
+            <span class="challenge-rating__star">{"★"}</span>
             if let Some(avg) = *average {
                 <span>{format!("{:.1}", avg)}</span>
             } else {
@@ -58,6 +60,15 @@ mod preview {
         ChallengeRatingProps {
             challenge_id: "123".to_string(),
             api_url: "https://api.example.com/reviews".to_string(),
+            default_rating: Some(4.5),
         },
+        (
+            "loading rating",
+            ChallengeRatingProps {
+                challenge_id: "123".to_string(),
+                api_url: "https://api.example.com/reviews".to_string(),
+                default_rating: None,
+            }
+        ),
     );
 }

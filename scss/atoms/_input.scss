@@ -1,20 +1,208 @@
-@mixin centered-input {
+@use "sass:map";
+
+$input-configs: (
+    "size": (
+        "sm": (
+            "padding": (
+                "xs",
+                "sm",
+            ),
+            "font": "200",
+        ),
+        "md": (
+            "padding": (
+                "sm",
+                "md",
+            ),
+            "font": "300",
+        ),
+        "lg": (
+            "padding": (
+                "md",
+                "lg",
+            ),
+            "font": "400",
+        ),
+    ),
+    "variant": (
+        "outline": (
+            "border": "border-primary",
+            "bg": "background-primary",
+            "text": "text-primary",
+            "focus": "primary",
+        ),
+        "filled": (
+            "border": "background-secondary",
+            "bg": "background-secondary",
+            "text": "text-primary",
+            "focus": "primary",
+        ),
+        "error": (
+            "border": "danger",
+            "bg": "background-primary",
+            "text": "text-primary",
+            "focus": "danger",
+        ),
+        "success": (
+            "border": "success",
+            "bg": "background-primary",
+            "text": "text-primary",
+            "focus": "success",
+        ),
+        "centered": (
+            "border": "border-primary",
+            "bg": "background-primary",
+            "text": "text-primary",
+            "focus": "primary",
+            "align": center,
+            "hover-border": "primary",
+        ),
+    ),
+);
+
+@mixin input-base {
     width: 100%;
-    padding: spacing("sm") spacing("md");
-    border: 1px solid color("border-primary");
-    border-radius: border-radius("sm");
-    font-size: font-size("md");
-    color: color("text-primary");
-    background-color: light-color("background-primary");
-    text-align: center;
+    font-family: font("primary");
+    line-height: line-height("normal");
+    transition: all 0.3s ease;
+
+    &::placeholder {
+        color: color("gray-400");
+    }
+
+    &:disabled {
+        background-color: color("gray-100");
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+@mixin input-focus($color) {
+    outline: none;
+    border-color: color($color);
+    box-shadow: 0 0 0 3px rgba(color($color), 0.2);
+}
+
+@mixin input($config: ()) {
+    $default-config: (
+        "size": "md",
+        "variant": "outline",
+        "full-width": true,
+    );
+    $config: map.merge($default-config, $config);
+
+    @include input-base;
+
+    $size-config: map.get($input-configs, "size", map.get($config, "size"));
+    @if $size-config {
+        $padding: map.get($size-config, "padding");
+        @if $padding {
+            padding: spacing(nth($padding, 1)) spacing(nth($padding, 2));
+        }
+        $font-size: map.get($size-config, "font");
+        @if $font-size {
+            font-size: font-size($font-size);
+        }
+    }
+
+    $variant-config: map.get(
+        $input-configs,
+        "variant",
+        map.get($config, "variant")
+    );
+    @if $variant-config {
+        $border: map.get($variant-config, "border");
+        @if $border {
+            border: 1px solid color($border);
+        }
+
+        $bg: map.get($variant-config, "bg");
+        @if $bg {
+            background-color: color($bg);
+        }
+
+        $text: map.get($variant-config, "text");
+        @if $text {
+            color: color($text);
+        }
+
+        border-radius: border-radius("md");
+
+        $align: map.get($variant-config, "align");
+        @if $align {
+            text-align: $align;
+        }
+    }
+
+    @if map.get($config, "full-width") {
+        width: 100%;
+    }
 
     &:focus {
-        border-color: color("primary");
-        box-shadow: 0 0 5px rgba(color("primary"), 0.5);
-        outline: none;
+        @if $variant-config {
+            $focus: map.get($variant-config, "focus");
+            @if $focus {
+                @include input-focus($focus);
+            }
+        }
     }
 
-    &:hover {
-        border-color: light-color("primary");
+    &:hover:not(:disabled) {
+        @if $variant-config {
+            $hover-border: map.get($variant-config, "hover-border");
+            @if $hover-border {
+                border-color: lighten-color($hover-border, 1.1);
+            } @else {
+                $border: map.get($variant-config, "border");
+                @if $border {
+                    border-color: darken-color($border, 0.1);
+                }
+            }
+        }
     }
+}
+
+@mixin input-outline($size: "md") {
+    @include input(
+        (
+            "variant": "outline",
+            "size": $size,
+        )
+    );
+}
+
+@mixin input-filled($size: "md") {
+    @include input(
+        (
+            "variant": "filled",
+            "size": $size,
+        )
+    );
+}
+
+@mixin input-error($size: "md") {
+    @include input(
+        (
+            "variant": "error",
+            "size": $size,
+        )
+    );
+}
+
+@mixin input-success($size: "md") {
+    @include input(
+        (
+            "variant": "success",
+            "size": $size,
+        )
+    );
+}
+
+@mixin centered-input($size: "md") {
+    @include input(
+        (
+            "variant": "centered",
+            "size": $size,
+        )
+    );
 }

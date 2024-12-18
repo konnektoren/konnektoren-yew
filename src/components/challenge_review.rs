@@ -93,13 +93,12 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     };
 
     html! {
-        <div class="challenge-review-component">
+        <div class="challenge-review">
             <h3>{i18n.t("Rate this Challenge")}</h3>
-            <div class="stars-rating">
             <ChallengeRatingComponent api_url={props.api_url.clone()} challenge_id={props.challenge_id.clone()} />
-                <RatingStarsComponent max_stars={5} rating={*stars as f64} on_click={Some(on_star_click)} />
-            </div>
-            <div class="comment-input">
+            <RatingStarsComponent max_stars={5} rating={*stars as f64} on_click={Some(on_star_click)} />
+
+            <div class="challenge-review__comment-input">
                 <input
                     type="text"
                     placeholder={i18n.t("Leave a comment")}

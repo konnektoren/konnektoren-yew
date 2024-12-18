@@ -1,0 +1,66 @@
+.challenge-info {
+    color: color("text-primary");
+    @include card(
+        (
+            padding: "lg",
+            shadow: "medium",
+            theme: "background-primary",
+        )
+    );
+    @include content-layout;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-2px);
+        @include card-shadow("hard");
+    }
+
+    &__tasks,
+    &__unlock-points {
+        @include vertical-layout(
+            (
+                gap: "sm",
+            )
+        );
+        padding-top: spacing("sm");
+        border-top: 1px solid color("border-primary");
+
+        &-title {
+            font-size: font-size("400");
+            font-weight: font-weight("bold");
+            color: color("text-primary");
+        }
+
+        &-text {
+            font-size: font-size("300");
+            color: color("text-secondary");
+            line-height: line-height("normal");
+        }
+    }
+
+    @include responsive-layout("medium") {
+        min-width: 250px;
+    }
+
+    @include responsive-layout("small") {
+        min-width: 150px;
+
+        &__description {
+            font-size: font-size("200");
+        }
+
+        &__tasks,
+        &__unlock-points {
+            padding-top: spacing("sm");
+
+            &-title {
+                font-size: font-size("300");
+            }
+
+            &-text {
+                font-size: font-size("200");
+                line-height: line-height("tight");
+            }
+        }
+    }
+}
