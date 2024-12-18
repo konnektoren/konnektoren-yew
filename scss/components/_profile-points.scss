@@ -6,51 +6,70 @@
             shadow: "soft",
         )
     );
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     position: fixed;
-    top: padding("sm");
-    left: padding("sm");
-
+    top: spacing("sm");
+    left: spacing("sm");
     font-family: font("secondary");
-    color: color("primary");
     z-index: z-index("10");
-    transition:
-        background-color 0.3s ease,
-        transform 0.3s ease;
+    transition: all 0.3s ease;
 
-    .icon {
-        @include text-style("500");
+    &__icon {
+        font-size: font-size("500");
+        color: color("primary");
+        margin-bottom: spacing("xs");
     }
-    .profile-name {
-        @include text-style("200", "regular", "secondary");
+
+    &__name {
+        font-size: font-size("200");
+        font-weight: font-weight("regular");
+        color: color("text-secondary");
+        text-align: center;
+        margin-bottom: spacing("xs");
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
-    .points {
-        @include text-style("400", "bold", "secondary");
+
+    &__points {
+        font-size: font-size("400");
+        font-weight: font-weight("bold");
+        color: color("text-secondary");
     }
 
     &:hover {
         background-color: color("dark");
-        color: color("light");
         transform: translateY(-3px);
 
-        .profile-name {
-            color: color("primary");
+        .profile-points__icon {
+            color: color("light");
         }
 
-        .points {
+        .profile-points__name,
+        .profile-points__points {
             color: color("primary");
         }
     }
 
-    @include respond-to("small") {
-        padding: padding("lg") * 0.5;
-        .icon {
-            @include text-style("400");
+    @include responsive-layout("small") {
+        padding: spacing("xs");
+
+        &__icon {
+            font-size: font-size("400");
         }
-        .profile-name {
-            @include text-style("100");
+
+        &__name {
+            font-size: font-size("100");
+            max-width: 120px;
         }
-        .points {
-            @include text-style("300");
+
+        &__points {
+            font-size: font-size("300");
         }
     }
 }
