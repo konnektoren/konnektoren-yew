@@ -37,8 +37,8 @@ integrate-gerillass:
     EOF
 
     # Update _index.scss to include gerillass if not already included
-    if ! grep -q "@forward 'gerillass';" {{vendor_dir}}/_index.scss; then
-        echo "@forward 'gerillass';" >> {{vendor_dir}}/_index.scss
+    if ! grep -q "@import 'gerillass';" {{vendor_dir}}/_index.scss; then
+        echo "@import 'gerillass';" >> {{vendor_dir}}/_index.scss
     fi
 
     echo "Gerillass integration complete"

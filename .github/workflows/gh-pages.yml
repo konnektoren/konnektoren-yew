@@ -25,7 +25,15 @@ jobs:
         with:
           version: "latest"
 
-      - run: trunk build --features=yew-preview --release --public-url /konnektoren-yew/
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: "1.13"
+
+      - name: Setup styles
+        run: just setup-styles
+
+      - name: Build
+        run: trunk build --features=yew-preview --release --public-url /konnektoren-yew/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
