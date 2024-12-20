@@ -1,5 +1,7 @@
+@import "base";
 @import "components";
 
 .design-mobile {
+    @include base-mobile;
     @include progress;
 }
