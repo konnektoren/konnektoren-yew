@@ -1,0 +1,59 @@
+.badge {
+    @include badge-base(
+        (
+            theme: "background-primary",
+            text: "text-primary",
+            shadow: "soft",
+        )
+    );
+    right: spacing("2xl");
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: z-index("floating");
+
+    &:hover {
+        transform: translateY(-2px);
+
+        .badge__tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    &__label {
+        @include badge-base(
+            (
+                theme: "primary",
+                text: "light",
+                padding: "xs",
+            )
+        );
+        font-size: font-size("400");
+        font-weight: font-weight("bold");
+        margin-right: spacing("xs");
+    }
+
+    &__tooltip {
+        @include badge-tooltip;
+        @include card(
+            (
+                padding: "sm",
+                shadow: "medium",
+                theme: "background-primary",
+            )
+        );
+
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -10px);
+        width: 150px;
+        text-align: center;
+        font-size: font-size("300");
+        color: color("text-primary");
+    }
+
+    @include responsive-layout("small") {
+        display: none;
+    }
+}

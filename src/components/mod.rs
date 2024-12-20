@@ -1,5 +1,6 @@
 //! This module contains all the components that are used in the app.
 
+mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
 pub mod challenge;
@@ -29,6 +30,7 @@ pub mod translate;
 pub mod marketplace;
 mod rating_stars;
 
+pub use badge::Badge;
 pub use challenge::*;
 pub use challenge_config::ChallengeConfigComponent;
 pub use challenge_info::ChallengeInfoComponent;

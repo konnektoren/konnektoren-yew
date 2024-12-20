@@ -1,5 +1,5 @@
 use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, ChallengeConfigComponent,
+    challenge::ChallengeComponent, game_path::GamePathComponent, Badge, ChallengeConfigComponent,
     ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
     MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent,
     SharePageComp, SoundConfig, TranslateComponent,
@@ -218,7 +218,8 @@ pub fn App() -> Html {
         create_component_group!(
             "Misc",
             SharePageComp::preview(),
-            create_component_item!("Example", Example, vec![("default", ())])
+            create_component_item!("Example", Example, vec![("default", ())]),
+            Badge::preview()
         ),
     ];
 
