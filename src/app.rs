@@ -19,7 +19,9 @@ use crate::components::challenge::{
     MultipleChoiceCircleComponent, MultipleChoiceComponent, SortTableComponent,
 };
 #[cfg(feature = "certificates")]
-use crate::components::{AchievementsComponent, CertificateComponent, CertificateImageComponent};
+use crate::components::{
+    AchievementComponent, AchievementsComponent, CertificateComponent, CertificateImageComponent,
+};
 #[cfg(feature = "effects")]
 use crate::effects::BlinkAnimation;
 use crate::i18n::{I18nConfig, I18nProvider};
@@ -196,6 +198,7 @@ pub fn App() -> Html {
         ),
         create_component_group!(
             "Certificates",
+            AchievementComponent::preview(),
             AchievementsComponent::preview(),
             CertificateComponent::preview(),
             CertificateImageComponent::preview()

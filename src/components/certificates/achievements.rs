@@ -131,7 +131,7 @@ mod preview {
                 id: "".to_string(),
                 name: "Achievement 1".to_string(),
                 description: "Description 1".to_string(),
-                icon: "https://example.com/icon1.png".to_string(),
+                icon: "https://picsum.photos/64".to_string(),
                 condition: "".to_string(),
             },],
             certificates: vec![
