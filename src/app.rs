@@ -5,6 +5,9 @@ use crate::components::{
     SharePageComp, SoundConfig, TranslateComponent,
 };
 
+#[cfg(feature = "yew-preview")]
+use crate::components::navigation::menu::preview::ExampleMenu;
+
 #[cfg(feature = "marketplace")]
 use crate::components::marketplace::{
     CartBadgeComponent, ProductCatalogComponent, ProductComponent, ShoppingCartComponent,
@@ -203,6 +206,7 @@ pub fn App() -> Html {
             CertificateComponent::preview(),
             CertificateImageComponent::preview()
         ),
+        create_component_group!("Navigation", ExampleMenu::preview(),),
         create_component_group!(
             "Marketplace",
             ProductComponent::preview(),

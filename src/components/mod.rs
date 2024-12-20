@@ -16,6 +16,7 @@ pub mod inbox;
 mod map;
 #[cfg(feature = "music")]
 pub mod music;
+pub mod navigation;
 pub mod profile;
 pub mod progress_bar;
 pub mod seo;
@@ -40,6 +41,7 @@ pub use game_path::GamePathComponent;
 pub use gdrive_backup::GDriveBackupComponent;
 pub use inbox::InboxComponent;
 pub use map::*;
+pub use navigation::*;
 pub use progress_bar::ProgressBar;
 pub use seo::{SeoComponent, SeoConfig};
 pub use share_page::SharePageComp;
