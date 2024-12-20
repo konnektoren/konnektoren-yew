@@ -1,7 +1,7 @@
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, ChallengeConfigComponent,
     ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
-    MusicConfig, ProgressBar, RatingStarsComponent, SettingsComponent, SharePageComp,
+    MusicConfig, ProgressBar, RatingStarsComponent, SelectTheme, SettingsComponent, SharePageComp,
     TranslateComponent,
 };
 
@@ -29,6 +29,7 @@ use crate::prelude::{
     ChallengeReviewComponent, GameControllerProvider, InformativeComponent,
     InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
     QuestionComponent, ReadText, RepositoryProvider, SelectLanguage, SelectLevelComp,
+    ThemeProvider,
 };
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
@@ -188,7 +189,8 @@ pub fn App() -> Html {
             SelectLevelComp::preview(),
             SettingsComponent::preview(),
             MusicComponent::preview(),
-            MusicConfig::preview()
+            MusicConfig::preview(),
+            SelectTheme::preview()
         ),
         create_component_group!(
             "Certificates",
@@ -218,6 +220,7 @@ pub fn App() -> Html {
     #[cfg(feature = "yew-preview")]
     html! {
         <RepositoryProvider config={repository_config}>
+        <ThemeProvider>
         <I18nProvider config={i18n_config}>
             <GameControllerProvider>
             <div style="
@@ -240,9 +243,13 @@ pub fn App() -> Html {
                 <div style="flex: 1; overflow: hidden;">
                     <PreviewPage {groups} />
                 </div>
+                <div>
+                    <SelectTheme />
+                </div>
             </div>
             </GameControllerProvider>
         </I18nProvider>
+        </ThemeProvider>
         </RepositoryProvider>
     }
     #[cfg(not(feature = "yew-preview"))]

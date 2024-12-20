@@ -8,6 +8,7 @@ pub mod repository_hooks;
 pub mod repository_provider;
 pub mod session_provider;
 pub mod settings_provider;
+pub mod theme_provider;
 
 pub use crate::i18n::{use_i18n, use_selected_language, I18nProvider, I18nProviderProps};
 pub use certificates_provider::{CertificatesContext, CertificatesProvider};
@@ -29,3 +30,4 @@ pub use repository_provider::{
 };
 pub use session_provider::{SessionContext, SessionProvider};
 pub use settings_provider::{SettingsContext, SettingsProvider};
+pub use theme_provider::{use_theme, ThemeContext, ThemeProvider};
