@@ -1,0 +1,78 @@
+.achievement {
+    @include card(
+        (
+            padding: "md",
+            shadow: "soft",
+            radius: "2xl",
+        )
+    );
+    @include content-layout;
+
+    max-width: 250px;
+    position: relative;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(color("dark"), 0.15);
+
+        &::after {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+    }
+
+    &__icon {
+        width: 80px;
+        height: 80px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: spacing("md");
+        transition: transform 0.3s ease;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &:hover &__icon {
+        transform: scale(1.1);
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            135deg,
+            lighten-color("light") 0%,
+            darken-color("light") 100%
+        );
+        z-index: -1;
+        border-radius: border-radius("md");
+    }
+
+    &::after {
+        content: "🏆";
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        @include badge-circular(
+            "sm",
+            (
+                theme: "secondary",
+                text: "light",
+                shadow: "soft",
+            )
+        );
+        font-size: font-size("sm");
+        opacity: 0;
+        transform: translate(10px, -10px);
+        transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
+    }
+}
