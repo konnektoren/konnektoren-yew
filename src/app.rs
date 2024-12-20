@@ -37,7 +37,7 @@ use log;
 use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
-use yew_preview::{create_component_item, prelude::*};
+use yew_preview::{create_component_group, create_component_item, prelude::*};
 
 #[function_component]
 pub fn Example() -> Html {
@@ -125,66 +125,90 @@ pub fn App() -> Html {
     let i18n_config = I18nConfig::default();
 
     #[cfg(feature = "yew-preview")]
-    let component_list: ComponentList = vec![
-        BlinkAnimation::preview(),
-        create_component_item!(
-            "MultipleChoiceComponent",
-            MultipleChoiceComponent,
-            vec![(
-                "default",
-                MultipleChoiceComponentProps {
-                    challenge: default_multiple_choice.clone(),
-                    ..Default::default()
-                }
-            )]
+    let groups: ComponentList = vec![
+        create_component_group!(
+            "Challenge",
+            BlinkAnimation::preview(),
+            create_component_item!(
+                "MultipleChoiceComponent",
+                MultipleChoiceComponent,
+                vec![(
+                    "default",
+                    MultipleChoiceComponentProps {
+                        challenge: default_multiple_choice.clone(),
+                        ..Default::default()
+                    }
+                )]
+            ),
+            create_component_item!(
+                "MultipleChoiceCircleComponent",
+                MultipleChoiceCircleComponent,
+                vec![(
+                    "default",
+                    MultipleChoiceComponentProps {
+                        challenge: default_multiple_choice,
+                        ..Default::default()
+                    }
+                )]
+            ),
+            SortTableComponent::preview(),
+            ContextualChoiceComponent::preview(),
+            ChallengeComponent::preview(),
+            ChallengeActionsComponent::preview(),
+            ChallengeConfigComponent::preview(),
+            ChallengeInfoComponent::preview(),
+            ChallengeReviewComponent::preview(),
+            ChallengeRatingComponent::preview(),
+            ChallengeTimerComponent::preview()
         ),
-        create_component_item!(
-            "MultipleChoiceCircleComponent",
-            MultipleChoiceCircleComponent,
-            vec![(
-                "default",
-                MultipleChoiceComponentProps {
-                    challenge: default_multiple_choice,
-                    ..Default::default()
-                }
-            )]
+        create_component_group!(
+            "Profile",
+            ProfileConfigComponent::preview(),
+            ProfilePointsComponent::preview()
         ),
-        SortTableComponent::preview(),
-        ContextualChoiceComponent::preview(),
-        ChallengeComponent::preview(),
-        ProfileConfigComponent::preview(),
-        ProfilePointsComponent::preview(),
-        ChallengeActionsComponent::preview(),
-        ChallengeConfigComponent::preview(),
-        ChallengeInfoComponent::preview(),
-        ChallengeReviewComponent::preview(),
-        ChallengeRatingComponent::preview(),
-        RatingStarsComponent::preview(),
-        ChallengeTimerComponent::preview(),
-        InformativeComponent::preview(),
-        InformativeMarkdownComponent::preview(),
-        MapComponent::preview(),
-        GamePathComponent::preview(),
-        MusicComponent::preview(),
-        OptionsComponent::preview(),
-        ProgressBar::preview(),
-        QuestionComponent::preview(),
-        TranslateComponent::preview(),
-        AchievementsComponent::preview(),
-        CertificateComponent::preview(),
-        CertificateImageComponent::preview(),
-        ReadText::preview(),
-        SelectLanguage::preview(),
-        SelectLevelComp::preview(),
-        SettingsComponent::preview(),
-        MusicConfig::preview(),
-        ProductComponent::preview(),
-        ProductCatalogComponent::preview(),
-        ShoppingCartComponent::preview(),
-        CartBadgeComponent::preview(),
-        TonWalletComponent::preview(),
-        SharePageComp::preview(),
-        create_component_item!("Example", Example, vec![("default", ())]),
+        create_component_group!(
+            "Game",
+            MapComponent::preview(),
+            GamePathComponent::preview(),
+            ProgressBar::preview(),
+            QuestionComponent::preview()
+        ),
+        create_component_group!(
+            "UI Components",
+            RatingStarsComponent::preview(),
+            InformativeComponent::preview(),
+            InformativeMarkdownComponent::preview(),
+            ReadText::preview(),
+            TranslateComponent::preview()
+        ),
+        create_component_group!(
+            "Settings",
+            OptionsComponent::preview(),
+            SelectLanguage::preview(),
+            SelectLevelComp::preview(),
+            SettingsComponent::preview(),
+            MusicComponent::preview(),
+            MusicConfig::preview()
+        ),
+        create_component_group!(
+            "Certificates",
+            AchievementsComponent::preview(),
+            CertificateComponent::preview(),
+            CertificateImageComponent::preview()
+        ),
+        create_component_group!(
+            "Marketplace",
+            ProductComponent::preview(),
+            ProductCatalogComponent::preview(),
+            ShoppingCartComponent::preview(),
+            CartBadgeComponent::preview(),
+            TonWalletComponent::preview()
+        ),
+        create_component_group!(
+            "Misc",
+            SharePageComp::preview(),
+            create_component_item!("Example", Example, vec![("default", ())])
+        ),
     ];
 
     let storage = LocalStorage::new(None);
@@ -196,7 +220,27 @@ pub fn App() -> Html {
         <RepositoryProvider config={repository_config}>
         <I18nProvider config={i18n_config}>
             <GameControllerProvider>
-                <PreviewPage components={component_list} />
+            <div style="
+                font-family: Arial, sans-serif;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            ">
+                <div style="
+                    padding: 10px;
+                    background-color: #f8f8f8;
+                    border-bottom: 1px solid #ccc;
+                    flex-shrink: 0;
+                ">
+                    <h1 style="text-align: center;">
+                        { "Konnektoren Yew Components" }
+                    </h1>
+                </div>
+                <div style="flex: 1; overflow: hidden;">
+                    <PreviewPage {groups} />
+                </div>
+            </div>
             </GameControllerProvider>
         </I18nProvider>
         </RepositoryProvider>
