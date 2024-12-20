@@ -2,6 +2,12 @@
 
 This is the repository for the Konnektoren Yew UI.
 
+## Setup
+
+```bash
+just setup
+```
+
 ## Build
 
 ```bash
