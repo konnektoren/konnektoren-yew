@@ -10,16 +10,16 @@ pub enum Design {
 impl Design {
     pub fn as_class(&self) -> &str {
         match self {
-            Design::Desktop => "desktop-design",
-            Design::Mobile => "mobile-design",
+            Design::Desktop => "design-desktop",
+            Design::Mobile => "design-mobile",
             Design::Other(class) => class,
         }
     }
 
     pub fn from_class(class: &str) -> Self {
         match class {
-            "desktop-design" => Design::Desktop,
-            "mobile-design" => Design::Mobile,
+            "design-desktop" => Design::Desktop,
+            "design-mobile" => Design::Mobile,
             _ => Design::Other(class.to_string()),
         }
     }
@@ -28,8 +28,8 @@ impl Design {
         let class_list = document().body().unwrap().class_name();
         let design_class = class_list
             .split_whitespace()
-            .find(|class| class.ends_with("-design"))
-            .unwrap_or("desktop-design");
+            .find(|class| class.starts_with("design-"))
+            .unwrap_or("design-desktop");
 
         Design::from_class(design_class)
     }

@@ -1,8 +1,8 @@
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, ChallengeConfigComponent,
     ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
-    MusicConfig, ProgressBar, RatingStarsComponent, SelectTheme, SettingsComponent, SharePageComp,
-    TranslateComponent,
+    MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent,
+    SharePageComp, SoundConfig, TranslateComponent,
 };
 
 #[cfg(feature = "marketplace")]
@@ -26,7 +26,7 @@ use crate::i18n::{I18nConfig, I18nProvider};
 use crate::model::DefaultSessionInitializer;
 use crate::prelude::{
     BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,
-    ChallengeReviewComponent, GameControllerProvider, InformativeComponent,
+    ChallengeReviewComponent, DesignProvider, GameControllerProvider, InformativeComponent,
     InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
     QuestionComponent, ReadText, RepositoryProvider, SelectLanguage, SelectLevelComp,
     ThemeProvider,
@@ -190,6 +190,8 @@ pub fn App() -> Html {
             SettingsComponent::preview(),
             MusicComponent::preview(),
             MusicConfig::preview(),
+            SoundConfig::preview(),
+            SelectDesign::preview(),
             SelectTheme::preview()
         ),
         create_component_group!(
@@ -221,6 +223,7 @@ pub fn App() -> Html {
     html! {
         <RepositoryProvider config={repository_config}>
         <ThemeProvider>
+        <DesignProvider>
         <I18nProvider config={i18n_config}>
             <GameControllerProvider>
             <div style="
@@ -245,10 +248,12 @@ pub fn App() -> Html {
                 </div>
                 <div>
                     <SelectTheme />
+                    <SelectDesign />
                 </div>
             </div>
             </GameControllerProvider>
         </I18nProvider>
+        </DesignProvider>
         </ThemeProvider>
         </RepositoryProvider>
     }
