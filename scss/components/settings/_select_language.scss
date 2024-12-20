@@ -1,0 +1,41 @@
+.select-language {
+    @include select-container;
+    margin: spacing("sm");
+
+    p {
+        display: flex;
+        align-items: center;
+        gap: spacing("sm");
+        @include text-style("sm", "regular", "text-primary");
+    }
+
+    select {
+        @include select-base;
+        @include select-arrow(20px);
+        font-size: font-size("400");
+        display: inline-block;
+    }
+
+    @include responsive-layout("small") {
+        select {
+            font-size: font-size("300");
+            padding: spacing("xs") spacing("sm");
+        }
+    }
+}
+
+.language-flags {
+    @include flex-container(spacing("xs"));
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: spacing("sm") 0;
+
+    span {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
