@@ -1,0 +1,138 @@
+.certificate {
+    @include card(
+        (
+            padding: "xl",
+            shadow: "soft",
+        )
+    );
+    @include content-layout;
+    @include vertical-layout(
+        (
+            gap: "xl",
+            align: stretch,
+        )
+    );
+
+    &__title {
+        font-family: font("certificate-heading");
+        color: color("primary");
+        text-align: center;
+    }
+
+    &__details {
+        @include vertical-layout(
+            (
+                gap: "md",
+            )
+        );
+    }
+
+    &__info {
+        @include text-style("md", "regular", "text-primary");
+        font-family: font("certificate");
+
+        strong {
+            font-weight: font-weight("bold");
+            margin-right: spacing("xs");
+        }
+    }
+
+    &__verification {
+        @include card(
+            (
+                padding: "sm",
+                radius: "sm",
+            )
+        );
+        display: flex;
+        align-items: center;
+        gap: spacing("sm");
+        font-family: font("info");
+        margin-top: spacing("md");
+
+        &-icon {
+            font-size: font-size("md");
+        }
+
+        &--verified {
+            background-color: darken-color("success");
+            color: lighten-color("success", 1.8);
+        }
+
+        &--not-verified {
+            background-color: darken-color("danger");
+            color: lighten-color("danger", 1.8);
+        }
+    }
+
+    &__share {
+        @include vertical-layout(
+            (
+                gap: "md",
+                align: center,
+            )
+        );
+        width: 100%;
+    }
+
+    &__share-input {
+        width: 100%;
+        @include card(
+            (
+                padding: "sm",
+                shadow: "soft",
+                radius: "sm",
+            )
+        );
+        @include text-style("md", "regular", "text-primary");
+        border: 1px solid color("border-primary");
+        text-align: center;
+        transition: border-color 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: color("primary");
+        }
+    }
+
+    &__share-message {
+        @include text-style("sm", "medium", "success");
+        transition: opacity 0.3s ease;
+    }
+
+    &__image {
+        width: 100%;
+        margin-top: spacing("lg");
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: border-radius("md");
+        }
+    }
+
+    @include responsive-layout("small") {
+        padding: spacing("md");
+
+        &__title {
+            font-size: font-size("500");
+        }
+
+        &__info {
+            @include text-style("sm", "regular", "text-primary");
+        }
+
+        &__share-input {
+            @include text-style("sm");
+            padding: spacing("xs");
+        }
+
+        &__verification {
+            padding: spacing("xs");
+
+            &-icon {
+                font-size: font-size("sm");
+            }
+        }
+    }
+}
