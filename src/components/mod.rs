@@ -23,6 +23,7 @@ pub mod progress_bar;
 pub mod seo;
 mod settings;
 pub mod share_page;
+pub mod social_links;
 pub mod timer;
 pub mod translate;
 
@@ -47,6 +48,7 @@ pub use navigation::*;
 pub use progress_bar::ProgressBar;
 pub use seo::{SeoComponent, SeoConfig};
 pub use share_page::SharePageComp;
+pub use social_links::SocialLinks;
 pub use timer::TimerComponent;
 pub use translate::TranslateComponent;
 
