@@ -1,0 +1,24 @@
+@use "sass:map";
+
+@mixin grid-layout($config: ()) {
+    $default-config: (
+        columns: 12,
+        gap: "md",
+        template: null,
+        align: start,
+        justify: start,
+    );
+    $config: map-merge($default-config, $config);
+
+    display: grid;
+    gap: spacing(map.get($config, gap));
+
+    @if map.get($config, template) {
+        grid-template-columns: map.get($config, template);
+    } @else {
+        grid-template-columns: repeat(map.get($config, columns), 1fr);
+    }
+
+    align-items: map.get($config, align);
+    justify-content: map.get($config, justify);
+}
