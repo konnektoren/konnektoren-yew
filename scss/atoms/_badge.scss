@@ -13,11 +13,23 @@ $badge-configs: (
     ),
 );
 
-@mixin badge-base($radius: "full") {
-    border-radius: border-radius($radius);
+@mixin badge-base($config: ()) {
+    $default-config: (
+        padding: "sm",
+        radius: "sm",
+        theme: "primary",
+        text: "light",
+        shadow: "soft",
+    );
+    $config: map-merge($default-config, $config);
+
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    padding: spacing(map.get($config, padding));
+    border-radius: border-radius(map.get($config, radius));
+    background-color: color(map.get($config, theme));
+    color: color(map.get($config, text));
+    @include card-shadow(map.get($config, shadow));
 }
 
 @mixin badge-circular($size: "md", $config: ()) {
@@ -25,17 +37,21 @@ $badge-configs: (
         shadow: "default",
         theme: "primary",
         text: "light",
+        radius: "full",
+        padding: "none",
     );
     $config: map-merge($default-config, $config);
 
-    $badge-size: map.get($badge-configs, "size", $size);
+    @include badge-base($config);
 
-    @include badge-base("full");
+    $badge-size: map.get($badge-configs, "size", $size);
     width: $badge-size;
     height: $badge-size;
-    background-color: color(map.get($config, theme));
-    color: color(map.get($config, text));
-    @include card-shadow(map.get($config, shadow));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 @mixin badge-counter($size: "sm", $config: ()) {
@@ -60,4 +76,15 @@ $badge-configs: (
     font-weight: font-weight("bold");
     border-radius: $counter-size;
     @include card-shadow(map.get($config, shadow));
+}
+
+@mixin badge-tooltip {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease,
+        transform 0.3s ease;
+    z-index: z-index("tooltip");
 }

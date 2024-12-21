@@ -1,5 +1,6 @@
 //! This module contains all the components that are used in the app.
 
+mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
 pub mod challenge;
@@ -16,10 +17,9 @@ pub mod inbox;
 mod map;
 #[cfg(feature = "music")]
 pub mod music;
+pub mod navigation;
 pub mod profile;
 pub mod progress_bar;
-pub mod select_language;
-mod select_level;
 pub mod seo;
 mod settings;
 pub mod share_page;
@@ -30,6 +30,7 @@ pub mod translate;
 pub mod marketplace;
 mod rating_stars;
 
+pub use badge::Badge;
 pub use challenge::*;
 pub use challenge_config::ChallengeConfigComponent;
 pub use challenge_info::ChallengeInfoComponent;
@@ -42,9 +43,8 @@ pub use game_path::GamePathComponent;
 pub use gdrive_backup::GDriveBackupComponent;
 pub use inbox::InboxComponent;
 pub use map::*;
+pub use navigation::*;
 pub use progress_bar::ProgressBar;
-pub use select_language::SelectLanguage;
-pub use select_level::SelectLevelComp;
 pub use seo::{SeoComponent, SeoConfig};
 pub use share_page::SharePageComp;
 pub use timer::TimerComponent;

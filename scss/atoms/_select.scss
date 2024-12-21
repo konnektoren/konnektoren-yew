@@ -1,0 +1,41 @@
+@mixin select-base {
+    appearance: none;
+    background-color: color("background-primary");
+    border: 1px solid color("border-primary");
+    border-radius: border-radius("sm");
+    color: color("text-primary");
+    font-family: font("primary");
+    outline: none;
+    padding: spacing("sm") spacing("md");
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+        border-color: color("primary");
+    }
+
+    &:focus {
+        border-color: color("primary");
+        box-shadow: 0 0 0 2px rgba(color("primary"), 0.1);
+    }
+
+    option {
+        background-color: color("background-primary");
+        color: color("text-primary");
+        padding: spacing("xs");
+    }
+}
+
+@mixin select-arrow($size: 24px) {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right spacing("sm") center;
+    background-size: $size $size;
+    padding-right: calc(#{spacing("lg")} + #{$size});
+}
+
+@mixin select-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}

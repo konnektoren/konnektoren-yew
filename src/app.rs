@@ -1,9 +1,12 @@
 use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, ChallengeConfigComponent,
+    challenge::ChallengeComponent, game_path::GamePathComponent, Badge, ChallengeConfigComponent,
     ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
     MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent,
     SharePageComp, SoundConfig, TranslateComponent,
 };
+
+#[cfg(feature = "yew-preview")]
+use crate::components::navigation::menu::preview::ExampleMenu;
 
 #[cfg(feature = "marketplace")]
 use crate::components::marketplace::{
@@ -203,6 +206,7 @@ pub fn App() -> Html {
             CertificateComponent::preview(),
             CertificateImageComponent::preview()
         ),
+        create_component_group!("Navigation", ExampleMenu::preview(),),
         create_component_group!(
             "Marketplace",
             ProductComponent::preview(),
@@ -214,7 +218,8 @@ pub fn App() -> Html {
         create_component_group!(
             "Misc",
             SharePageComp::preview(),
-            create_component_item!("Example", Example, vec![("default", ())])
+            create_component_item!("Example", Example, vec![("default", ())]),
+            Badge::preview()
         ),
     ];
 
