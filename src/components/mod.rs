@@ -14,6 +14,7 @@ pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
 pub mod inbox;
+pub mod logo;
 mod map;
 #[cfg(feature = "music")]
 pub mod music;
@@ -23,6 +24,7 @@ pub mod progress_bar;
 pub mod seo;
 mod settings;
 pub mod share_page;
+pub mod social_links;
 pub mod timer;
 pub mod translate;
 
@@ -42,11 +44,13 @@ pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;
 pub use inbox::InboxComponent;
+pub use logo::Logo;
 pub use map::*;
 pub use navigation::*;
 pub use progress_bar::ProgressBar;
 pub use seo::{SeoComponent, SeoConfig};
 pub use share_page::SharePageComp;
+pub use social_links::SocialLinks;
 pub use timer::TimerComponent;
 pub use translate::TranslateComponent;
 
