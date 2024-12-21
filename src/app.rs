@@ -44,6 +44,7 @@ use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
 use yew_preview::{create_component_group, create_component_item, prelude::*};
+use yew_router::prelude::BrowserRouter;
 
 #[function_component]
 pub fn Example() -> Html {
@@ -231,6 +232,7 @@ pub fn App() -> Html {
 
     #[cfg(feature = "yew-preview")]
     html! {
+        <BrowserRouter>
         <RepositoryProvider config={repository_config}>
         <ThemeProvider>
         <DesignProvider>
@@ -266,6 +268,7 @@ pub fn App() -> Html {
         </DesignProvider>
         </ThemeProvider>
         </RepositoryProvider>
+        </BrowserRouter>
     }
     #[cfg(not(feature = "yew-preview"))]
     html! {
