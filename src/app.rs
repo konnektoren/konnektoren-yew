@@ -1,8 +1,8 @@
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, Badge, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
-    MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent,
-    SharePageComp, SocialLinks, SoundConfig, TranslateComponent,
+    ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, Logo,
+    MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme,
+    SettingsComponent, SharePageComp, SocialLinks, SoundConfig, TranslateComponent,
 };
 
 #[cfg(feature = "yew-preview")]
@@ -220,7 +220,8 @@ pub fn App() -> Html {
             SharePageComp::preview(),
             create_component_item!("Example", Example, vec![("default", ())]),
             Badge::preview(),
-            SocialLinks::preview()
+            SocialLinks::preview(),
+            Logo::preview()
         ),
     ];
 
