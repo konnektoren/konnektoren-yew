@@ -1,0 +1,49 @@
+@mixin form-group {
+    @include vertical-layout(
+        (
+            gap: "xs",
+            align: stretch,
+        )
+    );
+    margin-bottom: spacing("md");
+}
+
+@mixin input-group {
+    @include horizontal-layout(
+        (
+            gap: "sm",
+            align: center,
+        )
+    );
+
+    &__field {
+        @include form-field;
+        flex: 1;
+    }
+
+    &__addon {
+        @include button(
+            (
+                size: "md",
+                variant: "secondary",
+                elevation: false,
+            )
+        );
+    }
+}
+
+@mixin search-group {
+    @include input-group;
+
+    &__field {
+        @include form-field;
+        padding-left: spacing("lg");
+        background-repeat: no-repeat;
+        background-position: spacing("sm") center;
+        background-size: spacing("md");
+    }
+
+    &__button {
+        @include primary-button("md");
+    }
+}

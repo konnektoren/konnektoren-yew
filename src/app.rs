@@ -1,8 +1,8 @@
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, Badge, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ContextualChoiceComponent, MusicComponent,
-    MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent,
-    SharePageComp, SoundConfig, TranslateComponent,
+    ChallengeInfoComponent, ChallengeTimerComponent, ChatComponent, ContextualChoiceComponent,
+    Logo, MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign,
+    SelectTheme, SettingsComponent, SharePageComp, SocialLinks, SoundConfig, TranslateComponent,
 };
 
 #[cfg(feature = "yew-preview")]
@@ -44,6 +44,7 @@ use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
 use yew_preview::{create_component_group, create_component_item, prelude::*};
+use yew_router::prelude::BrowserRouter;
 
 #[function_component]
 pub fn Example() -> Html {
@@ -219,7 +220,10 @@ pub fn App() -> Html {
             "Misc",
             SharePageComp::preview(),
             create_component_item!("Example", Example, vec![("default", ())]),
-            Badge::preview()
+            Badge::preview(),
+            SocialLinks::preview(),
+            Logo::preview(),
+            ChatComponent::preview()
         ),
     ];
 
@@ -229,6 +233,7 @@ pub fn App() -> Html {
 
     #[cfg(feature = "yew-preview")]
     html! {
+        <BrowserRouter>
         <RepositoryProvider config={repository_config}>
         <ThemeProvider>
         <DesignProvider>
@@ -264,6 +269,7 @@ pub fn App() -> Html {
         </DesignProvider>
         </ThemeProvider>
         </RepositoryProvider>
+        </BrowserRouter>
     }
     #[cfg(not(feature = "yew-preview"))]
     html! {
