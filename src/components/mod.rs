@@ -10,6 +10,7 @@ pub mod challenge_presence;
 pub mod challenge_rating;
 pub mod challenge_review;
 pub mod challenge_timer;
+pub mod chat;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
@@ -40,6 +41,7 @@ pub use challenge_presence::ChallengePresenceComponent;
 pub use challenge_rating::ChallengeRatingComponent;
 pub use challenge_review::ChallengeReviewComponent;
 pub use challenge_timer::ChallengeTimerComponent;
+pub use chat::ChatComponent;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;

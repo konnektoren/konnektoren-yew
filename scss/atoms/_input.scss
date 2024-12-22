@@ -57,6 +57,14 @@ $input-configs: (
             "align": center,
             "hover-border": "primary",
         ),
+        "chat": (
+            "border": "border-primary",
+            "bg": "background-primary",
+            "text": "text-primary",
+            "focus": "primary",
+            "hover-border": "primary",
+            "radius": "full",
+        ),
     ),
 );
 
