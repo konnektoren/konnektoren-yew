@@ -1,0 +1,163 @@
+@use "sass:map";
+
+.leaderboard {
+    @include card;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: color("light");
+
+    &__table {
+        @include table-base;
+        font-size: font-size("300");
+        table-layout: fixed;
+        width: 100%;
+
+        @include respond-to("small") {
+            font-size: font-size("200");
+        }
+    }
+
+    &__header {
+        @include table-header;
+
+        th {
+            padding: spacing("1") spacing("2");
+        }
+    }
+
+    &__row {
+        @include table-row;
+
+        &:nth-child(even) {
+            .leaderboard__cell {
+                background-color: color("background-primary");
+            }
+        }
+
+        &:hover {
+            .leaderboard__cell {
+                background-color: color("hover");
+            }
+        }
+
+        &--highlighted {
+            .leaderboard__cell {
+                background-color: color("primary") !important;
+                color: color("light");
+                font-weight: font-weight("medium");
+
+                &--rank {
+                    color: color("light");
+                }
+            }
+
+            &:hover {
+                .leaderboard__cell {
+                    background-color: darken-color("primary", 0.9) !important;
+                }
+            }
+
+            .timer {
+                color: darken-color("light", 0.9);
+            }
+        }
+    }
+
+    &__cell {
+        @include table-cell;
+        transition: background-color 0.2s ease;
+        padding: spacing("xs") spacing("xs");
+
+        &--rank {
+            @include table-cell(
+                (
+                    align: center,
+                    padding: (
+                        "0",
+                        "xs",
+                    ),
+                )
+            );
+            font-weight: font-weight("medium");
+            color: color("primary");
+        }
+
+        &--name {
+            @include table-cell(
+                (
+                    padding: (
+                        "xs",
+                        "sm",
+                    ),
+                )
+            );
+        }
+
+        &--performance {
+            @include table-cell(
+                (
+                    align: right,
+                    padding: (
+                        "xs",
+                        "sm",
+                    ),
+                )
+            );
+        }
+
+        &--time {
+            @include table-cell(
+                (
+                    align: right,
+                    padding: (
+                        "xs",
+                        "sm",
+                    ),
+                )
+            );
+            color: color("text-secondary");
+        }
+    }
+
+    .timer {
+        @include horizontal-layout(
+            (
+                gap: "1",
+                align: center,
+            )
+        );
+        margin-bottom: 0;
+
+        &__title {
+            display: none;
+        }
+
+        @include respond-to("small") {
+            gap: spacing("0");
+        }
+    }
+
+    &__container {
+        @include horizontal-scroll;
+        padding: 0 spacing("2");
+
+        @include respond-to("small") {
+            padding: 0 spacing("1");
+        }
+    }
+
+    @media (max-width: 360px) {
+        &__table {
+            font-size: font-size("300");
+        }
+
+        &__cell {
+            padding: spacing("1");
+
+            &:not(&--rank):not(&--time) {
+                font-size: font-size("200");
+            }
+        }
+    }
+}

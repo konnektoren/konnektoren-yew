@@ -14,3 +14,21 @@
     flex-wrap: map-get($config, wrap);
     gap: spacing(map-get($config, gap));
 }
+
+@mixin horizontal-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: color("background-primary");
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: color("border-primary");
+        border-radius: border-radius("full");
+    }
+}

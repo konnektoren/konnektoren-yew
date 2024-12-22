@@ -15,6 +15,7 @@ pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
 pub mod inbox;
+pub mod leaderboard;
 pub mod logo;
 mod map;
 #[cfg(feature = "music")]
@@ -46,6 +47,7 @@ pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;
 pub use inbox::InboxComponent;
+pub use leaderboard::LeaderboardComp;
 pub use logo::Logo;
 pub use map::*;
 pub use navigation::*;
