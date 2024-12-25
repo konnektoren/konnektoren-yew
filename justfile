@@ -41,11 +41,31 @@ build: styles-check
     trunk build --release
 
 # Run all tests
-test: test-cargo test-wasm
+test: test-cargo test-wasm test-i18n
 
 # Run cargo tests
 test-cargo:
     cargo test
+
+# Run i18n completeness check
+test-i18n:
+    #!/usr/bin/env bash
+    chmod +x ./scripts/i18n_report.sh
+    ./scripts/i18n_report.sh
+
+# Generate i18n report
+i18n-report:
+    #!/usr/bin/env bash
+    ./scripts/i18n_report.sh
+
+# CI-specific settings
+ci-test-i18n:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just i18n-report
+    if [ -f "${REPORTS_DIR}/i18n_summary.md" ]; then
+        cat "${REPORTS_DIR}/i18n_summary.md"
+    fi
 
 # Run wasm tests in Firefox
 test-wasm:

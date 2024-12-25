@@ -84,3 +84,6 @@ serde_yaml = "0.9.34+deprecated"
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
 tokio = { version = "1.0", features = ["rt", "macros"] }
+regex = "1.5"
+walkdir = "2.3"
+serde_json = "1.0"
