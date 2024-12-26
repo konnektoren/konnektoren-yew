@@ -1394,6 +1394,7 @@ dependencies = [
  "yew-i18n",
  "yew-preview",
  "yew-router",
+ "yew-tou-rs",
 ]
 
 [[package]]
@@ -2984,6 +2985,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.91",
+]
+
+[[package]]
+name = "yew-tou-rs"
+version = "0.2.0"
+source = "git+https://github.com/chriamue/yew-tou-rs/?branch=main#66127466687eb646324c6e1e1e8e8e6f7920fe11"
+dependencies = [
+ "markdown",
+ "serde",
+ "serde_json",
+ "web-sys",
+ "yew",
 ]
 
 [[package]]

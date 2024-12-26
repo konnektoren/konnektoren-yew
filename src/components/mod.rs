@@ -29,6 +29,8 @@ pub mod share_page;
 pub mod social_links;
 pub mod status_message;
 pub mod timer;
+#[cfg(feature = "tour")]
+pub mod tour;
 pub mod translate;
 
 #[cfg(feature = "marketplace")]
@@ -58,6 +60,8 @@ pub use share_page::SharePageComp;
 pub use social_links::SocialLinks;
 pub use status_message::{StatusMessage, StatusType};
 pub use timer::TimerComponent;
+#[cfg(feature = "tour")]
+pub use tour::*;
 pub use translate::TranslateComponent;
 
 #[cfg(feature = "certificates")]

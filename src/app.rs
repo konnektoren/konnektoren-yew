@@ -14,6 +14,8 @@ use crate::components::marketplace::{
     CartBadgeComponent, ProductCatalogComponent, ProductComponent, ShoppingCartComponent,
     TonWalletComponent,
 };
+#[cfg(feature = "tour")]
+use crate::components::tour::{TourButton, TourConfig};
 
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
@@ -228,6 +230,8 @@ pub fn App() -> Html {
             ChatComponent::preview(),
             StatusMessage::preview()
         ),
+        #[cfg(feature = "tour")]
+        create_component_group!("Tour", TourConfig::preview(), TourButton::preview()),
     ];
 
     let storage = LocalStorage::new(None);

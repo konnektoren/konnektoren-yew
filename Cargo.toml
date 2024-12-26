@@ -19,6 +19,7 @@ default = [
     "music",
     "storage",
     "gdrive",
+    "tour",
 ]
 backup = []
 certificates = [
@@ -31,6 +32,7 @@ music = []
 storage = ["gloo/storage"]
 yew-preview = ["dep:yew-preview"]
 gdrive = ["backup"]
+tour = ["yew-tou-rs"]
 
 [dependencies]
 async-trait = "0.1.83"
@@ -73,6 +75,9 @@ yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true
 yew-chat = { git = "https://github.com/chriamue/yew-chat", features = [
     "yew",
 ], default-features = false }
+yew-tou-rs = { git = "https://github.com/chriamue/yew-tou-rs/", branch = "main", features = [
+    "markdown",
+], optional = true }
 uuid = { version = "1.10.0", features = ["v4"] }
 urlencoding = "2.1.3"
 rand = "0.8"
