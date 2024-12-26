@@ -3,6 +3,7 @@
 pub mod actions;
 pub mod challenge;
 pub mod challenge_history_summary;
+pub mod challenges_summary;
 pub mod contextual_choice;
 pub mod contextual_choice_result;
 pub mod custom;
@@ -23,6 +24,9 @@ pub mod sort_table_result;
 pub use actions::{ChallengeActions, ChallengeActionsComponent};
 pub use challenge::ChallengeComponent;
 pub use challenge_history_summary::ChallengeHistorySummaryComponent;
+pub use challenges_summary::{
+    ChallengesSummaryComp, ChallengesSummaryConfig, ChallengesSummaryProps,
+};
 pub use contextual_choice::ContextualChoiceComponent;
 pub use contextual_choice_result::ContextualChoiceResultComponent;
 pub use custom::CustomComponent;
