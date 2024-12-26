@@ -3,7 +3,7 @@ use crate::components::{
     ChallengeInfoComponent, ChallengeTimerComponent, ChatComponent, ContextualChoiceComponent,
     LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent,
     SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks, SoundConfig,
-    TranslateComponent,
+    StatusMessage, TranslateComponent,
 };
 
 #[cfg(feature = "yew-preview")]
@@ -225,7 +225,8 @@ pub fn App() -> Html {
             Badge::preview(),
             SocialLinks::preview(),
             Logo::preview(),
-            ChatComponent::preview()
+            ChatComponent::preview(),
+            StatusMessage::preview()
         ),
     ];
 
