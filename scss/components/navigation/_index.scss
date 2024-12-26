@@ -1,3 +1,8 @@
+.navigation-wrapper {
+    @include horizontal-layout;
+    background: color("nav-background");
+}
+
 .navigation {
     background: color("nav-background");
     display: flex;
