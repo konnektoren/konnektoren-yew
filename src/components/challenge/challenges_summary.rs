@@ -25,7 +25,15 @@ pub struct ChallengesSummaryConfig {
     pub language: String,
 }
 
-fn challenge_info_block(challenge: &ChallengeConfig) -> Html {
+#[derive(Properties, Clone, PartialEq)]
+pub struct ChallengeInfoBlockProps {
+    pub challenge: ChallengeConfig,
+}
+
+#[function_component(ChallengeInfoBlock)]
+pub fn challenge_info_block(props: &ChallengeInfoBlockProps) -> Html {
+    let challenge = &props.challenge;
+
     html! {
         <div class="challenge-block">
             <div class="challenge-block__header">
@@ -78,7 +86,11 @@ fn level_section(level: &GamePath) -> Html {
                 </div>
             </div>
             <div class="level-section__challenges">
-                {for level.challenges.iter().map(challenge_info_block)}
+                {for level.challenges.iter().map(|challenge| {
+                    html! {
+                        <ChallengeInfoBlock challenge={challenge.clone()} />
+                    }
+                })}
             </div>
         </section>
     }
@@ -177,7 +189,7 @@ pub fn challenges_summary(props: &ChallengesSummaryProps) -> Html {
     }
 }
 
-fn get_styles() -> String {
+pub fn get_styles() -> String {
     r#"
     .challenges-summary {
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
