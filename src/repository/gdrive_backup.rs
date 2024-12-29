@@ -1,6 +1,6 @@
 #![cfg_attr(not(target_arch = "wasm32"), allow(unused))]
 
-use super::{Backup, BackupError, BackupInfo, BACKUP_KEY};
+use super::{Backup, BackupError, BackupInfo};
 use async_trait::async_trait;
 use gloo::net::http::Request;
 use serde::{Deserialize, Serialize};

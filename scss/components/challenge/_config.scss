@@ -1,10 +1,13 @@
 .challenge-config {
-    @include position-absolute;
     @include card(
         (
             theme: "dark",
         )
     );
     z-index: z-index("modal");
-    color: color("light");
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    flex-grow: 1;
 }

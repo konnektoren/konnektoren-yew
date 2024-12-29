@@ -7,12 +7,29 @@
             theme: "background-primary",
         )
     );
+    padding: spacing("lg");
     @include content-layout;
     transition: all 0.3s ease-in-out;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
     &:hover {
         transform: translateY(-2px);
         @include card-shadow("hard");
+    }
+
+    &__title {
+        margin-bottom: spacing("md");
+    }
+
+    &__description {
+        flex: 1;
+    }
+
+    &__meta {
+        margin-top: auto;
     }
 
     &__tasks,
