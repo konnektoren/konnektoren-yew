@@ -150,17 +150,7 @@ pub fn App() -> Html {
                     }
                 )]
             ),
-            create_component_item!(
-                "MultipleChoiceCircleComponent",
-                MultipleChoiceCircleComponent,
-                vec![(
-                    "default",
-                    MultipleChoiceComponentProps {
-                        challenge: default_multiple_choice,
-                        ..Default::default()
-                    }
-                )]
-            ),
+            MultipleChoiceCircleComponent::preview(),
             SortTableComponent::preview(),
             ContextualChoiceComponent::preview(),
             ChallengeComponent::preview(),

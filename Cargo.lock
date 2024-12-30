@@ -1341,7 +1341,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-core"
 version = "0.4.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#24dca61c47a382cbbac702f0c2f33b06e18f67e0"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#34557bc89a1e133a1cb3189eb2efd4192c390d8b"
 dependencies = [
  "ab_glyph",
  "anyhow",

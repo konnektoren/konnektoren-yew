@@ -45,3 +45,47 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
         </div>
     }
 }
+
+#[cfg(feature = "yew-preview")]
+mod preview {
+    use super::*;
+    use konnektoren_core::prelude::{ChallengeType, Game};
+    use yew_preview::prelude::*;
+
+    use konnektoren_core::challenges::multiple_choice::MultipleChoice;
+
+    fn create_default_challenge() -> MultipleChoice {
+        let game = Game::default();
+        let default_challenge = game.create_challenge("konnektoren-1").unwrap();
+        match &default_challenge.challenge_type {
+            ChallengeType::MultipleChoice(multiple_choice) => multiple_choice.clone(),
+            _ => unreachable!(),
+        }
+    }
+
+    fn create_articles_challenge() -> MultipleChoice {
+        let game = Game::default();
+        let default_challenge = game.create_challenge("articles-1").unwrap();
+        match &default_challenge.challenge_type {
+            ChallengeType::MultipleChoice(multiple_choice) => multiple_choice.clone(),
+            _ => unreachable!(),
+        }
+    }
+
+    yew_preview::create_preview!(
+        MultipleChoiceCircleComponent,
+        MultipleChoiceComponentProps {
+            challenge: create_default_challenge(),
+            on_command: None,
+            on_event: None,
+        },
+        (
+            "Articles",
+            MultipleChoiceComponentProps {
+                challenge: create_articles_challenge(),
+                on_command: None,
+                on_event: None,
+            }
+        ),
+    );
+}
