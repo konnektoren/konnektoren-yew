@@ -1,0 +1,119 @@
+.question {
+    @include card(
+        (
+            padding: "sm",
+            shadow: "medium",
+            theme: "background-primary",
+        )
+    );
+    @include content-layout;
+    @include vertical-layout(
+        (
+            gap: "sm",
+            align: center,
+        )
+    );
+    display: inline-flex;
+    color: color("primary");
+
+    &__title {
+        @include material-h4;
+    }
+
+    &__icon {
+        font-size: font-size("800");
+        background: linear-gradient(
+            45deg,
+            color("primary"),
+            color("secondary")
+        );
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    &__image {
+        max-width: 200px;
+        height: auto;
+        border-radius: border-radius("lg");
+        @include card-shadow("medium");
+        margin: spacing("md") auto;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+            @include card-shadow("hard");
+        }
+    }
+
+    &__text {
+        @include material-h5;
+        color: color("text-primary");
+        text-align: center;
+        line-height: line-height("relaxed");
+        padding: 0 spacing("md");
+        font-weight: font-weight("medium");
+    }
+
+    &__help {
+        @include card(
+            (
+                padding: "md",
+                shadow: "soft",
+                theme: "background-secondary",
+            )
+        );
+        width: 100%;
+        border-left: 4px solid color("info");
+        animation: slideIn 0.3s ease-out;
+
+        &-text {
+            @include material-body1;
+            color: color("text-secondary");
+            font-style: italic;
+            text-align: center;
+        }
+
+        &-translation {
+            padding-top: spacing("md");
+            border-top: 1px solid color("border-primary");
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    @include responsive-layout("small") {
+        padding: spacing("xs");
+
+        &__title {
+            @include material-h5;
+        }
+
+        &__icon {
+            font-size: font-size("700");
+        }
+
+        &__image {
+            max-width: 150px;
+        }
+
+        &__text {
+            @include material-h6;
+            padding: 0;
+        }
+
+        &__help {
+            padding: spacing("sm");
+
+            &-text {
+                @include material-body2;
+            }
+        }
+    }
+}

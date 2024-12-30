@@ -33,14 +33,16 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
                 max={props.challenge.questions.len()}
                 label={format!("Question {} of {}", *task_index + 1, props.challenge.questions.len())}
             />
-            <OptionsComponent
-                options={props.challenge.options.clone()}
-                on_select={handle_option_selection}
-            />
-            <QuestionComponent
-                question={props.challenge.questions[*task_index].clone()}
-                help={*show_help}
-            />
+            <div class="multiple-choice-circle__content">
+                <OptionsComponent
+                    options={props.challenge.options.clone()}
+                    on_select={handle_option_selection}
+                />
+                <QuestionComponent
+                    question={props.challenge.questions[*task_index].clone()}
+                    help={*show_help}
+                />
+            </div>
             <ReadText text={props.challenge.questions[*task_index].question.clone()} lang="de-DE" />
         </div>
     }

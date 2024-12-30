@@ -1,0 +1,125 @@
+@use "sass:math";
+
+.multiple-choice-circle {
+    @include vertical-layout(
+        (
+            gap: "xl",
+            align: stretch,
+        )
+    );
+    max-width: 800px;
+    min-width: 400px;
+    width: fit-content;
+    margin: 0 auto;
+    padding: spacing("xl");
+
+    .progress {
+        width: 100%;
+    }
+
+    &__content {
+        position: relative;
+        min-height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .question {
+        position: absolute;
+        z-index: 1;
+        width: fit-content;
+        max-width: 90%;
+    }
+
+    .multiple-choice-options {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .multiple-choice-option {
+        position: absolute;
+        transform-origin: center;
+        z-index: z-index("tooltip");
+
+        span {
+            @include card(
+                (
+                    padding: "sm",
+                    shadow: "soft",
+                    theme: "background-primary",
+                )
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            min-height: 70px;
+            max-width: 120px;
+            padding: spacing("sm") spacing("md");
+            border-radius: border-radius("full");
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: font-size("400");
+            font-weight: font-weight("medium");
+            text-align: center;
+            hyphens: auto;
+
+            &:hover {
+                transform: scale(1.1);
+                background-color: color("primary");
+                color: color("light");
+                @include elevation(2);
+            }
+        }
+
+        @for $i from 1 through 8 {
+            &:nth-child(#{$i}) {
+                $angle: ($i - 1) * math.div(360deg, 8);
+                $radius: 180px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%)
+                    rotate($angle)
+                    translateX($radius)
+                    rotate(-$angle);
+            }
+        }
+    }
+
+    @include responsive-layout("small") {
+        padding: spacing("md");
+
+        &__content {
+            min-height: 300px;
+        }
+
+        .question {
+            width: 250px;
+        }
+
+        .multiple-choice-option {
+            span {
+                min-width: 50px;
+                min-height: 50px;
+                max-width: 100px;
+                font-size: font-size("300");
+                padding: spacing("xs") spacing("sm");
+            }
+
+            @for $i from 1 through 8 {
+                &:nth-child(#{$i}) {
+                    $angle: ($i - 1) * math.div(360deg, 8);
+                    $radius: 140px;
+                    transform: translate(-50%, -50%)
+                        rotate($angle)
+                        translateX($radius)
+                        rotate(-$angle);
+                }
+            }
+        }
+    }
+}
