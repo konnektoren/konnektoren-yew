@@ -20,7 +20,6 @@ use crate::components::tour::{TourButton, TourConfig};
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
-use crate::components::challenge::multiple_choice::MultipleChoiceComponentProps;
 use crate::components::challenge::{
     MultipleChoiceCircleComponent, MultipleChoiceComponent, SortTableComponent,
 };
@@ -125,13 +124,6 @@ pub fn Example() -> Html {
 
 #[function_component]
 pub fn App() -> Html {
-    let game = Game::default();
-    let default_challenge = game.create_challenge("konnektoren-1").unwrap();
-    let default_multiple_choice: MultipleChoice = match &default_challenge.challenge_type {
-        ChallengeType::MultipleChoice(multiple_choice) => multiple_choice.clone(),
-        _ => unreachable!(),
-    };
-
     let i18n_config = I18nConfig::default();
 
     #[cfg(feature = "yew-preview")]
@@ -139,17 +131,7 @@ pub fn App() -> Html {
         create_component_group!(
             "Challenge",
             BlinkAnimation::preview(),
-            create_component_item!(
-                "MultipleChoiceComponent",
-                MultipleChoiceComponent,
-                vec![(
-                    "default",
-                    MultipleChoiceComponentProps {
-                        challenge: default_multiple_choice.clone(),
-                        ..Default::default()
-                    }
-                )]
-            ),
+            MultipleChoiceComponent::preview(),
             MultipleChoiceCircleComponent::preview(),
             SortTableComponent::preview(),
             ContextualChoiceComponent::preview(),

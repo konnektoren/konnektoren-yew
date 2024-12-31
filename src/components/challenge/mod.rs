@@ -35,7 +35,7 @@ pub use custom_result::CustomResultComponent;
 pub use informative::InformativeComponent;
 pub use informative_markdown::InformativeMarkdownComponent;
 pub use informative_result::InformativeResultComponent;
-pub use multiple_choice::MultipleChoiceComponent;
+pub use multiple_choice::{MultipleChoiceComponent, MultipleChoiceComponentProps};
 pub use multiple_choice_circle::MultipleChoiceCircleComponent;
 pub use multiple_choice_result::MultipleChoiceResultComponent;
 pub use options::OptionsComponent;
