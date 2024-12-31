@@ -1,10 +1,14 @@
 @import "actions";
 @import "config";
 @import "info";
-@import "informative";
-@import "informative_markdown";
-@import "multiple-choice-circle";
+@import "options";
 @import "question";
 @import "rating";
 @import "review";
+
+@import "informative";
+@import "informative_markdown";
+@import "multiple-choice-result";
+@import "multiple-choice";
+@import "multiple-choice-circle";
 @import "sort-table";
