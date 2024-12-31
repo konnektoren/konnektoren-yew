@@ -1,0 +1,32 @@
+.multiple-choice-option {
+    span {
+        @include card(
+            (
+                padding: "sm",
+                shadow: "soft",
+                theme: "background-primary",
+            )
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 70px;
+        min-height: 70px;
+        max-width: 240px;
+        padding: spacing("sm") spacing("md");
+        border-radius: border-radius("full");
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: font-size("400");
+        font-weight: font-weight("medium");
+        text-align: center;
+        hyphens: auto;
+
+        &:hover {
+            transform: scale(1.1);
+            background-color: color("primary");
+            color: color("light");
+            z-index: z-index("tooltip");
+        }
+    }
+}
