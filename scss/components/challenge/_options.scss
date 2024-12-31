@@ -10,15 +10,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 70px;
-        min-height: 70px;
+        min-width: 50px;
+        min-height: 50px;
         max-width: 240px;
-        padding: spacing("sm") spacing("md");
         border-radius: border-radius("full");
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: font-size("400");
-        font-weight: font-weight("medium");
+        font-size: font-size("300");
         text-align: center;
         hyphens: auto;
 

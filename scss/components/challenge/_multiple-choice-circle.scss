@@ -44,6 +44,9 @@
         position: absolute;
         transform-origin: center;
         z-index: z-index("modal");
+        font-weight: font-weight("medium");
+        min-width: 70px;
+        min-height: 70px;
 
         @for $i from 1 through 8 {
             &:nth-child(#{$i}) {
