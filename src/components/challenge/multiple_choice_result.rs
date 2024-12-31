@@ -17,23 +17,18 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
             .zip(options.iter())
             .map(|(question, option)| {
                 let is_correct = question.option == option.id;
-                let class_name = if is_correct {
-                    "result-correct"
-                } else {
-                    "result-incorrect"
-                };
+                let modifier = if is_correct { "correct" } else { "incorrect" };
                 let text = format!("{}: {} - ", question.question, option.name);
 
                 html! {
-                    <li class={class_name}>
-                        <div class={class_name}>{text}<span>{
-                            if is_correct {
-                                "Correct"
-                            } else {
-                                "Incorrect"
-                            }
-                        }</span></div>
-                    </li>
+                    <tr class={classes!("multiple-choice-result__row", format!("multiple-choice-result__row--{}", modifier))}>
+                        <td class="multiple-choice-result__cell">
+                            {text}
+                        </td>
+                        <td class={classes!("multiple-choice-result__cell", format!("multiple-choice-result__cell--{}", modifier))}>
+                            {if is_correct { "Correct" } else { "Incorrect" }}
+                        </td>
+                    </tr>
                 }
             })
             .collect::<Vec<Html>>(),
@@ -41,11 +36,19 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
     };
 
     html! {
-        <div class="challenge-result">
-            <h2>{"Challenge Result"}</h2>
-            <ul>
-                {for results.into_iter()}
-            </ul>
+        <div class="multiple-choice-result">
+            <h2 class="multiple-choice-result__title">{"Challenge Result"}</h2>
+            <table class="multiple-choice-result__table">
+                <thead class="multiple-choice-result__header">
+                    <tr>
+                        <th class="multiple-choice-result__header-cell">{"Question"}</th>
+                        <th class="multiple-choice-result__header-cell">{"Result"}</th>
+                    </tr>
+                </thead>
+                <tbody class="multiple-choice-result__body">
+                    {for results.into_iter()}
+                </tbody>
+            </table>
         </div>
     }
 }
