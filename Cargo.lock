@@ -1340,8 +1340,8 @@ dependencies = [
 
 [[package]]
 name = "konnektoren-core"
-version = "0.4.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#34557bc89a1e133a1cb3189eb2efd4192c390d8b"
+version = "0.4.1"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#374bfcbfe0b3f4adcbabe95cb83cfdaa0ef320ef"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -1376,7 +1376,7 @@ dependencies = [
 
 [[package]]
 name = "konnektoren-yew"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2534,7 +2534,7 @@ dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "winnow 0.6.20",
+ "winnow 0.6.21",
 ]
 
 [[package]]
@@ -2881,9 +2881,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.6.20"
+version = "0.6.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36c1fec1a2bb5866f07c25f68c26e565c4c200aebb96d7e55710c19d3e8ac49b"
+checksum = "e6f5bb5257f2407a5425c6e749bfd9692192a73e70a6060516ac04f889087d68"
 dependencies = [
  "memchr",
 ]

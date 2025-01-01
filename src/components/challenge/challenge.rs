@@ -1,8 +1,8 @@
 use super::{
     ContextualChoiceComponent, ContextualChoiceResultComponent, CustomComponent,
-    CustomPackageComponent, InformativeComponent, InformativeMarkdownComponent,
-    MultipleChoiceCircleComponent, MultipleChoiceComponent, MultipleChoiceResultComponent,
-    SortTableComponent,
+    CustomPackageComponent, GapFillComponent, GapFillResultComponent, InformativeComponent,
+    InformativeMarkdownComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent,
+    MultipleChoiceResultComponent, SortTableComponent,
 };
 use crate::components::{ChallengeInfoComponent, ChallengeTimerComponent};
 use konnektoren_core::challenges::ChallengeVariant;
@@ -75,6 +75,10 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
                on_command={handle_command} />
             }
         }
+        (None, ChallengeType::GapFill(challenge), _) => html! {
+            <GapFillComponent challenge={challenge.clone()} on_event={handle_event}
+           on_command={handle_command} />
+        },
         (None, ChallengeType::SortTable(challenge), ChallengeVariant::SortTable) => html! {
             <SortTableComponent challenge={challenge.clone()} on_event={handle_event}
            on_command={handle_command} />
@@ -104,6 +108,9 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         },
         (Some(result), ChallengeType::ContextualChoice(challenge)) => html! {
             <ContextualChoiceResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
+        },
+        (Some(result), ChallengeType::GapFill(challenge)) => html! {
+            <GapFillResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
         },
         _ => html! {},
     };
