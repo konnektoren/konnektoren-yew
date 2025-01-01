@@ -1,0 +1,51 @@
+.gap-fill-result {
+    &__title {
+        margin-bottom: spacing("lg");
+    }
+
+    &__table {
+        @include table-base;
+    }
+
+    &__header {
+        @include table-header;
+    }
+
+    &__header-cell {
+        @include table-cell;
+    }
+
+    &__row {
+        @include table-row;
+
+        &--correct {
+            &:hover {
+                background-color: lighten-color("success", 1.1);
+            }
+        }
+
+        &--incorrect {
+            &:hover {
+                background-color: lighten-color("danger", 1.2);
+            }
+        }
+    }
+
+    &__cell {
+        @include table-cell(
+            (
+                whitespace: normal,
+            )
+        );
+
+        &--correct {
+            color: color("success");
+            font-weight: font-weight("medium");
+        }
+
+        &--incorrect {
+            color: color("danger");
+            font-weight: font-weight("medium");
+        }
+    }
+}

@@ -21,7 +21,7 @@ use crate::components::tour::{TourButton, TourConfig};
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
 use crate::components::challenge::{
-    MultipleChoiceCircleComponent, MultipleChoiceComponent, SortTableComponent,
+    GapFillComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent, SortTableComponent,
 };
 #[cfg(feature = "certificates")]
 use crate::components::{
@@ -135,6 +135,7 @@ pub fn App() -> Html {
             MultipleChoiceCircleComponent::preview(),
             SortTableComponent::preview(),
             ContextualChoiceComponent::preview(),
+            GapFillComponent::preview(),
             ChallengeComponent::preview(),
             ChallengeActionsComponent::preview(),
             ChallengeConfigComponent::preview(),
