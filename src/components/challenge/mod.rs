@@ -18,6 +18,7 @@ pub mod multiple_choice;
 pub mod multiple_choice_circle;
 pub mod multiple_choice_result;
 pub mod options;
+pub mod ordering;
 pub mod question;
 pub mod result_summary;
 pub mod sort_table;
@@ -43,6 +44,7 @@ pub use multiple_choice::{MultipleChoiceComponent, MultipleChoiceComponentProps}
 pub use multiple_choice_circle::MultipleChoiceCircleComponent;
 pub use multiple_choice_result::MultipleChoiceResultComponent;
 pub use options::OptionsComponent;
+pub use ordering::OrderingComponent;
 pub use question::QuestionComponent;
 pub use result_summary::ResultSummaryComponent;
 pub use sort_table::SortTableComponent;
