@@ -4,8 +4,116 @@ use konnektoren_core::challenges::{ChallengeResult, Ordering, OrderingItem, Orde
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use rand::prelude::{thread_rng, SliceRandom};
-use web_sys::DragEvent;
+use wasm_bindgen::JsCast;
+use web_sys::{DragEvent, Element, TouchEvent};
 use yew::prelude::*;
+
+// Props for the OrderingElement component
+#[derive(Properties, PartialEq)]
+struct OrderingElementProps {
+    index: usize,
+    element: String,
+    is_selected: bool,
+    is_dragging: bool,
+    show_drop_indicator: bool,
+    on_click: Callback<usize>,
+    on_drag_start: Callback<DragEvent>,
+    on_drag_over: Callback<DragEvent>,
+    on_drag_leave: Callback<DragEvent>,
+    on_drop: Callback<DragEvent>,
+    on_touch_start: Callback<TouchEvent>,
+    on_touch_move: Callback<TouchEvent>,
+    on_touch_end: Callback<TouchEvent>,
+}
+
+#[function_component(OrderingElement)]
+fn ordering_element(props: &OrderingElementProps) -> Html {
+    let onclick = {
+        let index = props.index;
+        let on_click = props.on_click.clone();
+        Callback::from(move |_| on_click.emit(index))
+    };
+
+    html! {
+        <>
+            if props.index > 0 {
+                <div class={classes!(
+                    "ordering__drop-indicator",
+                    props.show_drop_indicator.then(|| "ordering__drop-indicator--active")
+                )} />
+            }
+            <div
+                class={classes!(
+                    "ordering__element",
+                    props.is_dragging.then(|| "ordering__element--dragging"),
+                    props.is_selected.then(|| "ordering__element--selected")
+                )}
+                draggable="true"
+                data-index={props.index.to_string()}
+                onclick={onclick}
+                ondragstart={props.on_drag_start.clone()}
+                ondragover={props.on_drag_over.clone()}
+                ondragleave={props.on_drag_leave.clone()}
+                ondrop={props.on_drop.clone()}
+                ontouchstart={props.on_touch_start.clone()}
+                ontouchmove={props.on_touch_move.clone()}
+                ontouchend={props.on_touch_end.clone()}
+            >
+                {&props.element}
+            </div>
+        </>
+    }
+}
+
+// Props for the OrderingList component
+#[derive(Properties, PartialEq)]
+struct OrderingListProps {
+    elements: Vec<String>,
+    selected_index: Option<usize>,
+    dragged_index: Option<usize>,
+    drop_target_index: Option<usize>,
+    on_click: Callback<usize>,
+    on_drag_start: Callback<DragEvent>,
+    on_drag_over: Callback<DragEvent>,
+    on_drag_leave: Callback<DragEvent>,
+    on_drop: Callback<DragEvent>,
+    on_touch_start: Callback<TouchEvent>,
+    on_touch_move: Callback<TouchEvent>,
+    on_touch_end: Callback<TouchEvent>,
+}
+
+// List of ordering elements component
+#[function_component(OrderingList)]
+fn ordering_list(props: &OrderingListProps) -> Html {
+    html! {
+        <div class="ordering__elements-list">
+            {props.elements.iter().enumerate().map(|(index, element)| {
+                let is_dragging = props.dragged_index == Some(index);
+                let is_selected = props.selected_index == Some(index);
+                let show_drop_indicator = props.drop_target_index == Some(index);
+
+                html! {
+                    <OrderingElement
+                        key={index}
+                        {index}
+                        element={element.clone()}
+                        {is_selected}
+                        {is_dragging}
+                        {show_drop_indicator}
+                        on_click={props.on_click.clone()}
+                        on_drag_start={props.on_drag_start.clone()}
+                        on_drag_over={props.on_drag_over.clone()}
+                        on_drag_leave={props.on_drag_leave.clone()}
+                        on_drop={props.on_drop.clone()}
+                        on_touch_start={props.on_touch_start.clone()}
+                        on_touch_move={props.on_touch_move.clone()}
+                        on_touch_end={props.on_touch_end.clone()}
+                    />
+                }
+            }).collect::<Html>()}
+        </div>
+    }
+}
 
 #[derive(Properties, PartialEq)]
 pub struct OrderingComponentProps {
@@ -21,6 +129,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let current_item = use_state(|| 0);
     let dragged_index = use_state(|| None::<usize>);
     let drop_target_index = use_state(|| None::<usize>);
+    let selected_index = use_state(|| None::<usize>);
     // Initialize with shuffled order
     let current_order = use_state(|| {
         if let Some(item) = props.challenge.items.get(0) {
@@ -46,6 +155,24 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         }
     };
 
+    let handle_click = {
+        let selected_index = selected_index.clone();
+        let current_order = current_order.clone();
+        Callback::from(move |index: usize| {
+            if let Some(selected_idx) = *selected_index {
+                if selected_idx != index {
+                    // Swap elements
+                    let mut new_order = (*current_order).clone();
+                    new_order.swap(selected_idx, index);
+                    current_order.set(new_order);
+                }
+                selected_index.set(None);
+            } else {
+                selected_index.set(Some(index));
+            }
+        })
+    };
+
     let handle_drag_start = {
         let dragged_index = dragged_index.clone();
         Callback::from(move |event: DragEvent| {
@@ -53,8 +180,11 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                 if let Ok(index) = target
                     .get_attribute("data-index")
                     .unwrap_or_default()
-                    .parse()
+                    .parse::<usize>()
                 {
+                    if let Some(data_transfer) = event.data_transfer() {
+                        let _ = data_transfer.set_data("text/plain", &index.to_string());
+                    }
                     dragged_index.set(Some(index));
                 }
             }
@@ -104,6 +234,61 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                     current_order.set(new_order);
                 }
             }
+            dragged_index.set(None);
+            drop_target_index.set(None);
+        })
+    };
+
+    let handle_touch_start = {
+        let dragged_index = dragged_index.clone();
+        Callback::from(move |event: TouchEvent| {
+            event.prevent_default();
+            if let Some(target) = event.target().unwrap().dyn_into::<Element>().ok() {
+                if let Ok(index) = target
+                    .get_attribute("data-index")
+                    .unwrap_or_default()
+                    .parse()
+                {
+                    dragged_index.set(Some(index));
+                }
+            }
+        })
+    };
+
+    let handle_touch_move = {
+        let current_order = current_order.clone();
+        let dragged_index = dragged_index.clone();
+        let drop_target_index = drop_target_index.clone();
+        Callback::from(move |event: TouchEvent| {
+            event.prevent_default();
+            if let Some(touch) = event.touches().get(0) {
+                let target = touch.target().unwrap();
+                if let Some(element) = target.dyn_into::<Element>().ok() {
+                    if let Ok(target_idx) = element
+                        .get_attribute("data-index")
+                        .unwrap_or_default()
+                        .parse()
+                    {
+                        drop_target_index.set(Some(target_idx));
+
+                        // If we have both indices, perform the swap
+                        if let Some(source_idx) = *dragged_index {
+                            if source_idx != target_idx {
+                                let mut new_order = (*current_order).clone();
+                                new_order.swap(source_idx, target_idx);
+                                current_order.set(new_order);
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    };
+
+    let handle_touch_end = {
+        let dragged_index = dragged_index.clone();
+        let drop_target_index = drop_target_index.clone();
+        Callback::from(move |_: TouchEvent| {
             dragged_index.set(None);
             drop_target_index.set(None);
         })
@@ -209,39 +394,22 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                     label={format!("Item {} of {}", (*current_item) + 1, props.challenge.items.len())}
                 />
                 <div class="ordering__elements">
-                    <div class="ordering__elements-list">
-                        {ordered_elements.iter().enumerate().map(|(index, element)| {
-                            let is_dragging = *dragged_index == Some(index);
-                            let show_drop_indicator = *drop_target_index == Some(index);
-
-                            html! {
-                                <>
-                                    if index > 0 {
-                                        <div class={classes!(
-                                            "ordering__drop-indicator",
-                                            show_drop_indicator.then(|| "ordering__drop-indicator--active")
-                                        )} />
-                                    }
-                                    <div
-                                        class={classes!(
-                                            "ordering__element",
-                                            is_dragging.then(|| "ordering__element--dragging")
-                                        )}
-                                        draggable="true"
-                                        data-index={index.to_string()}
-                                        ondragstart={handle_drag_start.clone()}
-                                        ondragover={handle_drag_over.clone()}
-                                        ondragleave={handle_drag_leave.clone()}
-                                        ondrop={handle_drop.clone()}
-                                    >
-                                        {element}
-                                    </div>
-                                </>
-                            }
-                        }).collect::<Html>()}
-                    </div>
+                    <OrderingList
+                        elements={ordered_elements}
+                        selected_index={*selected_index}
+                        dragged_index={*dragged_index}
+                        drop_target_index={*drop_target_index}
+                        on_click={handle_click}
+                        on_drag_start={handle_drag_start}
+                        on_drag_over={handle_drag_over}
+                        on_drag_leave={handle_drag_leave}
+                        on_drop={handle_drop}
+                        on_touch_start={handle_touch_start}
+                        on_touch_move={handle_touch_move}
+                        on_touch_end={handle_touch_end}
+                    />
                 </div>
-                <ChallengeActionsComponent on_action={handle_action.clone()} />
+                <ChallengeActionsComponent on_action={handle_action} />
             </div>
         }
     } else {
