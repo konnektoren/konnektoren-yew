@@ -2,7 +2,8 @@ use super::{
     ContextualChoiceComponent, ContextualChoiceResultComponent, CustomComponent,
     CustomPackageComponent, GapFillComponent, GapFillResultComponent, InformativeComponent,
     InformativeMarkdownComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent,
-    MultipleChoiceResultComponent, OrderingComponent, OrderingResultComponent, SortTableComponent,
+    MultipleChoiceResultComponent, OrderingComponent, OrderingResultComponent,
+    PlaceholderComponent, SortTableComponent,
 };
 use crate::components::{ChallengeInfoComponent, ChallengeTimerComponent};
 use konnektoren_core::challenges::ChallengeVariant;
@@ -102,6 +103,9 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         (None, ChallengeType::Custom(challenge), ChallengeVariant::CustomPackage) => html! {
             <CustomPackageComponent challenge={challenge.clone()} on_event={handle_event}
            on_command={handle_command} />
+        },
+        (None, ChallengeType::Placeholder(challenge), _) => html! {
+            <PlaceholderComponent challenge={challenge.clone()} on_command={handle_command} language={props.language.clone()} />
         },
         _ => html! {},
     };

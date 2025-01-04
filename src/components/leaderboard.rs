@@ -1,5 +1,6 @@
 use crate::components::TimerComponent;
 use crate::i18n::use_i18n;
+use crate::tools::TracedResponse;
 use gloo::net::http::Request;
 use konnektoren_core::challenges::{PerformanceRecord, Timed};
 use serde::{Deserialize, Serialize};
@@ -30,7 +31,7 @@ pub async fn fetch_all_performance_records(
         None => api_url.to_string(),
     };
 
-    let response = Request::get(&url).send().await?;
+    let response = Request::get(&url).send_traced().await?;
 
     let leaderboard: LeaderboardV1Response = response.json().await?;
     let mut performance_records = leaderboard.performance_records;

@@ -1,3 +1,4 @@
+use crate::tools::TracedResponse;
 use gloo::net::http::Request;
 use yew::prelude::*;
 
@@ -20,7 +21,7 @@ pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
         use_effect_with((), move |_| {
             wasm_bindgen_futures::spawn_local(async move {
                 let url = format!("{}/reviews/{}/average", api_url, challenge_id);
-                let response = Request::get(&url).send().await;
+                let response = Request::get(&url).send_traced().await;
 
                 match response {
                     Ok(response) if response.status() == 200 => {

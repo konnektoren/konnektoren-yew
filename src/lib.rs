@@ -4,6 +4,7 @@ pub mod i18n;
 pub mod managers;
 pub mod model;
 pub mod providers;
+pub mod tools;
 
 #[cfg(feature = "effects")]
 pub mod effects;
@@ -21,4 +22,5 @@ pub mod prelude {
     pub use crate::managers::*;
     pub use crate::model::*;
     pub use crate::providers::*;
+    pub use crate::tools::{update_trace_from_response, TracedRequest, TracedResponse};
 }

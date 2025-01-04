@@ -1,6 +1,8 @@
 use gloo::net::http::Request;
 use yew::prelude::*;
 
+use crate::tools::TracedResponse;
+
 #[derive(Properties, PartialEq)]
 pub struct ChallengePresenceProps {
     pub challenge_id: String,
@@ -30,10 +32,12 @@ pub fn challenge_presence(props: &ChallengePresenceProps) -> Html {
 
                 // Use GET for read-only, POST for recording presence
                 let response = if read_only {
-                    Request::get(&url).send().await
+                    Request::get(&url)
                 } else {
-                    Request::post(&url).send().await
-                };
+                    Request::post(&url)
+                }
+                .send_traced()
+                .await;
 
                 match response {
                     Ok(response) if response.status() == 200 => {

@@ -1,5 +1,6 @@
 use crate::components::{ChallengeRatingComponent, RatingStarsComponent};
 use crate::i18n::use_i18n;
+use crate::tools::{update_trace_from_response, TracedRequest};
 use gloo::net::http::Request;
 use konnektoren_core::challenges::Review;
 use yew::prelude::*;
@@ -72,8 +73,15 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                     },
                 };
 
-                match Request::post(&api_url).json(&review).unwrap().send().await {
+                match Request::post(&api_url)
+                    .with_trace()
+                    .json(&review)
+                    .unwrap()
+                    .send()
+                    .await
+                {
                     Ok(response) => {
+                        update_trace_from_response(&response);
                         let status = response.status();
                         if (200..300).contains(&status) {
                             log::info!("Review submitted successfully");
