@@ -20,6 +20,7 @@ pub struct OrderingComponentProps {
 pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let current_item = use_state(|| 0);
     let dragged_index = use_state(|| None::<usize>);
+    let drop_target_index = use_state(|| None::<usize>);
     // Initialize with shuffled order
     let current_order = use_state(|| {
         if let Some(item) = props.challenge.items.get(0) {
@@ -60,13 +61,33 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         })
     };
 
-    let handle_drag_over = Callback::from(|event: DragEvent| {
-        event.prevent_default();
-    });
+    let handle_drag_over = {
+        let drop_target_index = drop_target_index.clone();
+        Callback::from(move |event: DragEvent| {
+            event.prevent_default();
+            if let Some(target) = event.target_dyn_into::<web_sys::Element>() {
+                if let Ok(index) = target
+                    .get_attribute("data-index")
+                    .unwrap_or_default()
+                    .parse()
+                {
+                    drop_target_index.set(Some(index));
+                }
+            }
+        })
+    };
+
+    let handle_drag_leave = {
+        let drop_target_index = drop_target_index.clone();
+        Callback::from(move |_: DragEvent| {
+            drop_target_index.set(None);
+        })
+    };
 
     let handle_drop = {
         let current_order = current_order.clone();
         let dragged_index = dragged_index.clone();
+        let drop_target_index = drop_target_index.clone();
         Callback::from(move |event: DragEvent| {
             event.prevent_default();
             if let Some(target) = event.target_dyn_into::<web_sys::Element>() {
@@ -84,6 +105,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                 }
             }
             dragged_index.set(None);
+            drop_target_index.set(None);
         })
     };
 
@@ -190,20 +212,31 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                     <div class="ordering__elements-list">
                         {ordered_elements.iter().enumerate().map(|(index, element)| {
                             let is_dragging = *dragged_index == Some(index);
+                            let show_drop_indicator = *drop_target_index == Some(index);
+
                             html! {
-                                <div
-                                    class={classes!(
-                                        "ordering__element",
-                                        is_dragging.then(|| "ordering__element--dragging")
-                                    )}
-                                    draggable="true"
-                                    data-index={index.to_string()}
-                                    ondragstart={handle_drag_start.clone()}
-                                    ondragover={handle_drag_over.clone()}
-                                    ondrop={handle_drop.clone()}
-                                >
-                                    {element}
-                                </div>
+                                <>
+                                    if index > 0 {
+                                        <div class={classes!(
+                                            "ordering__drop-indicator",
+                                            show_drop_indicator.then(|| "ordering__drop-indicator--active")
+                                        )} />
+                                    }
+                                    <div
+                                        class={classes!(
+                                            "ordering__element",
+                                            is_dragging.then(|| "ordering__element--dragging")
+                                        )}
+                                        draggable="true"
+                                        data-index={index.to_string()}
+                                        ondragstart={handle_drag_start.clone()}
+                                        ondragover={handle_drag_over.clone()}
+                                        ondragleave={handle_drag_leave.clone()}
+                                        ondrop={handle_drop.clone()}
+                                    >
+                                        {element}
+                                    </div>
+                                </>
                             }
                         }).collect::<Html>()}
                     </div>

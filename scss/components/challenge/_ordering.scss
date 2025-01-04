@@ -31,7 +31,8 @@
     &__elements-list {
         display: flex;
         flex-direction: column;
-        gap: spacing("md");
+        gap: 0;
+        position: relative;
     }
 
     &__elements-list {
@@ -51,6 +52,9 @@
         cursor: move;
         user-select: none;
         transition: all 0.3s ease;
+        margin: 0;
+        position: relative;
+        z-index: 1;
 
         &:hover {
             transform: translateY(-2px);
@@ -60,12 +64,52 @@
 
         &--dragging {
             opacity: 0.5;
+            transform: scale(0.98);
             background-color: lighten-color("primary", 1.9);
             @include card-shadow("hard");
         }
 
         &--over {
             border: 2px dashed color("primary");
+        }
+    }
+
+    &__drop-indicator {
+        height: spacing("xs");
+        background: transparent;
+        transition: all 0.3s ease;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            background-color: color("primary");
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        &--active {
+            height: spacing("md");
+
+            &::after {
+                transform: scaleX(1);
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: spacing("md");
+                height: spacing("md");
+                background-color: color("primary");
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+            }
         }
     }
 
