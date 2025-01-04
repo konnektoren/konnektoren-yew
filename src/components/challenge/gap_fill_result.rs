@@ -1,4 +1,4 @@
-use konnektoren_core::challenges::{ChallengeResult, GapFill, GapFillAnswer};
+use konnektoren_core::challenges::{ChallengeResult, GapFill};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
