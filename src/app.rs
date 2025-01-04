@@ -22,7 +22,7 @@ use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent}
 
 use crate::components::challenge::{
     GapFillComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent, OrderingComponent,
-    SortTableComponent,
+    OrderingResultComponent, SortTableComponent,
 };
 #[cfg(feature = "certificates")]
 use crate::components::{
@@ -138,6 +138,7 @@ pub fn App() -> Html {
             ContextualChoiceComponent::preview(),
             GapFillComponent::preview(),
             OrderingComponent::preview(),
+            OrderingResultComponent::preview(),
             ChallengeComponent::preview(),
             ChallengeActionsComponent::preview(),
             ChallengeConfigComponent::preview(),

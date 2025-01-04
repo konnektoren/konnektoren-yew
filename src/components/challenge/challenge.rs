@@ -2,7 +2,7 @@ use super::{
     ContextualChoiceComponent, ContextualChoiceResultComponent, CustomComponent,
     CustomPackageComponent, GapFillComponent, GapFillResultComponent, InformativeComponent,
     InformativeMarkdownComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent,
-    MultipleChoiceResultComponent, SortTableComponent,
+    MultipleChoiceResultComponent, OrderingResultComponent, SortTableComponent,
 };
 use crate::components::{ChallengeInfoComponent, ChallengeTimerComponent};
 use konnektoren_core::challenges::ChallengeVariant;
@@ -111,6 +111,9 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         },
         (Some(result), ChallengeType::GapFill(challenge)) => html! {
             <GapFillResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
+        },
+        (Some(result), ChallengeType::Ordering(challenge)) => html! {
+            <OrderingResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
         },
         _ => html! {},
     };
