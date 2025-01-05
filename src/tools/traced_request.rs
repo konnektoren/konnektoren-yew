@@ -7,29 +7,29 @@ use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TraceContext {
-    pub trace_id: String,
+    pub trace_id: String, // This will be our session ID
     pub parent_id: String,
-    pub span_id: String, // Add current span ID
-    pub session_id: String,
+    pub span_id: String,
     pub sampled: bool,
 }
 
 impl Default for TraceContext {
     fn default() -> Self {
-        let session_id = match SessionStorage::get::<String>("session_trace_id") {
+        // Generate a new trace ID if none exists
+        let trace_id = match SessionStorage::get::<String>("trace_id") {
             Ok(id) => id,
             Err(_) => {
                 let id = Uuid::new_v4().to_string().replace("-", "");
-                let _ = SessionStorage::set("session_trace_id", &id);
+                let _ = SessionStorage::set("trace_id", &id);
+                debug!("Created new trace ID: {}", id);
                 id
             }
         };
 
         Self {
-            trace_id: session_id.clone(),
+            trace_id,
             parent_id: "0".repeat(16),
-            span_id: Uuid::new_v4().to_string().replace("-", ""),
-            session_id,
+            span_id: Uuid::new_v4().to_string().replace("-", "")[..16].to_string(),
             sampled: true,
         }
     }
@@ -38,11 +38,16 @@ impl Default for TraceContext {
 impl TraceContext {
     pub fn get_or_create() -> Self {
         match SessionStorage::get::<String>("traceparent") {
-            Ok(trace_parent) => Self::from_traceparent(&trace_parent),
+            Ok(trace_parent) => {
+                debug!("Retrieved existing traceparent: {}", trace_parent);
+                Self::from_traceparent(&trace_parent)
+            }
             Err(_) => {
                 let context = Self::default();
                 if let Err(e) = SessionStorage::set("traceparent", context.to_traceparent()) {
                     debug!("Failed to store traceparent: {}", e);
+                } else {
+                    debug!("Stored new traceparent: {}", context.to_traceparent());
                 }
                 context
             }
@@ -50,11 +55,18 @@ impl TraceContext {
     }
 
     pub fn new_child(&self) -> Self {
+        // Retrieve the trace ID from storage to ensure it is not overwritten
+        let trace_id = SessionStorage::get::<String>("trace_id").unwrap_or_else(|_| {
+            let id = Uuid::new_v4().to_string().replace("-", "");
+            let _ = SessionStorage::set("trace_id", &id);
+            debug!("Created new trace ID: {}", id);
+            id
+        });
+
         Self {
-            trace_id: self.trace_id.clone(),
-            parent_id: self.span_id.clone(),
-            span_id: Uuid::new_v4().to_string().replace("-", ""),
-            session_id: self.session_id.clone(),
+            trace_id: trace_id.clone(),      // Keep the trace ID constant
+            parent_id: self.span_id.clone(), // Use the current span ID as parent ID
+            span_id: Uuid::new_v4().to_string().replace("-", "")[..16].to_string(),
             sampled: self.sampled,
         }
     }
@@ -71,14 +83,17 @@ impl TraceContext {
     pub fn from_traceparent(traceparent: &str) -> Self {
         let parts: Vec<&str> = traceparent.split('-').collect();
         if parts.len() >= 4 {
-            let session_id = SessionStorage::get::<String>("session_trace_id")
-                .unwrap_or_else(|_| parts[1].to_string());
+            // Use the trace ID from the traceparent
+            let trace_id = parts[1].to_string();
+            // Store or update the trace ID only if it doesn't exist
+            if SessionStorage::get::<String>("trace_id").is_err() {
+                let _ = SessionStorage::set("trace_id", &trace_id);
+            }
 
             Self {
-                trace_id: parts[1].to_string(),
+                trace_id,
                 parent_id: parts[2].to_string(),
-                span_id: Uuid::new_v4().to_string().replace("-", ""),
-                session_id,
+                span_id: Uuid::new_v4().to_string().replace("-", "")[..16].to_string(),
                 sampled: parts[3] == "01",
             }
         } else {
@@ -118,8 +133,26 @@ impl TracedRequest for RequestBuilder {
     }
 }
 
+pub trait SessionRequest {
+    fn with_session_id(self) -> Self;
+}
+
+impl SessionRequest for RequestBuilder {
+    fn with_session_id(self) -> Self {
+        let session_id = SessionStorage::get::<String>("session_trace_id").unwrap_or_else(|_| {
+            let id = Uuid::new_v4().to_string().replace("-", "");
+            let _ = SessionStorage::set("session_trace_id", &id);
+            debug!("Created new session trace ID: {}", id);
+            id
+        });
+
+        debug!("Sending with session ID: {}", session_id);
+        self.header("X-Session-ID", &session_id)
+    }
+}
+
 #[async_trait(?Send)]
-pub trait TracedResponse: TracedRequest {
+pub trait TracedResponse: TracedRequest + SessionRequest {
     async fn send_traced(self) -> Result<Response, gloo::net::Error>;
     async fn fetch_traced<T>(self) -> Result<T, String>
     where
@@ -129,7 +162,7 @@ pub trait TracedResponse: TracedRequest {
 #[async_trait(?Send)]
 impl TracedResponse for RequestBuilder {
     async fn send_traced(self) -> Result<Response, gloo::net::Error> {
-        let response = self.with_trace().send().await?;
+        let response = self.with_session_id().send().await?;
         update_trace_from_response(&response);
         Ok(response)
     }
