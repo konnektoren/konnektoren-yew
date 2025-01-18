@@ -8,12 +8,16 @@ pub struct FeedbackPopupProps {
     pub api_url: String,
     #[prop_or(0)]
     pub timeout_seconds: u32,
+    #[prop_or(false)]
+    pub show: bool,
+    #[prop_or(false)]
+    pub expanded: bool,
 }
 
 #[function_component(FeedbackPopup)]
 pub fn feedback_popup(props: &FeedbackPopupProps) -> Html {
-    let show = use_state(|| false);
-    let expanded = use_state(|| false);
+    let show = use_state(|| props.show);
+    let expanded = use_state(|| props.expanded);
     let i18n = use_i18n();
 
     {
@@ -74,12 +78,14 @@ mod preview {
         FeedbackPopupProps {
             api_url: "https://api.konnektoren.help".to_string(),
             timeout_seconds: 0,
+            show: true,
         },
         (
             "10 Seconds timeout",
             FeedbackPopupProps {
                 api_url: "https://api.konnektoren.help".to_string(),
                 timeout_seconds: 10,
+                show: true,
             }
         ),
         (
@@ -87,6 +93,7 @@ mod preview {
             FeedbackPopupProps {
                 api_url: "https://api.konnektoren.help".to_string(),
                 timeout_seconds: 5,
+                show: true,
             }
         )
     );
