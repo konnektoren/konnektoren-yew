@@ -31,6 +31,20 @@ fn get_url_language(supported_languages: &[&str]) -> Option<String> {
     }
 }
 
+fn get_path_language(supported_languages: &[&str]) -> Option<String> {
+    let window = window();
+    let path = window.location().pathname().unwrap_or_default();
+    let parts: Vec<&str> = path.trim_matches('/').split('/').collect();
+
+    parts.first().and_then(|first_part| {
+        if supported_languages.contains(first_part) {
+            Some(first_part.to_string())
+        } else {
+            None
+        }
+    })
+}
+
 fn get_browser_language(supported_languages: &[&str]) -> Option<String> {
     let language = window().navigator().language().unwrap();
     if supported_languages.contains(&language.as_str()) {
@@ -41,8 +55,9 @@ fn get_browser_language(supported_languages: &[&str]) -> Option<String> {
 }
 
 fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) -> String {
-    // Priority: URL query param → config → browser language
-    get_url_language(&config.supported_languages)
+    // Priority: URL path → URL query param → settings → browser language → default
+    get_path_language(&config.supported_languages)
+        .or_else(|| get_url_language(&config.supported_languages))
         .or_else(|| {
             if config
                 .supported_languages
