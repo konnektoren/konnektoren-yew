@@ -20,7 +20,7 @@ pub use i18n_yml_loader::I18nYmlLoader;
 pub const LANGUAGE_KEY: &str = "selected_language";
 
 /// A list of supported languages represented by their ISO codes.
-pub const LANGUAGES: [&str; 9] = ["en", "ua", "ar", "de", "cn", "pl", "tr", "es", "vi"];
+pub const LANGUAGES: [&str; 9] = ["en", "uk", "ar", "de", "zh", "pl", "tr", "es", "vi"];
 
 /// Re-export the `I18nConfig` struct from the `config` module.
 pub use config::I18nConfig;
@@ -88,8 +88,8 @@ pub fn flag(lang: &'static str) -> &'static str {
     match lang {
         "en" => "🇺🇸",
         "de" => "🇩🇪",
-        "ua" => "🇺🇦",
-        "cn" => "🇨🇳",
+        "uk" => "🇺🇦",
+        "zh" => "🇨🇳",
         "ar" => "🇸🇦",
         "pl" => "🇵🇱",
         "tr" => "🇹🇷",
@@ -103,8 +103,8 @@ pub fn language_name(lang: &'static str) -> &'static str {
     match lang {
         "en" => "English",
         "de" => "Deutsch",
-        "ua" => "Українська",
-        "cn" => "中文",
+        "uk" => "Українська",
+        "zh" => "中文",
         "ar" => "العربية",
         "pl" => "Polski",
         "tr" => "Türkçe",
@@ -123,9 +123,9 @@ mod tests {
     /// Tests the `supported_language` function with various inputs.
     fn test_supported_language() {
         assert_eq!(supported_language(Some("en")), Some("en".to_string()));
-        assert_eq!(supported_language(Some("ua")), Some("ua".to_string()));
+        assert_eq!(supported_language(Some("uk")), Some("uk".to_string()));
         assert_eq!(supported_language(Some("de")), Some("de".to_string()));
-        assert_eq!(supported_language(Some("cn")), Some("cn".to_string()));
+        assert_eq!(supported_language(Some("zh")), Some("zh".to_string()));
         assert_eq!(supported_language(Some("ar")), Some("ar".to_string()));
         assert_eq!(supported_language(Some("pl")), Some("pl".to_string()));
         assert_eq!(supported_language(Some("tr")), Some("tr".to_string()));
@@ -141,8 +141,8 @@ mod tests {
     fn test_flag() {
         assert_eq!(flag("en"), "🇺🇸");
         assert_eq!(flag("de"), "🇩🇪");
-        assert_eq!(flag("ua"), "🇺🇦");
-        assert_eq!(flag("cn"), "🇨🇳");
+        assert_eq!(flag("uk"), "🇺🇦");
+        assert_eq!(flag("zh"), "🇨🇳");
         assert_eq!(flag("ar"), "🇸🇦");
         assert_eq!(flag("pl"), "🇵🇱");
         assert_eq!(flag("tr"), "🇹🇷");
@@ -156,8 +156,8 @@ mod tests {
     fn test_language_name() {
         assert_eq!(language_name("en"), "English");
         assert_eq!(language_name("de"), "Deutsch");
-        assert_eq!(language_name("ua"), "Українська");
-        assert_eq!(language_name("cn"), "中文");
+        assert_eq!(language_name("uk"), "Українська");
+        assert_eq!(language_name("zh"), "中文");
         assert_eq!(language_name("ar"), "العربية");
         assert_eq!(language_name("pl"), "Polski");
         assert_eq!(language_name("tr"), "Türkçe");

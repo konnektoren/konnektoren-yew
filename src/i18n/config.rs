@@ -19,13 +19,13 @@ impl Default for I18nConfig {
 
         let i18n_data = [
             ("ar", include_str!("../assets/i18n/ar.json")),
-            ("cn", include_str!("../assets/i18n/cn.json")),
+            ("zh", include_str!("../assets/i18n/zh.json")),
             ("en", include_str!("../assets/i18n/en.json")),
             ("de", include_str!("../assets/i18n/de.json")),
             ("es", include_str!("../assets/i18n/es.json")),
             ("pl", include_str!("../assets/i18n/pl.json")),
             ("tr", include_str!("../assets/i18n/tr.json")),
-            ("ua", include_str!("../assets/i18n/ua.json")),
+            ("uk", include_str!("../assets/i18n/uk.json")),
             ("vi", include_str!("../assets/i18n/vi.json")),
         ];
         for (lang, data) in i18n_data.iter() {
