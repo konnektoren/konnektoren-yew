@@ -79,6 +79,7 @@ mod preview {
             api_url: "https://api.konnektoren.help".to_string(),
             timeout_seconds: 0,
             show: true,
+            expanded: false,
         },
         (
             "10 Seconds timeout",
@@ -86,6 +87,7 @@ mod preview {
                 api_url: "https://api.konnektoren.help".to_string(),
                 timeout_seconds: 10,
                 show: true,
+                expanded: false,
             }
         ),
         (
@@ -94,6 +96,7 @@ mod preview {
                 api_url: "https://api.konnektoren.help".to_string(),
                 timeout_seconds: 5,
                 show: true,
+                expanded: false,
             }
         )
     );
