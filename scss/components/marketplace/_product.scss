@@ -25,6 +25,14 @@
         }
     }
 
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: spacing("md");
+        margin-top: spacing("md");
+    }
+
     &__price {
         font-size: font-size("500");
         font-weight: font-weight("bold");

@@ -12,8 +12,9 @@ use crate::components::navigation::menu::preview::ExampleMenu;
 #[cfg(feature = "marketplace")]
 use crate::components::marketplace::{
     CartBadgeComponent, ProductCatalogComponent, ProductComponent, ShoppingCartComponent,
-    TonWalletComponent,
+    WalletComponent,
 };
+
 #[cfg(feature = "tour")]
 use crate::components::tour::{TourButton, TourConfig};
 
@@ -190,13 +191,16 @@ pub fn App() -> Html {
             CertificateImageComponent::preview()
         ),
         create_component_group!("Navigation", ExampleMenu::preview(),),
+        #[cfg(feature = "marketplace")]
         create_component_group!(
             "Marketplace",
             ProductComponent::preview(),
             ProductCatalogComponent::preview(),
             ShoppingCartComponent::preview(),
             CartBadgeComponent::preview(),
-            TonWalletComponent::preview()
+            WalletComponent::<crate::components::marketplace::wallet::ton::TonWalletProvider>::preview(),
+            #[cfg(feature = "solana")]
+            WalletComponent::<crate::components::marketplace::wallet::solana::SolanaWalletProvider>::preview(),
         ),
         create_component_group!(
             "Misc",

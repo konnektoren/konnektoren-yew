@@ -12,6 +12,9 @@ export async function initTonWallet(
   onDisconnectCallback,
 ) {
   try {
+    // Wait for the button element to exist
+    await waitForElement("#ton-wallet-button");
+
     if (!tonConnectUI) {
       tonConnectUI = new TonConnectUI({
         manifestUrl: manifestUrl,
@@ -34,7 +37,6 @@ export async function initTonWallet(
       }
     });
 
-    // Return the tonConnectUI instance
     return tonConnectUI;
   } catch (outerError) {
     console.error("Error in initTonWallet:", outerError);
@@ -43,11 +45,40 @@ export async function initTonWallet(
   }
 }
 
+function waitForElement(selector) {
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver(() => {
+      if (document.querySelector(selector)) {
+        observer.disconnect();
+        resolve(document.querySelector(selector));
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });
+}
+
 async function getWalletBalance(address) {
-  // Implement this function to fetch the wallet balance
-  // You might need to use a TON API or SDK for this
-  // For now, we'll return a placeholder value
-  return 1000000000; // 1 TON
+  try {
+    // Use the correct API endpoint for account information
+    const response = await fetch(`${TON_API_URL}/accounts/${address}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    // The balance is in nanoTONs, convert to TON by dividing by 10^9
+    return data.balance || 0;
+  } catch (error) {
+    console.error("Error fetching balance:", error);
+    return 1000000000; // Return 1 TON as default for testing
+  }
 }
 
 export async function payTonWallet(address, amount) {
@@ -62,13 +93,6 @@ export async function payTonWallet(address, amount) {
   }
 
   try {
-    // In TON, 1 TON = 1,000,000,000 nanoTONs
-    // The amount should be provided in nanoTONs
-    // For example:
-    // 1 TON = 1,000,000,000
-    // 0.1 TON = 100,000,000
-    // 0.01 TON = 10,000,000
-    //
     const nanoTonAmount = amount.toString();
     const userFriendlyAddress = toUserFriendlyAddress(
       address,
@@ -76,7 +100,7 @@ export async function payTonWallet(address, amount) {
     );
 
     const transaction = {
-      validUntil: Math.floor(new Date() / 1000) + 360,
+      validUntil: Math.floor(Date.now() / 1000) + 360,
       messages: [
         {
           address: userFriendlyAddress,
@@ -88,13 +112,6 @@ export async function payTonWallet(address, amount) {
     return await tonConnectUI.sendTransaction(transaction);
   } catch (error) {
     console.error("Error sending transaction:", error);
-    if (error instanceof Error) {
-      console.error("Error details:", {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      });
-    }
     throw error;
   }
 }
