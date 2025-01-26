@@ -5,6 +5,8 @@ use yew::prelude::*;
 pub struct ProductComponentProps {
     pub product: Product,
     #[prop_or_default]
+    pub is_highlighted: bool,
+    #[prop_or_default]
     pub on_select: Option<Callback<Product>>,
     #[prop_or_default]
     pub on_tag: Option<Callback<String>>,
@@ -14,8 +16,15 @@ pub struct ProductComponentProps {
 
 #[function_component(ProductComponent)]
 pub fn product_component(props: &ProductComponentProps) -> Html {
+    let classes = classes!(
+        "product",
+        props.is_highlighted.then_some("product--highlighted")
+    );
+
+    let product_id = props.product.id.clone().unwrap_or_default();
+
     html! {
-        <div class="product">
+        <div id={format!("product-{}", product_id)} class={classes}>
             {render_header(&props.product)}
             {render_body(props)}
             {render_footer(props)}
@@ -123,7 +132,7 @@ mod preview {
             "no price",
             ProductComponentProps {
                 product: Product {
-                    id: None,
+                    id: Some("test-1".to_string()),
                     name: "Test Product".to_string(),
                     description: "This is a Test Product".to_string(),
                     price: None,
@@ -131,6 +140,7 @@ mod preview {
                     tags: vec![],
                     path: None
                 },
+                is_highlighted: false,
                 on_select: None,
                 ..Default::default()
             }
@@ -139,7 +149,7 @@ mod preview {
             "with price",
             ProductComponentProps {
                 product: Product {
-                    id: None,
+                    id: Some("test-2".to_string()),
                     name: "Test Product".to_string(),
                     description: "This is a Test Product".to_string(),
                     price: Some(1.0),
@@ -147,6 +157,24 @@ mod preview {
                     tags: vec!["tag1".to_string(), "tag2".to_string()],
                     path: None
                 },
+                is_highlighted: false,
+                on_select: Some(Callback::noop()),
+                ..Default::default()
+            }
+        ),
+        (
+            "highlighted",
+            ProductComponentProps {
+                product: Product {
+                    id: Some("test-3".to_string()),
+                    name: "Highlighted Product".to_string(),
+                    description: "This is a highlighted product".to_string(),
+                    price: Some(1.0),
+                    image: None,
+                    tags: vec!["highlighted".to_string()],
+                    path: None
+                },
+                is_highlighted: true,
                 on_select: Some(Callback::noop()),
                 ..Default::default()
             }

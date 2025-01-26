@@ -6,6 +6,8 @@ use yew::prelude::*;
 pub struct ProductCatalogCompProps {
     pub product_catalog: ProductCatalog,
     #[prop_or_default]
+    pub highlighted: Vec<String>,
+    #[prop_or_default]
     pub on_select: Option<Callback<Product>>,
     #[prop_or_default]
     pub on_tag: Option<Callback<String>>,
@@ -20,8 +22,19 @@ pub fn product_catalog_component(props: &ProductCatalogCompProps) -> Html {
         .products
         .iter()
         .map(|product| {
+            let is_highlighted = product
+                .id
+                .as_ref()
+                .map(|id| props.highlighted.contains(id))
+                .unwrap_or(false);
+
             html! {
-                <ProductComponent product={product.clone()} on_select={on_select.clone()} on_tag={on_tag.clone()} />
+                <ProductComponent
+                    product={product.clone()}
+                    {is_highlighted}
+                    on_select={on_select.clone()}
+                    on_tag={on_tag.clone()}
+                />
             }
         })
         .collect::<Html>();
@@ -49,6 +62,7 @@ mod preview {
                     id: "".to_string(),
                     products: vec![],
                 },
+                highlighted: vec![],
                 on_select: None,
                 on_tag: Some(Callback::noop()),
             }
@@ -60,7 +74,7 @@ mod preview {
                     id: "".to_string(),
                     products: vec![
                         Product {
-                            id: None,
+                            id: Some("test-1".to_string()),
                             name: "Test Product".to_string(),
                             description: "This is a Test Product".to_string(),
                             price: None,
@@ -69,9 +83,18 @@ mod preview {
                             path: None
                         },
                         Product {
-                            id: None,
+                            id: Some("test-2".to_string()),
                             name: "Test Product 2".to_string(),
-                            description: "This is a Test Product 2".to_string(),
+                            description: "This is a Test Product 2 (highlighted)".to_string(),
+                            price: Some(10.0),
+                            image: None,
+                            tags: vec![],
+                            path: None
+                        },
+                        Product {
+                            id: Some("test-3".to_string()),
+                            name: "Test Product 3".to_string(),
+                            description: "This is a Test Product 3".to_string(),
                             price: Some(10.0),
                             image: None,
                             tags: vec![],
@@ -79,6 +102,7 @@ mod preview {
                         },
                     ],
                 },
+                highlighted: vec!["test-2".to_string()],
                 on_select: Some(Callback::noop()),
                 on_tag: Some(Callback::noop()),
             }
