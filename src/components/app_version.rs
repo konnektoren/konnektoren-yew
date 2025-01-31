@@ -13,7 +13,7 @@ pub fn app_version(props: &AppVersionProps) -> Html {
     let build_timestamp = {
         let timestamp = env!("VERGEN_BUILD_TIMESTAMP");
         if let Some(pos) = timestamp.rfind('.') {
-            if let Some(z_pos) = timestamp.rfind('Z') {
+            if let Some(_z_pos) = timestamp.rfind('Z') {
                 format!("{}Z", &timestamp[..pos])
             } else {
                 timestamp.to_string()
@@ -65,11 +65,15 @@ mod preview {
 
     yew_preview::create_preview!(
         AppVersionComponent,
-        AppVersionProps { show_details: true },
+        AppVersionProps {
+            show_details: true,
+            version: "0.1.0".to_string()
+        },
         (
             "minimal",
             AppVersionProps {
                 show_details: false,
+                version: "0.1.0".to_string()
             }
         )
     );

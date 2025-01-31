@@ -1,7 +1,7 @@
 //! This module contains all the components that are used in the app.
-
 pub mod app_version;
 mod badge;
+pub mod buy_me_coffee;
 #[cfg(feature = "certificates")]
 mod certificates;
 pub mod challenge;
@@ -40,6 +40,7 @@ pub mod translate;
 
 pub use app_version::AppVersionComponent;
 pub use badge::Badge;
+pub use buy_me_coffee::BuyMeCoffeeComponent;
 #[cfg(feature = "certificates")]
 pub use certificates::*;
 pub use challenge::*;
