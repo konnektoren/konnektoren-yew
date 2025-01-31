@@ -1,9 +1,10 @@
 use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, Badge, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent,
-    ContextualChoiceComponent, FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig,
-    ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp,
-    SocialLinks, SoundConfig, StatusMessage, TranslateComponent,
+    challenge::ChallengeComponent, game_path::GamePathComponent, AppVersionComponent, Badge,
+    ChallengeConfigComponent, ChallengeInfoComponent, ChallengeTimerComponent,
+    ChallengesSummaryComp, ChatComponent, ContextualChoiceComponent, FeedbackPopup,
+    LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent,
+    SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks, SoundConfig,
+    StatusMessage, TranslateComponent,
 };
 
 #[cfg(feature = "yew-preview")]
@@ -181,7 +182,8 @@ pub fn App() -> Html {
             MusicConfig::preview(),
             SoundConfig::preview(),
             SelectDesign::preview(),
-            SelectTheme::preview()
+            SelectTheme::preview(),
+            AppVersionComponent::preview()
         ),
         create_component_group!(
             "Certificates",

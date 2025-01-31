@@ -1,5 +1,6 @@
 //! This module contains all the components that are used in the app.
 
+pub mod app_version;
 mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
@@ -37,6 +38,7 @@ pub mod timer;
 pub mod tour;
 pub mod translate;
 
+pub use app_version::AppVersionComponent;
 pub use badge::Badge;
 #[cfg(feature = "certificates")]
 pub use certificates::*;
