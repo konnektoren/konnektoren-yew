@@ -1,10 +1,10 @@
 use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, AppVersionComponent, Badge,
-    BuyMeCoffeeComponent, ChallengeConfigComponent, ChallengeInfoComponent,
-    ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent, ContextualChoiceComponent,
-    FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar,
-    RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks,
-    SoundConfig, StatusMessage, TranslateComponent,
+    challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
+    AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
+    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent,
+    ContextualChoiceComponent, FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig,
+    ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp,
+    SocialLinks, SoundConfig, StatusMessage, TranslateComponent,
 };
 
 #[cfg(feature = "yew-preview")]
@@ -215,6 +215,7 @@ pub fn App() -> Html {
             StatusMessage::preview(),
             FeedbackPopup::preview(),
             BuyMeCoffeeComponent::preview(),
+            AdvertisementComponent::preview(),
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", TourConfig::preview(), TourButton::preview()),

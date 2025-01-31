@@ -1,4 +1,5 @@
 //! This module contains all the components that are used in the app.
+pub mod advertisement;
 pub mod app_version;
 mod badge;
 pub mod buy_me_coffee;
@@ -38,6 +39,7 @@ pub mod timer;
 pub mod tour;
 pub mod translate;
 
+pub use advertisement::{AdNetwork, AdvertisementComponent, AdvertisementProps};
 pub use app_version::AppVersionComponent;
 pub use badge::Badge;
 pub use buy_me_coffee::BuyMeCoffeeComponent;
