@@ -1,6 +1,7 @@
 .chat {
     max-width: 90%;
     width: 300px;
+    min-width: max-content;
 
     &__bubble {
         @include primary-button("md");
@@ -10,6 +11,7 @@
                 align: center,
             )
         );
+        white-space: nowrap;
 
         &-icon {
             margin-right: spacing("sm");
@@ -61,7 +63,6 @@
         flex: 1;
         overflow-y: auto;
 
-        // ChatApp wrapper div
         & > div {
             display: flex;
             flex-direction: column;
@@ -124,8 +125,25 @@
     @include responsive-layout("small") {
         width: 80px;
 
+        &__bubble-text {
+            opacity: 0;
+            width: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        &__bubble:hover &__bubble-text {
+            opacity: 1;
+            width: auto;
+            margin-left: spacing("sm");
+        }
+
         &--expanded {
             width: 280px;
+
+            .chat__bubble {
+                display: none;
+            }
         }
     }
 }
