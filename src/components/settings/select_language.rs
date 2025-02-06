@@ -31,10 +31,10 @@ pub fn select_language() -> Html {
         <div class="select-language">
             <p>
                 { i18n.t("Please select a language from the dropdown.") }
-                <select onchange={on_select_change} value={(selected_language.get()).clone()}>
-                    <option value="" selected={selected_language.get().is_empty()} disabled=true>{ i18n.t("Select Language") }</option>
+                <select onchange={on_select_change} value={(selected_language.get().code()).clone()}>
+                    <option value="" selected={selected_language.get().code().is_empty()} disabled=true>{ i18n.t("Select Language") }</option>
                     { for LANGUAGES.iter().map(|&lang| html! {
-                        <option value={lang} selected={*lang == *selected_language.get()}>{format!("{} {}", flag(lang), language_name(lang))}</option>
+                        <option value={lang} selected={*lang == *selected_language.get().code()}>{format!("{} {}", flag(lang), language_name(lang))}</option>
                     })}
                 </select>
             </p>

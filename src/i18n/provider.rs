@@ -97,7 +97,7 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
         SelectedLanguage::new(&language)
     };
 
-    let i18n_ctx = use_state(|| create_i18n(&props.config, &selected_language.language));
+    let i18n_ctx = use_state(|| create_i18n(&props.config, &selected_language.get().code()));
 
     {
         let i18n_ctx = i18n_ctx.clone();
