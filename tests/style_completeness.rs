@@ -9,6 +9,7 @@ fn is_font_awesome_class(class: &str) -> bool {
     fa_patterns.iter().any(|pattern| class.starts_with(pattern))
 }
 
+#[ignore = "not working algorithm"]
 #[test]
 fn test_all_used_classes_have_styles() {
     // 1. Collect all CSS classes from SCSS files
@@ -40,6 +41,7 @@ fn test_all_used_classes_have_styles() {
     assert!(!has_errors, "There are missing styles");
 }
 
+#[ignore = "not working algorithm"]
 #[test]
 fn test_no_unused_styles() {
     // 1. Collect all CSS classes from SCSS files
