@@ -39,6 +39,9 @@ impl SelectedLanguage {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use wasm_bindgen_test::*;
+
+    wasm_bindgen_test_configure!(run_in_browser);
 
     #[test]
     fn test_default_language() {
@@ -55,13 +58,17 @@ mod tests {
     #[test]
     fn test_invalid_language_code() {
         let selected = SelectedLanguage::new("invalid");
-        assert_eq!(selected.language.code(), "en"); // Should fall back to default
+        assert_eq!(selected.language.code(), "en");
     }
 
-    #[test]
-    fn test_set_and_get_language() {
+    #[wasm_bindgen_test]
+    async fn test_set_and_get_language() {
+        LocalStorage::clear();
+
         let mut selected = SelectedLanguage::default();
         selected.set("de");
         assert_eq!(selected.get().code(), "de");
+
+        LocalStorage::clear();
     }
 }
