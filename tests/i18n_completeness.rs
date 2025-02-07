@@ -1,23 +1,49 @@
+use konnektoren_platform::i18n::Language;
+use konnektoren_yew::i18n::create_i18n_config;
 use regex::Regex;
-use serde_json::Value;
 use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::path::Path;
 use walkdir::WalkDir;
 
 #[test]
 fn test_i18n_completeness() {
+    // Initialize logging
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    // Load configuration with both platform and local translations
+    let config = create_i18n_config();
+
     // 1. Collect all i18n keys from source files
     let source_keys = collect_source_keys();
+    log::info!("Found {} keys in source files", source_keys.len());
 
-    // 2. Collect all translation keys from i18n files
-    let translation_files = collect_translation_files();
+    // 2. Get all translation keys from config
+    let mut translation_keys: HashMap<String, HashSet<String>> = HashMap::new();
+    let mut all_keys = HashSet::new();
+    let empty_set = HashSet::new();
+
+    for lang in Language::builtin() {
+        if let Some(translations) = config.translations.get(lang.code()) {
+            if let Some(obj) = translations.as_object() {
+                let keys: HashSet<_> = obj.keys().cloned().collect();
+                all_keys.extend(keys.clone());
+                translation_keys.insert(lang.code().to_string(), keys);
+            }
+        }
+    }
 
     // 3. Compare and report
     let mut has_errors = false;
 
-    // Check for missing translations in each language file
-    for (lang, keys) in &translation_files {
+    // Check for missing translations
+    log::info!("\nChecking translations completeness:");
+    for lang in Language::builtin() {
+        let lang_code = lang.code();
+        let keys = translation_keys.get(lang_code).unwrap_or(&empty_set);
+
         let missing: Vec<_> = source_keys
             .iter()
             .filter(|key| !keys.contains(*key))
@@ -25,94 +51,84 @@ fn test_i18n_completeness() {
 
         if !missing.is_empty() {
             has_errors = true;
-            println!("Missing translations in {}.json:", lang);
+            log::error!(
+                "Missing translations in {} ({}):",
+                lang.native_name(),
+                lang_code
+            );
             for key in missing {
-                println!("  - {}", key);
+                log::error!("  - {}", key);
+                // Show default translation if available
+                if let Some(default_trans) = config.translations.get("en") {
+                    if let Some(trans) = default_trans.get(key) {
+                        log::info!("    Default (EN): {}", trans);
+                    }
+                }
             }
+        } else {
+            log::info!(
+                "{} ({}) - All translations present",
+                lang.native_name(),
+                lang_code
+            );
         }
+
+        // Show translation coverage
+        let coverage = if !source_keys.is_empty() {
+            (keys.len() as f64 / source_keys.len() as f64 * 100.0).round()
+        } else {
+            100.0
+        };
+        log::info!(
+            "{} coverage: {:.1}% ({}/{} keys)",
+            lang.native_name(),
+            coverage,
+            keys.len(),
+            source_keys.len()
+        );
     }
 
     // Check for unused translations
-    let all_translation_keys: HashSet<_> = translation_files
-        .values()
-        .flat_map(|keys| keys.iter().cloned())
-        .collect();
-
-    let unused: Vec<_> = all_translation_keys
+    let unused: Vec<_> = all_keys
         .iter()
         .filter(|key| !source_keys.contains(*key))
         .collect();
 
     if !unused.is_empty() {
-        println!("\nUnused translations:");
+        log::warn!("\nUnused translations:");
         for key in unused {
-            println!("  - {}", key);
+            log::warn!("  - {}", key);
+            // Show translations for unused keys
+            for lang in Language::builtin() {
+                let trans = config.t_with_lang(key, &lang);
+                log::info!("    {} ({}): {}", lang.native_name(), lang.code(), trans);
+            }
         }
     }
+
+    // Print summary
+    log::info!("\nTranslation Summary:");
+    log::info!("Total keys in source: {}", source_keys.len());
+    log::info!("Total unique translations: {}", all_keys.len());
+    log::info!("Supported languages: {}", Language::builtin().len());
 
     assert!(!has_errors, "There are missing translations");
 }
 
 fn collect_source_keys() -> HashSet<String> {
     let mut keys = HashSet::new();
-    let re = Regex::new(r#"i18n\.t\("([^"]+)"\)"#).unwrap();
+    let re = Regex::new(r#"(?:i18n\.t|t_with_lang)\("([^"]+)"\)"#).unwrap();
 
     for entry in WalkDir::new("src") {
         let entry = entry.unwrap();
         if entry.path().extension().map_or(false, |ext| ext == "rs") {
-            let content = fs::read_to_string(entry.path()).unwrap();
-            for cap in re.captures_iter(&content) {
-                keys.insert(cap[1].to_string());
-            }
-        }
-    }
-
-    keys
-}
-
-fn collect_translation_files() -> HashMap<String, HashSet<String>> {
-    let mut translations = HashMap::new();
-    let i18n_dir = Path::new("src/assets/i18n");
-
-    for entry in fs::read_dir(i18n_dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-
-        if path.extension().map_or(false, |ext| ext == "json") {
-            let content = fs::read_to_string(&path).unwrap();
-            let json: Value = serde_json::from_str(&content).unwrap();
-
-            let lang = path.file_stem().unwrap().to_str().unwrap().to_string();
-            let keys = collect_keys_from_json(&json);
-            translations.insert(lang, keys);
-        }
-    }
-
-    translations
-}
-
-fn collect_keys_from_json(json: &Value) -> HashSet<String> {
-    let mut keys = HashSet::new();
-
-    fn collect_recursive(json: &Value, prefix: &str, keys: &mut HashSet<String>) {
-        match json {
-            Value::Object(map) => {
-                for (key, value) in map {
-                    let new_prefix = if prefix.is_empty() {
-                        key.clone()
-                    } else {
-                        format!("{}.{}", prefix, key)
-                    };
-                    collect_recursive(value, &new_prefix, keys);
+            if let Ok(content) = fs::read_to_string(entry.path()) {
+                for cap in re.captures_iter(&content) {
+                    keys.insert(cap[1].to_string());
                 }
             }
-            Value::String(_) => {
-                keys.insert(prefix.to_string());
-            }
-            _ => {}
         }
     }
 
-    collect_recursive(json, "", &mut keys);
     keys
 }
