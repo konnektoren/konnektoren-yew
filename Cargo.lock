@@ -2198,7 +2198,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-core"
 version = "0.4.5"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#2d1b6dea3825ff0b3e715aae0622d7a8162a787d"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#3f7544ccd8c122dca3aed66f7fb9e0dcd32da4b0"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -2238,7 +2238,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-platform"
 version = "0.1.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#2d1b6dea3825ff0b3e715aae0622d7a8162a787d"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#3f7544ccd8c122dca3aed66f7fb9e0dcd32da4b0"
 dependencies = [
  "config",
  "i18n-embed",

@@ -1,4 +1,4 @@
-use super::{I18n, SelectedLanguage};
+use super::SelectedLanguage;
 use crate::model::Settings;
 use crate::providers::use_settings;
 use gloo::utils::window;
@@ -63,7 +63,7 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
 
 #[derive(Clone, PartialEq)]
 pub struct I18nContext {
-    pub i18n: UseStateHandle<I18n>,
+    pub config: UseStateHandle<I18nConfig>,
     pub selected_language: SelectedLanguage,
 }
 
@@ -76,7 +76,7 @@ pub struct I18nProviderProps {
 #[function_component(I18nProvider)]
 pub fn i18n_provider(props: &I18nProviderProps) -> Html {
     let settings = use_settings();
-    let i18n = use_state(|| I18n::from(props.config.clone()));
+    let config = use_state(|| props.config.clone());
 
     let selected_language = {
         let language = determine_language(&props.config, &settings);
@@ -84,18 +84,18 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
     };
 
     {
-        let i18n = i18n.clone();
+        let config = config.clone();
         let settings = settings.clone();
         let props_config = props.config.clone();
 
         use_effect_with(settings.clone(), move |settings| {
             let language = determine_language(&props_config, settings);
-            i18n.set(I18n::from(props_config.clone()));
+            config.set(props_config.clone());
         });
     }
 
     let context = I18nContext {
-        i18n,
+        config,
         selected_language,
     };
 
@@ -107,10 +107,10 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
 }
 
 #[hook]
-pub fn use_i18n() -> UseStateHandle<I18n> {
+pub fn use_i18n() -> UseStateHandle<I18nConfig> {
     use_context::<I18nContext>()
         .expect("No I18n context provided")
-        .i18n
+        .config
 }
 
 #[hook]
@@ -122,8 +122,8 @@ pub fn use_selected_language() -> SelectedLanguage {
 
 #[hook]
 pub fn use_translation() -> impl Fn(&str) -> String {
-    let i18n = use_i18n();
+    let config = use_i18n();
     let selected_language = use_selected_language();
 
-    move |key: &str| i18n.t_with_lang(key, &selected_language.get())
+    move |key: &str| config.t_with_lang(key, &selected_language.get())
 }

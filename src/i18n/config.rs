@@ -1,7 +1,6 @@
-use super::I18n;
 use crate::i18n::LANGUAGES;
-pub use konnektoren_platform::i18n::I18nConfig;
 use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, TranslationAsset};
+pub use konnektoren_platform::i18n::{I18nConfig, Translation};
 use rust_embed::RustEmbed;
 use serde_json::Value;
 use std::collections::HashMap;
@@ -14,12 +13,6 @@ pub fn create_i18n_config() -> I18nConfig {
     I18nConfig::with_assets(CombinedTranslationAsset::<LocalI18nAssets>::new("i18n.yml"))
 }
 
-pub fn create_i18n() -> I18n {
-    I18n::from(I18nConfig::with_assets(CombinedTranslationAsset::<
-        LocalI18nAssets,
-    >::new("i18n.yml")))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -28,7 +21,7 @@ mod tests {
 
     #[test]
     fn test_create_i18n() {
-        let i18n = create_i18n();
+        let i18n = create_i18n_config();
         assert!(i18n.translations.contains_key("en"));
         assert!(i18n.translations.contains_key("de"));
         assert_eq!(i18n.default_language, Language::default());
@@ -36,7 +29,7 @@ mod tests {
 
     #[test]
     fn test_translations() {
-        let i18n = create_i18n();
+        let i18n = create_i18n_config();
 
         // Test JSON translations
         assert_eq!(i18n.t("Language"), "Language");
@@ -55,7 +48,7 @@ mod tests {
 
     #[test]
     fn test_supported_languages() {
-        let i18n = create_i18n();
+        let i18n = create_i18n_config();
         let supported = i18n.supported_languages();
 
         // Check if all builtin languages are supported
@@ -92,7 +85,7 @@ mod tests {
 
     #[test]
     fn test_fallback_behavior() {
-        let i18n = create_i18n();
+        let i18n = create_i18n_config();
         let missing_key = "NonExistentKey";
 
         // Should return the key itself when translation is missing
