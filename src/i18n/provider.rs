@@ -76,26 +76,34 @@ pub struct I18nProviderProps {
 #[function_component(I18nProvider)]
 pub fn i18n_provider(props: &I18nProviderProps) -> Html {
     let settings = use_settings();
-    let config = use_state(|| props.config.clone());
 
+    // Initialize selected_language first
     let selected_language = {
         let language = determine_language(&props.config, &settings);
         SelectedLanguage::new(&language.code())
     };
 
+    // Initialize config state with props
+    let config_ctx = use_state(|| props.config.clone());
+
     {
-        let config = config.clone();
+        let config_ctx = config_ctx.clone();
         let settings = settings.clone();
         let props_config = props.config.clone();
 
         use_effect_with(settings.clone(), move |settings| {
             let language = determine_language(&props_config, settings);
-            config.set(props_config.clone());
+            let mut config = props_config.clone();
+            // Update default language if needed
+            if config.default_language.code() != language.code() {
+                config.default_language = language;
+            }
+            config_ctx.set(config);
         });
     }
 
     let context = I18nContext {
-        config,
+        config: config_ctx,
         selected_language,
     };
 
@@ -105,7 +113,6 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
         </ContextProvider<I18nContext>>
     }
 }
-
 #[hook]
 pub fn use_i18n() -> UseStateHandle<I18nConfig> {
     use_context::<I18nContext>()
