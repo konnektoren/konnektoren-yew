@@ -6,6 +6,7 @@ use crate::components::{
     ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp,
     SocialLinks, SoundConfig, StatusMessage, TranslateComponent,
 };
+use crate::prelude::create_i18n_config;
 
 #[cfg(feature = "yew-preview")]
 use crate::components::navigation::menu::preview::ExampleMenu;
@@ -127,8 +128,6 @@ pub fn Example() -> Html {
 
 #[function_component]
 pub fn App() -> Html {
-    let i18n_config = I18nConfig::default();
-
     #[cfg(feature = "yew-preview")]
     let groups: ComponentList = vec![
         create_component_group!(
@@ -220,6 +219,14 @@ pub fn App() -> Html {
         #[cfg(feature = "tour")]
         create_component_group!("Tour", TourConfig::preview(), TourButton::preview()),
     ];
+
+    let i18n_config = create_i18n_config();
+
+    #[cfg(debug_assertions)]
+    log::info!(
+        "Initialized I18nConfig with default language: {}",
+        i18n_config.default_language.native_name()
+    );
 
     let storage = LocalStorage::new(None);
     let session_initilizer = DefaultSessionInitializer;

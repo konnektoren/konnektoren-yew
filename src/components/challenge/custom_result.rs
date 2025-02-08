@@ -65,7 +65,7 @@ pub fn custom_result(props: &CustomResultComponentProps) -> Html {
             if !content.is_empty() {
                 let language = SelectedLanguage::default().get();
                 let loader = I18nYmlLoader::new(content);
-                let translations = loader.get(&language).unwrap_or_default();
+                let translations = loader.get(&language.code()).unwrap_or_default();
                 konnektoren_js.borrow_mut().set_i18n_data(translations);
             }
             || ()

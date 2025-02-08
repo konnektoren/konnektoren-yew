@@ -1,199 +1,352 @@
-use crate::i18n::i18n_json_loader::I18nJsonLoader;
-use crate::i18n::i18n_loader::I18nLoader;
 use crate::i18n::LANGUAGES;
+use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, TranslationAsset};
+pub use konnektoren_platform::i18n::{I18nConfig, Translation};
+use rust_embed::RustEmbed;
+use serde_json::Value;
 use std::collections::HashMap;
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct I18nConfig {
-    pub supported_languages: Vec<&'static str>,
+#[derive(RustEmbed)]
+#[folder = "$CARGO_MANIFEST_DIR/src/assets/i18n/"]
+pub struct LocalI18nAssets;
 
-    pub translations: HashMap<String, serde_json::Value>,
+pub fn create_i18n_config() -> I18nConfig {
+    let mut config = I18nConfig::with_assets(CombinedTranslationAsset::<
+        konnektoren_platform::i18n::I18nAssets,
+    >::new("i18n.yml"));
 
-    pub default_language: String,
-}
+    // Then merge local translations
+    let local_translations =
+        CombinedTranslationAsset::<LocalI18nAssets>::new("i18n.yml").load_translations();
 
-impl Default for I18nConfig {
-    fn default() -> Self {
-        let supported_languages = LANGUAGES.to_vec();
-        let mut translations = HashMap::new();
-
-        let i18n_data = [
-            ("ar", include_str!("../assets/i18n/ar.json")),
-            ("zh", include_str!("../assets/i18n/zh.json")),
-            ("en", include_str!("../assets/i18n/en.json")),
-            ("de", include_str!("../assets/i18n/de.json")),
-            ("es", include_str!("../assets/i18n/es.json")),
-            ("pl", include_str!("../assets/i18n/pl.json")),
-            ("tr", include_str!("../assets/i18n/tr.json")),
-            ("uk", include_str!("../assets/i18n/uk.json")),
-            ("vi", include_str!("../assets/i18n/vi.json")),
-        ];
-        for (lang, data) in i18n_data.iter() {
-            let loader = I18nJsonLoader::new(data);
-            let json_data = loader.get_all().unwrap();
-            translations.insert(lang.to_string(), json_data);
-        }
-
-        Self {
-            supported_languages,
-            translations,
-            default_language: "en".to_string(),
+    // Merge local translations into platform config
+    for (lang_code, translations) in local_translations {
+        if let Some(lang) = Language::builtin()
+            .into_iter()
+            .find(|l| l.code() == lang_code)
+        {
+            config.merge_translation(&lang, translations);
         }
     }
-}
-
-impl I18nConfig {
-    pub fn new(
-        supported_languages: Vec<&'static str>,
-        translations: HashMap<String, serde_json::Value>,
-        default_language: String,
-    ) -> Self {
-        Self {
-            supported_languages,
-            translations,
-            default_language,
-        }
-    }
-
-    pub fn get_translation(&self, text: &str, lang: Option<&str>) -> String {
-        let language = lang
-            .map(|l| l.to_string())
-            .unwrap_or_else(|| self.default_language.clone());
-
-        let translation = self
-            .translations
-            .get(&language)
-            .unwrap_or(&serde_json::Value::Null);
-
-        translation[text].as_str().unwrap_or(text).to_string()
-    }
-
-    pub fn merge_translation(&mut self, lang: &str, translation: serde_json::Value) {
-        match self.translations.get(lang) {
-            Some(existing) => {
-                let mut merged = existing.clone();
-                merged
-                    .as_object_mut()
-                    .unwrap()
-                    .extend(translation.as_object().unwrap().clone());
-                self.translations.insert(lang.to_string(), merged);
-            }
-            None => {
-                self.translations.insert(lang.to_string(), translation);
-            }
-        }
-    }
+    config
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use konnektoren_platform::prelude::Language;
     use serde_json::json;
 
     #[test]
-    fn test_default() {
-        let config = I18nConfig::default();
-
-        assert_eq!(config.supported_languages.len(), 9);
-        assert_eq!(config.translations.len(), 9);
-        assert_eq!(config.default_language, "en");
+    fn test_create_i18n() {
+        let i18n = create_i18n_config();
+        assert!(i18n.translations.contains_key("en"));
+        assert!(i18n.translations.contains_key("de"));
+        assert_eq!(i18n.default_language, Language::default());
     }
 
     #[test]
-    fn test_get_translation() {
-        let mut translations = HashMap::new();
-        translations.insert(
-            "en".to_string(),
-            json!({ "Hello": "Hello", "World": "World" }),
+    fn test_translations() {
+        let i18n = create_i18n_config();
+
+        // Test JSON translations
+        assert_eq!(i18n.t("Language"), "Language");
+        assert_eq!(
+            i18n.t_with_lang("Language", &Language::from("de")),
+            "Sprache"
         );
 
-        let config = I18nConfig::new(vec!["en"], translations, "en".to_string());
-
-        assert_eq!(config.get_translation("Hello", None), "Hello");
-        assert_eq!(config.get_translation("World", None), "World");
-        assert_eq!(config.get_translation("Hello", Some("en")), "Hello");
-        assert_eq!(config.get_translation("World", Some("en")), "World");
-        assert_eq!(config.get_translation("Hello", Some("de")), "Hello");
-        assert_eq!(config.get_translation("World", Some("de")), "World");
+        // Test YAML translations
+        assert_eq!(i18n.t("Description"), "Description");
+        assert_eq!(
+            i18n.t_with_lang("Description", &Language::from("de")),
+            "Beschreibung"
+        );
     }
 
     #[test]
-    fn test_get_translation_default() {
-        let mut translations = HashMap::new();
-        translations.insert(
-            "en".to_string(),
-            json!({ "Hello": "Hello", "World": "World" }),
+    fn test_supported_languages() {
+        let i18n = create_i18n_config();
+        let supported = i18n.supported_languages();
+
+        // Check if all builtin languages are supported
+        for lang in ["en", "de", "es", "ar", "zh", "uk", "pl", "tr", "vi"].iter() {
+            assert!(
+                supported.iter().any(|l| l.code() == *lang),
+                "Language {} should be supported",
+                lang
+            );
+        }
+    }
+
+    #[test]
+    fn test_merge_translations_config() {
+        // Test merging translations with I18nConfig
+        let mut config = create_i18n_config();
+        let new_trans = json!({
+            "NewKey": "New Value",
+            "AnotherKey": "Another Value"
+        });
+
+        let lang = Language::from("en");
+        config.merge_translation(&lang, new_trans);
+
+        assert_eq!(config.get_translation("NewKey", Some(&lang)), "New Value");
+        assert_eq!(
+            config.get_translation("AnotherKey", Some(&lang)),
+            "Another Value"
         );
 
-        let config = I18nConfig::new(vec!["en"], translations, "en".to_string());
-
-        assert_eq!(config.get_translation("Hello", None), "Hello");
-        assert_eq!(config.get_translation("World", None), "World");
-        assert_eq!(config.get_translation("Hello", Some("en")), "Hello");
-        assert_eq!(config.get_translation("World", Some("en")), "World");
-        assert_eq!(config.get_translation("Hello", Some("de")), "Hello");
-        assert_eq!(config.get_translation("World", Some("de")), "World");
+        // Test that original translations are preserved
+        assert_eq!(config.get_translation("Language", Some(&lang)), "Language");
     }
 
     #[test]
-    fn test_get_translation_missing() {
-        let mut translations = HashMap::new();
-        translations.insert("en".to_string(), json!({ "Hello": "Hello"}));
+    fn test_fallback_behavior() {
+        let i18n = create_i18n_config();
+        let missing_key = "NonExistentKey";
 
-        let config = I18nConfig::new(vec!["en"], translations, "en".to_string());
-
-        assert_eq!(config.get_translation("Hello", None), "Hello");
-        assert_eq!(config.get_translation("World", None), "World");
-        assert_eq!(config.get_translation("Hello", Some("en")), "Hello");
-        assert_eq!(config.get_translation("World", Some("en")), "World");
-        assert_eq!(config.get_translation("Hello", Some("de")), "Hello");
-        assert_eq!(config.get_translation("World", Some("de")), "World");
-    }
-
-    #[test]
-    fn test_get_translation_empty() {
-        let translations = HashMap::new();
-
-        let config = I18nConfig::new(vec!["en"], translations, "en".to_string());
-
-        assert_eq!(config.get_translation("Hello", None), "Hello");
-        assert_eq!(config.get_translation("World", None), "World");
-        assert_eq!(config.get_translation("Hello", Some("en")), "Hello");
-        assert_eq!(config.get_translation("World", Some("en")), "World");
-        assert_eq!(config.get_translation("Hello", Some("de")), "Hello");
-        assert_eq!(config.get_translation("World", Some("de")), "World");
-    }
-
-    #[test]
-    fn test_get_translation_lang() {
-        let mut translations = HashMap::new();
-        translations.insert(
-            "en".to_string(),
-            json!({ "Hello": "Hello", "World": "World" }),
-        );
-        translations.insert(
-            "de".to_string(),
-            json!({ "Hello": "Hallo", "World": "Welt" }),
+        // Should return the key itself when translation is missing
+        assert_eq!(
+            i18n.t_with_lang(missing_key, &Language::from("en")),
+            missing_key
         );
 
-        let config = I18nConfig::new(vec!["en", "de"], translations, "en".to_string());
-
-        assert_eq!(config.get_translation("Hello", None), "Hello");
-        assert_eq!(config.get_translation("Hello", Some("en")), "Hello");
-        assert_eq!(config.get_translation("Hello", Some("de")), "Hallo");
-        assert_eq!(config.get_translation("Hello", Some("es")), "Hello");
+        // Should fall back to default language for unsupported language
+        assert_eq!(
+            i18n.t_with_lang("Language", &Language::from("xx")),
+            "Language"
+        );
     }
 
     #[test]
-    fn test_merge_translation() {
-        let mut translations = HashMap::new();
-        translations.insert("de".to_string(), json!({ "Hello": "Hello" }));
+    fn test_loaded_assets() {
+        let _ = env_logger::builder()
+            .filter_level(log::LevelFilter::Info)
+            .is_test(true)
+            .try_init();
 
-        let mut config = I18nConfig::new(vec!["en", "de"], translations, "en".to_string());
+        // First, let's check what files are actually embedded
+        log::info!("Available asset files:");
+        for file in LocalI18nAssets::iter() {
+            log::info!("  {}", file);
+        }
 
-        let translation = json!({ "World": "Welt" });
-        config.merge_translation("de", translation.clone());
+        let config = create_i18n_config();
 
-        assert_eq!(config.translations.get("de").unwrap()["World"], "Welt");
+        // Log raw translations map
+        log::info!("Raw translations map:");
+        log::info!("{:#?}", config.translations);
+
+        // Try to load a specific file directly
+        if let Some(content) = LocalI18nAssets::get("de.json") {
+            let content_str = std::str::from_utf8(&content.data).unwrap();
+            log::info!("Content of de.json:\n{}", content_str);
+        } else {
+            log::error!("Could not load de.json");
+        }
+        let config = create_i18n_config();
+
+        // Test German translations
+        let de_translations = config
+            .translations
+            .get("de")
+            .expect("German translations should exist");
+        let de_obj = de_translations.as_object().expect("Should be an object");
+
+        // Test specific German translations
+        assert_eq!(de_obj["Language"].as_str().unwrap(), "Sprache");
+        assert_eq!(
+            de_obj["Please select a language from the dropdown."]
+                .as_str()
+                .unwrap(),
+            "Bitte wählen Sie eine Sprache aus dem Dropdown-Menü."
+        );
+        assert_eq!(de_obj["Tasks"].as_str().unwrap(), "Aufgaben");
+        assert_eq!(
+            de_obj["Unlock Points"].as_str().unwrap(),
+            "Freizuschaltende Punkte"
+        );
+
+        // Test that all expected keys exist in German translations
+        let expected_de_keys = vec![
+            "Language",
+            "Please select a language from the dropdown.",
+            "Please select a language:",
+            "Select Language",
+            "Tasks",
+            "Unlock Points",
+            "Rate this Challenge",
+            "Submit",
+            "Submitting...",
+            "Leave a comment",
+            "Thank you for your review!",
+            "Name",
+            "Performance",
+            "Time",
+            "Rank",
+            "Show Tour Button",
+            "Start Tour",
+            "Feedback",
+            "We'd love your feedback!",
+        ];
+
+        for key in expected_de_keys {
+            assert!(
+                de_obj.contains_key(key),
+                "German translations should contain key: {}",
+                key
+            );
+        }
+
+        // Test that translations are working through the Translation trait
+        assert_eq!(
+            config.t_with_lang("Language", &Language::from("de")),
+            "Sprache"
+        );
+        assert_eq!(
+            config.t_with_lang("Tasks", &Language::from("de")),
+            "Aufgaben"
+        );
+
+        // Verify all supported languages have their translation files loaded
+        for lang in Language::builtin() {
+            assert!(
+                config.translations.contains_key(lang.code()),
+                "Translation file for {} should be loaded",
+                lang.native_name()
+            );
+        }
+
+        // Test the structure of loaded translations
+        for (lang_code, translations) in &config.translations {
+            assert!(
+                translations.is_object(),
+                "Translations for {} should be a JSON object",
+                lang_code
+            );
+            assert!(
+                !translations.as_object().unwrap().is_empty(),
+                "Translations for {} should not be empty",
+                lang_code
+            );
+        }
+    }
+
+    #[test]
+    fn test_combined_platform_and_local_translations() {
+        let _ = env_logger::builder()
+            .filter_level(log::LevelFilter::Info)
+            .is_test(true)
+            .try_init();
+
+        let config = create_i18n_config();
+
+        // Test local translations (from your app)
+        let local_keys = [
+            "Please select a language from the dropdown.",
+            "Please select a language:",
+            "Select Language",
+            "Tasks",
+            "Unlock Points",
+            "Rate this Challenge",
+            "Submit",
+            "Submitting...",
+            "Leave a comment",
+            "Thank you for your review!",
+            "Name",
+            "Performance",
+            "Time",
+            "Rank",
+            "Show Tour Button",
+            "Start Tour",
+            "Feedback",
+            "We'd love your feedback!",
+        ];
+
+        // Test platform translations (from konnektoren-platform)
+        let platform_keys = ["Language"];
+
+        // Test German translations
+        let de_translations = config
+            .translations
+            .get("de")
+            .expect("German translations should exist");
+
+        let de_obj = de_translations.as_object().expect("Should be an object");
+
+        // Verify local translations
+        for &key in &local_keys {
+            assert!(
+                de_obj.contains_key(key),
+                "Local translation key '{}' should exist in German translations",
+                key
+            );
+        }
+
+        // Verify platform translations
+        for &key in &platform_keys {
+            assert!(
+                de_obj.contains_key(key),
+                "Platform translation key '{}' should exist in German translations",
+                key
+            );
+        }
+
+        // Log all available keys for debugging
+        log::info!("Available translation keys for German:");
+        if let Some(obj) = de_translations.as_object() {
+            for key in obj.keys() {
+                log::info!("  {}", key);
+            }
+        }
+
+        // Test that translations don't override each other
+        let en_translations = config
+            .translations
+            .get("en")
+            .expect("English translations should exist");
+
+        let en_obj = en_translations.as_object().expect("Should be an object");
+
+        // Verify translation count
+        let total_keys = de_obj.len();
+        log::info!("Total number of translations in German: {}", total_keys);
+        assert!(
+            total_keys >= local_keys.len() + platform_keys.len(),
+            "Should have at least the sum of local and platform translations. Expected at least {}, got {}",
+            local_keys.len() + platform_keys.len(),
+            total_keys
+        );
+
+        // Test merged translations work through the Translation trait
+        for lang in Language::builtin() {
+            // Test some local keys
+            for &key in &local_keys {
+                let result = config.t_with_lang(key, &lang);
+                assert!(
+                    !result.is_empty(),
+                    "Translation for '{}' should exist in {}",
+                    key,
+                    lang.native_name()
+                );
+            }
+
+            // Test platform keys
+            for &key in &platform_keys {
+                let result = config.t_with_lang(key, &lang);
+                log::info!(
+                    "Platform translation for '{}' in {}: '{}'",
+                    key,
+                    lang.native_name(),
+                    result
+                );
+            }
+        }
+
+        // Log final statistics
+        log::info!("Translation test summary:");
+        log::info!("  Local keys: {}", local_keys.len());
+        log::info!("  Platform keys: {}", platform_keys.len());
+        log::info!("  Total keys in German: {}", total_keys);
     }
 }
