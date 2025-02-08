@@ -611,9 +611,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.12"
+version = "1.2.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "755717a7de9ec452bf7f3f1a3099085deabd7f2962b861dae91ecd7a365903d2"
+checksum = "c7777341816418c02e033934a09f20dc0ccaf65a5201ef8a450ae0105a573fda"
 dependencies = [
  "jobserver",
  "libc",
@@ -2157,7 +2157,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-core"
 version = "0.4.5"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#fc07047570d6104a61f5cf96e1027926a07bf2d2"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#31ec26efac93465af6dc93fc0aea5afa15c3789f"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -2197,7 +2197,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-platform"
 version = "0.1.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#fc07047570d6104a61f5cf96e1027926a07bf2d2"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#31ec26efac93465af6dc93fc0aea5afa15c3789f"
 dependencies = [
  "config",
  "isolang",

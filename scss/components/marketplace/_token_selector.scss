@@ -79,13 +79,9 @@
         justify-content: center;
 
         img {
-            width: calc(
-                100% - 2 * #{spacing("xs")}
-            ); // Adjust width to account for padding
-            height: calc(
-                100% - 2 * #{spacing("xs")}
-            ); // Adjust height to account for padding
-            object-fit: contain; // Changed from cover to contain
+            width: calc(100% - 2 * #{spacing("xs")});
+            height: calc(100% - 2 * #{spacing("xs")});
+            object-fit: contain;
             border-radius: border-radius("full");
         }
     }
