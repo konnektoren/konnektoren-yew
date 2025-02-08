@@ -13,6 +13,7 @@ pub mod challenge_rating;
 pub mod challenge_review;
 pub mod challenge_timer;
 pub mod chat;
+pub mod domain_selector;
 pub mod feedback_popup;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
@@ -53,6 +54,7 @@ pub use challenge_rating::ChallengeRatingComponent;
 pub use challenge_review::ChallengeReviewComponent;
 pub use challenge_timer::ChallengeTimerComponent;
 pub use chat::ChatComponent;
+pub use domain_selector::DomainSelectorComponent;
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
