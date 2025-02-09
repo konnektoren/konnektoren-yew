@@ -43,7 +43,7 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
                     help={*show_help}
                 />
             </div>
-            <ReadText text={props.challenge.questions[*task_index].question.clone()} lang="de-DE" />
+            <ReadText text={props.challenge.questions[*task_index].question.clone()} lang={props.challenge.lang.clone()} />
         </div>
     }
 }
@@ -51,7 +51,7 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
-    use konnektoren_core::prelude::{ChallengeType, Game};
+    use konnektoren_core::prelude::{ChallengeType, Game, MultipleChoiceOption, Question};
     use yew_preview::prelude::*;
 
     use konnektoren_core::challenges::multiple_choice::MultipleChoice;
@@ -74,6 +74,64 @@ mod preview {
         }
     }
 
+    fn create_spanish_challenge() -> MultipleChoice {
+        let id = "spanish-1".to_string();
+        let name = "Spanish Basic Verbs".to_string();
+        let lang = "es".to_string();
+        let options = vec![
+            MultipleChoiceOption {
+                id: 1,
+                name: "ser".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 2,
+                name: "estar".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 3,
+                name: "tener".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 4,
+                name: "hacer".to_string(),
+            },
+        ];
+        let questions = vec![
+            Question {
+                question: "¿Cuál verbo se usa para expresar características permanentes?"
+                    .to_string(),
+                help: "Se usa para características esenciales y permanentes".to_string(),
+                option: 1, // ser
+                image: None,
+            },
+            Question {
+                question: "¿Qué verbo se usa para estados temporales o ubicación?".to_string(),
+                help: "Se usa para estados temporales y localización".to_string(),
+                option: 2, // estar
+                image: None,
+            },
+            Question {
+                question: "¿Cuál es el verbo que significa 'to have'?".to_string(),
+                help: "Se usa para expresar posesión".to_string(),
+                option: 3, // tener
+                image: None,
+            },
+            Question {
+                question: "¿Qué verbo significa 'to do' o 'to make'?".to_string(),
+                help: "Se usa para acciones y creación".to_string(),
+                option: 4, // hacer
+                image: None,
+            },
+        ];
+        MultipleChoice {
+            id,
+            name,
+            lang,
+            options,
+            questions,
+        }
+    }
+
     yew_preview::create_preview!(
         MultipleChoiceCircleComponent,
         MultipleChoiceComponentProps {
@@ -89,5 +147,13 @@ mod preview {
                 on_event: None,
             }
         ),
+        (
+            "Spanish",
+            MultipleChoiceComponentProps {
+                challenge: create_spanish_challenge(),
+                on_command: None,
+                on_event: None,
+            }
+        )
     );
 }

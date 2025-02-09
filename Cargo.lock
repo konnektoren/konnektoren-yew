@@ -2156,8 +2156,8 @@ dependencies = [
 
 [[package]]
 name = "konnektoren-core"
-version = "0.4.5"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#31ec26efac93465af6dc93fc0aea5afa15c3789f"
+version = "0.4.6"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#2829a9c8c2491047bf5bcc692dd21bcd78a101e4"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -2197,7 +2197,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-platform"
 version = "0.1.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#31ec26efac93465af6dc93fc0aea5afa15c3789f"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#2829a9c8c2491047bf5bcc692dd21bcd78a101e4"
 dependencies = [
  "config",
  "isolang",

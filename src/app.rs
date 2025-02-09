@@ -33,7 +33,7 @@ use crate::components::{
 };
 #[cfg(feature = "effects")]
 use crate::effects::BlinkAnimation;
-use crate::i18n::{I18nConfig, I18nProvider};
+use crate::i18n::I18nProvider;
 use crate::model::DefaultSessionInitializer;
 use crate::prelude::{
     BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,

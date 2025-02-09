@@ -31,7 +31,7 @@ pub fn select_language() -> Html {
         <div class="select-language">
             <p>
                 { i18n.t("Please select a language from the dropdown.") }
-                <select onchange={on_select_change} value={(selected_language.get().code())}>
+                <select onchange={on_select_change} value={selected_language.get().code()}>
                     <option value="" selected={selected_language.get().code().is_empty()} disabled=true>{ i18n.t("Select Language") }</option>
                     { for LANGUAGES.iter().map(|&lang| html! {
                         <option value={lang} selected={*lang == *selected_language.get().code()}>{format!("{} {}", flag(lang), language_name(lang))}</option>

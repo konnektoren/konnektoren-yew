@@ -1,9 +1,6 @@
-use crate::i18n::LANGUAGES;
+pub use konnektoren_platform::i18n::I18nConfig;
 use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, TranslationAsset};
-pub use konnektoren_platform::i18n::{I18nConfig, Translation};
 use rust_embed::RustEmbed;
-use serde_json::Value;
-use std::collections::HashMap;
 
 #[derive(RustEmbed)]
 #[folder = "$CARGO_MANIFEST_DIR/src/assets/i18n/"]

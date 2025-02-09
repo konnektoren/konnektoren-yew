@@ -155,7 +155,7 @@ pub fn multiple_choice_component(props: &MultipleChoiceComponentProps) -> Html {
                 challenge={props.challenge.clone()}
                 challenge_result={(*challenge_result).clone()}
             />
-            <ReadText text={props.challenge.questions[*task_index].help.clone()} lang="de-DE" />
+            <ReadText text={props.challenge.questions[*task_index].help.clone()} lang={props.challenge.lang.clone()} />
         </div>
     }
 }
