@@ -17,6 +17,9 @@ use crate::components::marketplace::{
     WalletComponent,
 };
 
+#[cfg(feature = "sbom")]
+use crate::components::app_dependencies::AppDependenciesComponent;
+
 #[cfg(feature = "tour")]
 use crate::components::tour::{TourButton, TourConfig};
 
@@ -183,7 +186,9 @@ pub fn App() -> Html {
             SoundConfig::preview(),
             SelectDesign::preview(),
             SelectTheme::preview(),
-            AppVersionComponent::preview()
+            AppVersionComponent::preview(),
+            #[cfg(feature = "sbom")]
+            AppDependenciesComponent::preview()
         ),
         create_component_group!(
             "Certificates",

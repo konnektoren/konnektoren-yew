@@ -1,0 +1,96 @@
+.app-dependencies {
+    padding: 1rem;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    &__toggle {
+        padding: 0.3rem 0.6rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #f8f9fa;
+        cursor: pointer;
+        font-size: 0.9em;
+
+        &:hover {
+            background: #e9ecef;
+        }
+    }
+
+    &__count {
+        font-weight: 500;
+    }
+
+    &__licenses {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-bottom: 1rem;
+    }
+
+    &__search {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        font-size: 0.9em;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        font-size: 0.9em;
+
+        &:hover {
+            background: #f8f9fa;
+        }
+    }
+
+    .license-group {
+        display: flex;
+        gap: 0.2rem;
+        align-items: center;
+
+        &:not(:last-child)::after {
+            content: "OR";
+            font-size: 0.8em;
+            color: #666;
+            margin: 0 0.3rem;
+        }
+    }
+
+    &__item-licenses {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .license-badge {
+        background: #e9ecef;
+        padding: 0.3rem 0.6rem;
+        border-radius: 3px;
+        font-size: 0.9em;
+
+        &--small {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.8em;
+        }
+    }
+}

@@ -1,5 +1,7 @@
 //! This module contains all the components that are used in the app.
 pub mod advertisement;
+#[cfg(feature = "sbom")]
+pub mod app_dependencies;
 pub mod app_version;
 mod badge;
 pub mod buy_me_coffee;
@@ -41,6 +43,8 @@ pub mod tour;
 pub mod translate;
 
 pub use advertisement::{AdNetwork, AdvertisementComponent, AdvertisementProps};
+#[cfg(feature = "sbom")]
+pub use app_dependencies::AppDependenciesComponent;
 pub use app_version::AppVersionComponent;
 pub use badge::Badge;
 pub use buy_me_coffee::BuyMeCoffeeComponent;

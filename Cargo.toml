@@ -21,6 +21,7 @@ default = [
     "gdrive",
     "tour",
     "solana",
+    "sbom",
 ]
 backup = []
 certificates = [
@@ -35,6 +36,7 @@ yew-preview = ["dep:yew-preview"]
 gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
+sbom = ["cargo-cyclonedx"]
 
 [dependencies]
 async-trait = "0.1.83"
@@ -112,3 +114,6 @@ env_logger = "0.10"
 [build-dependencies]
 anyhow = "1.0"
 vergen = { version = "9.0.0", features = ["build", "cargo", "rustc"] }
+cargo-cyclonedx = { version = "0.4", optional = true }
+serde = { version = "*" }
+serde_json = { version = "*" }

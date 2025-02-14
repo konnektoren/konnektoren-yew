@@ -32,6 +32,9 @@ jobs:
       - name: Setup styles
         run: just setup-styles
 
+      - name: Setup SBOM
+        run: just sbom
+
       - name: Build
         run: trunk build --features=yew-preview --release --public-url /konnektoren-yew/
 

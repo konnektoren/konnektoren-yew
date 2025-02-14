@@ -29,7 +29,7 @@ serve:
     trunk serve --features=yew-preview
 
 # Build the project for release
-build: styles-check
+build: styles-check sbom
     #!/usr/bin/env bash
     set -euo pipefail
     echo "Building with BUILD_DIR=${BUILD_DIR}"
@@ -115,3 +115,8 @@ lint-style:
 # You might want to update your existing lint command to include style linting
 lint: lint-style
     cargo clippy -- -D warnings
+
+# Generate SBOM
+sbom:
+    cargo install cargo-cyclonedx
+    cargo cyclonedx --format json
