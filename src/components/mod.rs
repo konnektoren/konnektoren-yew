@@ -38,6 +38,7 @@ mod settings;
 pub mod share_page;
 pub mod social_links;
 pub mod status_message;
+pub mod swipe;
 pub mod timer;
 #[cfg(feature = "tour")]
 pub mod tour;
@@ -85,6 +86,7 @@ pub use settings::*;
 pub use share_page::SharePageComp;
 pub use social_links::SocialLinks;
 pub use status_message::{StatusMessage, StatusType};
+pub use swipe::{SwipeComponent, SwipeDirection};
 pub use timer::TimerComponent;
 #[cfg(feature = "tour")]
 pub use tour::*;
