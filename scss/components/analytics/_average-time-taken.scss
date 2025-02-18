@@ -1,0 +1,99 @@
+.average-time-taken {
+    // Block styles
+    & {
+        @include card(
+            (
+                padding: "lg",
+                shadow: "soft",
+            )
+        );
+    }
+
+    // Element styles
+    &__header {
+        @include horizontal-layout(
+            (
+                justify: space-between,
+                align: center,
+            )
+        );
+        margin-bottom: spacing("md");
+    }
+
+    &__title {
+        //  Using a mixin defined in _type.scss
+        @include material-h3;
+        margin: 0;
+    }
+
+    &__trend {
+        // Uses styles from success rate component
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    &__trend-icon {
+        // Icon styles (assuming Font Awesome or similar)
+        &.fa-arrow-up {
+            // Example:  Icon for improving trend
+            color: color("success");
+        }
+
+        &.fa-arrow-down {
+            // Example: Icon for declining trend
+            color: color("danger");
+        }
+
+        &.fa-arrows-left-right {
+            // Example: Icon for stable trend
+            color: color("info");
+        }
+    }
+
+    &__trend-label {
+        // Trend label styling
+    }
+
+    &__content {
+        @include vertical-layout(
+            (
+                gap: "md",
+            )
+        );
+    }
+
+    &__value {
+        // Style for the value display
+        font-size: font-size("4xl"); // Example
+        font-weight: font-weight("bold");
+        color: color("text-primary");
+    }
+
+    &__description {
+        // Style for the description text
+        font-size: font-size("md");
+        color: color("text-secondary");
+        margin: 0; // Remove default margin
+    }
+
+    // Modifier styles (for trend, etc.)
+    &__trend--improving {
+        background-color: color("success");
+        color: color("light");
+    }
+
+    &__trend--declining {
+        background-color: color("danger");
+        color: color("light");
+    }
+
+    &__trend--stable {
+        background-color: color("info");
+        color: color("light");
+    }
+}

@@ -1,4 +1,4 @@
-use crate::components::analytics::SuccessRateComponent;
+use crate::components::analytics::{AverageTimeTakenComponent, SuccessRateComponent};
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
     AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
@@ -157,7 +157,8 @@ pub fn App() -> Html {
         ),
         create_component_group!(
             "Analytics",
-            SuccessRateComponent::preview()
+            SuccessRateComponent::preview(),
+            AverageTimeTakenComponent::preview(),
         ),
         create_component_group!(
             "Profile",
