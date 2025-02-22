@@ -24,6 +24,25 @@
             color("info")
         );
         background-size: 300% 100%;
+
+        @include glow-animation {
+            animation: glowing 3s infinite alternate;
+        }
+
+        @include gradient-animation {
+            background: linear-gradient(
+                90deg,
+                color("danger"),
+                color("warning"),
+                color("success"),
+                color("info")
+            );
+            background-size: 300% 100%;
+            animation-name: moveGradient;
+            animation-duration: 3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
     }
 
     &__label {
@@ -38,6 +57,3 @@
         }
     }
 }
-
-@include glow-animation("danger", "warning");
-@include gradient-animation;
