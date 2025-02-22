@@ -60,12 +60,10 @@
         position: absolute;
         top: -10px;
         right: -10px;
-        @include badge-circular(
-            "sm",
+        @include badge(
             (
+                circular: true,
                 theme: "secondary",
-                text: "light",
-                shadow: "soft",
             )
         );
         font-size: font-size("sm");

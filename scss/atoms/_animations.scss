@@ -1,4 +1,4 @@
-@mixin gradient-animation {
+@mixin gradient-animation($duration: 3s, $direction: linear) {
     @keyframes moveGradient {
         0% {
             background-position: 0% 50%;
@@ -7,15 +7,24 @@
             background-position: 300% 50%;
         }
     }
+    @content;
 }
 
-@mixin glow-animation($from-color, $to-color) {
+@mixin glow-animation(
+    $from-color: "primary",
+    $to-color: "secondary",
+    $shadow-size: 5px,
+    $duration: 3s,
+    $iteration-count: infinite
+) {
     @keyframes glowing {
         0% {
-            box-shadow: 0 0 5px color($from-color);
+            box-shadow: 0 0 $shadow-size color($from-color);
         }
         100% {
-            box-shadow: 0 0 20px color($to-color);
+            box-shadow: 0 0 (4 * $shadow-size) color($to-color);
         }
     }
+
+    @content;
 }
