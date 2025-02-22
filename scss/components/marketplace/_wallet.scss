@@ -172,7 +172,7 @@
         }
 
         &:disabled {
-            background-color: color("disabled");
+            background-color: color("button-disabled");
             color: color("text-disabled");
             cursor: not-allowed;
             transform: none;
