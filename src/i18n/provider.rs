@@ -80,7 +80,7 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
     // Initialize selected_language first
     let selected_language = {
         let language = determine_language(&props.config, &settings);
-        SelectedLanguage::new(&language.code())
+        SelectedLanguage::new(language.code())
     };
 
     // Initialize config state with props

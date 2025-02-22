@@ -20,7 +20,7 @@ pub struct GDriveBackupProps {
 
 #[function_component(GDriveBackupComponent)]
 pub fn gdrive_backup(props: &GDriveBackupProps) -> Html {
-    let backups = use_state(|| Vec::<BackupInfo>::new());
+    let backups = use_state(Vec::<BackupInfo>::new);
     let loading = use_state(|| false);
     let error = use_state(|| None::<String>);
 

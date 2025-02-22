@@ -43,7 +43,7 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
     let provider = use_state(|| props.provider.clone());
     let connection = use_state(|| None::<WalletConnection>);
     let selected_token = use_state(|| props.tokens.first().cloned());
-    let token_balances = use_state(|| HashMap::<String, WalletBalance>::new());
+    let token_balances = use_state(HashMap::<String, WalletBalance>::new);
     let token_price = use_state(|| None::<f64>);
     let error_state = use_state(|| None::<String>);
     let is_sending = use_state(|| false);
@@ -86,7 +86,7 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                 provider.set(provider_instance.clone());
 
                 // Update balances if already connected
-                if let Some(conn) = &*connection {
+                if let Some(_conn) = &*connection {
                     for token in &tokens {
                         if let Ok(balance) = provider_instance.get_balance(token).await {
                             token_balances.set(

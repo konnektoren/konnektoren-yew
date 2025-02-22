@@ -98,7 +98,7 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                     if let Some(i18n_content) = loaded_package.get_file_as_string("i18n.yml") {
                         let language = SelectedLanguage::default().get();
                         let loader = I18nYmlLoader::new(i18n_content.as_str());
-                        let translations = loader.get(&language.code()).unwrap_or_default();
+                        let translations = loader.get(language.code()).unwrap_or_default();
                         konnektoren_js.borrow_mut().set_i18n_data(translations);
                     }
 

@@ -1,20 +1,8 @@
 use crate::components::map::bounds::Bounds;
-use crate::prelude::ModelCoordinate;
 use konnektoren_core::game::GamePath;
-
-pub trait Center {
-    fn get_center(&self) -> ModelCoordinate;
-}
 
 pub trait Zoom {
     fn get_zoom(&self, max_width: u32, max_height: u32) -> f64;
-}
-
-impl Center for GamePath {
-    fn get_center(&self) -> ModelCoordinate {
-        let (min, max) = self.get_bounds();
-        ModelCoordinate((min.0 + max.0) / 2, (min.1 + max.1) / 2)
-    }
 }
 
 impl Zoom for GamePath {

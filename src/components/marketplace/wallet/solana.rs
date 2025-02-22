@@ -459,7 +459,7 @@ impl SolanaWalletProvider {
             "params": []
         });
 
-        let response = Request::post(&endpoint)
+        let response = Request::post(endpoint)
             .header("Content-Type", "application/json")
             .body(body.to_string())
             .unwrap()
@@ -496,8 +496,8 @@ impl SolanaWalletProvider {
             TokenType::Native => {
                 log::info!("Creating native SOL transfer for {} lamports", amount);
                 let transfer_instruction =
-                    system_instruction::transfer(&from_pubkey, &recipient_pubkey, amount);
-                Transaction::new_with_payer(&[transfer_instruction], Some(&from_pubkey))
+                    system_instruction::transfer(from_pubkey, &recipient_pubkey, amount);
+                Transaction::new_with_payer(&[transfer_instruction], Some(from_pubkey))
             }
             TokenType::Custom => {
                 let token_program_id =
@@ -516,11 +516,11 @@ impl SolanaWalletProvider {
                 );
                 let transfer_instruction = spl_token::instruction::transfer_checked(
                     &token_program_id,
-                    &from_pubkey,
+                    from_pubkey,
                     &token_mint,
                     &recipient_pubkey,
-                    &from_pubkey,
-                    &[&from_pubkey],
+                    from_pubkey,
+                    &[from_pubkey],
                     amount_with_decimals,
                     token.decimals,
                 )
@@ -529,7 +529,7 @@ impl SolanaWalletProvider {
                     e.to_string()
                 })?;
 
-                Transaction::new_with_payer(&[transfer_instruction], Some(&from_pubkey))
+                Transaction::new_with_payer(&[transfer_instruction], Some(from_pubkey))
             }
         };
         tx.message.recent_blockhash = *recent_blockhash;
@@ -596,7 +596,7 @@ async fn get_sol_balance(address: &str, cluster: &Cluster) -> Result<u64, String
         "params": [address]
     });
 
-    let response = gloo::net::http::Request::post(&cluster.endpoint())
+    let response = gloo::net::http::Request::post(cluster.endpoint())
         .header("Content-Type", "application/json")
         .body(body.to_string())
         .unwrap()
@@ -646,7 +646,7 @@ async fn get_token_balance(
         ]
     });
 
-    let resp = Request::post(&endpoint)
+    let resp = Request::post(endpoint)
         .header("Content-Type", "application/json")
         .body(body.to_string())
         .unwrap()

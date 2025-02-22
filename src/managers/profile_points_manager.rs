@@ -16,13 +16,13 @@ pub fn profile_manager(props: &ProfilePointsManagerProps) -> Html {
         Some(children) => {
             let modified_children = children.iter().map(|mut item| {
                 let props = Rc::make_mut(&mut item.props);
-                props.profile = (&*profile_state).clone();
+                props.profile = (*profile_state).clone();
                 item
             });
             html! { for modified_children }
         }
         None => html! {
-            <ProfilePointsComponent profile={(&*profile_state).clone()} />
+            <ProfilePointsComponent profile={(*profile_state).clone()} />
         },
     }
 }

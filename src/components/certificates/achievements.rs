@@ -91,7 +91,7 @@ fn render_certificate_item(
     html! {
         <li class={classes!(
             "achievements__certificate-item",
-            is_selected.then(|| "achievements__certificate-item--selected")
+            is_selected.then_some("achievements__certificate-item--selected")
         )}>
             <div class="achievements__certificate-summary" {onclick}>
                 { render_certificate_summary(cert) }

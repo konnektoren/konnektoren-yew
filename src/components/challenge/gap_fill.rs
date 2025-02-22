@@ -205,13 +205,12 @@ fn render_sentence(
 
                 let on_click = {
                     let on_gap_click = on_gap_click.clone();
-                    let gap_index = gap_index;
                     Callback::from(move |_| on_gap_click.emit(gap_index))
                 };
 
                 let gap_class = classes!(
                     "gap-fill__gap",
-                    is_selected.then(|| "gap-fill__gap--selected"),
+                    is_selected.then_some("gap-fill__gap--selected"),
                 );
 
                 html! {

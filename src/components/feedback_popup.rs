@@ -22,7 +22,7 @@ pub fn feedback_popup(props: &FeedbackPopupProps) -> Html {
 
     {
         let show = show.clone();
-        let timeout = props.timeout_seconds.clone();
+        let timeout = props.timeout_seconds;
         use_effect_with((), move |_| {
             let handle = Timeout::new(timeout * 1000, move || {
                 show.set(true);

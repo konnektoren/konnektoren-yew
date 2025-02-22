@@ -15,7 +15,7 @@ pub struct ChallengeReviewProps {
 pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     let i18n = use_i18n();
     let stars = use_state(|| 0); // Holds the currently selected star rating
-    let comment = use_state(|| String::new()); // Holds the user's comment
+    let comment = use_state(String::new); // Holds the user's comment
     let is_sending = use_state(|| false); // Tracks when the review is being sent
     let is_sent = use_state(|| false); // Tracks whether the review has been successfully sent
 

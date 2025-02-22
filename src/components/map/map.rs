@@ -47,7 +47,7 @@ pub fn map_component(props: &MapComponentProps) -> Html {
     let bounds = props.game_path.get_bounds();
     let svg_bounds = (bounds.0.to_svg(SCALE), bounds.1.to_svg(SCALE));
 
-    let view_box_state = use_state(|| svg_bounds.clone());
+    let view_box_state = use_state(|| svg_bounds);
     let zoom_level = use_state(|| {
         props
             .game_path
@@ -55,7 +55,7 @@ pub fn map_component(props: &MapComponentProps) -> Html {
     });
     let is_dragging = use_state(|| false);
     let last_touch_pos = use_state(|| (0.0, 0.0));
-    let view_box_position = use_state(|| svg_bounds.0.clone());
+    let view_box_position = use_state(|| svg_bounds.0);
 
     let handle_wheel =
         handle_wheel_callback(&view_box_state, &zoom_level, &view_box_position, svg_bounds);
@@ -208,9 +208,7 @@ fn calculate_challenge_focus(
 
     let width = (bounds.1 .0 - bounds.0 .0) as f64;
     let height = (bounds.1 .1 - bounds.0 .1) as f64;
-    let zoom = (width.min(height) / (5.0 * SCALE as f64))
-        .max(MIN_ZOOM)
-        .min(MAX_ZOOM);
+    let zoom = (width.min(height) / (5.0 * SCALE as f64)).clamp(MIN_ZOOM, MAX_ZOOM);
 
     (center, zoom)
 }
@@ -233,8 +231,8 @@ fn on_touch_move_callback(
         if *is_dragging {
             let touch = e.touches().get(0).unwrap();
             let (dx, dy) =
-                calculate_mouse_delta(touch.client_x(), touch.client_y(), &*last_touch_pos);
-            let (dx, dy) = (dx.max(-1.0).min(1.0), dy.max(-1.0).min(1.0));
+                calculate_mouse_delta(touch.client_x(), touch.client_y(), &last_touch_pos);
+            let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
 
             if dx.is_nan() || dy.is_nan() {
                 log::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
@@ -335,8 +333,8 @@ fn on_mouse_move_callback(
 
     Callback::from(move |e: MouseEvent| {
         if *is_dragging {
-            let (dx, dy) = calculate_mouse_delta(e.client_x(), e.client_y(), &*last_mouse_pos);
-            let (dx, dy) = (dx.max(-1.0).min(1.0), dy.max(-1.0).min(1.0));
+            let (dx, dy) = calculate_mouse_delta(e.client_x(), e.client_y(), &last_mouse_pos);
+            let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
 
             if dx.is_nan() || dy.is_nan() {
                 log::error!("Invalid mouse movement delta: dx={}, dy={}", dx, dy);

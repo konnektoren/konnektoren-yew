@@ -80,7 +80,7 @@ pub fn custom_result(props: &CustomResultComponentProps) -> Html {
         let js_code = (*js_content).clone();
         let loading = loading.clone();
 
-        use_effect_with(((*loading).clone(), js_code.clone()), move |_| {
+        use_effect_with(((*loading), js_code.clone()), move |_| {
             if !*loading {
                 let js = konnektoren_js.borrow_mut();
                 js.set_challenge_data(challenge);

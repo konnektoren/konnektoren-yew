@@ -209,11 +209,7 @@ async fn upload_session(access_token: &str, session: &str) -> Result<String, Bac
         Content-Type: application/json\r\n\r\n\
         {}\r\n\
         --{}--",
-        boundary,
-        metadata.to_string(),
-        boundary,
-        session,
-        boundary
+        boundary, metadata, boundary, session, boundary
     );
 
     let upload_url = "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart";

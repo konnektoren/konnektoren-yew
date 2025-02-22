@@ -6586,9 +6586,10 @@ dependencies = [
 [[package]]
 name = "yew-preview"
 version = "0.3.0"
-source = "git+https://github.com/chriamue/yew-preview#65fd8c9d08d6c83a221be463fa44ded088970ffc"
+source = "git+https://github.com/chriamue/yew-preview#b0da5bab988ec6877e0939e243110ef4b6e16613"
 dependencies = [
  "paste",
+ "web-sys",
  "yew",
 ]
 

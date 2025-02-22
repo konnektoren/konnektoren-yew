@@ -22,7 +22,7 @@ impl PartialEq for ProfileProviderProps {
 
 #[function_component(ProfileProvider)]
 pub fn profile_provider(props: &ProfileProviderProps) -> Html {
-    let profile = use_state(|| PlayerProfile::default());
+    let profile = use_state(PlayerProfile::default);
 
     // Load profile
     {
