@@ -24,7 +24,7 @@ impl PartialEq for InboxProviderProps {
 
 #[function_component(InboxProvider)]
 pub fn inbox_provider(props: &InboxProviderProps) -> Html {
-    let inbox = use_state(|| Inbox::default());
+    let inbox = use_state(Inbox::default);
 
     // Load inbox
     {

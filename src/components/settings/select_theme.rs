@@ -31,7 +31,7 @@ pub fn select_theme(props: &SelectThemeProps) -> Html {
     {
         let theme = theme.clone();
         use_effect(move || {
-            update_theme_class(&*theme);
+            update_theme_class(&theme);
             || ()
         });
     }

@@ -1,5 +1,5 @@
 .badge {
-    @include badge-base(
+    @include badge(
         (
             theme: "background-primary",
             text: "text-primary",
@@ -22,7 +22,7 @@
     }
 
     &__label {
-        @include badge-base(
+        @include badge(
             (
                 theme: "primary",
                 text: "light",

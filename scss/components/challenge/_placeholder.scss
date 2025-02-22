@@ -27,18 +27,19 @@
     }
 
     &__type {
-        @include badge-base(
+        @include badge(
             (
                 padding: "sm",
                 theme: "primary",
                 text: "light",
                 radius: "full",
+                font-size: "300",
+                // Set font-size here for consistency
             )
         );
         display: inline-flex;
         align-items: center;
         gap: spacing("sm");
-        font-size: font-size("300");
 
         i {
             font-size: font-size("400");
@@ -114,20 +115,18 @@
     }
 
     &__time {
-        @include badge-base(
+        @include badge(
             (
-                padding: (
-                    "xs" "sm",
-                ),
+                padding: "xs",
                 theme: "background-secondary",
                 text: "text-secondary",
                 radius: "full",
+                font-size: "200",
             )
         );
         display: inline-flex;
         align-items: center;
         gap: spacing("xs");
-        font-size: font-size("200");
 
         i {
             color: color("primary");

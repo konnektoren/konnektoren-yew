@@ -49,7 +49,7 @@
 
         &.selected {
             border-color: color("primary");
-            background-color: color("primary-light");
+            background-color: color("background-secondary");
 
             .token-display__name,
             .token-display__symbol {

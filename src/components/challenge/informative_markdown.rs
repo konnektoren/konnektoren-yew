@@ -104,7 +104,7 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
             html! {<p>{error}</p>}
         }
         LoadingState::FetchSuccess(ref text) => {
-            let content = Html::from_html_unchecked(AttrValue::from(markdown::to_html(&text)));
+            let content = Html::from_html_unchecked(AttrValue::from(markdown::to_html(text)));
             html! {
                 <div class="informative-markdown">
                     <h2>{&props.challenge.description}</h2>

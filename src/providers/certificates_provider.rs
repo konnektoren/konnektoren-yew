@@ -25,7 +25,7 @@ impl PartialEq for CertificatesProviderProps {
 
 #[function_component(CertificatesProvider)]
 pub fn certificates_provider(props: &CertificatesProviderProps) -> Html {
-    let certificates = use_state(|| Vec::new());
+    let certificates = use_state(Vec::new);
 
     // Load certificates
     {

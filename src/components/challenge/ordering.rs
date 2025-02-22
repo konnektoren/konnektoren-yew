@@ -39,14 +39,14 @@ fn ordering_element(props: &OrderingElementProps) -> Html {
             if props.index > 0 {
                 <div class={classes!(
                     "ordering__drop-indicator",
-                    props.show_drop_indicator.then(|| "ordering__drop-indicator--active")
+                    props.show_drop_indicator.then_some("ordering__drop-indicator--active")
                 )} />
             }
             <div
                 class={classes!(
                     "ordering__element",
-                    props.is_dragging.then(|| "ordering__element--dragging"),
-                    props.is_selected.then(|| "ordering__element--selected")
+                    props.is_dragging.then_some("ordering__element--dragging"),
+                    props.is_selected.then_some("ordering__element--selected")
                 )}
                 draggable="true"
                 data-index={props.index.to_string()}
@@ -132,7 +132,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let selected_index = use_state(|| None::<usize>);
     // Initialize with shuffled order
     let current_order = use_state(|| {
-        if let Some(item) = props.challenge.items.get(0) {
+        if let Some(item) = props.challenge.items.first() {
             let mut indices: Vec<usize> = (0..item.elements.len()).collect();
             use rand::seq::SliceRandom;
             use rand::thread_rng;
@@ -243,7 +243,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         let dragged_index = dragged_index.clone();
         Callback::from(move |event: TouchEvent| {
             event.prevent_default();
-            if let Some(target) = event.target().unwrap().dyn_into::<Element>().ok() {
+            if let Ok(target) = event.target().unwrap().dyn_into::<Element>() {
                 if let Ok(index) = target
                     .get_attribute("data-index")
                     .unwrap_or_default()
@@ -263,7 +263,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
             event.prevent_default();
             if let Some(touch) = event.touches().get(0) {
                 let target = touch.target().unwrap();
-                if let Some(element) = target.dyn_into::<Element>().ok() {
+                if let Ok(element) = target.dyn_into::<Element>() {
                     if let Ok(target_idx) = element
                         .get_attribute("data-index")
                         .unwrap_or_default()

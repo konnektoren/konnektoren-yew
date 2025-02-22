@@ -20,7 +20,7 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
     let item_index = use_state(|| 0);
     let challenge_result = use_state(ChallengeResult::default);
     let show_help = use_state(|| false);
-    let selections = use_state(|| HashMap::new());
+    let selections = use_state(HashMap::new);
 
     if *item_index >= props.challenge.items.len() {
         return html! {};

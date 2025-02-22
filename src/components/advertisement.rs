@@ -68,7 +68,7 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
     // Initialize ads if they're not blocked
     {
         use_effect(move || {
-            if let Some(window) = web_sys::window() {
+            if let Some(_window) = web_sys::window() {
                 let _ = js_sys::Function::new_no_args(
                     "(adsbygoogle = window.adsbygoogle || []).push({});",
                 )

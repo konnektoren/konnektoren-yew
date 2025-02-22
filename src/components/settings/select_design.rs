@@ -31,7 +31,7 @@ pub fn select_design(props: &SelectDesignProps) -> Html {
     {
         let design = design.clone();
         use_effect(move || {
-            update_design_class(&*design);
+            update_design_class(&design);
             || ()
         });
     }

@@ -7,7 +7,7 @@ use yew::prelude::*;
 #[function_component(ProfileConfigComponent)]
 pub fn profile_config_component() -> Html {
     let profile_repository = use_profile_repository();
-    let profile = use_state(|| PlayerProfile::default());
+    let profile = use_state(PlayerProfile::default);
     let name = use_state(|| profile.name.clone());
 
     {

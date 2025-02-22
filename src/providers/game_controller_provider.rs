@@ -44,7 +44,7 @@ pub fn use_game_state() -> UseStateHandle<GameState> {
         let game_state = game_state.clone();
         use_effect_with(game_state.clone(), move |game_state| {
             let mut new_session = (*session).clone();
-            new_session.game_state = (&**game_state).clone();
+            new_session.game_state = (**game_state).clone();
             session.set(new_session);
         });
     }
@@ -80,7 +80,7 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
         Some(controller) => controller.clone(),
         None => {
             let game = Game::default();
-            let session = Arc::new(RwLock::new((&*session).clone()));
+            let session = Arc::new(RwLock::new((*session).clone()));
 
             let persistence = Arc::new(GameStatePersistenceImpl {
                 session_repository,

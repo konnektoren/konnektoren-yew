@@ -18,12 +18,25 @@
 }
 
 /* Retrieves a color from the $colors map with fallback */
-@function color($key) {
+@function color($key, $convert-non-color: false) {
+    @if type-of($key) != "string" {
+        @error "The `$key` argument must be a string. Got: #{type-of($key)}.";
+    }
+
     $color: map.get($colors, $key);
 
     @if not $color {
-        @warn "Color `#{$key}` not found in $colors map.";
-        @return get-fallback-color($key);
+        @warn "Color `#{$key}` not found in $colors map. Trying fallback...";
+        $color: get-fallback-color($key);
+
+        @if not $color {
+            @warn "No fallback color defined for `#{$key}`. Using last-resort default (transparent).";
+            @return transparent;
+        }
+    }
+
+    @if $convert-non-color and type-of($color) != "color" {
+        @return str-insert($color, "#", 1);
     }
 
     @return $color;

@@ -18,7 +18,7 @@ pub fn select_language() -> Html {
             let select = e.target_dyn_into::<HtmlSelectElement>();
             if let Some(select) = select {
                 log::info!("Selected language: {:?}", select.value());
-                let mut new_settings = (&*settings).clone();
+                let mut new_settings = (*settings).clone();
                 let value = select.value();
                 new_settings.language = value.clone();
                 selected_language.set(&value.clone());

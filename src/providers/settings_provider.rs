@@ -22,7 +22,7 @@ impl PartialEq for SettingsProviderProps {
 
 #[function_component(SettingsProvider)]
 pub fn settings_provider(props: &SettingsProviderProps) -> Html {
-    let settings = use_state(|| Settings::default());
+    let settings = use_state(Settings::default);
 
     {
         let settings = settings.clone();

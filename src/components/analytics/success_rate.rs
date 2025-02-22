@@ -93,9 +93,9 @@ mod preview {
     use konnektoren_core::challenges::ChallengeHistory;
     use yew_preview::prelude::*;
 
-    fn create_metric_with_value(value: f64, trend: Trend) -> SuccessRateMetric {
+    fn create_metric_with_value(_value: f64, _trend: Trend) -> SuccessRateMetric {
         // Create a mock history that will result in the desired value and trend
-        let mut history = ChallengeHistory::new();
+        let history = ChallengeHistory::new();
         // You might need to add appropriate challenges here to achieve the desired value
         SuccessRateMetric::new(history)
     }

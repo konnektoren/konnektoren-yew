@@ -2,17 +2,9 @@ use crate::i18n::LANGUAGE_KEY;
 use gloo::storage::{LocalStorage, Storage};
 use konnektoren_platform::i18n::Language;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Default, PartialEq)]
 pub struct SelectedLanguage {
     pub language: Language,
-}
-
-impl Default for SelectedLanguage {
-    fn default() -> Self {
-        Self {
-            language: Language::default(),
-        }
-    }
 }
 
 impl SelectedLanguage {

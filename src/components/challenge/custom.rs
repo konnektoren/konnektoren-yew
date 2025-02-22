@@ -102,13 +102,13 @@ pub fn custom_component(props: &CustomComponentProps) -> Html {
                     // Set i18n data if available
                     if !i18n_content.is_empty() {
                         let language = SelectedLanguage::default().get();
-                        let loader = I18nYmlLoader::new(&i18n_content);
-                        let translations = loader.get(&language.code()).unwrap_or_default();
+                        let loader = I18nYmlLoader::new(i18n_content);
+                        let translations = loader.get(language.code()).unwrap_or_default();
                         konnektoren_js.borrow_mut().set_i18n_data(translations);
                     }
 
                     // Execute JS code
-                    konnektoren_js.borrow_mut().execute_js(&js_code);
+                    konnektoren_js.borrow_mut().execute_js(js_code);
                 }
             },
         );
