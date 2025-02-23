@@ -6,7 +6,7 @@ use crate::components::{
     ContextualChoiceComponent, DomainSelectorComponent, FeedbackPopup, LeaderboardComp, Logo,
     MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme,
     SettingsComponent, SharePageComp, SocialLinks, SoundConfig, StatusMessage, SwipeComponent,
-    TranslateComponent,
+    TranslateComponent, VideoComponent,
 };
 use crate::prelude::create_i18n_config;
 
@@ -180,7 +180,8 @@ pub fn App() -> Html {
             InformativeMarkdownComponent::preview(),
             ReadText::preview(),
             TranslateComponent::preview(),
-            SwipeComponent::preview()
+            SwipeComponent::preview(),
+            VideoComponent::preview()
         ),
         create_component_group!(
             "Settings",

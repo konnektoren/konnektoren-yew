@@ -1,0 +1,82 @@
+.video {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: border-radius("md");
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+
+    &--playing {
+        cursor: auto;
+    }
+
+    &__preview {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        overflow: hidden;
+        background-color: black; /* Fallback color */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition:
+            opacity 0.3s ease,
+            visibility 0s linear 0.3s; // Transition opacity first, then visibility
+
+        &--hidden {
+            opacity: 0;
+            visibility: hidden; /* Add this */
+            pointer-events: none; /* Add this */
+        }
+    }
+
+    &__preview-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    &__preview-emoji {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 5em; /* Adjust as needed */
+        color: white;
+    }
+
+    &__play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s ease;
+    }
+
+    &__iframe,
+    &__player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+        z-index: 1; /* Ensure it's above the preview */
+    }
+
+    &__player {
+        object-fit: cover;
+    }
+}

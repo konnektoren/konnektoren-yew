@@ -43,6 +43,7 @@ pub mod timer;
 #[cfg(feature = "tour")]
 pub mod tour;
 pub mod translate;
+pub mod video;
 
 pub use advertisement::{AdNetwork, AdvertisementComponent, AdvertisementProps};
 pub use analytics::*;
@@ -91,3 +92,4 @@ pub use timer::TimerComponent;
 #[cfg(feature = "tour")]
 pub use tour::*;
 pub use translate::TranslateComponent;
+pub use video::VideoComponent;
