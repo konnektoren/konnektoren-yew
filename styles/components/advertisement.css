@@ -1,0 +1,82 @@
+.advertisement {
+    @apply card bg-base-100 shadow-sm w-full mx-auto my-8 text-center;
+
+    /* Different layouts for ad types */
+    &:has(.buy-me-coffee) {
+        @apply max-w-[340px] p-4;
+    }
+
+    &:has(.adsbygoogle) {
+        @apply max-w-full p-0;
+    }
+
+    .advertisement__message {
+        @apply p-4 text-base-content/60 text-sm mb-4;
+        @apply bg-base-200 rounded-md;
+    }
+
+    .advertisement__container {
+        @apply flex justify-center items-center p-4;
+        @apply transition-transform duration-300;
+
+        /* AdSense specific styles */
+        &:has(.adsbygoogle) {
+            @apply p-0 min-h-[320px] w-full;
+
+            .adsbygoogle {
+                @apply block w-full h-[320px];
+            }
+        }
+    }
+
+    .advertisement__label {
+        @apply text-xs text-base-content/60 mt-2 uppercase tracking-wider;
+    }
+
+    /* Loading state */
+    &--loading {
+        @apply min-h-[320px] flex items-center justify-center;
+        @apply text-base-content/60 text-sm;
+    }
+}
+@screen sm {
+    .advertisement {
+        @apply my-4;
+
+        &:has(.buy-me-coffee) {
+            @apply max-w-[280px];
+        }
+
+        &:has(.adsbygoogle) {
+            @apply min-h-[280px];
+        }
+
+        .advertisement__container {
+            @apply p-2;
+
+            &:has(.adsbygoogle) {
+                @apply min-h-[280px];
+
+                .adsbygoogle {
+                    @apply min-h-[280px];
+                }
+            }
+
+            .buy-me-coffee {
+                @apply max-w-[250px];
+            }
+        }
+
+        .advertisement__message {
+            @apply text-xs p-2;
+        }
+
+        .advertisement__label {
+            @apply text-[0.625rem];
+        }
+
+        &--loading {
+            @apply min-h-[280px] text-xs;
+        }
+    }
+}
