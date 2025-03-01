@@ -1,0 +1,50 @@
+.progress {
+    @apply w-full relative h-12 bg-accent z-20;
+
+    .progress__bar {
+        @apply h-full text-center leading-[3rem] transition-[width] duration-300 ease-in-out;
+        background: linear-gradient(
+            90deg,
+            oklch(var(--er)),
+            oklch(var(--wa)),
+            oklch(var(--su)),
+            oklch(var(--in))
+        );
+        background-size: 300% 100%;
+        animation:
+            moveGradient 3s linear infinite,
+            glowing 3s infinite alternate;
+    }
+
+    .progress__label {
+        @apply text-base-100;
+    }
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 300% 50%;
+    }
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px oklch(var(--p));
+    }
+    100% {
+        box-shadow: 0 0 20px oklch(var(--p));
+    }
+}
+
+@screen sm {
+    .progress {
+        @apply h-8;
+    }
+
+    .progress__bar {
+        @apply leading-8;
+    }
+}

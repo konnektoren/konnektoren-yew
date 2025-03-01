@@ -1,0 +1,11 @@
+.share-page {
+    @apply card bg-base-100 p-6 shadow-md max-w-md mx-auto flex flex-col items-center gap-4;
+
+    .share-page__input {
+        @apply input input-bordered w-full text-center focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20;
+    }
+
+    .share-page__message {
+        @apply text-sm text-success mt-2;
+    }
+}

@@ -1,0 +1,39 @@
+.rating-stars {
+    @apply flex items-center justify-center gap-1;
+
+    .rating-stars__star {
+        @apply text-4xl cursor-pointer transition-transform duration-200 ease-in-out text-base-300;
+    }
+
+    .rating-stars__star:hover {
+        @apply scale-110;
+    }
+
+    .rating-stars__star--full {
+        @apply text-primary;
+    }
+
+    .rating-stars__star--half {
+        @apply relative opacity-70 text-base-300;
+    }
+
+    .rating-stars__star--half::before {
+        content: "★";
+        @apply absolute left-0 top-0 w-1/2 overflow-hidden text-warning;
+    }
+
+    .rating-stars__star--empty {
+        @apply text-base-300;
+    }
+
+    .rating-stars__star:not(:hover) .star.full,
+    .rating-stars__star:not(:hover) .star.half::before {
+        @apply text-warning;
+    }
+}
+
+@screen sm {
+    .rating-stars__star {
+        @apply text-3xl;
+    }
+}

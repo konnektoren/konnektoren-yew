@@ -1,0 +1,11 @@
+.logo {
+    @apply flex items-center;
+
+    & img {
+        @apply w-8 h-8 object-contain transition-transform duration-300 ease-in-out;
+
+        &:hover {
+            @apply transform scale-110;
+        }
+    }
+}

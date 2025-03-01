@@ -1,3 +1,4 @@
 @import "tailwind.css";
 
 @import "components/index.css";
+@import "vendors/index.css";

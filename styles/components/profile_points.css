@@ -1,0 +1,75 @@
+/* Default badge state */
+.profile-points {
+    .profile-points__badge {
+        @apply badge badge-lg bg-base-100 shadow-md flex flex-col items-center gap-0.5 p-2;
+        transition: all 0.3s ease;
+    }
+
+    .profile-points__badge-top {
+        @apply flex flex-col items-center gap-0.5;
+    }
+
+    .profile-points__icon {
+        @apply text-xl text-primary;
+    }
+
+    .profile-points__initial {
+        @apply text-sm font-medium text-base-content/60;
+    }
+
+    .profile-points__points {
+        @apply text-sm font-bold text-base-content/60;
+    }
+
+    /* Expanded card state */
+    .profile-points__expanded {
+        @apply card bg-base-100 shadow-md p-2 hidden items-center gap-2 whitespace-nowrap min-w-max;
+    }
+
+    .profile-points__name {
+        @apply text-sm text-base-content/60;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Mobile styles and expanded state */
+    @screen sm {
+        .profile-points__badge {
+            @apply scale-90;
+        }
+
+        .profile-points--expanded .profile-points__badge {
+            @apply hidden;
+        }
+
+        .profile-points--expanded .profile-points__expanded {
+            @apply flex;
+            animation: slideIn 0.3s ease;
+        }
+    }
+}
+
+/* Hover state on desktop */
+@media (hover: hover) {
+    .profile-points:hover .profile-points__badge {
+        @apply hidden;
+    }
+
+    .profile-points:hover .profile-points__expanded {
+        @apply flex;
+        animation: slideIn 0.3s ease;
+    }
+
+    .profile-points:hover .profile-points__points {
+        @apply text-primary;
+    }
+}
