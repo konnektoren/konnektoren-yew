@@ -1,0 +1,17 @@
+.timer {
+    @apply card bg-base-100 shadow-sm p-4 flex items-center gap-2;
+
+    & .timer__title {
+        @apply font-bold text-base-content mb-2;
+    }
+
+    & .timer__text {
+        @apply font-medium text-base-content/70;
+    }
+}
+
+@screen sm {
+    .timer {
+        @apply text-sm p-2;
+    }
+}

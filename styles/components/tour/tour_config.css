@@ -1,0 +1,10 @@
+.tour-config {
+    @apply p-4 rounded-lg shadow-md bg-base-200;
+    & label {
+        @apply flex items-center space-x-2 cursor-pointer;
+    }
+    & input[type="checkbox"] {
+        @apply checkbox-primary h-5 w-5 text-primary rounded;
+        @apply focus:ring-primary focus:border-primary;
+    }
+}

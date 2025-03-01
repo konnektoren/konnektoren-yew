@@ -1,0 +1,7 @@
+.tour-button {
+    @apply z-10;
+
+    & .tour-button__btn {
+        @apply btn btn-primary;
+    }
+}
