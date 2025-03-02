@@ -1,0 +1,39 @@
+.gap-fill-result__title {
+    @apply mb-6;
+}
+
+.gap-fill-result__table {
+    @apply table table-zebra w-full;
+}
+
+.gap-fill-result__header {
+    @apply bg-base-200 border-b border-base-300;
+}
+
+.gap-fill-result__header-cell {
+    @apply p-4 text-left font-medium text-base-content;
+}
+
+.gap-fill-result__row {
+    @apply border-b border-base-200 transition-colors duration-200;
+}
+
+.gap-fill-result__row--correct:hover {
+    @apply bg-success/10;
+}
+
+.gap-fill-result__row--incorrect:hover {
+    @apply bg-error/10;
+}
+
+.gap-fill-result__cell {
+    @apply p-4 whitespace-normal;
+}
+
+.gap-fill-result__cell--correct {
+    @apply text-success font-medium;
+}
+
+.gap-fill-result__cell--incorrect {
+    @apply text-error font-medium;
+}

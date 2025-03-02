@@ -1,0 +1,4 @@
+.challenge-config {
+    @apply card bg-base-300 z-50;
+    @apply flex flex-col w-full h-auto flex-grow;
+}

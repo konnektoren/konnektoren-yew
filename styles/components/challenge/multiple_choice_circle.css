@@ -1,0 +1,129 @@
+.multiple-choice-circle {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
+}
+
+.multiple-choice-circle .progress {
+    @apply w-full;
+}
+
+.multiple-choice-circle__content {
+    @apply relative min-h-[400px];
+    @apply flex justify-center items-center;
+}
+
+.multiple-choice-circle .question {
+    @apply absolute z-10 w-fit max-w-[90%];
+}
+
+.multiple-choice-circle .multiple-choice-options {
+    @apply absolute inset-0;
+    @apply flex justify-center items-center;
+}
+
+.multiple-choice-circle .multiple-choice-option {
+    @apply absolute z-50 font-medium;
+    @apply min-w-[70px] min-h-[70px];
+    transform-origin: center;
+}
+
+/* Position options in a circle */
+.multiple-choice-circle .multiple-choice-option:nth-child(1) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(2) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(45deg) translateX(180px)
+        rotate(-45deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(3) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(90deg) translateX(180px)
+        rotate(-90deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(4) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(135deg) translateX(180px)
+        rotate(-135deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(5) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(180deg) translateX(180px)
+        rotate(-180deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(6) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(225deg) translateX(180px)
+        rotate(-225deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(7) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(270deg) translateX(180px)
+        rotate(-270deg);
+}
+
+.multiple-choice-circle .multiple-choice-option:nth-child(8) {
+    @apply left-1/2 top-1/2;
+    transform: translate(-50%, -50%) rotate(315deg) translateX(180px)
+        rotate(-315deg);
+}
+
+@screen sm {
+    .multiple-choice-circle {
+        @apply p-4;
+    }
+
+    .multiple-choice-circle__content {
+        @apply min-h-[300px];
+    }
+
+    .multiple-choice-circle .question {
+        @apply w-[250px];
+    }
+
+    .multiple-choice-circle .multiple-choice-option span {
+        @apply min-w-[50px] min-h-[50px] max-w-[100px];
+        @apply text-sm p-1 px-2;
+    }
+
+    /* Smaller radius for mobile */
+    .multiple-choice-circle .multiple-choice-option:nth-child(1) {
+        transform: translate(-50%, -50%) rotate(0deg) translateX(140px)
+            rotate(0deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(2) {
+        transform: translate(-50%, -50%) rotate(45deg) translateX(140px)
+            rotate(-45deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(3) {
+        transform: translate(-50%, -50%) rotate(90deg) translateX(140px)
+            rotate(-90deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(4) {
+        transform: translate(-50%, -50%) rotate(135deg) translateX(140px)
+            rotate(-135deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(5) {
+        transform: translate(-50%, -50%) rotate(180deg) translateX(140px)
+            rotate(-180deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(6) {
+        transform: translate(-50%, -50%) rotate(225deg) translateX(140px)
+            rotate(-225deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(7) {
+        transform: translate(-50%, -50%) rotate(270deg) translateX(140px)
+            rotate(-270deg);
+    }
+    .multiple-choice-circle .multiple-choice-option:nth-child(8) {
+        transform: translate(-50%, -50%) rotate(315deg) translateX(140px)
+            rotate(-315deg);
+    }
+}

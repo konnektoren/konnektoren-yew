@@ -1,0 +1,101 @@
+.sort-table {
+    @apply card bg-base-100 p-6 shadow-md;
+    @apply flex flex-col gap-6 items-stretch;
+    @apply max-w-[800px] mx-auto;
+}
+
+.sort-table__title {
+    @apply text-2xl font-bold text-base-content;
+}
+
+.sort-table__description {
+    @apply text-lg text-base-content/60 leading-normal;
+}
+
+.sort-table__table {
+    @apply w-full border-separate border-spacing-0;
+    @apply rounded-md overflow-hidden shadow-sm;
+}
+
+.sort-table__header {
+    @apply bg-primary;
+}
+
+.sort-table__header-cell {
+    @apply p-2 text-xl text-primary-content text-left;
+    @apply font-bold font-sans;
+}
+
+.sort-table__body-row {
+    @apply transition-colors duration-300;
+}
+
+.sort-table__body-row:nth-child(even) {
+    @apply bg-base-100;
+}
+
+.sort-table__body-row:nth-child(odd) {
+    @apply bg-base-200;
+}
+
+.sort-table__body-row:hover,
+.sort-table__body-row--selected {
+    @apply bg-base-300;
+}
+
+.sort-table__body-cell {
+    @apply p-2 text-lg text-base-content;
+    @apply border-b border-base-300;
+    @apply cursor-move select-none;
+    @apply transition-all duration-300;
+}
+
+.sort-table__body-cell:hover {
+    @apply bg-base-200;
+}
+
+.sort-table__body-cell--selected {
+    @apply bg-primary/10 text-base-content;
+}
+
+.sort-table__body-cell--dragging {
+    @apply opacity-50 bg-primary/10;
+}
+
+.sort-table__actions {
+    @apply flex justify-center gap-4;
+}
+
+.sort-table__actions-button {
+    @apply btn btn-primary btn-lg;
+}
+
+@screen sm {
+    .sort-table {
+        @apply p-4 gap-4;
+    }
+
+    .sort-table__title {
+        @apply text-xl;
+    }
+
+    .sort-table__description {
+        @apply text-sm;
+    }
+
+    .sort-table__table {
+        @apply rounded-sm;
+    }
+
+    .sort-table__header-cell {
+        @apply p-1 text-lg;
+    }
+
+    .sort-table__body-cell {
+        @apply p-1 text-sm;
+    }
+
+    .sort-table__actions-button {
+        @apply btn-sm;
+    }
+}

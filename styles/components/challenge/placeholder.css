@@ -1,0 +1,165 @@
+.placeholder {
+    @apply card bg-base-100 p-8 shadow-md rounded-lg max-w-[800px] mx-auto;
+}
+
+.placeholder__header {
+    @apply flex flex-col gap-4 items-center text-center mb-8;
+}
+
+.placeholder__title {
+    @apply text-3xl font-bold text-base-content;
+}
+
+.placeholder__type {
+    @apply badge badge-lg badge-primary rounded-full;
+    @apply inline-flex items-center gap-2 text-sm;
+}
+
+.placeholder__type i {
+    @apply text-lg;
+}
+
+.placeholder__content {
+    @apply flex flex-col gap-6 items-center;
+}
+
+.placeholder__media {
+    @apply text-center mb-6 min-h-[200px];
+    @apply flex justify-center items-center;
+}
+
+.placeholder__icon-image {
+    @apply text-6xl inline-block;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.placeholder__icon-image:hover {
+    @apply scale-110 text-primary/90;
+}
+
+.placeholder__default-icon {
+    @apply text-6xl inline-block text-primary opacity-70;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.placeholder__image {
+    @apply max-w-[300px] w-full h-auto rounded-lg shadow-md;
+    @apply transition-all duration-300 object-cover;
+}
+
+.placeholder__image:hover {
+    @apply -translate-y-[5px] shadow-lg;
+}
+
+.placeholder__info {
+    @apply text-center;
+}
+
+.placeholder__description {
+    @apply text-base text-base-content/60 text-center;
+    @apply max-w-[600px] mx-auto m-0;
+}
+
+.placeholder__meta {
+    @apply mt-4 flex justify-center gap-4;
+}
+
+.placeholder__time {
+    @apply badge badge-ghost rounded-full text-xs;
+    @apply inline-flex items-center gap-1;
+}
+
+.placeholder__time i {
+    @apply text-primary;
+}
+
+.placeholder__text {
+    @apply card bg-base-200 p-6 shadow-sm rounded-md w-full;
+}
+
+.placeholder__text h1 {
+    @apply text-xl font-bold text-base-content mb-4;
+}
+
+.placeholder__actions {
+    @apply mt-8 text-center;
+}
+
+.placeholder__button {
+    @apply btn btn-primary btn-lg;
+}
+
+/* Status Variants */
+.placeholder--coming-soon .placeholder__type {
+    @apply bg-primary;
+}
+
+.placeholder--coming-soon .placeholder__icon-image,
+.placeholder--coming-soon .placeholder__image {
+    @apply border-2 border-primary;
+}
+
+.placeholder--planned .placeholder__type {
+    @apply bg-info;
+}
+
+.placeholder--planned .placeholder__icon-image,
+.placeholder--planned .placeholder__image {
+    @apply border-2 border-info;
+}
+
+.placeholder--under-development .placeholder__type {
+    @apply bg-warning;
+}
+
+.placeholder--under-development .placeholder__icon-image,
+.placeholder--under-development .placeholder__image {
+    @apply border-2 border-warning;
+}
+
+@screen sm {
+    .placeholder {
+        @apply p-6;
+    }
+
+    .placeholder__title {
+        @apply text-2xl;
+    }
+
+    .placeholder__type {
+        @apply text-xs;
+    }
+
+    .placeholder__type i {
+        @apply text-sm;
+    }
+
+    .placeholder__icon-image,
+    .placeholder__default-icon {
+        @apply text-4xl;
+    }
+
+    .placeholder__description {
+        @apply text-sm;
+    }
+
+    .placeholder__text {
+        @apply p-4;
+    }
+
+    .placeholder__text h1 {
+        @apply text-lg;
+    }
+
+    .placeholder__button {
+        @apply btn-md;
+    }
+
+    .placeholder__media {
+        @apply min-h-[150px];
+    }
+
+    .placeholder__image {
+        @apply max-w-[200px];
+    }
+}

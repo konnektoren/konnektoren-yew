@@ -1,0 +1,61 @@
+.challenge-review {
+    @apply card bg-base-100 p-6 shadow-md;
+    @apply flex flex-col gap-4 items-stretch;
+    @apply transition-transform duration-300 ease-in-out;
+
+    &:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .challenge-review__title {
+        @apply relative pb-4;
+    }
+
+    .challenge-review__title:hover::after {
+        @apply w-[100px];
+    }
+
+    .challenge-review__rating {
+        @apply flex flex-col gap-2 items-center;
+    }
+
+    .challenge-review__comment {
+        @apply flex flex-col gap-2;
+    }
+
+    .challenge-review__comment input {
+        @apply input input-lg input-bordered w-full;
+        @apply focus:input-primary focus:outline-none;
+    }
+
+    .challenge-review__submit {
+        @apply btn btn-primary btn-lg w-full;
+    }
+
+    .challenge-review__submit:disabled {
+        @apply btn-disabled bg-base-300 text-base-content/50;
+        @apply transform-none shadow-none cursor-not-allowed;
+    }
+
+    .challenge-review__success {
+        @apply text-success text-lg font-medium text-center p-4;
+    }
+
+    @screen sm {
+        .challenge-review__title {
+            @apply text-3xl;
+        }
+
+        .challenge-review__stars {
+            @apply text-4xl;
+        }
+
+        .challenge-review__comment input {
+            @apply input-md;
+        }
+
+        .challenge-review__submit {
+            @apply btn-md;
+        }
+    }
+}

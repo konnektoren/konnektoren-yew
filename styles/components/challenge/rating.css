@@ -1,0 +1,29 @@
+.challenge-rating {
+    @apply flex items-center gap-1 justify-start;
+    @apply card bg-warning/10 p-2 px-4 shadow-sm rounded-sm;
+    @apply text-lg inline-flex;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.challenge-rating:hover {
+    @apply bg-warning/20 scale-105;
+}
+
+.challenge-rating__star {
+    @apply text-warning text-xl;
+    @apply transition-transform duration-300 ease-in-out;
+}
+
+.challenge-rating__star:hover {
+    @apply rotate-[72deg] scale-125;
+}
+
+@screen sm {
+    .challenge-rating {
+        @apply text-sm p-1 px-2;
+    }
+
+    .challenge-rating__star {
+        @apply text-lg;
+    }
+}
