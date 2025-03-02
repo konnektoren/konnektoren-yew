@@ -1,0 +1,51 @@
+.token-selector {
+    @apply mt-4;
+}
+
+.token-selector__list {
+    @apply flex flex-col gap-2 max-h-[200px] overflow-y-auto;
+    @apply p-2 bg-base-200 rounded-md;
+}
+
+.token-selector__button {
+    @apply btn btn-ghost w-full justify-start normal-case;
+    @apply border border-base-300 rounded-md bg-base-100;
+    @apply transition-all duration-200 ease-in-out;
+}
+
+.token-selector__button:hover {
+    @apply -translate-y-0.5 bg-base-200;
+}
+
+.token-selector__button.selected {
+    @apply border-primary bg-base-100;
+}
+
+/* Token Display */
+.token-display {
+    @apply flex items-center gap-2 w-full;
+}
+
+.token-display__image {
+    @apply w-8 h-8 rounded-full overflow-hidden;
+}
+
+.token-display__image img {
+    @apply w-full h-full object-cover;
+}
+
+.token-display__info {
+    @apply flex flex-col items-start;
+}
+
+.token-display__name {
+    @apply text-sm font-medium text-base-content;
+}
+
+.token-display__symbol {
+    @apply text-xs text-base-content/60;
+}
+
+.token-display__balance {
+    @apply ml-auto text-sm text-base-content;
+}

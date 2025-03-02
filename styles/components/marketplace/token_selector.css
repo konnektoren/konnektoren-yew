@@ -1,0 +1,80 @@
+.token-selector {
+    @apply mt-4;
+}
+
+.token-selector__list {
+    @apply flex flex-col gap-2 max-h-[200px] overflow-y-auto;
+    @apply p-2 bg-base-200 rounded-md;
+}
+
+.token-selector__button {
+    @apply btn btn-ghost w-full justify-start normal-case;
+    @apply border border-base-300 rounded-md bg-base-100;
+    @apply transition-all duration-200 ease-in-out;
+}
+
+.token-selector__button:hover {
+    @apply -translate-y-0.5 bg-base-200 border-primary;
+}
+
+.token-selector__button:active {
+    @apply translate-y-0;
+}
+
+.token-selector__button.selected {
+    @apply border-primary bg-base-200;
+}
+
+.token-selector__button.selected .token-selector__name,
+.token-selector__button.selected .token-selector__symbol {
+    @apply text-primary;
+}
+
+.token-selector__token-display {
+    @apply flex items-center gap-2 w-full;
+}
+
+.token-selector__image {
+    @apply w-8 h-8 rounded-full overflow-hidden flex-shrink-0;
+    @apply bg-base-200 shadow-sm p-0.5;
+    @apply flex items-center justify-center;
+}
+
+.token-selector__image img {
+    @apply w-[calc(100%-4px)] h-[calc(100%-4px)] object-contain rounded-full;
+}
+
+.token-selector__info {
+    @apply flex flex-col items-start flex-1 text-left;
+}
+
+.token-selector__name {
+    @apply text-sm font-medium text-base-content;
+}
+
+.token-selector__symbol {
+    @apply text-xs text-base-content/60;
+}
+
+/* Responsive */
+@screen sm {
+    .token-selector__name {
+        @apply text-xs;
+    }
+
+    .token-selector__symbol {
+        @apply text-[0.625rem];
+    }
+
+    .token-selector__image {
+        @apply w-7 h-7 p-0;
+    }
+
+    .token-selector__image img {
+        @apply w-[calc(100%-2px)] h-[calc(100%-2px)];
+    }
+
+    .token-selector__button {
+        @apply p-1;
+    }
+}
