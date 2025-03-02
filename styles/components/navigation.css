@@ -1,0 +1,99 @@
+.navigation-wrapper {
+    @apply flex items-center bg-base-200;
+}
+
+.navigation {
+    @apply flex justify-around items-center w-full bg-base-200;
+    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)];
+
+    & .nav-group {
+        @apply flex flex-col items-center;
+        @apply text-base-content/70 bg-transparent border-none p-2;
+        @apply cursor-pointer transition-all duration-300;
+
+        &.active {
+            @apply text-primary -translate-y-[5px];
+        }
+
+        & i {
+            @apply text-3xl mb-1;
+        }
+
+        & span {
+            @apply text-sm;
+        }
+
+        &:hover {
+            @apply text-primary/80 -translate-y-[5px];
+        }
+    }
+}
+
+.navigation-dropdown {
+    @apply absolute bottom-full left-0 w-4/5;
+    @apply bg-base-200 p-2 rounded-t-2xl;
+    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)];
+    animation: slideUp 0.3s ease;
+
+    & nav {
+        @apply flex flex-col;
+    }
+
+    & a {
+        @apply flex items-center p-2;
+        @apply text-base-content/70 no-underline;
+        @apply transition-all duration-300;
+
+        & i {
+            @apply mr-2;
+        }
+
+        &:hover {
+            @apply text-primary/80 bg-primary/10 translate-x-[5px];
+        }
+    }
+}
+
+.nav-extras {
+    @apply p-2 border-t border-base-300/10 mt-2;
+    @apply flex flex-col gap-2;
+
+    :global(.social-links) {
+        @apply flex gap-2 justify-center;
+    }
+
+    :global(.theme-toggle) {
+        @apply flex justify-center;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        @apply translate-y-full opacity-0;
+    }
+    to {
+        @apply translate-y-0 opacity-100;
+    }
+}
+
+@screen sm {
+    .navigation-wrapper .navigation .nav-group {
+        & i {
+            @apply text-sm;
+        }
+        & span {
+            @apply text-xs;
+        }
+    }
+}
+
+@screen md {
+    .navigation-wrapper .navigation .nav-group {
+        & i {
+            @apply text-xl;
+        }
+        & span {
+            @apply text-xs;
+        }
+    }
+}
