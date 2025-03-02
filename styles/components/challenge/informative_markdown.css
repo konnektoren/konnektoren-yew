@@ -1,0 +1,7 @@
+.informative {
+    @apply card bg-base-100 shadow-md;
+
+    button {
+        @apply btn btn-primary w-full;
+    }
+}

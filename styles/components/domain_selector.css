@@ -1,0 +1,25 @@
+.domain-selector {
+    @apply flex flex-col items-center;
+
+    .domain-selector__select {
+        @apply select select-bordered select-md w-full max-w-[300px];
+    }
+
+    .domain-selector__select:hover {
+        @apply select-primary -translate-y-0.5;
+    }
+
+    .domain-selector__option {
+        @apply flex items-center gap-2 p-2;
+    }
+
+    .domain-selector__option[selected] {
+        @apply bg-primary/10 text-primary font-medium;
+    }
+
+    @screen sm {
+        .domain-selector__select {
+            @apply select-sm max-w-[200px];
+        }
+    }
+}

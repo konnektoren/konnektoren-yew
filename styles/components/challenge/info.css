@@ -1,0 +1,68 @@
+.challenge-info {
+    @apply card bg-base-100 p-6 shadow-md text-base-content;
+    @apply flex flex-col w-full flex-1;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.challenge-info:hover {
+    @apply -translate-y-0.5 shadow-lg;
+}
+
+.challenge-info__title {
+    @apply mb-4;
+}
+
+.challenge-info__description {
+    @apply flex-1;
+}
+
+.challenge-info__meta {
+    @apply mt-auto;
+}
+
+.challenge-info__tasks,
+.challenge-info__unlock-points {
+    @apply flex flex-col gap-2;
+    @apply pt-2 border-t border-base-300;
+}
+
+.challenge-info__tasks-title,
+.challenge-info__unlock-points-title {
+    @apply text-lg font-bold text-base-content;
+}
+
+.challenge-info__tasks-text,
+.challenge-info__unlock-points-text {
+    @apply text-sm text-base-content/60 leading-normal;
+}
+
+@screen md {
+    .challenge-info {
+        @apply min-w-[250px];
+    }
+}
+
+@screen sm {
+    .challenge-info {
+        @apply min-w-[150px];
+    }
+
+    .challenge-info__description {
+        @apply text-xs;
+    }
+
+    .challenge-info__tasks,
+    .challenge-info__unlock-points {
+        @apply pt-2;
+    }
+
+    .challenge-info__tasks-title,
+    .challenge-info__unlock-points-title {
+        @apply text-sm;
+    }
+
+    .challenge-info__tasks-text,
+    .challenge-info__unlock-points-text {
+        @apply text-xs leading-tight;
+    }
+}

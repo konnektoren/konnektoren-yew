@@ -1,0 +1,53 @@
+.feedback {
+    @apply z-30;
+
+    .feedback__bubble {
+        @apply btn btn-primary gap-2 flex items-center;
+    }
+
+    .feedback__bubble-icon {
+        @apply btn btn-circle btn-sm btn-ghost;
+    }
+
+    .feedback__bubble-text {
+        @apply text-sm font-bold;
+    }
+
+    .feedback__content {
+        @apply relative card bg-base-100 shadow-md p-6 max-w-[300px] hidden;
+    }
+
+    .feedback--expanded .feedback__content {
+        @apply block;
+    }
+
+    .feedback__title {
+        @apply text-2xl font-bold mb-4;
+    }
+
+    .feedback__close {
+        @apply btn btn-circle btn-sm btn-ghost absolute top-2 right-2;
+    }
+
+    .feedback--expanded .feedback__bubble {
+        @apply hidden;
+    }
+
+    @screen sm {
+        .feedback__bubble {
+            @apply px-2 py-1;
+        }
+
+        .feedback__bubble-icon {
+            @apply text-3xl;
+        }
+
+        .feedback__content {
+            @apply p-2 max-w-[250px];
+        }
+
+        .feedback__title {
+            @apply text-xl;
+        }
+    }
+}

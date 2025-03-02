@@ -1,0 +1,121 @@
+.product {
+    @apply card bg-base-100 shadow-md hover:shadow-lg;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.product-content {
+    @apply card-body p-6;
+}
+
+.product__title {
+    @apply mb-4;
+}
+
+.product__description {
+    @apply mb-6;
+}
+
+.product--highlighted {
+    @apply -translate-y-1 scale-[1.02] border-2 border-primary relative;
+}
+
+.product--highlighted::before {
+    content: "";
+    @apply absolute inset-0 rounded-lg bg-primary/10;
+    animation: inner-highlight-pulse 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+.product--highlighted .product__title {
+    @apply text-primary text-[110%] font-bold;
+}
+
+.product--highlighted .product__button {
+    @apply bg-primary text-primary-content scale-105;
+}
+
+.product--highlighted .product__button:hover {
+    @apply bg-primary/90;
+}
+
+.product--highlighted .product__tag {
+    @apply bg-primary/10 text-primary border border-primary;
+}
+
+.product--highlighted .product__tag:hover {
+    @apply bg-primary/20;
+}
+
+/* Tags */
+.product__tags {
+    @apply flex flex-wrap gap-3 mb-6;
+}
+
+.product__tag {
+    @apply px-3 py-1.5 rounded-md bg-base-200;
+    @apply transition-colors duration-300;
+}
+
+.product__tag:hover {
+    @apply bg-base-300;
+}
+
+/* Footer */
+.product__footer {
+    @apply card-actions justify-between items-center gap-6 mt-6;
+}
+
+.product__price {
+    @apply text-2xl font-bold text-primary;
+}
+
+.product__button {
+    @apply btn btn-primary px-6;
+}
+
+.product__button:hover {
+    @apply -translate-y-0.5;
+}
+
+/* Responsive */
+@screen sm {
+    .product-content {
+        @apply p-4;
+    }
+
+    .product__title {
+        @apply text-xl mb-3;
+    }
+
+    .product__description {
+        @apply text-sm mb-4;
+    }
+
+    .product__button {
+        @apply text-sm px-4;
+    }
+
+    .product__tags {
+        @apply gap-2 mb-4;
+    }
+
+    .product__tag {
+        @apply px-2 py-1;
+    }
+
+    .product__footer {
+        @apply gap-4 mt-4;
+    }
+}
+
+@keyframes inner-highlight-pulse {
+    0% {
+        @apply opacity-20;
+    }
+    50% {
+        @apply opacity-40;
+    }
+    100% {
+        @apply opacity-20;
+    }
+}

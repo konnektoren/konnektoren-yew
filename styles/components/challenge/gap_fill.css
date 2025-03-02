@@ -1,0 +1,85 @@
+.gap-fill {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
+}
+
+.gap-fill__sentence {
+    @apply card bg-base-100 shadow-md p-6;
+    @apply text-center text-xl leading-relaxed text-base-content;
+}
+
+.gap-fill__gap {
+    @apply inline-block min-w-[80px] px-2 py-1 mx-1;
+    @apply border-b-2 border-primary text-primary;
+    @apply font-medium text-center cursor-pointer;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.gap-fill__gap:hover {
+    @apply bg-primary/10 -translate-y-0.5;
+}
+
+.gap-fill__gap--selected {
+    @apply bg-primary text-primary-content;
+}
+
+.gap-fill__gap--correct {
+    @apply border-success text-success;
+}
+
+.gap-fill__gap--incorrect {
+    @apply border-error text-error;
+}
+
+.gap-fill__options {
+    @apply flex justify-center flex-wrap gap-4 mt-6;
+}
+
+.gap-fill__option {
+    @apply card bg-base-100 p-2 shadow-sm;
+    @apply cursor-pointer transition-all duration-300 text-lg;
+}
+
+.gap-fill__option:hover {
+    @apply scale-105 bg-primary text-primary-content;
+}
+
+.gap-fill__option--selected {
+    @apply bg-primary text-primary-content;
+}
+
+.gap-fill__hints {
+    @apply card bg-base-200 p-4 shadow-sm mt-6;
+    @apply border-l-4 border-info;
+}
+
+.gap-fill__hints-title {
+    @apply font-medium text-base-content mb-2;
+}
+
+.gap-fill__hints-list {
+    @apply text-base-content/60 italic;
+}
+
+.gap-fill__translation {
+    @apply text-center text-base-content/60 italic;
+    @apply mt-4 pt-4 border-t border-base-300;
+}
+
+@screen sm {
+    .gap-fill {
+        @apply p-4;
+    }
+
+    .gap-fill__sentence {
+        @apply text-lg p-4;
+    }
+
+    .gap-fill__gap {
+        @apply min-w-[60px] text-sm;
+    }
+
+    .gap-fill__option {
+        @apply text-sm px-2 py-1;
+    }
+}

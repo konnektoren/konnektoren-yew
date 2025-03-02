@@ -1,0 +1,11 @@
+.social-links {
+    @apply flex justify-center gap-2;
+
+    & a {
+        @apply transition-transform duration-300 ease-in-out;
+    }
+
+    & a:hover {
+        @apply transform scale-150;
+    }
+}

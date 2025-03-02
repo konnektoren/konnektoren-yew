@@ -1,0 +1,62 @@
+.ordering-result {
+    @apply card bg-base-100 p-6 shadow-md mt-8;
+}
+
+.ordering-result__title {
+    @apply text-2xl font-semibold mb-6 text-base-content;
+}
+
+.ordering-result__table {
+    @apply table table-zebra w-full border-separate border-spacing-0;
+}
+
+.ordering-result__header {
+    @apply bg-primary;
+}
+
+.ordering-result__header-cell {
+    @apply p-4 text-primary-content font-bold text-left;
+}
+
+.ordering-result__row {
+    @apply transition-colors duration-200;
+}
+
+.ordering-result__row--correct:hover {
+    @apply bg-success/10;
+}
+
+.ordering-result__row--incorrect:hover {
+    @apply bg-error/10;
+}
+
+.ordering-result__cell {
+    @apply p-4 whitespace-normal border-b border-base-300;
+}
+
+.ordering-result__cell--correct {
+    @apply text-success font-medium;
+}
+
+.ordering-result__cell--incorrect {
+    @apply text-error font-medium;
+}
+
+.ordering-result__correct-answer {
+    @apply mt-2 text-sm text-base-content/60 italic;
+}
+
+@screen sm {
+    .ordering-result__title {
+        @apply text-xl;
+    }
+
+    .ordering-result__header-cell,
+    .ordering-result__cell {
+        @apply p-2 text-sm;
+    }
+
+    .ordering-result__correct-answer {
+        @apply text-xs;
+    }
+}

@@ -12,26 +12,25 @@ pub struct SelectThemeProps {
 pub fn select_theme(props: &SelectThemeProps) -> Html {
     let theme = use_theme();
 
-    let update_theme_class = |new_theme: &Theme| {
-        if let Some(body) = gloo::utils::document().body() {
-            let current_classes: Vec<String> = body
-                .class_name()
-                .split_whitespace()
-                .filter(|class| !class.starts_with("theme-"))
-                .map(String::from)
-                .collect();
-
-            let mut classes = current_classes;
-            classes.push(new_theme.as_class().to_string());
-
-            body.set_class_name(&classes.join(" "));
+    let update_theme = |new_theme: &Theme| {
+        if let Some(html) = gloo::utils::document().document_element() {
+            html.set_attribute(
+                "data-theme",
+                match new_theme {
+                    Theme::Light => "light",
+                    Theme::Dark => "dark",
+                    Theme::Star => "cyberpunk",
+                    Theme::Other(name) => name.as_str(),
+                },
+            )
+            .expect("Failed to set theme");
         }
     };
 
     {
         let theme = theme.clone();
         use_effect(move || {
-            update_theme_class(&theme);
+            update_theme(&theme);
             || ()
         });
     }
@@ -73,17 +72,7 @@ pub fn select_theme(props: &SelectThemeProps) -> Html {
             Theme::Light => "Light Theme".to_string(),
             Theme::Dark => "Dark Theme".to_string(),
             Theme::Star => "Star Theme".to_string(),
-            Theme::Other(name) => format!(
-                "{} Theme",
-                name.strip_prefix("theme-")
-                    .unwrap_or(name)
-                    .chars()
-                    .next()
-                    .unwrap()
-                    .to_uppercase()
-                    .chain(name.strip_prefix("theme-").unwrap_or(name).chars().skip(1))
-                    .collect::<String>()
-            ),
+            Theme::Other(name) => name.to_string(),
         }
     };
 
@@ -109,7 +98,7 @@ mod preview {
                 Theme::Light,
                 Theme::Dark,
                 Theme::Star,
-                Theme::Other("theme-custom".to_string())
+                Theme::Other("custom".to_string())
             ])
         },
         (

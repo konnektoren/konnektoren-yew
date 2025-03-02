@@ -1,0 +1,29 @@
+.badge-content {
+    @apply bg-base-100 text-base-content shadow-sm;
+    @apply right-8 cursor-pointer z-30;
+    @apply transition-transform duration-300 ease-in-out;
+
+    &:hover {
+        @apply -translate-y-0.5;
+
+        .badge__tooltip {
+            @apply opacity-100 visible translate-y-0;
+        }
+    }
+
+    &__label {
+        @apply badge badge-primary text-primary-content text-lg font-bold mr-1;
+    }
+
+    &__tooltip {
+        @apply card bg-base-100 shadow-md p-2;
+        @apply absolute top-full left-1/2 -translate-x-1/2 -translate-y-2;
+        @apply w-[150px] text-center text-sm;
+        @apply opacity-0 invisible;
+        @apply transition-all duration-300;
+    }
+
+    @screen sm {
+        @apply hidden;
+    }
+}

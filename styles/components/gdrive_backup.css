@@ -1,0 +1,69 @@
+.gdrive-backup {
+    @apply p-4;
+
+    .gdrive-backup__error {
+        @apply flex items-center gap-2 p-4 mb-4 rounded-md;
+        @apply bg-error/10 text-error-content;
+    }
+
+    .gdrive-backup__error i {
+        @apply text-xl;
+    }
+
+    .gdrive-backup__loading {
+        @apply flex items-center justify-center gap-2 p-6 text-base-content/60;
+    }
+
+    .gdrive-backup__loading i {
+        @apply text-xl;
+    }
+
+    .gdrive-backup__content {
+        @apply flex flex-col gap-6;
+    }
+
+    .gdrive-backup__button {
+        @apply btn btn-primary gap-2 self-end;
+    }
+
+    .gdrive-backup__button:hover {
+        @apply -translate-y-0.5 shadow-md;
+    }
+
+    .gdrive-backup__button:active {
+        @apply translate-y-0;
+    }
+
+    .gdrive-backup__button i {
+        @apply text-base;
+    }
+
+    .gdrive-backup__list {
+        @apply flex flex-col gap-2;
+    }
+
+    .gdrive-backup__item {
+        @apply flex items-center gap-4 p-4 bg-base-100 border border-base-300 rounded-md cursor-pointer;
+        @apply transition-all duration-200 ease-in-out;
+    }
+
+    .gdrive-backup__item:hover {
+        @apply bg-base-200 -translate-y-0.5 shadow-md;
+    }
+
+    .gdrive-backup__item i {
+        @apply text-base-content/60 text-xl;
+    }
+
+    .gdrive-backup__item-content {
+        @apply flex-1 flex justify-between items-center gap-6;
+    }
+
+    .gdrive-backup__item-name {
+        @apply font-medium text-base-content font-sans truncate;
+    }
+
+    .gdrive-backup__item-date {
+        @apply flex items-center gap-2 text-base-content/60 text-sm font-mono whitespace-nowrap;
+    }
+}

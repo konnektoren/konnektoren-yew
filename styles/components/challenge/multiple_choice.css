@@ -1,0 +1,16 @@
+.multiple-choice {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
+
+    .progress {
+        @apply w-full;
+    }
+
+    .multiple-choice-options {
+        @apply grid grid-cols-2 gap-4 w-full;
+    }
+
+    .multiple-choice-option {
+        @apply max-w-[200px] rounded-sm text-sm;
+    }
+}

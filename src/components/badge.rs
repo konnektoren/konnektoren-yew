@@ -9,7 +9,7 @@ pub struct BadgeProps {
 #[function_component(Badge)]
 pub fn badge(props: &BadgeProps) -> Html {
     html! {
-        <div class="badge">
+        <div class="badge__content">
             <span class="badge__label">{ &props.label }</span>
             <div class="badge__tooltip">
                 { &props.description }

@@ -1,0 +1,97 @@
+.ordering {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
+}
+
+.ordering__title {
+    @apply text-2xl text-base-content text-center font-semibold mb-6;
+}
+
+.ordering__elements {
+    @apply card bg-base-100 shadow-md p-6;
+}
+
+.ordering__elements-list {
+    @apply flex flex-col gap-0 relative;
+    touch-action: none;
+    user-select: none;
+}
+
+.ordering__element {
+    @apply card bg-base-200 shadow-sm p-4;
+    @apply cursor-move relative z-10;
+    @apply transition-all duration-300 ease-in-out m-0;
+    touch-action: none;
+    user-select: none;
+}
+
+.ordering__element:hover {
+    @apply -translate-y-0.5 shadow-md bg-base-300;
+}
+
+.ordering__element--dragging {
+    @apply opacity-50 scale-95 bg-primary/10 shadow-lg z-50 cursor-grabbing;
+}
+
+.ordering__element:not(.ordering__element--dragging) {
+    @apply cursor-grab;
+}
+
+.ordering__element--over {
+    @apply border-2 border-dashed border-primary;
+}
+
+@media (hover: none) {
+    .ordering__element:active {
+        @apply scale-95 bg-primary/10 shadow-lg;
+    }
+}
+
+.ordering__drop-indicator {
+    @apply h-1 bg-transparent relative;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.ordering__drop-indicator::after {
+    content: "";
+    @apply absolute left-0 right-0 top-1/2 h-0.5 bg-primary;
+    @apply scale-x-0 transition-transform duration-300 ease-in-out;
+}
+
+.ordering__drop-indicator--active {
+    @apply h-4;
+}
+
+.ordering__drop-indicator--active::after {
+    @apply scale-x-100;
+}
+
+.ordering__drop-indicator--active::before {
+    content: "";
+    @apply absolute left-1/2 top-1/2 w-4 h-4 bg-primary rounded-full;
+    @apply -translate-x-1/2 -translate-y-1/2;
+}
+
+@media (hover: none) {
+    .ordering__drop-indicator {
+        @apply h-4 bg-primary/10;
+    }
+
+    .ordering__drop-indicator--active {
+        @apply bg-success/20;
+    }
+}
+
+@screen sm {
+    .ordering {
+        @apply p-4;
+    }
+
+    .ordering__title {
+        @apply text-xl;
+    }
+
+    .ordering__element {
+        @apply p-4 min-h-8 text-sm;
+    }
+}

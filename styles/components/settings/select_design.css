@@ -1,0 +1,11 @@
+.select-design button {
+    @apply btn btn-ghost gap-2;
+
+    & i {
+        @apply transition-transform duration-300 ease-in-out;
+    }
+
+    &:hover i {
+        @apply scale-110;
+    }
+}

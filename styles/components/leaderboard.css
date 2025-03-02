@@ -1,0 +1,101 @@
+.leaderboard {
+    @apply card bg-base-100 w-full max-w-[800px] mx-auto;
+
+    .leaderboard__table {
+        @apply table w-full table-fixed text-sm;
+    }
+
+    .leaderboard__header {
+        @apply bg-base-100 border-b border-base-300;
+    }
+
+    .leaderboard__header th {
+        @apply p-2 font-semibold text-left;
+    }
+
+    .leaderboard__row {
+        @apply hover:bg-base-200 transition-colors duration-200;
+    }
+
+    .leaderboard__row:nth-child(even) .leaderboard__cell {
+        @apply bg-base-200;
+    }
+
+    .leaderboard__row:hover .leaderboard__cell {
+        @apply bg-base-300;
+    }
+
+    .leaderboard__row--highlighted .leaderboard__cell {
+        @apply bg-primary text-primary-content font-medium !important;
+    }
+
+    .leaderboard__row--highlighted:hover .leaderboard__cell {
+        @apply bg-primary/90 !important;
+    }
+
+    .leaderboard__row--highlighted .timer {
+        @apply text-primary-content/90;
+    }
+
+    .leaderboard__cell {
+        @apply p-2 transition-colors duration-200;
+    }
+
+    .leaderboard__cell--rank {
+        @apply text-center py-0 px-2 font-medium text-primary;
+    }
+
+    .leaderboard__cell--name {
+        @apply py-2 px-4;
+    }
+
+    .leaderboard__cell--performance {
+        @apply py-2 px-4 text-right;
+    }
+
+    .leaderboard__cell--time {
+        @apply py-2 px-4 text-right text-base-content/60;
+    }
+
+    .leaderboard .timer {
+        @apply flex items-center gap-1 mb-0;
+    }
+
+    .leaderboard .timer__title {
+        @apply hidden;
+    }
+
+    .leaderboard__container {
+        @apply overflow-x-auto px-4;
+    }
+
+    @screen sm {
+        .leaderboard__table {
+            @apply text-xs;
+        }
+
+        .leaderboard .timer {
+            @apply gap-0;
+        }
+
+        .leaderboard__container {
+            @apply px-2;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .leaderboard__table {
+            @apply text-sm;
+        }
+
+        .leaderboard__cell {
+            @apply p-1;
+        }
+
+        .leaderboard__cell:not(.leaderboard__cell--rank):not(
+                .leaderboard__cell--time
+            ) {
+            @apply text-xs;
+        }
+    }
+}

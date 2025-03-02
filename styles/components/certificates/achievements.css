@@ -1,0 +1,85 @@
+.achievements {
+    @apply card bg-base-100 p-8 shadow-md max-w-[800px] mx-auto;
+}
+
+.achievements__title {
+    @apply text-primary;
+}
+
+.achievements__container {
+    @apply flex flex-col gap-8 mb-8;
+}
+
+.achievements__achievements-list,
+.achievements__certificates-list {
+    @apply flex-1;
+}
+
+.achievements__subtitle {
+    @apply text-primary text-xl mb-4;
+}
+
+.achievements__achievement-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.achievements__list {
+    @apply flex flex-col gap-4 list-none p-0;
+}
+
+.achievements__certificate-item {
+    @apply card shadow-sm transition-all duration-300;
+}
+
+.achievements__certificate-item--selected {
+    @apply shadow-[0_0_10px_rgba(var(--p),0.2)];
+}
+
+.achievements__certificate-summary {
+    @apply flex justify-between items-center p-4 cursor-pointer;
+    @apply transition-colors duration-200;
+}
+
+.achievements__certificate-summary:hover {
+    @apply bg-base-200;
+}
+
+.achievements__date {
+    @apply text-sm text-base-content/60;
+}
+
+.achievements__name {
+    @apply text-base font-bold text-primary;
+}
+
+.achievements__performance {
+    @apply text-lg font-bold text-success;
+}
+
+.achievements__certificate-details {
+    @apply p-4 border-t border-base-300;
+}
+
+@screen sm {
+    .achievements {
+        @apply p-4;
+    }
+
+    .achievements__title {
+        @apply text-xl;
+    }
+
+    .achievements__container {
+        @apply gap-4;
+    }
+
+    .achievements__certificate-summary {
+        @apply flex-col items-start gap-1 p-2;
+    }
+
+    .achievements__achievement-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        @apply gap-2;
+    }
+}
