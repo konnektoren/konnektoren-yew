@@ -1,0 +1,28 @@
+.certificate__image-container {
+    @apply mt-8 flex justify-center items-center;
+}
+
+.certificate__image {
+    @apply max-w-full h-auto;
+    @apply border border-base-100 rounded-md shadow-md;
+    @apply transition-all duration-300 ease-in-out;
+}
+
+.certificate__image:hover {
+    @apply scale-[1.02] shadow-lg;
+}
+
+.certificate__image-error {
+    @apply text-base text-error p-4;
+    @apply bg-error/10 rounded-sm;
+}
+
+@screen sm {
+    .certificate__image-container {
+        @apply mt-6;
+    }
+
+    .certificate__image-error {
+        @apply text-sm p-2;
+    }
+}

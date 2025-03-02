@@ -1,0 +1,110 @@
+.average-time-taken {
+    @apply card bg-base-100 rounded-xl p-6 shadow-md;
+
+    .average-time-taken__header {
+        @apply flex justify-between items-center mb-6;
+    }
+
+    .average-time-taken__title {
+        @apply text-xl font-semibold m-0;
+    }
+
+    .average-time-taken__trend {
+        @apply flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium;
+    }
+
+    .average-time-taken__trend--improving {
+        @apply bg-success/10 text-success;
+    }
+
+    .average-time-taken__trend--declining {
+        @apply bg-error/10 text-error;
+    }
+
+    .average-time-taken__trend--stable {
+        @apply bg-info/10 text-info;
+    }
+
+    .average-time-taken__trend-icon {
+        &.fa-arrow-up {
+            @apply text-success;
+        }
+
+        &.fa-arrow-down {
+            @apply text-error;
+        }
+
+        &.fa-arrows-left-right {
+            @apply text-info;
+        }
+    }
+
+    .average-time-taken__content {
+        @apply flex flex-col gap-6;
+    }
+
+    .average-time-taken__value-container {
+        @apply flex flex-col gap-4;
+    }
+
+    .average-time-taken__value {
+        @apply flex flex-col items-center;
+    }
+
+    .average-time-taken__value-number {
+        @apply text-4xl font-bold text-base-content;
+    }
+
+    .average-time-taken__value-label {
+        @apply text-sm text-base-content/60;
+    }
+
+    .average-time-taken__gauge {
+        @apply w-full h-2 bg-base-200 rounded overflow-hidden;
+    }
+
+    .average-time-taken__gauge-fill {
+        @apply h-full transition-[width] duration-300 ease-in-out;
+        background: linear-gradient(
+            90deg,
+            oklch(var(--p)) 0%,
+            oklch(var(--su)) 100%
+        );
+    }
+
+    .average-time-taken__details {
+        @apply flex flex-col gap-4;
+    }
+
+    .average-time-taken__description {
+        @apply text-sm text-base-content/60 m-0;
+    }
+
+    .average-time-taken__thresholds {
+        @apply flex flex-col gap-2;
+    }
+
+    .average-time-taken__threshold {
+        @apply flex items-center gap-3;
+    }
+
+    .average-time-taken__threshold-marker {
+        @apply text-xs font-semibold px-2 py-1 rounded;
+    }
+
+    .average-time-taken__threshold-marker--fast {
+        @apply bg-success/10 text-success;
+    }
+
+    .average-time-taken__threshold-marker--medium {
+        @apply bg-warning/10 text-warning;
+    }
+
+    .average-time-taken__threshold-marker--slow {
+        @apply bg-error/10 text-error;
+    }
+
+    .average-time-taken__threshold-label {
+        @apply text-sm text-base-content/60;
+    }
+}

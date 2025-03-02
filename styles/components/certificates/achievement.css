@@ -1,0 +1,42 @@
+.achievement {
+    @apply card bg-base-100 p-4 shadow-sm rounded-2xl max-w-[250px] relative;
+}
+
+.achievement:hover {
+    @apply -translate-y-0.5 shadow-lg;
+}
+
+.achievement:hover::after {
+    @apply opacity-100 translate-x-0 translate-y-0;
+}
+
+.achievement__icon {
+    @apply w-20 h-20 flex items-center justify-center mb-4;
+    @apply transition-transform duration-300 ease-in-out;
+}
+
+.achievement__icon img {
+    @apply max-w-full max-h-full object-contain;
+}
+
+.achievement:hover .achievement__icon {
+    @apply scale-110;
+}
+
+.achievement::before {
+    content: "";
+    @apply absolute inset-0 rounded-md -z-10;
+    background: linear-gradient(
+        135deg,
+        oklch(var(--b1) / 1) 0%,
+        oklch(var(--b2) / 1) 100%
+    );
+}
+
+.achievement::after {
+    content: "🏆";
+    @apply absolute -top-2.5 -right-2.5;
+    @apply badge badge-secondary badge-lg rounded-full text-sm;
+    @apply opacity-0 translate-x-2.5 -translate-y-2.5;
+    @apply transition-all duration-300 ease-in-out;
+}
