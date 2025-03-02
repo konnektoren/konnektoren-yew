@@ -1,8 +1,13 @@
-/* Default badge state */
 .profile-points {
+    @apply relative;
+
     .profile-points__badge {
-        @apply badge badge-lg bg-base-100 shadow-md flex flex-col items-center gap-0.5 p-2;
+        @apply badge bg-base-100 shadow-md;
+        @apply inline-flex flex-col items-center justify-center gap-1;
+        @apply p-3;
         transition: all 0.3s ease;
+        min-width: min-content;
+        height: auto;
     }
 
     .profile-points__badge-top {
@@ -21,13 +26,13 @@
         @apply text-sm font-bold text-base-content/60;
     }
 
-    /* Expanded card state */
     .profile-points__expanded {
         @apply card bg-base-100 shadow-md p-2 hidden items-center gap-2 whitespace-nowrap min-w-max;
-    }
+        @apply flex-row;
 
-    .profile-points__name {
-        @apply text-sm text-base-content/60;
+        .profile-points__badge-top {
+            @apply flex-row gap-2;
+        }
     }
 
     @keyframes slideIn {
