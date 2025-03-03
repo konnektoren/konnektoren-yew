@@ -1,4 +1,5 @@
 @import "tailwind.css";
 
+@import "atoms/index.css";
 @import "components/index.css";
 @import "vendors/index.css";

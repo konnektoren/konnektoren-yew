@@ -1,7 +1,6 @@
 use crate::model::Inbox;
 use chrono::Utc;
 use yew::prelude::*;
-use yew_chat::prelude::Message;
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct InboxProps {
@@ -67,6 +66,7 @@ pub fn inbox_component(props: &InboxProps) -> Html {
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
+    use yew_chat::prelude::Message;
     use yew_preview::prelude::*;
 
     yew_preview::create_preview!(
