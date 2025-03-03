@@ -1,10 +1,12 @@
 .navigation-wrapper {
-    @apply flex items-center bg-base-200;
+    @apply fixed left-0 bottom-0;
+    @apply z-50 w-full;
+    @apply flex items-center justify-around bg-base-200;
 }
 
 .navigation {
     @apply flex justify-around items-center w-full bg-base-200;
-    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)];
+    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)] shadow-lg;
 
     & .nav-group {
         @apply flex flex-col items-center;
