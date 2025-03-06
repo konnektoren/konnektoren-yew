@@ -97,10 +97,12 @@ impl SolanaWalletProvider {
                             Ok(_) => {
                                 gloo::timers::future::TimeoutFuture::new(500).await;
 
-                                if let Ok(account) = adapter.connected_account() {
-                                    log::info!("Got account: {}", account.address);
+                                if let Ok(account) =
+                                    adapter.connection_info().await.connected_account()
+                                {
+                                    log::info!("Got account: {}", account.address());
                                     let new_connection = WalletConnection {
-                                        address: account.address.clone(),
+                                        address: account.address().to_string(),
                                         network: network.clone(),
                                     };
 
@@ -276,18 +278,21 @@ impl WalletProvider for SolanaWalletProvider {
         let adapter = adapter_guard.as_ref().ok_or("No adapter available")?;
 
         // Check if wallet is connected
-        if !adapter.is_connected() {
+        if !adapter.is_connected().await {
             return Err(
                 "Wallet not connected. Please connect using the wallet list first.".to_string(),
             );
         }
 
         // Get connected account
-        let account = adapter.connected_account().map_err(|e| e.to_string())?;
+        let connect_info = adapter.connection_info().await;
+        let account = connect_info
+            .connected_account()
+            .map_err(|e| e.to_string())?;
 
         // Create connection
         let connection = WalletConnection {
-            address: account.address.clone(),
+            address: account.address().to_string(),
             network: self.get_network(),
         };
 
@@ -320,7 +325,7 @@ impl WalletProvider for SolanaWalletProvider {
 
         if let (Some(adapter), Some(connection)) = (&mut *adapter_guard, old_connection.clone()) {
             // Perform disconnect
-            adapter.disconnect().await.map_err(|e| e.to_string())?;
+            adapter.disconnect().await;
 
             // Wait a moment for the connection to stabilize
             gloo::timers::future::TimeoutFuture::new(200).await;
@@ -392,7 +397,7 @@ impl WalletProvider for SolanaWalletProvider {
             .map_err(|_| "Failed to acquire connection read lock".to_string())?;
 
         // Check both adapter connection and our connection state
-        if !adapter.is_connected() || connection_guard.is_none() {
+        if !adapter.is_connected().await || connection_guard.is_none() {
             return Err("Wallet not connected".to_string());
         }
 
@@ -572,8 +577,11 @@ impl SolanaWalletProvider {
         token: &Token,
         adapter: &WalletAdapter,
     ) -> Result<String, String> {
-        let account = adapter.connected_account().map_err(|e| e.to_string())?;
-        let from_pubkey = Pubkey::new_from_array(account.public_key);
+        let connect_info = adapter.connection_info().await;
+        let account = connect_info
+            .connected_account()
+            .map_err(|e| e.to_string())?;
+        let from_pubkey = Pubkey::from(account.public_key());
         log::info!("From pubkey: {}", from_pubkey);
 
         let recent_blockhash = self.get_blockhash().await?;
