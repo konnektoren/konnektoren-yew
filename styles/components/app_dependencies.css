@@ -18,7 +18,7 @@
     }
 
     .app-dependencies__search {
-        @apply input input-bordered w-full mb-4 text-sm;
+        @apply input w-full mb-4 text-sm;
     }
 
     .app-dependencies__list {
@@ -55,7 +55,7 @@
         }
 
         &--requirement {
-            @apply badge-outline;
+            @apply badge;
         }
     }
 

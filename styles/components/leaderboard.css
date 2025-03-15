@@ -26,11 +26,11 @@
     }
 
     .leaderboard__row--highlighted .leaderboard__cell {
-        @apply bg-primary text-primary-content font-medium !important;
+        @apply bg-primary text-primary-content font-medium;
     }
 
     .leaderboard__row--highlighted:hover .leaderboard__cell {
-        @apply bg-primary/90 !important;
+        @apply bg-primary/90;
     }
 
     .leaderboard__row--highlighted .timer {

@@ -110,12 +110,12 @@
 
 @keyframes inner-highlight-pulse {
     0% {
-        @apply opacity-20;
+        opacity: 0.2;
     }
     50% {
-        @apply opacity-40;
+        opacity: 0.4;
     }
     100% {
-        @apply opacity-20;
+        opacity: 0.2;
     }
 }

@@ -1,5 +1,5 @@
-@import "select_design.css";
-@import "select_language.css";
-@import "select_level.css";
-@import "select_theme.css";
-@import "settings.css";
+@import "./select_design.css";
+@import "./select_language.css";
+@import "./select_level.css";
+@import "./select_theme.css";
+@import "./settings.css";

@@ -10,7 +10,7 @@
     }
 
     & input {
-        @apply input input-bordered input-sm min-w-[200px] max-w-xs;
+        @apply input input-sm min-w-[200px] max-w-xs;
     }
 
     & button {

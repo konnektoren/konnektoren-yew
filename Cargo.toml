@@ -54,7 +54,7 @@ konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", 
 ] }
 konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 log = "0.4.21"
-markdown = { version = "1.0.0-alpha.18" }
+markdown = { version = "1.0.0-alpha.23" }
 serde_json = "1.0.117"
 thiserror = "2.0"
 wasm-bindgen = { version = "0.2", features = ["serde"] }

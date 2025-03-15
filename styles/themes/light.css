@@ -1,0 +1,54 @@
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+
+    /* Base colors - more closely match your F5F5F5 background */
+    --color-base-100: oklch(97% 0.01 0);
+    --color-base-200: oklch(94% 0.01 0);
+    --color-base-300: oklch(91% 0.01 0);
+    --color-base-content: oklch(16% 0.01 0);
+
+    /* Primary color - More accurate orange FF8C00 */
+    --color-primary: oklch(76% 0.19 63.82);
+    --color-primary-content: oklch(100% 0 0);
+
+    /* Secondary color - More accurate purple 8A2BE2 */
+    --color-secondary: oklch(51% 0.274 296.82);
+    --color-secondary-content: oklch(100% 0 0);
+
+    /* Accent/Tertiary - Gray 808080 instead of teal */
+    --color-accent: oklch(54% 0.03 0);
+    --color-accent-content: oklch(100% 0 0);
+
+    /* Other colors - adjusted to match more closely */
+    --color-neutral: oklch(54% 0.03 0); /* Gray 808080 */
+    --color-neutral-content: oklch(100% 0 0);
+
+    /* Info - #17a2b8 */
+    --color-info: oklch(65% 0.18 206.7);
+    --color-info-content: oklch(100% 0 0);
+
+    /* Success - #28a745 */
+    --color-success: oklch(63% 0.21 142.5);
+    --color-success-content: oklch(100% 0 0);
+
+    /* Warning - #ffc107 */
+    --color-warning: oklch(85% 0.2 84.4);
+    --color-warning-content: oklch(16% 0.01 0);
+
+    /* Error - #dc3545 */
+    --color-error: oklch(60% 0.28 25.76);
+    --color-error-content: oklch(100% 0 0);
+
+    /* Styling options */
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}

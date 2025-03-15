@@ -46,7 +46,7 @@
     }
 
     .chat .input-field {
-        @apply input input-bordered focus:input-primary flex-1 min-h-[40px] bg-base-100;
+        @apply input focus:input-primary flex-1 min-h-[40px] bg-base-100;
     }
 
     .chat .send-button {

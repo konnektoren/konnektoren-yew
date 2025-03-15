@@ -24,7 +24,7 @@
     }
 
     .challenge-review__comment input {
-        @apply input input-lg input-bordered w-full;
+        @apply input input-lg w-full;
         @apply focus:input-primary focus:outline-none;
     }
 
@@ -33,7 +33,7 @@
     }
 
     .challenge-review__submit:disabled {
-        @apply btn-disabled bg-base-300 text-base-content/50;
+        @apply btn bg-base-300 text-base-content/50;
         @apply transform-none shadow-none cursor-not-allowed;
     }
 

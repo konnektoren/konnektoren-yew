@@ -2,7 +2,7 @@
     @apply flex flex-col items-center;
 
     .domain-selector__select {
-        @apply select select-bordered select-md w-full max-w-[300px];
+        @apply select select-md w-full max-w-[300px];
     }
 
     .domain-selector__select:hover {

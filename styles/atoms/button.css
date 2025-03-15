@@ -1,55 +1,53 @@
-/* Base button styles */
 button {
     @apply btn normal-case h-auto;
-    @apply bg-primary;
+    @apply bg-primary text-primary-content border-primary;
     @apply transition-all duration-300;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply hover:-translate-y-0.5 hover:shadow-lg;
+    @apply hover:bg-secondary hover:border-secondary hover:text-secondary-content;
 }
 
-/* Primary variant */
-.btn-primary {
-    @apply bg-primary text-primary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
-}
+@layer components {
+    /* Button variants you can add via classes */
+    .btn-primary {
+        @apply bg-primary text-primary-content border-primary;
+        @apply hover:bg-secondary hover:border-secondary hover:text-secondary-content;
+    }
 
-/* Secondary variant */
-.btn-secondary {
-    @apply bg-secondary text-secondary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
-}
+    .btn-secondary {
+        @apply bg-secondary text-secondary-content border-secondary;
+        @apply hover:bg-primary hover:border-primary hover:text-primary-content;
+    }
 
-/* Tertiary variant */
-.btn-tertiary {
-    @apply bg-accent text-accent-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
-}
+    .btn-tertiary {
+        @apply bg-accent text-accent-content border-accent;
+        @apply hover:brightness-90;
+    }
 
-/* Size variants */
-.btn-sm {
-    @apply px-2 py-1 text-sm;
-}
+    /* Size variants */
+    .btn-sm {
+        @apply px-2 py-1 text-sm;
+    }
 
-.btn-lg {
-    @apply px-6 py-3 text-lg;
-}
+    .btn-lg {
+        @apply px-6 py-3 text-lg;
+    }
 
-/* Material Design style button */
-.btn-material {
-    @apply btn;
-    @apply px-4 py-2 text-sm;
-    @apply rounded uppercase tracking-wider;
-    @apply bg-primary text-primary-content;
-    @apply shadow-md;
-    @apply transition-all duration-300;
-    @apply hover:shadow-lg hover:-translate-y-0.5;
-    @apply active:shadow-xl;
-}
+    /* Material Design style button */
+    .btn-material {
+        @apply btn px-4 py-2 text-sm;
+        @apply rounded uppercase tracking-wider;
+        @apply bg-primary text-primary-content border-primary;
+        @apply shadow-md transition-all duration-300;
+        @apply hover:shadow-lg hover:-translate-y-0.5;
+        @apply active:shadow-xl;
+    }
 
-/* Custom gradient buttons */
-.btn-gradient {
-    @apply btn;
-    @apply bg-gradient-to-r from-primary to-secondary;
-    @apply text-primary-content;
-    @apply transition-all duration-300;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    /* Custom gradient buttons */
+    .btn-gradient {
+        @apply btn normal-case h-auto;
+        @apply bg-gradient-to-r from-primary to-secondary;
+        @apply text-primary-content;
+        @apply transition-all duration-300;
+        @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    }
 }
