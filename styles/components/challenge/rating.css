@@ -1,29 +1,25 @@
 .challenge-rating {
-    @apply flex items-center gap-1 justify-start;
-    @apply card bg-warning/10 p-2 px-4 shadow-sm rounded-sm;
-    @apply text-lg inline-flex;
-    @apply transition-all duration-300 ease-in-out;
+    @apply badge badge-lg gap-1 bg-base-100 border-warning text-base-content;
+    @apply shadow-sm transition-all duration-300 ease-in-out;
+    @apply inline-flex items-center justify-start;
 }
 
 .challenge-rating:hover {
-    @apply bg-warning/20 scale-105;
+    @apply bg-warning/10 scale-105 shadow-md;
 }
 
 .challenge-rating__star {
-    @apply text-warning text-xl;
-    @apply transition-transform duration-300 ease-in-out;
-}
-
-.challenge-rating__star:hover {
-    @apply rotate-[72deg] scale-125;
+    @apply mask mask-star-2 bg-warning w-4 h-4;
+    font-size: 0; /* Hide the star character */
+    display: inline-block;
 }
 
 @screen sm {
     .challenge-rating {
-        @apply text-sm p-1 px-2;
+        @apply badge-md px-2 py-1;
     }
 
     .challenge-rating__star {
-        @apply text-lg;
+        @apply w-3 h-3;
     }
 }

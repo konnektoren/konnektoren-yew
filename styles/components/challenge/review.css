@@ -1,61 +1,50 @@
 .challenge-review {
-    @apply card bg-base-100 p-6 shadow-md;
-    @apply flex flex-col gap-4 items-stretch;
-    @apply transition-transform duration-300 ease-in-out;
+    @apply card bg-base-100 shadow-md p-6;
+    @apply flex flex-col gap-4;
+    @apply hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300;
 
-    &:hover {
-        @apply -translate-y-0.5 shadow-lg;
+    h3 {
+        @apply card-title text-primary mb-2;
+        @apply after:content-[''] after:block after:w-16 after:h-1 after:bg-primary/30 after:mt-2;
     }
 
-    .challenge-review__title {
-        @apply relative pb-4;
+    .rating-stars {
+        @apply my-4 justify-center;
     }
 
-    .challenge-review__title:hover::after {
-        @apply w-[100px];
+    .challenge-review__comment-input {
+        @apply w-full;
     }
 
-    .challenge-review__rating {
-        @apply flex flex-col gap-2 items-center;
+    .challenge-review__comment-input input {
+        @apply input w-full;
+        @apply focus:outline-primary focus:border-primary;
     }
 
-    .challenge-review__comment {
-        @apply flex flex-col gap-2;
+    button {
+        @apply btn btn-primary w-full mt-2;
+        @apply disabled:bg-base-300 disabled:text-base-content/50
+               disabled:cursor-not-allowed disabled:border-base-300;
     }
 
-    .challenge-review__comment input {
-        @apply input input-lg w-full;
-        @apply focus:input-primary focus:outline-none;
-    }
-
-    .challenge-review__submit {
-        @apply btn btn-primary btn-lg w-full;
-    }
-
-    .challenge-review__submit:disabled {
-        @apply btn bg-base-300 text-base-content/50;
-        @apply transform-none shadow-none cursor-not-allowed;
-    }
-
-    .challenge-review__success {
-        @apply text-success text-lg font-medium text-center p-4;
+    p {
+        @apply text-success text-center py-2 mt-2;
+        @apply bg-success/10 rounded-lg border border-success/20;
     }
 
     @screen sm {
-        .challenge-review__title {
-            @apply text-3xl;
+        @apply p-4;
+
+        h3 {
+            @apply text-xl;
         }
 
-        .challenge-review__stars {
-            @apply text-4xl;
+        .challenge-review__comment-input input {
+            @apply input-sm;
         }
 
-        .challenge-review__comment input {
-            @apply input-md;
-        }
-
-        .challenge-review__submit {
-            @apply btn-md;
+        button {
+            @apply btn-sm;
         }
     }
 }
