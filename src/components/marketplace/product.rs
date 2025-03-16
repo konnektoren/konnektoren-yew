@@ -25,9 +25,7 @@ pub fn product_component(props: &ProductComponentProps) -> Html {
 
     html! {
         <div id={format!("product-{}", product_id)} class={classes}>
-            {render_header(&props.product)}
             {render_body(props)}
-            {render_footer(props)}
         </div>
     }
 }
@@ -35,17 +33,21 @@ pub fn product_component(props: &ProductComponentProps) -> Html {
 fn render_header(product: &Product) -> Html {
     html! {
         <div class="product__header">
-            <h2 class="product__title">{&product.name}</h2>
+            <h2 class="product__title">
+                {&product.name}
+            </h2>
         </div>
     }
 }
 
 fn render_body(props: &ProductComponentProps) -> Html {
     html! {
-        <div class="product__body">
-            <p class="product__description">{&props.product.description}</p>
+        <div class="product-content">
+            {render_header(&props.product)}
             {render_image(&props.product)}
+            <p class="product__description">{&props.product.description}</p>
             {render_tags(props)}
+            {render_footer(props)}
         </div>
     }
 }
@@ -53,10 +55,14 @@ fn render_body(props: &ProductComponentProps) -> Html {
 fn render_image(product: &Product) -> Html {
     match &product.image {
         Some(image) if image.starts_with("fa-") => html! {
-            <i class={format!("product__icon fas {}", image)}></i>
+            <div class="text-center">
+                <i class={format!("product__icon fas {}", image)}></i>
+            </div>
         },
         Some(image) => html! {
-            <img src={image.to_string()} alt={product.name.clone()} class="product__image" />
+            <figure>
+                <img src={image.to_string()} alt={product.name.clone()} class="product__image" />
+            </figure>
         },
         None => html!(),
     }
@@ -98,7 +104,10 @@ fn render_footer(props: &ProductComponentProps) -> Html {
 fn render_price(product: &Product) -> Html {
     match product.price {
         Some(price) => html! {
-            <span class="product__price">{format!("Price: {}", price)}</span>
+            <div class="product__price">
+                <label class="product__price-label">{"Price"}</label>
+                <span class="product__price-value">{price}</span>
+            </div>
         },
         None => html!(),
     }
