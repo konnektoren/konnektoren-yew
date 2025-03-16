@@ -9,21 +9,15 @@ pub struct ProgressBarProps {
 
 #[function_component(ProgressBar)]
 pub fn progress_bar(props: &ProgressBarProps) -> Html {
-    let progress = match props.max {
-        Some(max) => (props.value as f64 / max as f64) * 100.0,
-        None => props.value as f64,
-    };
-
     html! {
-        <div class="progress">
-            <div
-                class="progress__bar"
-                style={format!("width: {:.2}%;", progress)}
+        <div class="progress-bar">
+            <progress
+                class="progress-bar__fill"
+                value={props.value.to_string()}
+                max={props.max.unwrap_or(100).to_string()}
             >
-                <span class="progress__label">
-                    {props.label.clone()}
-                </span>
-            </div>
+                <span class="progress-bar__label">{&props.label}</span>
+            </progress>
         </div>
     }
 }

@@ -1,0 +1,32 @@
+.progress-bar {
+    @apply w-full h-12;
+}
+
+.progress-bar__fill {
+    @apply progress progress-primary;
+}
+
+.progress-bar__label {
+    @apply text-base-100 font-medium;
+}
+
+/* Accessibility enhancement - hidden actual progress element */
+.progress-bar::before {
+    @apply sr-only;
+    content: attr(aria-valuenow);
+}
+
+/* Responsive styles */
+@screen sm {
+    .progress-bar {
+        @apply h-8;
+    }
+
+    .progress-bar__fill {
+        @apply leading-8;
+    }
+
+    .progress-bar__label {
+        @apply text-sm;
+    }
+}
