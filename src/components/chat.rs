@@ -27,7 +27,7 @@ pub fn chat(props: &ChatProps) -> Html {
     };
 
     html! {
-        <div class={classes!("chat", if *expanded { "chat--expanded" } else { "" })}>
+        <div class={classes!("chat-content", if *expanded { "chat--expanded" } else { "" })}>
             <div class="chat__bubble" onclick={on_toggle.clone()}>
                 <span class="chat__bubble-icon">{"💬"}</span>
                 <span class="chat__bubble-text">{"Chat"}</span>
@@ -60,7 +60,7 @@ mod preview {
         ChatComponent,
         ChatProps {
             api_url: "https://api.konnektoren.help".to_string(),
-            channel: "yew-preview".to_string(),
+            channel: "yew-preview-1".to_string(),
         },
     );
 }
