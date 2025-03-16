@@ -1,17 +1,29 @@
 .timer {
-    @apply card bg-base-100 shadow-sm p-4 flex items-center gap-2;
+    @apply card bg-base-100 shadow-sm p-4;
+    @apply relative;
 
     & .timer__title {
-        @apply font-bold text-base-content mb-2;
+        @apply absolute top-1 left-2;
+        @apply text-xs font-medium text-base-content/70;
     }
 
     & .timer__text {
-        @apply font-medium text-base-content/70;
+        @apply countdown font-mono text-2xl;
+        @apply flex justify-center items-center;
+        @apply mt-4;
     }
 }
 
 @screen sm {
     .timer {
-        @apply text-sm p-2;
+        @apply p-3;
+
+        & .timer__title {
+            @apply text-[10px];
+        }
+
+        & .timer__text {
+            @apply text-xl mt-3;
+        }
     }
 }
