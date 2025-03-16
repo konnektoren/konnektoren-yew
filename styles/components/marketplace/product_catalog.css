@@ -1,4 +1,14 @@
 .product-catalog {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8;
-    @apply max-w-[1400px] mx-auto;
+    @apply grid gap-6;
+    @apply p-4;
+    @apply w-full min-w-[800px] max-w-[1400px];
+    @apply grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
+
+    @screen md {
+        @apply p-6;
+    }
+
+    @screen lg {
+        @apply p-8;
+    }
 }
