@@ -120,3 +120,6 @@ lint: lint-style
 sbom:
     cargo install cargo-cyclonedx
     cargo cyclonedx --format json
+
+server:
+    cargo run --bin konnektoren-yew-server --features server,yew-preview
