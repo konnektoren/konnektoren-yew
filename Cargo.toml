@@ -11,6 +11,11 @@ path = "src/lib.rs"
 name = "konnektoren-yew-bin"
 path = "src/main.rs"
 
+[[bin]]
+name = "konnektoren-yew-server"
+path = "src/bin/server.rs"
+required-features = ["server"]
+
 [features]
 default = [
     "certificates",
@@ -22,6 +27,7 @@ default = [
     "tour",
     "solana",
     "sbom",
+    "csr",
 ]
 backup = []
 certificates = [
@@ -37,6 +43,9 @@ gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
 sbom = ["cargo-cyclonedx"]
+csr = ["yew/csr"]
+ssr = ["yew/ssr"]
+server = ["ssr", "axum", "tokio/full"]
 
 [dependencies]
 async-trait = "0.1.83"
@@ -80,7 +89,7 @@ web-sys = { version = "0.3.*", features = [
     "Element",
     "DomRect",
 ] }
-yew = { version = "0.21", features = ["csr"] }
+yew = { version = "0.21" }
 yew-router = "0.18"
 yew-hooks = { version = "0.3.2" }
 yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true }
@@ -105,6 +114,9 @@ serde_yaml = "0.9.34+deprecated"
 wallet-adapter = { version = "1.1", optional = true }
 solana-sdk = { version = "2.1.2", optional = true }
 spl-token = { version = "7.0.0", optional = true }
+
+tokio = { version = "1.0", features = ["rt", "macros"], optional = true }
+axum = { version = "0.8", features = ["macros"], optional = true }
 
 [dev-dependencies]
 konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
