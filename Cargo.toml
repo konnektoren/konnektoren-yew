@@ -43,7 +43,7 @@ gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
 sbom = ["cargo-cyclonedx"]
-csr = ["yew/csr"]
+csr = ["yew/csr", "gloo", "web-sys", "js-sys", "wasm-bindgen"]
 ssr = ["yew/ssr"]
 server = ["ssr", "axum", "tokio/full"]
 
@@ -54,7 +54,7 @@ chrono = "0.4.38"
 console_log = "1.0"
 futures = "0.3"
 getrandom = { version = "0.3", features = ["wasm_js"] }
-gloo = { version = "0.11.0", features = ["net"] }
+gloo = { version = "0.11.0", features = ["net"], optional = true }
 hex = "0.4.3"
 implicit-clone = "0.4.9"
 indexmap = "2.2.6"
@@ -66,13 +66,13 @@ log = "0.4.21"
 markdown = { version = "1.0.0-alpha.23" }
 serde_json = "1.0.117"
 thiserror = "2.0"
-wasm-bindgen = { version = "0.2.100", features = [
+wasm-bindgen = { version = "0.2.100", optional = true, features = [
     "spans",
     "std",
     "serde",
 ], default-features = false }
 wasm-bindgen-futures = { version = "0.4.42" }
-web-sys = { version = "0.3.*", features = [
+web-sys = { version = "0.3.*", optional = true, features = [
     "HtmlInputElement",
     "HtmlAudioElement",
     "AudioContext",
@@ -109,7 +109,7 @@ rust-embed = { version = "8.5.0", features = [
 ] }
 anyhow = "1.0.86"
 serde = { version = "1.0.204", features = ["derive"] }
-js-sys = "0.3.69"
+js-sys = { version = "0.3.69", optional = true }
 serde_yaml = "0.9.34+deprecated"
 wallet-adapter = { version = "1.1", optional = true }
 solana-sdk = { version = "2.1.2", optional = true }

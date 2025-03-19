@@ -8,6 +8,7 @@ pub mod repository_hooks;
 pub mod repository_provider;
 pub mod session_provider;
 pub mod settings_provider;
+pub mod ssr_impl;
 pub mod theme_provider;
 
 pub use crate::i18n::{use_i18n, use_selected_language, I18nProvider, I18nProviderProps};

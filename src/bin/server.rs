@@ -1,4 +1,5 @@
 use axum::{response::Html as AxumHtml, routing::get, Router};
+use konnektoren_yew::app::App;
 use konnektoren_yew::components::{AppVersionComponent, Badge};
 use log::info;
 use yew::prelude::*;
@@ -44,6 +45,13 @@ async fn render_html(content: String) -> AxumHtml<String> {
     ))
 }
 
+async fn serve_app() -> AxumHtml<String> {
+    let app_renderer = ServerRenderer::<App>::new();
+    let content = app_renderer.render().await;
+
+    render_html(content).await
+}
+
 async fn serve_app_version() -> AxumHtml<String> {
     let renderer = ServerRenderer::<AppVersionWrapper>::new();
     let content = renderer.render().await;
@@ -74,6 +82,7 @@ async fn serve_home() -> AxumHtml<String> {
             <div class="component-links">
                 <h2>Individual Component Pages</h2>
                 <ul>
+                    <li><a href="/app">App Component</a></li>
                     <li><a href="/app-version">App Version Component</a></li>
                     <li><a href="/badge">Badge Component</a></li>
                 </ul>
@@ -89,6 +98,7 @@ async fn serve_home() -> AxumHtml<String> {
 async fn main() {
     let app = Router::new()
         .route("/", get(serve_home))
+        .route("/app", get(serve_app))
         .route("/app-version", get(serve_app_version))
         .route("/badge", get(serve_badge));
 
