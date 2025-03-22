@@ -1,7 +1,3 @@
-use crate::providers::use_settings;
-use gloo::timers::callback::Timeout;
-use gloo::utils::window;
-use web_sys::SpeechSynthesisUtterance;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -13,25 +9,33 @@ pub struct ReadTextProps {
 
 #[function_component(ReadText)]
 pub fn read_text(props: &ReadTextProps) -> Html {
-    let settings = use_settings();
+    #[cfg(feature = "csr")]
+    {
+        use crate::providers::use_settings;
+        use gloo::timers::callback::Timeout;
+        use gloo::utils::window;
+        use web_sys::SpeechSynthesisUtterance;
 
-    let text_clone = props.text.clone();
-    let lang_clone = props.lang.clone();
-    use_effect(move || {
-        let settings = settings.clone();
-        Timeout::new(0, move || {
-            if let Ok(speech_synthesis) = window().speech_synthesis() {
-                let utterance = SpeechSynthesisUtterance::new().unwrap();
-                utterance.set_text(&text_clone);
-                utterance.set_lang(&lang_clone);
-                utterance.set_volume(settings.sound_volume);
+        let settings = use_settings();
 
-                speech_synthesis.speak(&utterance);
-            }
-        })
-        .forget();
-        || ()
-    });
+        let text_clone = props.text.clone();
+        let lang_clone = props.lang.clone();
+        use_effect(move || {
+            let settings = settings.clone();
+            Timeout::new(0, move || {
+                if let Ok(speech_synthesis) = window().speech_synthesis() {
+                    let utterance = SpeechSynthesisUtterance::new().unwrap();
+                    utterance.set_text(&text_clone);
+                    utterance.set_lang(&lang_clone);
+                    utterance.set_volume(settings.sound_volume);
+
+                    speech_synthesis.speak(&utterance);
+                }
+            })
+            .forget();
+            || ()
+        });
+    }
 
     html! {
         <>

@@ -1,5 +1,5 @@
+use log::debug;
 use regex::Regex;
-use web_sys::console;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -52,7 +52,7 @@ pub fn video(props: &VideoProps) -> Html {
         let playing = playing.clone();
         Callback::from(move |_| {
             playing.set(true);
-            console::log_1(&"Video Play button clicked!".into());
+            debug!("Video Play button clicked!");
         })
     };
 
