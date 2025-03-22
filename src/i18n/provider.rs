@@ -1,13 +1,15 @@
 use super::SelectedLanguage;
 use crate::model::Settings;
 use crate::providers::use_settings;
-use gloo::utils::window;
 use konnektoren_platform::i18n::I18nConfig;
 use konnektoren_platform::prelude::Language;
-use web_sys::UrlSearchParams;
 use yew::prelude::*;
 
+#[cfg(feature = "csr")]
 fn get_url_language(supported_languages: &[Language]) -> Option<Language> {
+    use gloo::utils::window;
+    use web_sys::UrlSearchParams;
+
     let window = window();
     let search = window.location().search().unwrap();
     let search_params = UrlSearchParams::new_with_str(&search).ok()?;
@@ -20,7 +22,15 @@ fn get_url_language(supported_languages: &[Language]) -> Option<Language> {
     }
 }
 
+#[cfg(not(feature = "csr"))]
+fn get_url_language(_supported_languages: &[Language]) -> Option<Language> {
+    None
+}
+
+#[cfg(feature = "csr")]
 fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
+    use gloo::utils::window;
+
     let window = window();
     let path = window.location().pathname().unwrap_or_default();
     let parts: Vec<&str> = path.trim_matches('/').split('/').collect();
@@ -34,13 +44,26 @@ fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
     })
 }
 
+#[cfg(not(feature = "csr"))]
+fn get_path_language(_supported_languages: &[Language]) -> Option<Language> {
+    None
+}
+
+#[cfg(feature = "csr")]
 fn get_browser_language(supported_languages: &[Language]) -> Option<Language> {
-    let language = window().navigator().language().unwrap();
+    use gloo::utils::window;
+
+    let language = window().navigator().language().unwrap_or_default();
     if supported_languages.iter().any(|l| l.code() == language) {
         Some(Language::from_code(&language))
     } else {
         None
     }
+}
+
+#[cfg(not(feature = "csr"))]
+fn get_browser_language(_supported_languages: &[Language]) -> Option<Language> {
+    None
 }
 
 fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) -> Language {
@@ -99,6 +122,7 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
                 config.default_language = language;
             }
             config_ctx.set(config);
+            || ()
         });
     }
 
@@ -113,6 +137,7 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
         </ContextProvider<I18nContext>>
     }
 }
+
 #[hook]
 pub fn use_i18n() -> UseStateHandle<I18nConfig> {
     use_context::<I18nContext>()

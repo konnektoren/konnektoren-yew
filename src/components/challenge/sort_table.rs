@@ -1,8 +1,6 @@
 use konnektoren_core::challenges::{ChallengeResult, SortTable, SortTableRow};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::Event;
-use wasm_bindgen::JsCast;
-use web_sys::{DragEvent, Element, TouchEvent};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Default)]
@@ -20,7 +18,6 @@ fn shuffle(rows: &[SortTableRow]) -> Vec<SortTableRow> {
     let mut rng = thread_rng();
 
     let mut rows = rows.to_owned();
-
     let mut columns: Vec<Vec<String>> = vec![vec![]; rows[0].values.len()];
 
     for row in &rows {
@@ -57,75 +54,38 @@ pub fn sort_table_comp(props: &SortTableComponentProps) -> Html {
     let handle_drag_start = {
         let dragged_cell = dragged_cell.clone();
         Callback::from(move |(row_index, col_index): (usize, usize)| {
+            #[cfg(feature = "csr")]
             dragged_cell.set(Some((row_index, col_index)));
         })
     };
 
-    let handle_drag_over = Callback::from(|event: DragEvent| {
-        event.prevent_default();
+    let handle_drag_over = Callback::from(move |e: DragEvent| {
+        #[cfg(feature = "csr")]
+        e.prevent_default();
     });
 
     let handle_touch_start = {
         let dragged_cell = dragged_cell.clone();
-        Callback::from(move |event: TouchEvent| {
-            event.prevent_default();
-            let target = event.target().unwrap();
-            let element = target.dyn_into::<Element>().unwrap();
-            let row_index = element
-                .get_attribute("data-row-index")
-                .unwrap()
-                .parse::<usize>()
-                .unwrap();
-            let col_index = element
-                .get_attribute("data-col-index")
-                .unwrap()
-                .parse::<usize>()
-                .unwrap();
-            dragged_cell.set(Some((row_index, col_index)));
-        })
-    };
+        Callback::from(move |e: TouchEvent| {
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
 
-    let handle_touch_move = {
-        let rows = rows.clone();
-        let dragged_cell = dragged_cell.clone();
-        Callback::from(move |event: TouchEvent| {
-            event.prevent_default();
-            if let Some(touch) = event.touches().get(0) {
-                let target = touch.target().unwrap();
-                let element = target.dyn_into::<Element>().unwrap();
-                let target_row_index = element
-                    .get_attribute("data-row-index")
-                    .unwrap()
-                    .parse::<usize>()
-                    .unwrap();
-                let target_col_index = element
-                    .get_attribute("data-col-index")
-                    .unwrap()
-                    .parse::<usize>()
-                    .unwrap();
-                if let Some((source_row_index, source_col_index)) = *dragged_cell {
-                    let mut updated_rows = (*rows).clone();
-
-                    if source_row_index != target_row_index || source_col_index != target_col_index
-                    {
-                        if source_col_index < updated_rows[source_row_index].values.len()
-                            && target_col_index < updated_rows[target_row_index].values.len()
-                        {
-                            let src_value = updated_rows[source_row_index]
-                                .values
-                                .remove(source_col_index);
-                            let tgt_value = updated_rows[target_row_index]
-                                .values
-                                .remove(target_col_index);
-
-                            updated_rows[source_row_index]
-                                .values
-                                .insert(source_col_index, tgt_value);
-                            updated_rows[target_row_index]
-                                .values
-                                .insert(target_col_index, src_value);
-
-                            rows.set(updated_rows);
+                e.prevent_default();
+                if let Some(target) = e.target() {
+                    if let Ok(element) = target.dyn_into::<Element>() {
+                        if let (Ok(row_index), Ok(col_index)) = (
+                            element
+                                .get_attribute("data-row-index")
+                                .unwrap_or_default()
+                                .parse::<usize>(),
+                            element
+                                .get_attribute("data-col-index")
+                                .unwrap_or_default()
+                                .parse::<usize>(),
+                        ) {
+                            dragged_cell.set(Some((row_index, col_index)));
                         }
                     }
                 }
@@ -133,63 +93,115 @@ pub fn sort_table_comp(props: &SortTableComponentProps) -> Html {
         })
     };
 
-    // Inside handle_cell_click
-    let handle_cell_click = {
+    let handle_touch_move = {
         let rows = rows.clone();
-        let selected_cell = selected_cell.clone();
-        Callback::from(move |(row_index, col_index): (usize, usize)| {
-            if let Some((selected_row_index, selected_col_index)) = *selected_cell {
-                if selected_row_index != row_index || selected_col_index != col_index {
-                    let mut updated_rows = (*rows).clone();
+        let dragged_cell = dragged_cell.clone();
+        Callback::from(move |e: TouchEvent| {
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
 
-                    // Safely check bounds before performing swap
-                    if selected_row_index < updated_rows.len()
-                        && row_index < updated_rows.len()
-                        && selected_col_index < updated_rows[selected_row_index].values.len()
-                        && col_index < updated_rows[row_index].values.len()
-                    {
-                        // Swap values directly instead of remove/insert
-                        let temp =
-                            updated_rows[selected_row_index].values[selected_col_index].clone();
-                        updated_rows[selected_row_index].values[selected_col_index] =
-                            updated_rows[row_index].values[col_index].clone();
-                        updated_rows[row_index].values[col_index] = temp;
-
-                        rows.set(updated_rows);
+                e.prevent_default();
+                if let Some(touch) = e.touches().get(0) {
+                    if let Some(target) = touch.target() {
+                        if let Ok(element) = target.dyn_into::<Element>() {
+                            if let (Ok(target_row_index), Ok(target_col_index)) = (
+                                element
+                                    .get_attribute("data-row-index")
+                                    .unwrap_or_default()
+                                    .parse::<usize>(),
+                                element
+                                    .get_attribute("data-col-index")
+                                    .unwrap_or_default()
+                                    .parse::<usize>(),
+                            ) {
+                                if let Some((source_row_index, source_col_index)) = *dragged_cell {
+                                    let mut updated_rows = (*rows).clone();
+                                    if source_row_index != target_row_index
+                                        || source_col_index != target_col_index
+                                    {
+                                        if source_col_index
+                                            < updated_rows[source_row_index].values.len()
+                                            && target_col_index
+                                                < updated_rows[target_row_index].values.len()
+                                        {
+                                            let src_value = updated_rows[source_row_index].values
+                                                [source_col_index]
+                                                .clone();
+                                            updated_rows[source_row_index].values
+                                                [source_col_index] = updated_rows[target_row_index]
+                                                .values[target_col_index]
+                                                .clone();
+                                            updated_rows[target_row_index].values
+                                                [target_col_index] = src_value;
+                                            rows.set(updated_rows);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-                selected_cell.set(None);
-            } else {
-                selected_cell.set(Some((row_index, col_index)));
             }
         })
     };
 
-    // Similarly update handle_drop and handle_touch_move
+    let handle_cell_click = {
+        let rows = rows.clone();
+        let selected_cell = selected_cell.clone();
+        Callback::from(move |(row_index, col_index): (usize, usize)| {
+            #[cfg(feature = "csr")]
+            {
+                if let Some((selected_row_index, selected_col_index)) = *selected_cell {
+                    if selected_row_index != row_index || selected_col_index != col_index {
+                        let mut updated_rows = (*rows).clone();
+                        if selected_row_index < updated_rows.len()
+                            && row_index < updated_rows.len()
+                            && selected_col_index < updated_rows[selected_row_index].values.len()
+                            && col_index < updated_rows[row_index].values.len()
+                        {
+                            let temp =
+                                updated_rows[selected_row_index].values[selected_col_index].clone();
+                            updated_rows[selected_row_index].values[selected_col_index] =
+                                updated_rows[row_index].values[col_index].clone();
+                            updated_rows[row_index].values[col_index] = temp;
+                            rows.set(updated_rows);
+                        }
+                    }
+                    selected_cell.set(None);
+                } else {
+                    selected_cell.set(Some((row_index, col_index)));
+                }
+            }
+        })
+    };
+
     let handle_drop = {
         let rows = rows.clone();
         let dragged_cell = dragged_cell.clone();
         Callback::from(
-            move |(event, target_row_index, target_col_index): (DragEvent, usize, usize)| {
-                event.prevent_default();
-                if let Some((source_row_index, source_col_index)) = *dragged_cell {
-                    let mut updated_rows = (*rows).clone();
-
-                    if source_row_index != target_row_index || source_col_index != target_col_index
-                    {
-                        if source_row_index < updated_rows.len()
-                            && target_row_index < updated_rows.len()
-                            && source_col_index < updated_rows[source_row_index].values.len()
-                            && target_col_index < updated_rows[target_row_index].values.len()
+            move |(e, target_row_index, target_col_index): (DragEvent, usize, usize)| {
+                #[cfg(feature = "csr")]
+                {
+                    e.prevent_default();
+                    if let Some((source_row_index, source_col_index)) = *dragged_cell {
+                        let mut updated_rows = (*rows).clone();
+                        if source_row_index != target_row_index
+                            || source_col_index != target_col_index
                         {
-                            // Swap values directly
-                            let temp =
-                                updated_rows[source_row_index].values[source_col_index].clone();
-                            updated_rows[source_row_index].values[source_col_index] =
-                                updated_rows[target_row_index].values[target_col_index].clone();
-                            updated_rows[target_row_index].values[target_col_index] = temp;
-
-                            rows.set(updated_rows);
+                            if source_row_index < updated_rows.len()
+                                && target_row_index < updated_rows.len()
+                                && source_col_index < updated_rows[source_row_index].values.len()
+                                && target_col_index < updated_rows[target_row_index].values.len()
+                            {
+                                let temp =
+                                    updated_rows[source_row_index].values[source_col_index].clone();
+                                updated_rows[source_row_index].values[source_col_index] =
+                                    updated_rows[target_row_index].values[target_col_index].clone();
+                                updated_rows[target_row_index].values[target_col_index] = temp;
+                                rows.set(updated_rows);
+                            }
                         }
                     }
                 }
@@ -223,34 +235,25 @@ pub fn sort_table_comp(props: &SortTableComponentProps) -> Html {
                 </thead>
                 <tbody class="sort-table__body">
                     { for rows.iter().enumerate().map(|(row_index, row)| {
-                        // Check if any cell in this row is selected
-                        let is_row_selected = match *selected_cell {
-                            Some((selected_row, _)) => selected_row == row_index,
-                            None => false,
-                        };
+                        let is_row_selected = matches!(*selected_cell, Some((selected_row, _)) if selected_row == row_index);
 
                         html! {
                             <tr class={classes!(
                                 "sort-table__body-row",
-                                if is_row_selected { Some("sort-table__body-row--selected") } else { None }
+                                is_row_selected.then_some("sort-table__body-row--selected")
                             )}>
                                 { for row.values.iter().enumerate().map(|(col_index, value)| {
-                                    let is_selected = match *selected_cell {
-                                        Some((selected_row, selected_col)) =>
-                                            selected_row == row_index && selected_col == col_index,
-                                        None => false,
-                                    };
-                                    let is_dragging = match *dragged_cell {
-                                        Some((drag_row, drag_col)) =>
-                                            drag_row == row_index && drag_col == col_index,
-                                        None => false,
-                                    };
+                                    let is_selected = matches!(*selected_cell,
+                                        Some((selected_row, selected_col)) if selected_row == row_index && selected_col == col_index);
+                                    let is_dragging = matches!(*dragged_cell,
+                                        Some((drag_row, drag_col)) if drag_row == row_index && drag_col == col_index);
+
                                     html! {
                                         <td
                                             class={classes!(
                                                 "sort-table__body-cell",
-                                                if is_selected { Some("sort-table__body-cell--selected") } else { None },
-                                                if is_dragging { Some("sort-table__body-cell--dragging") } else { None }
+                                                is_selected.then_some("sort-table__body-cell--selected"),
+                                                is_dragging.then_some("sort-table__body-cell--dragging")
                                             )}
                                             draggable="true"
                                             data-row-index={row_index.to_string()}

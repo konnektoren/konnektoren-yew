@@ -1,5 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
+#[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, GapFill, GapFillAnswer};
 use konnektoren_core::commands::{ChallengeCommand, Command};
@@ -130,6 +131,22 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
         })
     };
 
+    let read_text = {
+        #[cfg(feature = "effects")]
+        {
+            html! {
+                <ReadText
+                    text={current_question.explanation.clone()}
+                    lang={"de-DE".to_string()}
+                />
+            }
+        }
+        #[cfg(not(feature = "effects"))]
+        {
+            html! {}
+        }
+    };
+
     html! {
         <div class="gap-fill">
             <ProgressBar
@@ -181,7 +198,7 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
             }
 
             <ChallengeActionsComponent on_action={handle_action} />
-            <ReadText text={current_question.explanation.clone()} lang="de-DE" />
+            {read_text}
         </div>
     }
 }

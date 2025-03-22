@@ -1,7 +1,6 @@
 use crate::providers::use_profile_repository;
 use crate::repository::PROFILE_STORAGE_KEY;
 use konnektoren_core::prelude::PlayerProfile;
-use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
 #[function_component(ProfileConfigComponent)]
@@ -10,6 +9,7 @@ pub fn profile_config_component() -> Html {
     let profile = use_state(PlayerProfile::default);
     let name = use_state(|| profile.name.clone());
 
+    #[cfg(feature = "csr")]
     {
         let profile = profile.clone();
         let name = name.clone();
@@ -30,8 +30,12 @@ pub fn profile_config_component() -> Html {
     let on_name_change = {
         let name = name.clone();
         Callback::from(move |e: InputEvent| {
-            let input: HtmlInputElement = e.target_unchecked_into();
-            name.set(input.value());
+            #[cfg(feature = "csr")]
+            {
+                use web_sys::HtmlInputElement;
+                let input: HtmlInputElement = e.target_unchecked_into();
+                name.set(input.value());
+            }
         })
     };
 
@@ -40,22 +44,25 @@ pub fn profile_config_component() -> Html {
         let profile = profile.clone();
         let profile_repository = profile_repository.clone();
         Callback::from(move |_| {
-            let mut updated_profile = (*profile).clone();
-            updated_profile.name = (*name).clone();
+            #[cfg(feature = "csr")]
+            {
+                let mut updated_profile = (*profile).clone();
+                updated_profile.name = (*name).clone();
 
-            wasm_bindgen_futures::spawn_local({
-                let profile_repository = profile_repository.clone();
-                let profile = profile.clone();
-                let updated_profile = updated_profile.clone();
-                async move {
-                    if let Ok(_) = profile_repository
-                        .update_profile(PROFILE_STORAGE_KEY, &updated_profile)
-                        .await
-                    {
-                        profile.set(updated_profile);
+                wasm_bindgen_futures::spawn_local({
+                    let profile_repository = profile_repository.clone();
+                    let profile = profile.clone();
+                    let updated_profile = updated_profile.clone();
+                    async move {
+                        if let Ok(_) = profile_repository
+                            .update_profile(PROFILE_STORAGE_KEY, &updated_profile)
+                            .await
+                        {
+                            profile.set(updated_profile);
+                        }
                     }
-                }
-            });
+                });
+            }
         })
     };
 

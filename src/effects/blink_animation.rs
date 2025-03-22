@@ -1,6 +1,4 @@
 use std::time::Duration;
-use wasm_bindgen::JsCast;
-use web_sys::{window, HtmlElement};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -38,24 +36,31 @@ pub fn blink_animation(props: &BlinkAnimationProps) -> Html {
         class_name, color, class_name, class_name, duration
     );
 
-    use_effect_with(target_id.clone(), move |_| {
-        if let Some(document) = window()
-            .unwrap()
-            .document()
-            .unwrap()
-            .get_element_by_id(&target_id)
-        {
-            let element = document.dyn_into::<HtmlElement>().unwrap();
-            element.class_list().add_1(&class_name).unwrap();
+    #[cfg(feature = "csr")]
+    {
+        use gloo::timers::future::TimeoutFuture;
+        use wasm_bindgen::JsCast;
+        use web_sys::{window, HtmlElement};
 
-            let cloned_element = element.clone();
-            wasm_bindgen_futures::spawn_local(async move {
-                gloo::timers::future::TimeoutFuture::new((duration) as u32).await;
-                cloned_element.class_list().remove_1(&class_name).unwrap();
-            });
-        }
-        || ()
-    });
+        use_effect_with(target_id.clone(), move |_| {
+            if let Some(document) = window()
+                .unwrap()
+                .document()
+                .unwrap()
+                .get_element_by_id(&target_id)
+            {
+                let element = document.dyn_into::<HtmlElement>().unwrap();
+                element.class_list().add_1(&class_name).unwrap();
+
+                let cloned_element = element.clone();
+                wasm_bindgen_futures::spawn_local(async move {
+                    TimeoutFuture::new((duration) as u32).await;
+                    cloned_element.class_list().remove_1(&class_name).unwrap();
+                });
+            }
+            || ()
+        });
+    }
 
     html! {
         <style>{style}</style>

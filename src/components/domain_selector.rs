@@ -1,5 +1,4 @@
 use konnektoren_platform::domain::DomainConfig;
-use web_sys::HtmlSelectElement;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -18,15 +17,20 @@ pub fn domain_selector_component<T: DomainConfig + 'static>(
         let on_domain_change = props.on_domain_change.clone();
 
         Callback::from(move |e: Event| {
-            let target = e.target_dyn_into::<HtmlSelectElement>().unwrap();
-            let selected_value = target.value();
-
-            // Find the selected domain and call the callback
-            if let Some(selected_domain) = domains
-                .iter()
-                .find(|domain| domain.code() == selected_value)
+            #[cfg(feature = "csr")]
             {
-                on_domain_change.emit(selected_domain.clone());
+                use web_sys::HtmlSelectElement;
+                if let Some(target) = e.target_dyn_into::<HtmlSelectElement>() {
+                    let selected_value = target.value();
+
+                    // Find the selected domain and call the callback
+                    if let Some(selected_domain) = domains
+                        .iter()
+                        .find(|domain| domain.code() == selected_value)
+                    {
+                        on_domain_change.emit(selected_domain.clone());
+                    }
+                }
             }
         })
     };

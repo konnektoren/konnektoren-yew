@@ -1,5 +1,4 @@
 use crate::model::Settings;
-use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
 #[derive(Properties, Clone, PartialEq)]
@@ -15,14 +14,16 @@ pub fn music_config(props: &MusicConfigProps) -> Html {
     let on_change_music_volume = {
         let settings = props.settings.clone();
         Callback::from(move |e: InputEvent| {
-            let music_volume = {
+            #[cfg(feature = "csr")]
+            {
+                use web_sys::HtmlInputElement;
                 let input: HtmlInputElement = e.target_unchecked_into();
-                input.value().parse().unwrap_or(0.0)
-            };
-            on_change.emit(Settings {
-                music_volume,
-                ..settings.clone()
-            });
+                let music_volume = input.value().parse().unwrap_or(0.0);
+                on_change.emit(Settings {
+                    music_volume,
+                    ..settings.clone()
+                });
+            }
         })
     };
 

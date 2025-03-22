@@ -1,7 +1,5 @@
-use gloo::timers::callback::Timeout;
 use urlencoding::encode;
 use yew::prelude::*;
-use yew_hooks::use_clipboard;
 
 #[derive(Properties, Clone, PartialEq, Default)]
 pub struct SharePageProps {
@@ -11,31 +9,50 @@ pub struct SharePageProps {
 
 #[function_component(SharePageComp)]
 pub fn share_page_comp(props: &SharePageProps) -> Html {
-    let clipboard_handle = use_clipboard();
+    #[cfg(feature = "csr")]
+    let clipboard_handle = yew_hooks::use_clipboard();
     let show_copied_message = use_state(|| false);
 
-    let current_url = web_sys::window()
-        .unwrap()
-        .location()
-        .href()
-        .unwrap_or_default();
+    let current_url = {
+        #[cfg(feature = "csr")]
+        {
+            web_sys::window()
+                .unwrap()
+                .location()
+                .href()
+                .unwrap_or_default()
+        }
+        #[cfg(not(feature = "csr"))]
+        {
+            String::new() // Provide a default value for SSR
+        }
+    };
+
     let share_url = match props.url.clone() {
         Some(url) => format!("{}", encode(&url)),
         None => current_url,
     };
 
     let on_share_click = {
+        #[cfg(feature = "csr")]
         let clipboard_handle = clipboard_handle.clone();
-        let data = share_url.clone();
         let show_copied_message = show_copied_message.clone();
+        let share_url = share_url.clone();
         Callback::from(move |_| {
-            clipboard_handle.write_text(data.to_string());
-            show_copied_message.set(true);
-            let show_copied_message = show_copied_message.clone();
-            Timeout::new(3000, move || {
-                show_copied_message.set(false);
-            })
-            .forget();
+            #[cfg(feature = "csr")]
+            {
+                let clipboard_handle = clipboard_handle.clone();
+                let data = share_url.clone();
+                let show_copied_message = show_copied_message.clone();
+
+                clipboard_handle.write_text(data.to_string());
+                show_copied_message.set(true);
+                let show_copied_message = show_copied_message.clone();
+                gloo::timers::callback::Timeout::new(3000, move || {
+                    show_copied_message.set(false);
+                })
+                .forget();
+            }
         })
     };
 

@@ -1,6 +1,3 @@
-use gloo::events::EventListener;
-use wasm_bindgen::JsCast;
-use web_sys::{Element, MouseEvent, TouchEvent};
 use yew::prelude::*;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -32,7 +29,8 @@ pub struct SwipeComponent {
     drag_start: Option<(i32, i32)>,
     current_position: (i32, i32),
     node_ref: NodeRef,
-    _listeners: Vec<EventListener>,
+    #[cfg(feature = "csr")]
+    _listeners: Vec<gloo::events::EventListener>,
 }
 
 pub enum SwipeMsg {
@@ -51,6 +49,7 @@ impl Component for SwipeComponent {
             drag_start: None,
             current_position: (0, 0),
             node_ref: NodeRef::default(),
+            #[cfg(feature = "csr")]
             _listeners: Vec::new(),
         }
     }
@@ -67,12 +66,17 @@ impl Component for SwipeComponent {
         });
 
         let ontouchstart = ctx.link().callback(|e: TouchEvent| {
-            e.prevent_default();
-            if let Some(touch) = e.touches().get(0) {
-                SwipeMsg::DragStart(touch.client_x(), touch.client_y())
-            } else {
-                SwipeMsg::DragEnd
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::TouchEvent;
+                if let Ok(event) = e.dyn_into::<TouchEvent>() {
+                    if let Some(touch) = event.touches().get(0) {
+                        return SwipeMsg::DragStart(touch.client_x(), touch.client_y());
+                    }
+                }
             }
+            SwipeMsg::DragEnd
         });
 
         let on_click_left = ctx
@@ -174,48 +178,58 @@ impl Component for SwipeComponent {
     }
 
     fn rendered(&mut self, ctx: &Context<Self>, first_render: bool) {
-        if first_render {
-            if let Some(element) = self.node_ref.cast::<Element>() {
-                let document = web_sys::window().unwrap().document().unwrap();
+        #[cfg(feature = "csr")]
+        {
+            use gloo::events::EventListener;
+            use wasm_bindgen::JsCast;
+            use web_sys::{Document, Element, MouseEvent, TouchEvent};
 
-                // Mouse events
-                let mousemove = {
-                    let link = ctx.link().clone();
-                    EventListener::new(&document, "mousemove", move |event| {
-                        let event = event.dyn_ref::<MouseEvent>().unwrap();
-                        link.send_message(SwipeMsg::DragMove(event.client_x(), event.client_y()));
-                    })
-                };
+            if first_render {
+                if let Some(element) = self.node_ref.cast::<Element>() {
+                    let document = web_sys::window().unwrap().document().unwrap();
 
-                let mouseup = {
-                    let link = ctx.link().clone();
-                    EventListener::new(&document, "mouseup", move |_| {
-                        link.send_message(SwipeMsg::DragEnd);
-                    })
-                };
-
-                // Touch events
-                let touchmove = {
-                    let link = ctx.link().clone();
-                    EventListener::new(&element, "touchmove", move |event| {
-                        let event = event.dyn_ref::<TouchEvent>().unwrap();
-                        if let Some(touch) = event.touches().get(0) {
+                    // Mouse events
+                    let mousemove = {
+                        let link = ctx.link().clone();
+                        EventListener::new(&document, "mousemove", move |event| {
+                            let event = event.dyn_ref::<MouseEvent>().unwrap();
                             link.send_message(SwipeMsg::DragMove(
-                                touch.client_x(),
-                                touch.client_y(),
+                                event.client_x(),
+                                event.client_y(),
                             ));
-                        }
-                    })
-                };
+                        })
+                    };
 
-                let touchend = {
-                    let link = ctx.link().clone();
-                    EventListener::new(&element, "touchend", move |_| {
-                        link.send_message(SwipeMsg::DragEnd);
-                    })
-                };
+                    let mouseup = {
+                        let link = ctx.link().clone();
+                        EventListener::new(&document, "mouseup", move |_| {
+                            link.send_message(SwipeMsg::DragEnd);
+                        })
+                    };
 
-                self._listeners = vec![mousemove, mouseup, touchmove, touchend];
+                    // Touch events
+                    let touchmove = {
+                        let link = ctx.link().clone();
+                        EventListener::new(&element, "touchmove", move |event| {
+                            let event = event.dyn_ref::<TouchEvent>().unwrap();
+                            if let Some(touch) = event.touches().get(0) {
+                                link.send_message(SwipeMsg::DragMove(
+                                    touch.client_x(),
+                                    touch.client_y(),
+                                ));
+                            }
+                        })
+                    };
+
+                    let touchend = {
+                        let link = ctx.link().clone();
+                        EventListener::new(&element, "touchend", move |_| {
+                            link.send_message(SwipeMsg::DragEnd);
+                        })
+                    };
+
+                    self._listeners = vec![mousemove, mouseup, touchmove, touchend];
+                }
             }
         }
     }

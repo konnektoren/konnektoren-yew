@@ -129,16 +129,19 @@ fn create_option_selection_handler(
     selections: UseStateHandle<HashMap<(usize, usize), usize>>,
 ) -> Callback<(usize, usize)> {
     Callback::from(move |(choice_index, option_index): (usize, usize)| {
-        update_selections(&selections, *item_index, choice_index, option_index);
-        update_challenge_result(&challenge_result, &selections, *item_index, &challenge);
-        handle_event(
-            &on_event,
-            &challenge,
-            *item_index,
-            choice_index,
-            option_index,
-        );
-        check_for_task_completion(&item_index, &challenge, &challenge_result, &on_command);
+        #[cfg(feature = "csr")]
+        {
+            update_selections(&selections, *item_index, choice_index, option_index);
+            update_challenge_result(&challenge_result, &selections, *item_index, &challenge);
+            handle_event(
+                &on_event,
+                &challenge,
+                *item_index,
+                choice_index,
+                option_index,
+            );
+            check_for_task_completion(&item_index, &challenge, &challenge_result, &on_command);
+        }
     })
 }
 
@@ -269,22 +272,39 @@ fn render_select(
 ) -> Html {
     let selected_value = (**selections).get(&(item_index, choice_index)).cloned();
 
+    #[cfg(feature = "csr")]
+    let onchange = {
+        let handle_option_selection = handle_option_selection.clone();
+        Callback::from(move |e: yew::Event| {
+            use wasm_bindgen::JsCast;
+            if let Some(target) = e.target_dyn_into::<web_sys::HtmlSelectElement>() {
+                handle_option_selection.emit((choice_index, target.selected_index() as usize - 1));
+            }
+        })
+    };
+
+    #[cfg(not(feature = "csr"))]
+    let onchange = Callback::from(|_: yew::Event| ());
+
     html! {
         <select
             class="contextual-choice__select"
             value={selected_value.map(|v| v.to_string()).unwrap_or_default()}
-            onchange={
-                let handle_option_selection = handle_option_selection.clone();
-                Callback::from(move |e: web_sys::Event| {
-                    let target: web_sys::HtmlSelectElement = e.target_unchecked_into();
-                    handle_option_selection.emit((choice_index, target.selected_index() as usize - 1));
-                })
-            }
+            onchange={onchange}
         >
-            <option value="" disabled=true selected={selected_value.is_none()}>{"Select an option"}</option>
+            <option value="" disabled=true selected={selected_value.is_none()}>
+                {"Select an option"}
+            </option>
             {
                 current_item.choices[choice_index].options.iter().enumerate().map(|(j, option)| {
-                    html! { <option value={(j + 1).to_string()} selected={selected_value == Some(j + 1)}>{ option }</option> }
+                    html! {
+                        <option
+                            value={(j + 1).to_string()}
+                            selected={selected_value == Some(j + 1)}
+                        >
+                            { option }
+                        </option>
+                    }
                 }).collect::<Html>()
             }
         </select>

@@ -3,7 +3,6 @@ use gloo::timers::callback::Timeout;
 use konnektoren_core::certificates::CertificateData;
 use urlencoding::encode;
 use yew::prelude::*;
-use yew_hooks::{use_clipboard, UseClipboardHandle};
 
 #[derive(Properties, PartialEq, Clone, Debug, Default)]
 pub struct CertificateProps {
@@ -16,7 +15,8 @@ pub struct CertificateProps {
 
 #[function_component(CertificateComponent)]
 pub fn certificate(props: &CertificateProps) -> Html {
-    let clipboard_handle: UseClipboardHandle = use_clipboard();
+    #[cfg(feature = "csr")]
+    let clipboard_handle: yew_hooks::UseClipboardHandle = yew_hooks::use_clipboard();
     let show_copied_message = use_state(|| false);
 
     let share_url = format!(
@@ -27,17 +27,24 @@ pub fn certificate(props: &CertificateProps) -> Html {
     );
 
     let on_share_click = {
+        #[cfg(feature = "csr")]
         let clipboard_handle = clipboard_handle.clone();
         let data = share_url.clone();
         let show_copied_message = show_copied_message.clone();
         Callback::from(move |_| {
-            clipboard_handle.write_text(data.to_string());
-            show_copied_message.set(true);
-            let show_copied_message = show_copied_message.clone();
-            Timeout::new(3000, move || {
-                show_copied_message.set(false);
-            })
-            .forget();
+            #[cfg(feature = "csr")]
+            {
+                let clipboard_handle = clipboard_handle.clone();
+                let data = data.clone();
+                let show_copied_message = show_copied_message.clone();
+                clipboard_handle.write_text(data.to_string());
+                show_copied_message.set(true);
+                let show_copied_message = show_copied_message.clone();
+                Timeout::new(3000, move || {
+                    show_copied_message.set(false);
+                })
+                .forget();
+            }
         })
     };
 

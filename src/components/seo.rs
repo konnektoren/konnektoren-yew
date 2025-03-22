@@ -1,6 +1,3 @@
-use gloo::utils::document;
-use wasm_bindgen::JsCast;
-use web_sys::{Element, HtmlMetaElement};
 use yew::prelude::*;
 
 #[derive(Clone, PartialEq, Default)]
@@ -121,174 +118,181 @@ pub struct SeoProps {
 
 #[function_component(SeoComponent)]
 pub fn seo(props: &SeoProps) -> Html {
-    use_effect_with(props.config.clone(), move |config| {
-        let document = document();
-        let head = document.head().expect("No <head> element found");
+    #[cfg(feature = "csr")]
+    {
+        use gloo::utils::document;
+        use wasm_bindgen::JsCast;
+        use web_sys::{Element, HtmlMetaElement};
 
-        // Helper function to update meta tag
-        let update_meta_tag = {
-            let document = document.clone();
-            let head = head.clone();
-            move |name: &str, content: &str| {
-                if let Some(element) = document
-                    .query_selector(&format!("meta[name='{}']", name))
-                    .unwrap()
-                {
-                    let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
-                    meta.set_content(content);
-                } else {
-                    let meta = document
-                        .create_element("meta")
+        use_effect_with(props.config.clone(), move |config| {
+            let document = document();
+            let head = document.head().expect("No <head> element found");
+
+            // Helper function to update meta tag
+            let update_meta_tag = {
+                let document = document.clone();
+                let head = head.clone();
+                move |name: &str, content: &str| {
+                    if let Some(element) = document
+                        .query_selector(&format!("meta[name='{}']", name))
                         .unwrap()
-                        .dyn_into::<HtmlMetaElement>()
-                        .unwrap();
-                    meta.set_attribute("name", name).unwrap();
-                    meta.set_content(content);
-                    head.append_child(&meta).unwrap();
+                    {
+                        let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
+                        meta.set_content(content);
+                    } else {
+                        let meta = document
+                            .create_element("meta")
+                            .unwrap()
+                            .dyn_into::<HtmlMetaElement>()
+                            .unwrap();
+                        meta.set_attribute("name", name).unwrap();
+                        meta.set_content(content);
+                        head.append_child(&meta).unwrap();
+                    }
                 }
-            }
-        };
+            };
 
-        let update_og_meta_tag = {
-            let document = document.clone();
-            let head = head.clone();
-            move |property: &str, content: &str| {
-                if let Some(element) = document
-                    .query_selector(&format!("meta[property='og:{}']", property))
-                    .unwrap()
-                {
-                    let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
-                    meta.set_content(content);
-                } else {
-                    let meta = document
-                        .create_element("meta")
+            let update_og_meta_tag = {
+                let document = document.clone();
+                let head = head.clone();
+                move |property: &str, content: &str| {
+                    if let Some(element) = document
+                        .query_selector(&format!("meta[property='og:{}']", property))
                         .unwrap()
-                        .dyn_into::<HtmlMetaElement>()
-                        .unwrap();
-                    meta.set_attribute("property", &format!("og:{}", property))
-                        .unwrap();
-                    meta.set_content(content);
-                    head.append_child(&meta).unwrap();
+                    {
+                        let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
+                        meta.set_content(content);
+                    } else {
+                        let meta = document
+                            .create_element("meta")
+                            .unwrap()
+                            .dyn_into::<HtmlMetaElement>()
+                            .unwrap();
+                        meta.set_attribute("property", &format!("og:{}", property))
+                            .unwrap();
+                        meta.set_content(content);
+                        head.append_child(&meta).unwrap();
+                    }
                 }
-            }
-        };
+            };
 
-        let update_twitter_meta_tag = {
-            let document = document.clone();
-            let head = head.clone();
-            move |name: &str, content: &str| {
-                if let Some(element) = document
-                    .query_selector(&format!("meta[name='twitter:{}']", name))
-                    .unwrap()
-                {
-                    let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
-                    meta.set_content(content);
-                } else {
-                    let meta = document
-                        .create_element("meta")
+            let update_twitter_meta_tag = {
+                let document = document.clone();
+                let head = head.clone();
+                move |name: &str, content: &str| {
+                    if let Some(element) = document
+                        .query_selector(&format!("meta[name='twitter:{}']", name))
                         .unwrap()
-                        .dyn_into::<HtmlMetaElement>()
-                        .unwrap();
-                    meta.set_attribute("name", &format!("twitter:{}", name))
-                        .unwrap();
-                    meta.set_content(content);
-                    head.append_child(&meta).unwrap();
+                    {
+                        let meta = element.dyn_into::<HtmlMetaElement>().unwrap();
+                        meta.set_content(content);
+                    } else {
+                        let meta = document
+                            .create_element("meta")
+                            .unwrap()
+                            .dyn_into::<HtmlMetaElement>()
+                            .unwrap();
+                        meta.set_attribute("name", &format!("twitter:{}", name))
+                            .unwrap();
+                        meta.set_content(content);
+                        head.append_child(&meta).unwrap();
+                    }
                 }
-            }
-        };
+            };
 
-        let update_structured_data = {
-            let document = document.clone();
-            let head = head.clone();
-            move |content: &str| {
-                if let Some(element) = document
-                    .query_selector("script[type='application/ld+json']")
-                    .unwrap()
+            let update_structured_data = {
+                let document = document.clone();
+                let head = head.clone();
+                move |content: &str| {
+                    if let Some(element) = document
+                        .query_selector("script[type='application/ld+json']")
+                        .unwrap()
+                    {
+                        element.set_text_content(Some(content));
+                    } else {
+                        let script = document.create_element("script").unwrap();
+                        script.set_attribute("type", "application/ld+json").unwrap();
+                        script.set_text_content(Some(content));
+                        head.append_child(&script).unwrap();
+                    }
+                }
+            };
+
+            // Update title if provided
+            if let Some(title) = &config.title {
+                document.set_title(title);
+            }
+
+            // Update basic meta tags if provided
+            if let Some(description) = &config.description {
+                update_meta_tag("description", description);
+            }
+            if let Some(keywords) = &config.keywords {
+                update_meta_tag("keywords", keywords);
+            }
+            if let Some(author) = &config.author {
+                update_meta_tag("author", author);
+            }
+            if let Some(robots) = &config.robots {
+                update_meta_tag("robots", robots);
+            }
+
+            // Update Open Graph meta tags if provided
+            if let Some(og_title) = &config.og_title {
+                update_og_meta_tag("title", og_title);
+            }
+            if let Some(og_description) = &config.og_description {
+                update_og_meta_tag("description", og_description);
+            }
+            if let Some(og_image) = &config.og_image {
+                update_og_meta_tag("image", og_image);
+            }
+
+            // Update Twitter meta tags if provided
+            if let Some(twitter_card) = &config.twitter_card {
+                update_twitter_meta_tag("card", twitter_card);
+            }
+            if let Some(twitter_title) = &config.twitter_title {
+                update_twitter_meta_tag("title", twitter_title);
+            }
+            if let Some(twitter_description) = &config.twitter_description {
+                update_twitter_meta_tag("description", twitter_description);
+            }
+            if let Some(twitter_image) = &config.twitter_image {
+                update_twitter_meta_tag("image", twitter_image);
+            }
+
+            // Update canonical URL if provided
+            if let Some(canonical_url) = &config.canonical_url {
+                if let Some(existing_canonical) =
+                    document.query_selector("link[rel='canonical']").unwrap()
                 {
-                    element.set_text_content(Some(content));
+                    existing_canonical
+                        .set_attribute("href", canonical_url)
+                        .unwrap();
                 } else {
-                    let script = document.create_element("script").unwrap();
-                    script.set_attribute("type", "application/ld+json").unwrap();
-                    script.set_text_content(Some(content));
-                    head.append_child(&script).unwrap();
+                    let link: Element = document.create_element("link").unwrap();
+                    link.set_attribute("rel", "canonical").unwrap();
+                    link.set_attribute("href", canonical_url).unwrap();
+                    head.append_child(&link).unwrap();
                 }
             }
-        };
 
-        // Update title if provided
-        if let Some(title) = &config.title {
-            document.set_title(title);
-        }
-
-        // Update basic meta tags if provided
-        if let Some(description) = &config.description {
-            update_meta_tag("description", description);
-        }
-        if let Some(keywords) = &config.keywords {
-            update_meta_tag("keywords", keywords);
-        }
-        if let Some(author) = &config.author {
-            update_meta_tag("author", author);
-        }
-        if let Some(robots) = &config.robots {
-            update_meta_tag("robots", robots);
-        }
-
-        // Update Open Graph meta tags if provided
-        if let Some(og_title) = &config.og_title {
-            update_og_meta_tag("title", og_title);
-        }
-        if let Some(og_description) = &config.og_description {
-            update_og_meta_tag("description", og_description);
-        }
-        if let Some(og_image) = &config.og_image {
-            update_og_meta_tag("image", og_image);
-        }
-
-        // Update Twitter meta tags if provided
-        if let Some(twitter_card) = &config.twitter_card {
-            update_twitter_meta_tag("card", twitter_card);
-        }
-        if let Some(twitter_title) = &config.twitter_title {
-            update_twitter_meta_tag("title", twitter_title);
-        }
-        if let Some(twitter_description) = &config.twitter_description {
-            update_twitter_meta_tag("description", twitter_description);
-        }
-        if let Some(twitter_image) = &config.twitter_image {
-            update_twitter_meta_tag("image", twitter_image);
-        }
-
-        // Update canonical URL if provided
-        if let Some(canonical_url) = &config.canonical_url {
-            if let Some(existing_canonical) =
-                document.query_selector("link[rel='canonical']").unwrap()
-            {
-                existing_canonical
-                    .set_attribute("href", canonical_url)
-                    .unwrap();
-            } else {
-                let link: Element = document.create_element("link").unwrap();
-                link.set_attribute("rel", "canonical").unwrap();
-                link.set_attribute("href", canonical_url).unwrap();
-                head.append_child(&link).unwrap();
+            // Update language if provided
+            if let Some(language) = &config.language {
+                if let Some(html_element) = document.document_element() {
+                    html_element.set_attribute("lang", language).unwrap();
+                }
             }
-        }
 
-        // Update language if provided
-        if let Some(language) = &config.language {
-            if let Some(html_element) = document.document_element() {
-                html_element.set_attribute("lang", language).unwrap();
+            // Update structured data if provided
+            if let Some(structured_data) = &config.structured_data {
+                update_structured_data(structured_data);
             }
-        }
 
-        // Update structured data if provided
-        if let Some(structured_data) = &config.structured_data {
-            update_structured_data(structured_data);
-        }
-
-        || ()
-    });
+            || ()
+        });
+    }
 
     html! {}
 }

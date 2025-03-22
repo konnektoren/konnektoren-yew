@@ -1,6 +1,5 @@
 use crate::providers::use_settings;
 use uuid::Uuid;
-use web_sys::HtmlAudioElement;
 use yew::prelude::*;
 
 const MUSIC_URL: &str = "https://konnektoren.help/assets/fanfare-3-rpg.ogg";
@@ -31,7 +30,10 @@ pub fn music_component(props: &MusicComponentProps) -> Html {
 
     let audio_ref = use_node_ref();
 
+    #[cfg(feature = "csr")]
     {
+        use web_sys::HtmlAudioElement;
+
         let audio_ref = audio_ref.clone();
         let music_url = props
             .url
