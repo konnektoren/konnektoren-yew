@@ -1,4 +1,5 @@
 pub mod certificates_provider;
+pub mod client_side_router;
 pub mod design_provider;
 pub mod game_controller_provider;
 pub mod inbox_provider;
@@ -14,6 +15,7 @@ pub mod theme_provider;
 
 pub use crate::i18n::{use_i18n, use_selected_language, I18nProvider, I18nProviderProps};
 pub use certificates_provider::{CertificatesContext, CertificatesProvider};
+pub use client_side_router::ClientSideRouter;
 pub use design_provider::{use_design, DesignContext, DesignProvider};
 pub use game_controller_provider::{
     use_command_bus, use_event_bus, use_game_controller, use_game_state, GameControllerContext,

@@ -1,51 +1,27 @@
 use crate::components::analytics::{AverageTimeTakenComponent, SuccessRateComponent};
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
-    AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent,
-    ContextualChoiceComponent, DomainSelectorComponent, FeedbackPopup, LeaderboardComp, Logo,
-    MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme,
-    SettingsComponent, SharePageComp, SocialLinks, SoundConfig, StatusMessage, SwipeComponent,
-    TranslateComponent, VideoComponent,
 };
 use crate::prelude::create_i18n_config;
+use crate::prelude::GameControllerProvider;
+use crate::prelude::SelectDesign;
+use crate::prelude::SelectTheme;
+use crate::providers::ClientSideRouter;
 
 #[cfg(feature = "yew-preview")]
 use crate::components::navigation::menu::preview::ExampleMenu;
 
-#[cfg(feature = "marketplace")]
-use crate::components::marketplace::{
-    CartBadgeComponent, ProductCatalogComponent, ProductComponent, ShoppingCartComponent,
-    WalletComponent,
-};
-
-#[cfg(feature = "sbom")]
-use crate::components::app_dependencies::AppDependenciesComponent;
-
-#[cfg(feature = "tour")]
-use crate::components::tour::{TourButton, TourConfig};
-
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
-use crate::components::challenge::{
-    GapFillComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent, OrderingComponent,
-    OrderingResultComponent, PlaceholderComponent, SortTableComponent,
-};
-#[cfg(feature = "certificates")]
-use crate::components::{
-    AchievementComponent, AchievementsComponent, CertificateComponent, CertificateImageComponent,
-};
 #[cfg(feature = "effects")]
 use crate::effects::{BlinkAnimation, ReadText};
 use crate::i18n::I18nProvider;
 use crate::model::DefaultSessionInitializer;
-use crate::prelude::{
-    BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,
-    ChallengeReviewComponent, DesignProvider, GameControllerProvider, InformativeComponent,
-    InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
-    QuestionComponent, RepositoryProvider, SelectLanguage, SelectLevelComp, ThemeProvider,
-};
+use crate::prelude::DesignProvider;
+use crate::prelude::RepositoryProvider;
+use crate::prelude::ThemeProvider;
+use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
@@ -133,21 +109,11 @@ pub fn Example() -> Html {
 #[function_component]
 pub fn App() -> Html {
     #[cfg(feature = "yew-preview")]
-    let groups: ComponentList = vec![
-        create_component_group!(
-            "Analytics",
-            SuccessRateComponent::preview(),
-            AverageTimeTakenComponent::preview(),
-        ),
-        create_component_group!(
-            "Certificates",
-            AchievementComponent::preview(),
-            AchievementsComponent::preview(),
-            CertificateComponent::preview(),
-            CertificateImageComponent::preview()
-        ),
-        create_component_group!("Navigation", ExampleMenu::preview(),),
-    ];
+    let groups: ComponentList = vec![create_component_group!(
+        "Analytics",
+        SuccessRateComponent::preview(),
+        AverageTimeTakenComponent::preview(),
+    )];
 
     let i18n_config = create_i18n_config();
 
@@ -163,7 +129,7 @@ pub fn App() -> Html {
 
     #[cfg(feature = "yew-preview")]
     html! {
-        <BrowserRouter>
+        <ClientSideRouter>
         <RepositoryProvider config={repository_config}>
         <ThemeProvider>
         <DesignProvider>
@@ -199,7 +165,7 @@ pub fn App() -> Html {
         </DesignProvider>
         </ThemeProvider>
         </RepositoryProvider>
-        </BrowserRouter>
+        </ClientSideRouter>
     }
     #[cfg(not(feature = "yew-preview"))]
     html! {
