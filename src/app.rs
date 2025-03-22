@@ -37,15 +37,14 @@ use crate::components::{
     AchievementComponent, AchievementsComponent, CertificateComponent, CertificateImageComponent,
 };
 #[cfg(feature = "effects")]
-use crate::effects::BlinkAnimation;
+use crate::effects::{BlinkAnimation, ReadText};
 use crate::i18n::I18nProvider;
 use crate::model::DefaultSessionInitializer;
 use crate::prelude::{
     BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,
     ChallengeReviewComponent, DesignProvider, GameControllerProvider, InformativeComponent,
     InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
-    QuestionComponent, ReadText, RepositoryProvider, SelectLanguage, SelectLevelComp,
-    ThemeProvider,
+    QuestionComponent, RepositoryProvider, SelectLanguage, SelectLevelComp, ThemeProvider,
 };
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
@@ -137,6 +136,7 @@ pub fn App() -> Html {
     let groups: ComponentList = vec![
         create_component_group!(
             "Challenge",
+            #[cfg(feature = "effects")]
             BlinkAnimation::preview(),
             MultipleChoiceComponent::preview(),
             MultipleChoiceCircleComponent::preview(),
@@ -178,6 +178,7 @@ pub fn App() -> Html {
             RatingStarsComponent::preview(),
             InformativeComponent::preview(),
             InformativeMarkdownComponent::preview(),
+            #[cfg(feature = "effects")]
             ReadText::preview(),
             TranslateComponent::preview(),
             SwipeComponent::preview(),

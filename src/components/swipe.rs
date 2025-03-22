@@ -66,12 +66,17 @@ impl Component for SwipeComponent {
         });
 
         let ontouchstart = ctx.link().callback(|e: TouchEvent| {
-            e.prevent_default();
-            if let Some(touch) = e.touches().get(0) {
-                SwipeMsg::DragStart(touch.client_x(), touch.client_y())
-            } else {
-                SwipeMsg::DragEnd
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::TouchEvent;
+                if let Ok(event) = e.dyn_into::<TouchEvent>() {
+                    if let Some(touch) = event.touches().get(0) {
+                        return SwipeMsg::DragStart(touch.client_x(), touch.client_y());
+                    }
+                }
             }
+            SwipeMsg::DragEnd
         });
 
         let on_click_left = ctx

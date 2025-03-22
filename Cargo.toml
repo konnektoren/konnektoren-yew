@@ -43,7 +43,7 @@ gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
 sbom = ["cargo-cyclonedx"]
-csr = ["yew/csr", "gloo", "web-sys", "js-sys", "wasm-bindgen"]
+csr = ["yew/csr", "gloo", "web-sys", "js-sys", "wasm-bindgen", "yew-hooks"]
 ssr = ["yew/ssr"]
 server = ["ssr", "axum", "tokio/full"]
 
@@ -91,7 +91,7 @@ web-sys = { version = "0.3.*", optional = true, features = [
 ] }
 yew = { version = "0.21" }
 yew-router = "0.18"
-yew-hooks = { version = "0.3.2" }
+yew-hooks = { version = "0.3.2", optional = true }
 yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true }
 yew-chat = { git = "https://github.com/chriamue/yew-chat", features = [
     "yew",

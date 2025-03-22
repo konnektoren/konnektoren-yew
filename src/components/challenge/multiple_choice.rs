@@ -1,6 +1,7 @@
 use super::{ChallengeActions, ChallengeActionsComponent, OptionsComponent, QuestionComponent};
 use crate::components::challenge::MultipleChoiceResultComponent;
 use crate::components::ProgressBar;
+#[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::{
     ChallengeInput, ChallengeResult, MultipleChoice, MultipleChoiceOption,
@@ -135,6 +136,22 @@ pub fn multiple_choice_component(props: &MultipleChoiceComponentProps) -> Html {
         props.on_event.clone(),
     );
 
+    let read_text = {
+        #[cfg(feature = "effects")]
+        {
+            html! {
+                <ReadText
+                    text={props.challenge.questions[*task_index].help.clone()}
+                    lang={props.challenge.lang.clone()}
+                />
+            }
+        }
+        #[cfg(not(feature = "effects"))]
+        {
+            html! {}
+        }
+    };
+
     html! {
         <div class="multiple-choice">
             <ProgressBar
@@ -155,7 +172,7 @@ pub fn multiple_choice_component(props: &MultipleChoiceComponentProps) -> Html {
                 challenge={props.challenge.clone()}
                 challenge_result={(*challenge_result).clone()}
             />
-            <ReadText text={props.challenge.questions[*task_index].help.clone()} lang={props.challenge.lang.clone()} />
+            {read_text}
         </div>
     }
 }

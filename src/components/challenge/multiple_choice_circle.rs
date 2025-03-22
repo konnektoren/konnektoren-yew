@@ -3,6 +3,7 @@ use crate::components::challenge::multiple_choice::{
     create_handle_option_selection, MultipleChoiceComponentProps,
 };
 use crate::components::ProgressBar;
+#[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::ChallengeResult;
 use yew::prelude::*;
@@ -26,6 +27,22 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
         props.on_event.clone(),
     );
 
+    let read_text = {
+        #[cfg(feature = "effects")]
+        {
+            html! {
+                <ReadText
+                    text={props.challenge.questions[*task_index].question.clone()}
+                    lang={props.challenge.lang.clone()}
+                />
+            }
+        }
+        #[cfg(not(feature = "effects"))]
+        {
+            html! {}
+        }
+    };
+
     html! {
         <div class="multiple-choice-circle">
             <ProgressBar
@@ -43,7 +60,7 @@ pub fn multiple_choice_circle_component(props: &MultipleChoiceComponentProps) ->
                     help={*show_help}
                 />
             </div>
-            <ReadText text={props.challenge.questions[*task_index].question.clone()} lang={props.challenge.lang.clone()} />
+            {read_text}
         </div>
     }
 }

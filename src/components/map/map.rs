@@ -91,9 +91,17 @@ pub fn map_component(props: &MapComponentProps) -> Html {
         let is_dragging = is_dragging.clone();
         let last_touch_pos = last_touch_pos.clone();
         Callback::from(move |e: TouchEvent| {
-            let touch = e.touches().get(0).unwrap();
-            is_dragging.set(true);
-            last_touch_pos.set((touch.client_x() as f64, touch.client_y() as f64));
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::TouchEvent;
+                if let Ok(event) = e.dyn_into::<TouchEvent>() {
+                    if let Some(touch) = event.touches().get(0) {
+                        is_dragging.set(true);
+                        last_touch_pos.set((touch.client_x() as f64, touch.client_y() as f64));
+                    }
+                }
+            }
         })
     };
 
@@ -228,38 +236,51 @@ fn on_touch_move_callback(
     let view_box = view_box.clone();
 
     Callback::from(move |e: TouchEvent| {
-        if *is_dragging {
-            let touch = e.touches().get(0).unwrap();
-            let (dx, dy) =
-                calculate_mouse_delta(touch.client_x(), touch.client_y(), &last_touch_pos);
-            let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
+        #[cfg(feature = "csr")]
+        {
+            use wasm_bindgen::JsCast;
+            use web_sys::TouchEvent;
 
-            if dx.is_nan() || dy.is_nan() {
-                log::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
-                return;
-            }
+            if *is_dragging {
+                if let Ok(event) = e.dyn_into::<TouchEvent>() {
+                    if let Some(touch) = event.touches().get(0) {
+                        let (dx, dy) = calculate_mouse_delta(
+                            touch.client_x(),
+                            touch.client_y(),
+                            &last_touch_pos,
+                        );
+                        let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
 
-            last_touch_pos.set((touch.client_x() as f64, touch.client_y() as f64));
+                        if dx.is_nan() || dy.is_nan() {
+                            log::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
+                            return;
+                        }
 
-            let (view_box_width, view_box_height) = calculate_view_box_size(bounds, *zoom_level);
-            if view_box_width > 0 && view_box_height > 0 {
-                let (new_view_box_x, new_view_box_y) = calculate_new_view_box_position(
-                    &view_box_position,
-                    dx,
-                    dy,
-                    view_box_width,
-                    view_box_height,
-                    bounds,
-                );
+                        last_touch_pos.set((touch.client_x() as f64, touch.client_y() as f64));
 
-                update_view_box(
-                    &view_box_position,
-                    &view_box,
-                    new_view_box_x,
-                    new_view_box_y,
-                    view_box_width,
-                    view_box_height,
-                );
+                        let (view_box_width, view_box_height) =
+                            calculate_view_box_size(bounds, *zoom_level);
+                        if view_box_width > 0 && view_box_height > 0 {
+                            let (new_view_box_x, new_view_box_y) = calculate_new_view_box_position(
+                                &view_box_position,
+                                dx,
+                                dy,
+                                view_box_width,
+                                view_box_height,
+                                bounds,
+                            );
+
+                            update_view_box(
+                                &view_box_position,
+                                &view_box,
+                                new_view_box_x,
+                                new_view_box_y,
+                                view_box_width,
+                                view_box_height,
+                            );
+                        }
+                    }
+                }
             }
         }
     })
