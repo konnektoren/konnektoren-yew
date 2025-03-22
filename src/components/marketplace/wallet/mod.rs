@@ -5,6 +5,7 @@ pub mod provider;
 #[cfg(feature = "solana")]
 pub mod solana;
 pub mod token_selector;
+#[cfg(feature = "csr")]
 pub mod ton;
 pub mod wallet;
 pub use provider::WalletProvider;
@@ -12,19 +13,26 @@ pub use wallet::{WalletComponent, WalletComponentProps};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Network {
+    #[cfg(feature = "csr")]
     Ton,
+    #[cfg(feature = "csr")]
     TonTestnet,
+    #[cfg(feature = "solana")]
     Solana,
+    #[cfg(feature = "solana")]
     SolanaDevnet,
-    // Add other networks as needed
 }
 
 impl Display for Network {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            #[cfg(feature = "csr")]
             Network::Ton => write!(f, "TON"),
+            #[cfg(feature = "csr")]
             Network::TonTestnet => write!(f, "TON Testnet"),
+            #[cfg(feature = "solana")]
             Network::Solana => write!(f, "Solana"),
+            #[cfg(feature = "solana")]
             Network::SolanaDevnet => write!(f, "Solana Devnet"),
         }
     }

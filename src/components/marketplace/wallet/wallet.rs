@@ -344,7 +344,9 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                                                 class={classes!(
                                                     "wallet__payment-button",
                                                     match selected.network {
+                                                        #[cfg(feature = "csr")]
                                                         Network::TonTestnet => "ton",
+                                                        #[cfg(feature = "solana")]
                                                         Network::SolanaDevnet => "solana",
                                                         _ => ""
                                                     },
@@ -382,31 +384,41 @@ mod preview {
     use super::*;
     #[cfg(feature = "solana")]
     use crate::components::marketplace::wallet::solana::SolanaWalletProvider;
+    #[cfg(feature = "csr")]
     use crate::components::marketplace::wallet::ton::TonWalletProvider;
     use yew_preview::prelude::*;
 
     fn get_testnet_tokens() -> Vec<Token> {
-        vec![
-            Token {
-                name: "Toncoin".to_string(),
-                symbol: "TON".to_string(),
-                image_url: "https://cryptologos.cc/logos/toncoin-ton-logo.svg".to_string(),
-                contract_address:
-                    "0:5ca1f07c7d67fd26816a731377b6404e857265761676626a4bd6fda652293119".to_string(),
-                decimals: 9,
-                network: Network::TonTestnet,
-                token_type: TokenType::Native,
-            },
-            Token {
-                name: "Pepe TON".to_string(),
-                symbol: "PEPETON".to_string(),
-                image_url: "https://ton-pepe.com/pepe.png".to_string(),
-                contract_address: "EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N".to_string(),
-                decimals: 9,
-                network: Network::TonTestnet,
-                token_type: TokenType::Custom,
-            },
-        ]
+        #[cfg(feature = "csr")]
+        {
+            vec![
+                Token {
+                    name: "Toncoin".to_string(),
+                    symbol: "TON".to_string(),
+                    image_url: "https://cryptologos.cc/logos/toncoin-ton-logo.svg".to_string(),
+                    contract_address:
+                        "0:5ca1f07c7d67fd26816a731377b6404e857265761676626a4bd6fda652293119"
+                            .to_string(),
+                    decimals: 9,
+                    network: Network::TonTestnet,
+                    token_type: TokenType::Native,
+                },
+                Token {
+                    name: "Pepe TON".to_string(),
+                    symbol: "PEPETON".to_string(),
+                    image_url: "https://ton-pepe.com/pepe.png".to_string(),
+                    contract_address: "EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N"
+                        .to_string(),
+                    decimals: 9,
+                    network: Network::TonTestnet,
+                    token_type: TokenType::Custom,
+                },
+            ]
+        }
+        #[cfg(not(feature = "csr"))]
+        {
+            vec![]
+        }
     }
 
     #[cfg(feature = "solana")]
