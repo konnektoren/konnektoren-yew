@@ -1,5 +1,4 @@
 use konnektoren_core::prelude::GamePath;
-use web_sys::HtmlSelectElement;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Default)]
@@ -14,11 +13,14 @@ pub fn select_level(props: &SelectLevelCompProps) -> Html {
     let on_change = {
         let on_select = props.on_select.clone();
         Callback::from(move |e: Event| {
-            let select = e.target_dyn_into::<HtmlSelectElement>();
-            if let Some(select) = select {
-                let value = select.value();
-                let value = value.parse::<usize>().unwrap();
-                on_select.emit(value);
+            #[cfg(feature = "csr")]
+            {
+                use web_sys::HtmlSelectElement;
+                if let Some(select) = e.target_dyn_into::<HtmlSelectElement>() {
+                    let value = select.value();
+                    let value = value.parse::<usize>().unwrap();
+                    on_select.emit(value);
+                }
             }
         })
     };

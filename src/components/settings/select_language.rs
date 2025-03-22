@@ -1,6 +1,5 @@
 use crate::i18n::{flag, language_name, use_i18n, use_selected_language, LANGUAGES};
 use crate::providers::use_settings;
-use web_sys::HtmlSelectElement;
 use yew::prelude::*;
 
 #[function_component(SelectLanguage)]
@@ -13,16 +12,19 @@ pub fn select_language() -> Html {
         let selected_language = selected_language.clone();
         let settings = settings.clone();
         Callback::from(move |e: Event| {
-            let mut selected_language = selected_language.clone();
-            let settings = settings.clone();
-            let select = e.target_dyn_into::<HtmlSelectElement>();
-            if let Some(select) = select {
-                log::info!("Selected language: {:?}", select.value());
-                let mut new_settings = (*settings).clone();
-                let value = select.value();
-                new_settings.language = value.clone();
-                selected_language.set(&value.clone());
-                settings.set(new_settings);
+            #[cfg(feature = "csr")]
+            {
+                use web_sys::HtmlSelectElement;
+                let mut selected_language = selected_language.clone();
+                let settings = settings.clone();
+                if let Some(select) = e.target_dyn_into::<HtmlSelectElement>() {
+                    log::info!("Selected language: {:?}", select.value());
+                    let mut new_settings = (*settings).clone();
+                    let value = select.value();
+                    new_settings.language = value.clone();
+                    selected_language.set(&value.clone());
+                    settings.set(new_settings);
+                }
             }
         })
     };
