@@ -1,5 +1,4 @@
 use konnektoren_core::prelude::PlayerProfile;
-use web_sys::MouseEvent;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
@@ -16,8 +15,11 @@ pub fn profile_points_component(props: &ProfilePointsProps) -> Html {
     let toggle_expanded = {
         let expanded = expanded.clone();
         Callback::from(move |e: MouseEvent| {
-            e.prevent_default();
-            expanded.set(!*expanded);
+            #[cfg(feature = "csr")]
+            {
+                e.prevent_default();
+                expanded.set(!*expanded);
+            }
         })
     };
 
