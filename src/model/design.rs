@@ -1,5 +1,3 @@
-use gloo::utils::document;
-
 #[derive(Clone, PartialEq, Debug)]
 pub enum Design {
     Desktop,
@@ -25,12 +23,20 @@ impl Design {
     }
 
     pub fn get_from_body() -> Self {
-        let class_list = document().body().unwrap().class_name();
-        let design_class = class_list
-            .split_whitespace()
-            .find(|class| class.starts_with("design-"))
-            .unwrap_or("design-desktop");
+        #[cfg(feature = "csr")]
+        {
+            let class_list = gloo::utils::document().body().unwrap().class_name();
+            let design_class = class_list
+                .split_whitespace()
+                .find(|class| class.starts_with("design-"))
+                .unwrap_or("design-desktop");
 
-        Design::from_class(design_class)
+            Design::from_class(design_class)
+        }
+
+        #[cfg(not(feature = "csr"))]
+        {
+            Design::Desktop
+        }
     }
 }

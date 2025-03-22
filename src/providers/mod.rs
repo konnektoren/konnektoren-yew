@@ -8,6 +8,7 @@ pub mod repository_hooks;
 pub mod repository_provider;
 pub mod session_provider;
 pub mod settings_provider;
+#[cfg(feature = "ssr")]
 pub mod ssr_impl;
 pub mod theme_provider;
 

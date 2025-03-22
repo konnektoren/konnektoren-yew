@@ -1,6 +1,6 @@
 use axum::{response::Html as AxumHtml, routing::get, Router};
-use konnektoren_yew::app::App;
 use konnektoren_yew::components::{AppVersionComponent, Badge};
+use konnektoren_yew::prelude::App;
 use log::info;
 use yew::prelude::*;
 use yew::ServerRenderer;

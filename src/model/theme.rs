@@ -1,5 +1,3 @@
-use gloo::utils::document;
-
 #[derive(Clone, PartialEq, Debug)]
 pub enum Theme {
     Light,
@@ -28,12 +26,20 @@ impl Theme {
     }
 
     pub fn get_from_body() -> Self {
-        let class_list = document().body().unwrap().class_name();
-        let theme_class = class_list
-            .split_whitespace()
-            .find(|class| class.starts_with("theme-"))
-            .unwrap_or("theme-light");
+        #[cfg(feature = "csr")]
+        {
+            let class_list = gloo::utils::document().body().unwrap().class_name();
+            let theme_class = class_list
+                .split_whitespace()
+                .find(|class| class.starts_with("theme-"))
+                .unwrap_or("theme-light");
 
-        Theme::from_class(theme_class)
+            Theme::from_class(theme_class)
+        }
+
+        #[cfg(not(feature = "csr"))]
+        {
+            Theme::Light
+        }
     }
 }
