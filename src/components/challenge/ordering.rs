@@ -4,8 +4,6 @@ use konnektoren_core::challenges::{ChallengeResult, Ordering, OrderingItem, Orde
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use rand::prelude::{thread_rng, SliceRandom};
-use wasm_bindgen::JsCast;
-use web_sys::{DragEvent, Element, TouchEvent};
 use yew::prelude::*;
 
 // Props for the OrderingElement component
@@ -159,16 +157,19 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         let selected_index = selected_index.clone();
         let current_order = current_order.clone();
         Callback::from(move |index: usize| {
-            if let Some(selected_idx) = *selected_index {
-                if selected_idx != index {
-                    // Swap elements
-                    let mut new_order = (*current_order).clone();
-                    new_order.swap(selected_idx, index);
-                    current_order.set(new_order);
+            #[cfg(feature = "csr")]
+            {
+                if let Some(selected_idx) = *selected_index {
+                    if selected_idx != index {
+                        // Swap elements
+                        let mut new_order = (*current_order).clone();
+                        new_order.swap(selected_idx, index);
+                        current_order.set(new_order);
+                    }
+                    selected_index.set(None);
+                } else {
+                    selected_index.set(Some(index));
                 }
-                selected_index.set(None);
-            } else {
-                selected_index.set(Some(index));
             }
         })
     };
@@ -176,16 +177,22 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let handle_drag_start = {
         let dragged_index = dragged_index.clone();
         Callback::from(move |event: DragEvent| {
-            if let Some(target) = event.target_dyn_into::<web_sys::Element>() {
-                if let Ok(index) = target
-                    .get_attribute("data-index")
-                    .unwrap_or_default()
-                    .parse::<usize>()
-                {
-                    if let Some(data_transfer) = event.data_transfer() {
-                        let _ = data_transfer.set_data("text/plain", &index.to_string());
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
+
+                if let Some(target) = event.target_dyn_into::<Element>() {
+                    if let Ok(index) = target
+                        .get_attribute("data-index")
+                        .unwrap_or_default()
+                        .parse::<usize>()
+                    {
+                        if let Some(data_transfer) = event.data_transfer() {
+                            let _ = data_transfer.set_data("text/plain", &index.to_string());
+                        }
+                        dragged_index.set(Some(index));
                     }
-                    dragged_index.set(Some(index));
                 }
             }
         })
@@ -194,14 +201,20 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let handle_drag_over = {
         let drop_target_index = drop_target_index.clone();
         Callback::from(move |event: DragEvent| {
-            event.prevent_default();
-            if let Some(target) = event.target_dyn_into::<web_sys::Element>() {
-                if let Ok(index) = target
-                    .get_attribute("data-index")
-                    .unwrap_or_default()
-                    .parse()
-                {
-                    drop_target_index.set(Some(index));
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
+
+                event.prevent_default();
+                if let Some(target) = event.target_dyn_into::<Element>() {
+                    if let Ok(index) = target
+                        .get_attribute("data-index")
+                        .unwrap_or_default()
+                        .parse()
+                    {
+                        drop_target_index.set(Some(index));
+                    }
                 }
             }
         })
@@ -210,7 +223,10 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
     let handle_drag_leave = {
         let drop_target_index = drop_target_index.clone();
         Callback::from(move |_: DragEvent| {
-            drop_target_index.set(None);
+            #[cfg(feature = "csr")]
+            {
+                drop_target_index.set(None);
+            }
         })
     };
 
@@ -219,37 +235,49 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         let dragged_index = dragged_index.clone();
         let drop_target_index = drop_target_index.clone();
         Callback::from(move |event: DragEvent| {
-            event.prevent_default();
-            if let Some(target) = event.target_dyn_into::<web_sys::Element>() {
-                if let (Some(source_idx), Ok(target_idx)) = (
-                    *dragged_index,
-                    target
-                        .get_attribute("data-index")
-                        .unwrap_or_default()
-                        .parse::<usize>(),
-                ) {
-                    // Swap positions in current_order
-                    let mut new_order = (*current_order).clone();
-                    new_order.swap(source_idx, target_idx);
-                    current_order.set(new_order);
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
+
+                event.prevent_default();
+                if let Some(target) = event.target_dyn_into::<Element>() {
+                    if let (Some(source_idx), Ok(target_idx)) = (
+                        *dragged_index,
+                        target
+                            .get_attribute("data-index")
+                            .unwrap_or_default()
+                            .parse::<usize>(),
+                    ) {
+                        // Swap positions in current_order
+                        let mut new_order = (*current_order).clone();
+                        new_order.swap(source_idx, target_idx);
+                        current_order.set(new_order);
+                    }
                 }
+                dragged_index.set(None);
+                drop_target_index.set(None);
             }
-            dragged_index.set(None);
-            drop_target_index.set(None);
         })
     };
 
     let handle_touch_start = {
         let dragged_index = dragged_index.clone();
         Callback::from(move |event: TouchEvent| {
-            event.prevent_default();
-            if let Ok(target) = event.target().unwrap().dyn_into::<Element>() {
-                if let Ok(index) = target
-                    .get_attribute("data-index")
-                    .unwrap_or_default()
-                    .parse()
-                {
-                    dragged_index.set(Some(index));
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
+
+                event.prevent_default();
+                if let Ok(target) = event.target().unwrap().dyn_into::<Element>() {
+                    if let Ok(index) = target
+                        .get_attribute("data-index")
+                        .unwrap_or_default()
+                        .parse()
+                    {
+                        dragged_index.set(Some(index));
+                    }
                 }
             }
         })
@@ -260,23 +288,29 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         let dragged_index = dragged_index.clone();
         let drop_target_index = drop_target_index.clone();
         Callback::from(move |event: TouchEvent| {
-            event.prevent_default();
-            if let Some(touch) = event.touches().get(0) {
-                let target = touch.target().unwrap();
-                if let Ok(element) = target.dyn_into::<Element>() {
-                    if let Ok(target_idx) = element
-                        .get_attribute("data-index")
-                        .unwrap_or_default()
-                        .parse()
-                    {
-                        drop_target_index.set(Some(target_idx));
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen::JsCast;
+                use web_sys::Element;
 
-                        // If we have both indices, perform the swap
-                        if let Some(source_idx) = *dragged_index {
-                            if source_idx != target_idx {
-                                let mut new_order = (*current_order).clone();
-                                new_order.swap(source_idx, target_idx);
-                                current_order.set(new_order);
+                event.prevent_default();
+                if let Some(touch) = event.touches().get(0) {
+                    let target = touch.target().unwrap();
+                    if let Ok(element) = target.dyn_into::<Element>() {
+                        if let Ok(target_idx) = element
+                            .get_attribute("data-index")
+                            .unwrap_or_default()
+                            .parse()
+                        {
+                            drop_target_index.set(Some(target_idx));
+
+                            // If we have both indices, perform the swap
+                            if let Some(source_idx) = *dragged_index {
+                                if source_idx != target_idx {
+                                    let mut new_order = (*current_order).clone();
+                                    new_order.swap(source_idx, target_idx);
+                                    current_order.set(new_order);
+                                }
                             }
                         }
                     }
@@ -289,8 +323,11 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         let dragged_index = dragged_index.clone();
         let drop_target_index = drop_target_index.clone();
         Callback::from(move |_: TouchEvent| {
-            dragged_index.set(None);
-            drop_target_index.set(None);
+            #[cfg(feature = "csr")]
+            {
+                dragged_index.set(None);
+                drop_target_index.set(None);
+            }
         })
     };
 

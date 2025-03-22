@@ -2,8 +2,6 @@ use crate::i18n::{I18nLoader, I18nYmlLoader, SelectedLanguage};
 use konnektoren_core::challenges::{Custom, Package, PackageReader};
 use konnektoren_core::commands::Command;
 use konnektoren_core::events::Event;
-use konnektoren_core::konnektoren_js::KonnektorenJs;
-use wasm_bindgen::JsValue;
 use yew::prelude::*;
 
 #[derive(Properties, Clone, PartialEq)]
@@ -19,10 +17,18 @@ pub struct CustomPackageComponentProps {
 pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
     let package = use_state(|| None::<Package>);
     let loading = use_state(|| true);
-    let konnektoren_js = use_mut_ref(|| {
-        let window = web_sys::window().expect("no global `window` exists");
-        KonnektorenJs::new(&window)
-    });
+
+    #[cfg(feature = "csr")]
+    let konnektoren_js = {
+        use konnektoren_core::konnektoren_js::KonnektorenJs;
+        use web_sys::window;
+
+        use_mut_ref(|| {
+            let window = window().expect("no global `window` exists");
+            KonnektorenJs::new(&window)
+        })
+    };
+
     // Effect to load the package
     {
         let package = package.clone();
@@ -30,31 +36,39 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
         let loading = loading.clone();
 
         use_effect_with(challenge.clone(), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
-                if let Some(package_url) = &challenge.package_url {
-                    match PackageReader::download(package_url).await {
-                        Ok(package_data) => match PackageReader::read(&package_data) {
-                            Ok(loaded_package) => {
-                                package.set(Some(loaded_package));
-                                loading.set(false);
-                            }
-                            Err(e) => log::error!("Failed to read package: {}", e),
-                        },
-                        Err(e) => log::error!("Failed to download package: {}", e),
+            #[cfg(feature = "csr")]
+            {
+                use wasm_bindgen_futures::spawn_local;
+
+                spawn_local(async move {
+                    if let Some(package_url) = &challenge.package_url {
+                        match PackageReader::download(package_url).await {
+                            Ok(package_data) => match PackageReader::read(&package_data) {
+                                Ok(loaded_package) => {
+                                    package.set(Some(loaded_package));
+                                    loading.set(false);
+                                }
+                                Err(e) => log::error!("Failed to read package: {}", e),
+                            },
+                            Err(e) => log::error!("Failed to download package: {}", e),
+                        }
                     }
-                }
-            });
+                });
+            }
             || ()
         });
     }
 
     // Effect to set up the sendEvent callback once on mount
+    #[cfg(feature = "csr")]
     {
         let konnektoren_js = konnektoren_js.clone();
         let on_event = props.on_event.clone();
         let on_command = props.on_command.clone();
 
         use_effect(move || {
+            use wasm_bindgen::JsValue;
+
             let on_event = on_event.clone();
             let on_command = on_command.clone();
             konnektoren_js
@@ -79,6 +93,7 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
     }
 
     // Effect to process the loaded package after loading is complete
+    #[cfg(feature = "csr")]
     {
         let konnektoren_js = konnektoren_js.clone();
         let package = package.clone();
@@ -108,6 +123,7 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                     }
                 }
             }
+            || ()
         });
     }
 
