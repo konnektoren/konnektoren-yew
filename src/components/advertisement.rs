@@ -1,6 +1,5 @@
 use crate::components::BuyMeCoffeeComponent;
 use rand::Rng;
-use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -49,11 +48,23 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
     // Check if ads are blocked
     {
         let ad_blocked = ad_blocked.clone();
+        #[cfg(feature = "csr")]
+        use gloo::timers::future::TimeoutFuture;
+        #[cfg(feature = "csr")]
+        use wasm_bindgen::JsValue;
+
+        #[cfg(feature = "csr")]
+        use web_sys::window;
+
+        #[cfg(feature = "csr")]
+        use wasm_bindgen::prelude::*;
+
+        #[cfg(feature = "csr")]
         use_effect_with((), move |_| {
             wasm_bindgen_futures::spawn_local(async move {
                 // Check after a short delay if ads are loaded
-                gloo::timers::future::TimeoutFuture::new(2000).await;
-                if let Some(window) = web_sys::window() {
+                TimeoutFuture::new(2000).await;
+                if let Some(window) = window() {
                     let blocked = window
                         .get("adsbygoogle")
                         .expect("adsbygoogle")
@@ -67,8 +78,15 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
 
     // Initialize ads if they're not blocked
     {
+        #[cfg(feature = "csr")]
+        use wasm_bindgen::prelude::*;
+
+        #[cfg(feature = "csr")]
+        use web_sys::window;
+
+        #[cfg(feature = "csr")]
         use_effect(move || {
-            if let Some(_window) = web_sys::window() {
+            if let Some(_window) = window() {
                 let _ = js_sys::Function::new_no_args(
                     "(adsbygoogle = window.adsbygoogle || []).push({});",
                 )
@@ -120,18 +138,25 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
                     },
                 }
             } else {
-                html! {
-                    <div class="advertisement">
-                        <div class="advertisement__container">
-                            <ins class="adsbygoogle"
-                                style="display:block; width:100%; height:320px;"
-                                data-ad-client={client}
-                                data-ad-slot={slot}
-                                data-ad-format="auto"
-                                data-full-width-responsive="true">
-                            </ins>
+                #[cfg(feature = "csr")]
+                {
+                    html! {
+                        <div class="advertisement">
+                            <div class="advertisement__container">
+                                <ins class="adsbygoogle"
+                                    style="display:block; width:100%; height:320px;"
+                                    data-ad-client={client}
+                                    data-ad-slot={slot}
+                                    data-ad-format="auto"
+                                    data-full-width-responsive="true">
+                                </ins>
+                            </div>
                         </div>
-                    </div>
+                    }
+                }
+                #[cfg(not(feature = "csr"))]
+                {
+                    html! {}
                 }
             }
         }

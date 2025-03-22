@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -45,10 +44,20 @@ fn parse_license_expression(expr: &str) -> Vec<(String, Vec<String>)> {
 
 #[function_component(AppDependenciesComponent)]
 pub fn app_dependencies() -> Html {
-    let sbom: CycloneDX = serde_json::from_str(env!("CARGO_SBOM")).unwrap_or_else(|e| {
-        log::error!("Failed to parse SBOM: {}", e);
-        CycloneDX { components: vec![] }
-    });
+    let sbom: CycloneDX = {
+        #[cfg(feature = "sbom")]
+        {
+            serde_json::from_str(env!("CARGO_SBOM")).unwrap_or_else(|e| {
+                log::error!("Failed to parse SBOM: {}", e);
+                CycloneDX { components: vec![] }
+            })
+        }
+        #[cfg(not(feature = "sbom"))]
+        {
+            log::warn!("SBOM feature is not enabled.  Returning empty SBOM.");
+            CycloneDX { components: vec![] }
+        }
+    };
 
     let filter = use_state(String::new);
     let show_list = use_state(|| false);
@@ -87,8 +96,12 @@ pub fn app_dependencies() -> Html {
     let onfilter = {
         let filter = filter.clone();
         Callback::from(move |e: Event| {
-            let input: HtmlInputElement = e.target_unchecked_into();
-            filter.set(input.value());
+            #[cfg(feature = "csr")]
+            {
+                use web_sys::HtmlInputElement;
+                let input: web_sys::HtmlInputElement = e.target_unchecked_into();
+                filter.set(input.value());
+            }
         })
     };
 

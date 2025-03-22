@@ -1,8 +1,5 @@
 use crate::components::{ChallengeRatingComponent, RatingStarsComponent};
 use crate::i18n::use_i18n;
-use crate::tools::{update_trace_from_response, TracedRequest};
-use gloo::net::http::Request;
-use konnektoren_core::challenges::Review;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -31,10 +28,13 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     let on_comment_change = {
         let comment = comment.clone();
         Callback::from(move |e: InputEvent| {
-            let input = e
-                .target_unchecked_into::<web_sys::HtmlInputElement>()
-                .value();
-            comment.set(input);
+            #[cfg(feature = "csr")]
+            {
+                let input = e
+                    .target_unchecked_into::<web_sys::HtmlInputElement>()
+                    .value();
+                comment.set(input);
+            }
         })
     };
 
@@ -48,55 +48,62 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
         let api_url = props.api_url.clone();
 
         Callback::from(move |_: MouseEvent| {
-            let is_sending = is_sending.clone();
-            let is_sent = is_sent.clone();
+            #[cfg(feature = "csr")]
+            {
+                use crate::tools::{update_trace_from_response, TracedRequest};
+                use gloo::net::http::Request;
+                use konnektoren_core::challenges::Review;
 
-            if *is_sending || *is_sent {
-                return; // If it's already sending or sent, do nothing
-            }
+                let is_sending = is_sending.clone();
+                let is_sent = is_sent.clone();
 
-            is_sending.set(true); // Set the sending in process flag to true
-
-            let stars = *stars;
-            let comment = (*comment).clone();
-            let challenge_id = challenge_id.clone();
-            let api_url = api_url.clone();
-
-            wasm_bindgen_futures::spawn_local(async move {
-                let review = Review {
-                    challenge_id,
-                    rating: stars as u8,
-                    comment: if comment.is_empty() {
-                        None
-                    } else {
-                        Some(comment)
-                    },
-                };
-
-                match Request::post(&api_url)
-                    .with_trace()
-                    .json(&review)
-                    .unwrap()
-                    .send()
-                    .await
-                {
-                    Ok(response) => {
-                        update_trace_from_response(&response);
-                        let status = response.status();
-                        if (200..300).contains(&status) {
-                            log::info!("Review submitted successfully");
-                            is_sent.set(true); // Mark the review as successfully sent
-                        } else {
-                            log::error!("Failed to submit review: status code {}", status);
-                        }
-                    }
-                    Err(e) => {
-                        log::error!("Error while submitting review: {:?}", e);
-                    }
+                if *is_sending || *is_sent {
+                    return; // If it's already sending or sent, do nothing
                 }
 
-                is_sending.set(false); // Release sending lock
-            });
+                is_sending.set(true); // Set the sending in process flag to true
+
+                let stars = *stars;
+                let comment = (*comment).clone();
+                let challenge_id = challenge_id.clone();
+                let api_url = api_url.clone();
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let review = Review {
+                        challenge_id,
+                        rating: stars as u8,
+                        comment: if comment.is_empty() {
+                            None
+                        } else {
+                            Some(comment)
+                        },
+                    };
+
+                    match Request::post(&api_url)
+                        .with_trace()
+                        .json(&review)
+                        .unwrap()
+                        .send()
+                        .await
+                    {
+                        Ok(response) => {
+                            update_trace_from_response(&response);
+                            let status = response.status();
+                            if (200..300).contains(&status) {
+                                log::info!("Review submitted successfully");
+                                is_sent.set(true); // Mark the review as successfully sent
+                            } else {
+                                log::error!("Failed to submit review: status code {}", status);
+                            }
+                        }
+                        Err(e) => {
+                            log::error!("Error while submitting review: {:?}", e);
+                        }
+                    }
+
+                    is_sending.set(false); // Release sending lock
+                });
+            }
         })
     };
 
