@@ -214,6 +214,7 @@ pub fn App() -> Html {
             ProductCatalogComponent::preview(),
             ShoppingCartComponent::preview(),
             CartBadgeComponent::preview(),
+            #[cfg(feature = "csr")]
             WalletComponent::<crate::components::marketplace::wallet::ton::TonWalletProvider>::preview(),
             #[cfg(feature = "solana")]
             WalletComponent::<crate::components::marketplace::wallet::solana::SolanaWalletProvider>::preview(),

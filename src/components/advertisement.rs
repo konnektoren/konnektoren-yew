@@ -45,24 +45,15 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
 
     let ad_blocked = use_state(|| false);
 
-    // Check if ads are blocked
+    #[cfg(feature = "csr")]
     {
         let ad_blocked = ad_blocked.clone();
-        #[cfg(feature = "csr")]
-        use gloo::timers::future::TimeoutFuture;
-        #[cfg(feature = "csr")]
-        use wasm_bindgen::JsValue;
-
-        #[cfg(feature = "csr")]
-        use web_sys::window;
-
-        #[cfg(feature = "csr")]
-        use wasm_bindgen::prelude::*;
-
-        #[cfg(feature = "csr")]
         use_effect_with((), move |_| {
+            use gloo::timers::future::TimeoutFuture;
+            use wasm_bindgen::JsValue;
+            use web_sys::window;
+
             wasm_bindgen_futures::spawn_local(async move {
-                // Check after a short delay if ads are loaded
                 TimeoutFuture::new(2000).await;
                 if let Some(window) = window() {
                     let blocked = window
@@ -74,18 +65,11 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
             });
             || ()
         });
-    }
 
-    // Initialize ads if they're not blocked
-    {
-        #[cfg(feature = "csr")]
-        use wasm_bindgen::prelude::*;
-
-        #[cfg(feature = "csr")]
-        use web_sys::window;
-
-        #[cfg(feature = "csr")]
         use_effect(move || {
+            use wasm_bindgen::prelude::*;
+            use web_sys::window;
+
             if let Some(_window) = window() {
                 let _ = js_sys::Function::new_no_args(
                     "(adsbygoogle = window.adsbygoogle || []).push({});",
@@ -203,25 +187,5 @@ mod preview {
                 },
             ],
         },
-        (
-            "low_probability",
-            AdvertisementProps {
-                show_probability: 30,
-                placement: Some("preview".to_string()),
-                networks: vec![
-                    AdNetwork::GoogleAdsense {
-                        client: "ca-pub-5712533029715832".to_string(),
-                        slot: "1547914214".to_string(),
-                        width: "100vw".to_string(),
-                        height: "320".to_string(),
-                    },
-                    AdNetwork::BuyMeACoffee {
-                        data_id: "chriamue".to_string(),
-                        text: "Buy me a coffee",
-                        button_colour: "FFDD00",
-                    },
-                ],
-            }
-        )
     );
 }

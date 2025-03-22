@@ -455,10 +455,12 @@ mod preview {
         ]
     }
 
+    #[cfg(feature = "csr")]
     pub type TonWallet = WalletComponent<TonWalletProvider>;
     #[cfg(feature = "solana")]
     pub type SolanaWallet = WalletComponent<SolanaWalletProvider>;
 
+    #[cfg(feature = "csr")]
     yew_preview::create_preview!(
         TonWallet,
         WalletComponentProps {
