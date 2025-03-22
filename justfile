@@ -26,7 +26,7 @@ setup-styles:
 
 # Start development server
 serve:
-    trunk serve --features=yew-preview
+    trunk serve --features=csr,yew-preview
 
 # Build the project for release
 build: styles-check sbom
@@ -38,7 +38,7 @@ build: styles-check sbom
     mkdir -p ${BUILD_DIR}
 
     # Main build
-    trunk build --release
+    trunk build --release --features=csr,yew-preview
 
 # Run all tests
 test: test-cargo test-wasm test-i18n

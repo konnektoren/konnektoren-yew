@@ -27,7 +27,6 @@ default = [
     "tour",
     "solana",
     "sbom",
-    "csr",
 ]
 backup = []
 certificates = [
