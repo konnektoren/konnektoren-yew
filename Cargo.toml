@@ -52,6 +52,7 @@ csr = [
     "uuid/js",
 ]
 ssr = ["yew/ssr"]
+ssg = ["ssr", "axum"]
 server = ["ssr", "axum", "tokio/full"]
 
 [dependencies]

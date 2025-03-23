@@ -11,6 +11,9 @@ pub mod route;
 pub mod switch_route;
 pub mod tools;
 
+#[cfg(feature = "ssg")]
+pub mod ssg;
+
 #[cfg(feature = "effects")]
 pub mod effects;
 
