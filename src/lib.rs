@@ -1,10 +1,14 @@
 pub mod app;
+pub mod app_csr;
 pub mod app_ssr;
 pub mod components;
 pub mod i18n;
 pub mod managers;
 pub mod model;
+pub mod pages;
 pub mod providers;
+pub mod route;
+pub mod switch_route;
 pub mod tools;
 
 #[cfg(feature = "effects")]
@@ -15,10 +19,11 @@ pub mod repository;
 
 /// This is a prelude module that re-exports the most important types and traits.
 pub mod prelude {
-    #[cfg(feature = "csr")]
     pub use crate::app::App;
+    #[cfg(feature = "csr")]
+    pub use crate::app_csr::AppCSR;
     #[cfg(feature = "ssr")]
-    pub use crate::app_ssr::App;
+    pub use crate::app_ssr::AppSSR;
     pub use crate::components::*;
     #[cfg(feature = "effects")]
     pub use crate::effects::*;
