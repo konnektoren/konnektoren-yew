@@ -16,6 +16,11 @@ name = "konnektoren-yew-server"
 path = "src/bin/server.rs"
 required-features = ["server"]
 
+[[bin]]
+name = "generate_static"
+path = "src/bin/generate_static.rs"
+required-features = ["ssg"]
+
 [features]
 default = [
     "certificates",
@@ -52,7 +57,7 @@ csr = [
     "uuid/js",
 ]
 ssr = ["yew/ssr"]
-ssg = ["ssr", "axum"]
+ssg = ["ssr", "axum", "tokio/full"]
 server = ["ssr", "axum", "tokio/full"]
 
 [dependencies]
