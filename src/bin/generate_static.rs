@@ -4,6 +4,7 @@ use konnektoren_yew::ssg::renderer::{metadata_for_route, render_html_string};
 use konnektoren_yew::ssg::seo::meta::PageMeta;
 use konnektoren_yew::ssg::seo::robots::generate_robots_txt_string;
 use konnektoren_yew::ssg::seo::sitemap::generate_sitemap_string;
+use konnektoren_yew::wrapped_app::{WrappedApp, WrappedAppProps};
 use log::{error, info};
 use std::fs;
 use std::path::Path;
@@ -14,7 +15,7 @@ use tokio::time::sleep;
 use yew::ServerRenderer;
 use yew_router::Routable;
 
-const BASE_URL: &str = "https://konnektoren.app"; // Replace with your actual domain
+const BASE_URL: &str = "https://konnektoren.app";
 const OUTPUT_DIR: &str = "static_dist";
 
 /// Start SSR server for rendering
@@ -77,7 +78,7 @@ async fn render_and_save_route(
     let route_for_path = route.clone();
 
     // Create the renderer for this route
-    let renderer = ServerRenderer::<DirectRender>::with_props(move || DirectRenderProps {
+    let renderer = ServerRenderer::<WrappedApp>::with_props(move || WrappedAppProps {
         route: route_for_renderer.clone(),
     });
 

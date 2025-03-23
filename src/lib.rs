@@ -10,6 +10,7 @@ pub mod providers;
 pub mod route;
 pub mod switch_route;
 pub mod tools;
+pub mod wrapped_app;
 
 #[cfg(feature = "ssg")]
 pub mod ssg;
