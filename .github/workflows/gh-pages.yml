@@ -105,7 +105,7 @@ jobs:
           cargo install --force --git https://github.com/chriamue/trunk --branch fix/tailwindcss-extra-download-linux trunk
 
       - name: Build
-        run: trunk build --verbose --features=yew-preview --release --public-url /konnektoren-yew/
+        run: trunk build --verbose --features=yew-preview,csr --release --public-url /konnektoren-yew/
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
