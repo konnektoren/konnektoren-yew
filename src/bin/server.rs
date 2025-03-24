@@ -1,109 +1,152 @@
-use axum::{response::Html as AxumHtml, routing::get, Router};
-use konnektoren_yew::components::{AppVersionComponent, Badge};
+use axum::{extract::Path, response::Html as AxumHtml, routing::get, Router};
 use konnektoren_yew::prelude::App;
-use log::info;
+use konnektoren_yew::route::Route;
+use konnektoren_yew::switch_route::switch_route;
+use log::{error, info};
+use strum::IntoEnumIterator;
 use yew::prelude::*;
 use yew::ServerRenderer;
+use yew_router::Routable;
 
-// Wrapper for AppVersionComponent
-#[function_component(AppVersionWrapper)]
-fn app_version_wrapper() -> Html {
-    html! {
-        <AppVersionComponent show_details={true} />
-    }
+#[derive(Properties, PartialEq)]
+struct DirectRenderProps {
+    route: Route,
 }
 
-// Wrapper for Badge
-#[function_component(BadgeWrapper)]
-fn badge_wrapper() -> Html {
-    html! {
-        <Badge
-            label="Example Badge"
-            description="This is an example badge rendered by the server."
-        />
-    }
+#[function_component(DirectRender)]
+fn direct_render(props: &DirectRenderProps) -> Html {
+    switch_route(props.route.clone())
 }
 
-async fn render_html(content: String) -> AxumHtml<String> {
+// Function to generate HTML shell around the rendered content
+async fn render_html(content: String, title: &str) -> AxumHtml<String> {
     AxumHtml(format!(
         r#"<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Konnektoren Components</title>
-        <style>
-        </style>
+        <title>{} - Konnektoren</title>
+        <meta name="description" content="Konnektoren application - {}" />
+        <!-- Include the main CSS file that Trunk generates -->
+        <link data-trunk rel="css" href="/styles.css"/>
+        <script defer data-trunk rel="inline" src="/hydration.js"></script>
     </head>
     <body>
-        <h1>Konnektoren Component Server</h1>
-        <p>This page demonstrates server-side rendering of Konnektoren components.</p>
-        <main>{}</main>
+        <div id="app">{}</div>
     </body>
 </html>"#,
-        content
+        title, title, content
     ))
 }
 
-async fn serve_app() -> AxumHtml<String> {
-    let app_renderer = ServerRenderer::<App>::new();
-    let content = app_renderer.render().await;
+// Serve the whole app at a specific route
+async fn serve_route(Path(route_path): Path<String>) -> AxumHtml<String> {
+    // Convert path to Route enum
+    // Format the path for Router
+    let route_path = format!("/{}/", route_path);
 
-    render_html(content).await
-}
+    // Use the Routable trait to recognize the route
+    let route = Route::recognize(&route_path).unwrap_or(Route::Root);
 
-async fn serve_app_version() -> AxumHtml<String> {
-    let renderer = ServerRenderer::<AppVersionWrapper>::new();
+    // Title based on route
+    let title = match &route {
+        Route::Root => "Home",
+        Route::Home => "Home",
+        Route::About => "About",
+        Route::Example => "Example",
+    };
+
+    // Renderer for the whole app with the specific route
+    let renderer = ServerRenderer::<DirectRender>::with_props(move || DirectRenderProps {
+        route: route.clone(),
+    });
+
     let content = renderer.render().await;
-
-    render_html(content).await
+    render_html(content, title).await
 }
 
-async fn serve_badge() -> AxumHtml<String> {
-    let renderer = ServerRenderer::<BadgeWrapper>::new();
+// Serve the root app
+async fn serve_root() -> AxumHtml<String> {
+    let renderer = ServerRenderer::<App>::new();
+
     let content = renderer.render().await;
-
-    render_html(content).await
+    render_html(content, "Home").await
 }
 
-async fn serve_home() -> AxumHtml<String> {
-    let app_version_renderer = ServerRenderer::<AppVersionWrapper>::new();
-    let app_version_content = app_version_renderer.render().await;
+// Serve sitemap.xml for SEO
+async fn serve_sitemap() -> axum::response::Response<String> {
+    let base_url = "https://konnektoren.app"; // Replace with your actual domain
 
-    let badge_renderer = ServerRenderer::<BadgeWrapper>::new();
-    let badge_content = badge_renderer.render().await;
-
-    let combined_content = format!(
-        r#"<div class="component-list">
-                    {}
-                    {}
-            </div>
-
-            <div class="component-links">
-                <h2>Individual Component Pages</h2>
-                <ul>
-                    <li><a href="/app">App Component</a></li>
-                    <li><a href="/app-version">App Version Component</a></li>
-                    <li><a href="/badge">Badge Component</a></li>
-                </ul>
-            </div>
-        </div>"#,
-        app_version_content, badge_content
+    let mut sitemap = String::from(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">"#,
     );
 
-    render_html(combined_content).await
+    // Add root URL
+    sitemap.push_str(&format!(
+        r#"
+  <url>
+    <loc>{}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>"#,
+        base_url
+    ));
+
+    // Add all other routes
+    for route in Route::iter() {
+        // Skip root as it's already added
+        if matches!(route, Route::Root) {
+            continue;
+        }
+
+        // Convert route to string path
+        let route_str: String = route.to_path();
+
+        sitemap.push_str(&format!(
+            r#"
+  <url>
+    <loc>{}{}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>"#,
+            base_url, route_str
+        ));
+    }
+
+    sitemap.push_str("\n</urlset>");
+
+    axum::response::Response::builder()
+        .header("Content-Type", "application/xml")
+        .body(sitemap)
+        .unwrap()
+}
+
+// Function to serve robots.txt
+async fn serve_robots() -> axum::response::Response<String> {
+    let robots_txt =
+        format!("User-agent: *\nAllow: /\nSitemap: https://konnektoren.app/sitemap.xml");
+
+    axum::response::Response::builder()
+        .header("Content-Type", "text/plain")
+        .body(robots_txt)
+        .unwrap()
 }
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(serve_home))
-        .route("/app", get(serve_app))
-        .route("/app-version", get(serve_app_version))
-        .route("/badge", get(serve_badge));
+        .route("/", get(serve_root))
+        .route("/sitemap.xml", get(serve_sitemap))
+        .route("/robots.txt", get(serve_robots))
+        .route("/{route}/", get(serve_route)); // Dynamic route handling
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    info!("Component server running on http://localhost:3000");
+    info!("SSR server running on http://localhost:3000");
 
-    let _server = axum::serve(listener, app).await.unwrap();
+    let server = axum::serve(listener, app);
+    if let Err(e) = server.await {
+        error!("Server error: {}", e);
+    }
 }

@@ -123,3 +123,6 @@ sbom:
 
 server:
     cargo run --bin konnektoren-yew-server --features server,yew-preview
+
+generate-static:
+    cargo run --bin generate_static --features ssg
