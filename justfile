@@ -40,6 +40,9 @@ build: styles-check sbom
     # Main build
     trunk build --release --features=csr,yew-preview
 
+    # Static Site Generate
+    cargo run --bin ssg --features ssg
+
 # Run all tests
 test: test-cargo test-wasm test-i18n
 

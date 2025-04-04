@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
     <head>
         <meta charset="utf-8" />
-        <title>Konnektoren Yew</title>
+        <title data-ssg="title">Konnektoren Yew</title>
         <link data-trunk rel="tailwind-css-extra" href="styles/index.css" />
         <link data-trunk rel="scss" href="styles/vendors.css" />
         <link data-trunk rel="copy-dir" href="src/assets" />
@@ -15,6 +15,7 @@
             data-bin="konnektoren-yew-bin"
         />
     </head>
-
-    <body></body>
+    <body>
+        <div id="app" data-ssg="content"></div>
+    </body>
 </html>
