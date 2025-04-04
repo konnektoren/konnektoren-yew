@@ -4,3 +4,4 @@
 .idea/
 reports/
 *.cdx.json
+.DS_Store

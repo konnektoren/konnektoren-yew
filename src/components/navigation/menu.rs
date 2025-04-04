@@ -9,7 +9,9 @@ pub struct MenuProps<Route: yew_router::Routable + 'static> {
 }
 
 #[function_component(NavigationMenu)]
-pub fn navigation_menu<Route: yew_router::Routable + 'static>(props: &MenuProps<Route>) -> Html {
+pub fn navigation_menu<Route: yew_router::Routable + std::fmt::Debug + 'static>(
+    props: &MenuProps<Route>,
+) -> Html {
     let i18n = use_i18n();
     let active_group = use_state(|| None::<usize>);
 

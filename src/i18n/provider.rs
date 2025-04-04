@@ -140,16 +140,30 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
 
 #[hook]
 pub fn use_i18n() -> UseStateHandle<I18nConfig> {
-    use_context::<I18nContext>()
-        .expect("No I18n context provided")
-        .config
+    #[cfg(feature = "ssr")]
+    {
+        use_state(|| I18nConfig::default())
+    }
+    #[cfg(not(feature = "ssr"))]
+    {
+        use_context::<I18nContext>()
+            .expect("No I18n context provided")
+            .config
+    }
 }
 
 #[hook]
 pub fn use_selected_language() -> SelectedLanguage {
-    use_context::<I18nContext>()
-        .expect("No I18n context provided")
-        .selected_language
+    #[cfg(feature = "ssr")]
+    {
+        SelectedLanguage::new("en")
+    }
+    #[cfg(not(feature = "ssr"))]
+    {
+        use_context::<I18nContext>()
+            .expect("No I18n context provided")
+            .selected_language
+    }
 }
 
 #[hook]
