@@ -1,6 +1,8 @@
 /dist
+/static_dist
 /target
 /temp
 .idea/
 reports/
 *.cdx.json
+.DS_Store

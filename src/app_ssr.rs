@@ -107,7 +107,7 @@ pub fn Example() -> Html {
 }
 
 #[function_component]
-pub fn App() -> Html {
+pub fn AppSSR() -> Html {
     #[cfg(feature = "yew-preview")]
     let groups: ComponentList = vec![create_component_group!(
         "Analytics",

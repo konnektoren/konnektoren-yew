@@ -16,6 +16,11 @@ name = "konnektoren-yew-server"
 path = "src/bin/server.rs"
 required-features = ["server"]
 
+[[bin]]
+name = "generate_static"
+path = "src/bin/generate_static.rs"
+required-features = ["ssg"]
+
 [features]
 default = [
     "certificates",
@@ -52,6 +57,7 @@ csr = [
     "uuid/js",
 ]
 ssr = ["yew/ssr"]
+ssg = ["ssr", "axum", "tokio/full"]
 server = ["ssr", "axum", "tokio/full"]
 
 [dependencies]
@@ -118,6 +124,8 @@ anyhow = "1.0.86"
 serde = { version = "1.0.204", features = ["derive"] }
 js-sys = { version = "0.3.69", optional = true }
 serde_yaml = "0.9.34+deprecated"
+strum = "0.26.3"
+strum_macros = "0.26.3"
 wallet-adapter = { version = "1.1", optional = true }
 solana-sdk = { version = "2.1.2", optional = true }
 spl-token = { version = "7.0.0", optional = true }
