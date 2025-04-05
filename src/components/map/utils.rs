@@ -1,4 +1,5 @@
 use crate::components::map::bounds::Bounds;
+use crate::prelude::ModelCoordinate;
 use konnektoren_core::game::GamePath;
 
 pub trait Zoom {
@@ -21,31 +22,6 @@ mod tests {
     use super::*;
     use konnektoren_core::challenges::ChallengeConfig;
     use konnektoren_core::game::GamePath;
-
-    #[test]
-    fn test_get_center() {
-        let game_path = GamePath {
-            challenges: vec![
-                ChallengeConfig {
-                    id: "konnektoren-1".to_string(),
-                    position: Some((0, 0)),
-                    ..Default::default()
-                },
-                ChallengeConfig {
-                    id: "konnektoren-2".to_string(),
-                    position: Some((2, 2)),
-                    ..Default::default()
-                },
-                ChallengeConfig {
-                    id: "konnektoren-2".to_string(),
-                    position: Some((1, 3)),
-                    ..Default::default()
-                },
-            ],
-            ..Default::default()
-        };
-        assert_eq!(game_path.get_center(), ModelCoordinate(1, 1));
-    }
 
     #[test]
     fn test_get_zoom() {

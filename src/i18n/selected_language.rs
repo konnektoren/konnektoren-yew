@@ -1,5 +1,4 @@
 use crate::i18n::LANGUAGE_KEY;
-use gloo::storage::{LocalStorage, Storage};
 use konnektoren_platform::i18n::Language;
 
 #[derive(Clone, Default, PartialEq)]
@@ -15,24 +14,47 @@ impl SelectedLanguage {
     }
 
     pub fn set(&mut self, code: &str) {
-        let _ = LocalStorage::set(LANGUAGE_KEY, code);
+        #[cfg(not(feature = "ssr"))]
+        {
+            use gloo::storage::{LocalStorage, Storage};
+            let _ = LocalStorage::set(LANGUAGE_KEY, code);
+        }
         self.language = Language::from_code(code);
     }
 
     pub fn get(&self) -> Language {
-        let code: Result<String, _> = LocalStorage::get(LANGUAGE_KEY);
-        match code {
-            Ok(code) => Language::from_code(&code),
-            Err(_) => self.language.clone(),
+        #[cfg(not(feature = "ssr"))]
+        {
+            use gloo::storage::{LocalStorage, Storage};
+            let code: Result<String, _> = LocalStorage::get(LANGUAGE_KEY);
+            if let Ok(code) = code {
+                return Language::from_code(&code);
+            }
         }
+
+        // Default behavior for SSR or when storage fails
+        // Try to get from LANGUAGE environment variable if in SSR mode
+        #[cfg(feature = "ssr")]
+        {
+            if let Ok(lang) = std::env::var("LANGUAGE") {
+                return Language::from_code(&lang);
+            }
+        }
+
+        // Fallback to current language
+        self.language.clone()
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(not(feature = "ssr"))]
+    use gloo::storage::{LocalStorage, Storage};
+    #[cfg(not(feature = "ssr"))]
     use wasm_bindgen_test::*;
 
+    #[cfg(not(feature = "ssr"))]
     wasm_bindgen_test_configure!(run_in_browser);
 
     #[test]
@@ -53,6 +75,7 @@ mod tests {
         assert_eq!(selected.language.code(), "en");
     }
 
+    #[cfg(not(feature = "ssr"))]
     #[wasm_bindgen_test]
     async fn test_set_and_get_language() {
         LocalStorage::clear();
