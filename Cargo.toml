@@ -56,7 +56,7 @@ csr = [
     "yew-hooks",
     "uuid/js",
 ]
-ssr = ["yew/ssr", "yew_router/ssg"]
+ssr = ["yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
 ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio", "env_logger"]
 server = ["ssr", "axum", "tokio/full"]
 

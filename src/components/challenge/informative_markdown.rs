@@ -82,27 +82,27 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
 
     {
         let loading_state = loading_state.clone();
-        #[cfg(feature = "csr")]
-        use gloo::net::http::Request;
-
-        #[cfg(feature = "csr")]
-        use wasm_bindgen_futures::spawn_local;
+        let markdown_path_clone = markdown_path.clone();
+        let fallback_path_clone = fallback_path.clone();
 
         use_effect_with((), move |_| {
-            #[cfg(feature = "csr")]
-            {
-                let markdown_path = markdown_path.clone();
-                let loading_state = loading_state.clone();
-                spawn_local(async move {
-                    match fetch_markdown(&markdown_path).await {
-                        Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
-                        Err(_) => match fetch_markdown(&fallback_path).await {
+            let markdown_path = markdown_path_clone.clone();
+            let fallback_path = fallback_path_clone.clone();
+            let loading_state = loading_state.clone();
+
+            wasm_bindgen_futures::spawn_local(async move {
+                match fetch_markdown(&markdown_path).await {
+                    Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
+                    Err(err) => {
+                        log::warn!("Failed to fetch markdown {}: {}", markdown_path, err);
+                        match fetch_markdown(&fallback_path).await {
                             Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
                             Err(err) => loading_state.set(LoadingState::FetchError(err)),
-                        },
+                        }
                     }
-                });
-            }
+                }
+            });
+
             || ()
         });
     }
@@ -148,19 +148,49 @@ async fn fetch_markdown(path: &str) -> Result<String, String> {
         let response = Request::get(path)
             .send()
             .await
-            .map_err(|_| format!("Failed to fetch the file {}", path))?;
+            .map_err(|e| format!("Failed to fetch the file {}: {}", path, e))?;
         if response.status() == 200 {
             response
                 .text()
                 .await
-                .map_err(|_| format!("Failed to read the file content of {}", path))
+                .map_err(|e| format!("Failed to read the file content of {}: {}", path, e))
         } else {
-            Err(format!("File not found: {}", path))
+            Err(format!(
+                "File not found: {} (status: {})",
+                path,
+                response.status()
+            ))
         }
     }
-    #[cfg(not(feature = "csr"))]
+
+    #[cfg(all(feature = "ssr", not(feature = "csr")))]
     {
-        Err("SSR: Cannot fetch markdown".to_string())
+        // Get BUILD_DIR from environment variable at runtime
+        let build_dir = std::env::var("BUILD_DIR")
+            .map_err(|_| "SSR: BUILD_DIR environment variable is not set".to_string())?;
+
+        // Path could be absolute or relative
+        let file_path = if path.starts_with('/') {
+            path.to_string()
+        } else {
+            format!("{}/{}", build_dir, path)
+        };
+
+        log::info!("SSR: Loading markdown from {}", file_path);
+
+        match std::fs::read_to_string(&file_path) {
+            Ok(content) => Ok(content),
+            Err(e) => Err(format!(
+                "SSR: Failed to read markdown file {}: {}",
+                file_path, e
+            )),
+        }
+    }
+
+    // Add this default case for when neither feature is enabled
+    #[cfg(not(any(feature = "csr", feature = "ssr")))]
+    {
+        Err("Markdown fetching is not available in this configuration".to_string())
     }
 }
 

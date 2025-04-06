@@ -17,6 +17,7 @@ pub struct CustomPackageComponentProps {
 pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
     let package = use_state(|| None::<Package>);
     let loading = use_state(|| true);
+    let error = use_state(|| None::<String>);
 
     #[cfg(feature = "csr")]
     let konnektoren_js = {
@@ -34,27 +35,40 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
         let package = package.clone();
         let challenge = props.challenge.clone();
         let loading = loading.clone();
+        let error = error.clone();
 
         use_effect_with(challenge.clone(), move |_| {
-            #[cfg(feature = "csr")]
-            {
-                use wasm_bindgen_futures::spawn_local;
+            if let Some(package_url) = &challenge.package_url {
+                let package_url = package_url.clone();
 
-                spawn_local(async move {
-                    if let Some(package_url) = &challenge.package_url {
-                        match PackageReader::download(package_url).await {
-                            Ok(package_data) => match PackageReader::read(&package_data) {
-                                Ok(loaded_package) => {
-                                    package.set(Some(loaded_package));
-                                    loading.set(false);
-                                }
-                                Err(e) => log::error!("Failed to read package: {}", e),
-                            },
-                            Err(e) => log::error!("Failed to download package: {}", e),
+                wasm_bindgen_futures::spawn_local(async move {
+                    match PackageReader::download(&package_url).await {
+                        Ok(package_data) => match PackageReader::read(&package_data) {
+                            Ok(loaded_package) => {
+                                package.set(Some(loaded_package));
+                                loading.set(false);
+                            }
+                            Err(e) => {
+                                let err_msg = format!("Failed to read package: {}", e);
+                                log::error!("{}", err_msg);
+                                error.set(Some(err_msg));
+                                loading.set(false);
+                            }
+                        },
+                        Err(e) => {
+                            let err_msg =
+                                format!("Failed to download package from {}: {}", package_url, e);
+                            log::error!("{}", err_msg);
+                            error.set(Some(err_msg));
+                            loading.set(false);
                         }
                     }
                 });
+            } else {
+                error.set(Some("No package URL specified".to_string()));
+                loading.set(false);
             }
+
             || ()
         });
     }
@@ -99,32 +113,35 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
         let package = package.clone();
         let loading = loading.clone();
 
-        use_effect_with((loading, package.clone()), move |(loading, package)| {
-            if !**loading {
-                if let Some(loaded_package) = &**package {
-                    // Set challenge data
-                    if let Some(custom_challenge) = loaded_package.get_custom_challenge() {
-                        konnektoren_js
-                            .borrow_mut()
-                            .set_challenge_data(custom_challenge);
-                    }
+        use_effect_with(
+            (loading.clone(), package.clone()),
+            move |(loading, package)| {
+                if !**loading {
+                    if let Some(loaded_package) = &**package {
+                        // Set challenge data
+                        if let Some(custom_challenge) = loaded_package.get_custom_challenge() {
+                            konnektoren_js
+                                .borrow_mut()
+                                .set_challenge_data(custom_challenge);
+                        }
 
-                    // Set i18n data if available
-                    if let Some(i18n_content) = loaded_package.get_file_as_string("i18n.yml") {
-                        let language = SelectedLanguage::default().get();
-                        let loader = I18nYmlLoader::new(i18n_content.as_str());
-                        let translations = loader.get(language.code()).unwrap_or_default();
-                        konnektoren_js.borrow_mut().set_i18n_data(translations);
-                    }
+                        // Set i18n data if available
+                        if let Some(i18n_content) = loaded_package.get_file_as_string("i18n.yml") {
+                            let language = SelectedLanguage::default().get();
+                            let loader = I18nYmlLoader::new(i18n_content.as_str());
+                            let translations = loader.get(language.code()).unwrap_or_default();
+                            konnektoren_js.borrow_mut().set_i18n_data(translations);
+                        }
 
-                    // Execute JS code
-                    if let Some(js_content) = loaded_package.get_js_file() {
-                        konnektoren_js.borrow_mut().execute_js(js_content.as_str());
+                        // Execute JS code
+                        if let Some(js_content) = loaded_package.get_js_file() {
+                            konnektoren_js.borrow_mut().execute_js(js_content.as_str());
+                        }
                     }
                 }
-            }
-            || ()
-        });
+                || ()
+            },
+        );
     }
 
     // Render the HTML content
@@ -132,6 +149,11 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
         <div class="custom-package-challenge">
             if *loading {
                 <p>{"Loading package..."}</p>
+            } else if let Some(err) = &*error {
+                <div class="error-message">
+                    <h3>{"Error Loading Package"}</h3>
+                    <p>{err}</p>
+                </div>
             } else if let Some(loaded_package) = &*package {
                 if let Some(html_content) = loaded_package.get_html_file() {
                     <div>
@@ -149,5 +171,14 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                 <p>{"Error: Failed to load package"}</p>
             }
         </div>
+    }
+}
+
+// This component can be used for hydration in SSR mode
+#[cfg(feature = "ssr")]
+#[function_component(CustomPackageHydrationWrapper)]
+pub fn custom_package_hydration_wrapper(props: &CustomPackageComponentProps) -> Html {
+    html! {
+        <CustomPackageComponent ..props.clone() />
     }
 }
