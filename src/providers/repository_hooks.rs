@@ -108,16 +108,9 @@ pub fn use_session_repository() -> Arc<dyn SessionRepositoryTrait> {
 
 #[hook]
 pub fn use_session() -> UseStateHandle<Session> {
-    #[cfg(feature = "ssr")]
-    {
-        use_state(Session::default)
-    }
-    #[cfg(not(feature = "ssr"))]
-    {
-        use_context::<SessionContext>()
-            .expect("SessionContext not found")
-            .session
-    }
+    use_context::<SessionContext>()
+        .expect("SessionContext not found")
+        .session
 }
 
 #[hook]

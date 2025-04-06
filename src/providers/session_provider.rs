@@ -30,6 +30,19 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
     let session_initializer = props.session_initializer.clone();
     let error = use_state(|| None::<String>);
 
+    #[cfg(feature = "ssr")]
+    let session = {
+        let initializer = session_initializer.clone();
+        use_state(|| match initializer.initialize(&Session::default()) {
+            Ok(session) => session,
+            Err(e) => {
+                log::error!("Failed to initialize session: {:?}", e);
+                Session::default()
+            }
+        })
+    };
+
+    #[cfg(not(feature = "ssr"))]
     let session = use_state(
         || match session_initializer.initialize(&Session::default()) {
             Ok(session) => session,
@@ -40,7 +53,8 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         },
     );
 
-    // Load session
+    // Load session (CSR only)
+    #[cfg(not(feature = "ssr"))]
     {
         let session = session.clone();
         let error = error.clone();
@@ -77,6 +91,8 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         });
     }
 
+    // Save session (CSR only)
+    #[cfg(not(feature = "ssr"))]
     {
         let session_repository = props.session_repository.clone();
         let session = session.clone();
