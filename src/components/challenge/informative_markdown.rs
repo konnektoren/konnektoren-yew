@@ -1,6 +1,8 @@
 use crate::components::challenge::informative::InformativeComponentProps;
+use konnektoren_core::asset_loader::AssetLoader;
 use konnektoren_core::challenges::ChallengeResult;
 use konnektoren_core::commands::{ChallengeCommand, Command};
+use std::future::Future;
 use yew::prelude::*;
 
 pub enum LoadingState {
@@ -9,10 +11,39 @@ pub enum LoadingState {
     FetchError(String),
 }
 
+/// Function to load markdown content synchronously for SSG
+#[cfg(feature = "ssr")]
+pub fn load_markdown_for_ssg(path: &str) -> String {
+    use std::path::PathBuf;
+
+    // Get BUILD_DIR from environment variable at runtime or use defaults
+    let build_dir = std::env::var("BUILD_DIR").unwrap_or_else(|_| "./".to_string());
+
+    // Try multiple potential locations for the file
+    let potential_paths = vec![
+        PathBuf::from(path),                  // As provided
+        PathBuf::from(&build_dir).join(path), // In build dir
+        PathBuf::from("assets").join(path),   // In assets dir
+    ];
+
+    for file_path in potential_paths {
+        if file_path.exists() {
+            match std::fs::read_to_string(&file_path) {
+                Ok(content) => return content,
+                Err(e) => log::warn!("Failed to read file {}: {}", file_path.display(), e),
+            }
+        }
+    }
+
+    // Fallback content if file not found
+    format!("*Failed to load markdown content from {}*", path)
+}
+
 #[function_component(InformativeMarkdownComponent)]
 pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html {
     let loading_state = use_state(|| LoadingState::Loading);
     let language = props.language.as_deref().unwrap_or("en");
+    let asset_loader = use_state(AssetLoader::default);
 
     let on_finish = {
         let on_command = props.on_command.clone();
@@ -55,6 +86,7 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
         })
     };
 
+    // Get the markdown path
     let fallback_path = props
         .challenge
         .text
@@ -77,25 +109,42 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
         .cloned();
     let markdown_path = match informative_text {
         Some(text) => text.text,
-        None => fallback_path.to_string(),
+        None => fallback_path.clone(),
     };
 
+    // SSG support: pre-load content during server-side rendering
+    #[cfg(feature = "ssr")]
     {
-        let loading_state = loading_state.clone();
-        let markdown_path_clone = markdown_path.clone();
-        let fallback_path_clone = fallback_path.clone();
+        let loading_state_ssr = loading_state.clone();
+        let markdown_path_ssr = markdown_path.clone();
 
         use_effect_with((), move |_| {
-            let markdown_path = markdown_path_clone.clone();
-            let fallback_path = fallback_path_clone.clone();
-            let loading_state = loading_state.clone();
+            let markdown_content = load_markdown_for_ssg(&markdown_path_ssr);
+            loading_state_ssr.set(LoadingState::FetchSuccess(markdown_content));
+            || ()
+        });
+    }
+
+    // CSR support: load content asynchronously
+    #[cfg(feature = "csr")]
+    {
+        let loading_state_csr = loading_state.clone();
+        let markdown_path_csr = markdown_path.clone();
+        let fallback_path_csr = fallback_path.clone();
+        let asset_loader_csr = asset_loader.clone();
+
+        use_effect_with((), move |_| {
+            let markdown_path = markdown_path_csr.clone();
+            let fallback_path = fallback_path_csr.clone();
+            let loading_state = loading_state_csr.clone();
+            let asset_loader = asset_loader_csr.clone();
 
             wasm_bindgen_futures::spawn_local(async move {
-                match fetch_markdown(&markdown_path).await {
+                match fetch_markdown_with_loader(&asset_loader, &markdown_path).await {
                     Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
                     Err(err) => {
                         log::warn!("Failed to fetch markdown {}: {}", markdown_path, err);
-                        match fetch_markdown(&fallback_path).await {
+                        match fetch_markdown_with_loader(&asset_loader, &fallback_path).await {
                             Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
                             Err(err) => loading_state.set(LoadingState::FetchError(err)),
                         }
@@ -140,58 +189,13 @@ extern "C" {
     fn scrollTo(x: f64, y: f64);
 }
 
-async fn fetch_markdown(path: &str) -> Result<String, String> {
-    #[cfg(feature = "csr")]
-    {
-        use gloo::net::http::Request;
+async fn fetch_markdown_with_loader(loader: &AssetLoader, path: &str) -> Result<String, String> {
+    // Load the markdown file using the asset loader
+    let binary_data = loader.load_binary(path).await?;
 
-        let response = Request::get(path)
-            .send()
-            .await
-            .map_err(|e| format!("Failed to fetch the file {}: {}", path, e))?;
-        if response.status() == 200 {
-            response
-                .text()
-                .await
-                .map_err(|e| format!("Failed to read the file content of {}: {}", path, e))
-        } else {
-            Err(format!(
-                "File not found: {} (status: {})",
-                path,
-                response.status()
-            ))
-        }
-    }
-
-    #[cfg(all(feature = "ssr", not(feature = "csr")))]
-    {
-        // Get BUILD_DIR from environment variable at runtime
-        let build_dir = std::env::var("BUILD_DIR")
-            .map_err(|_| "SSR: BUILD_DIR environment variable is not set".to_string())?;
-
-        // Path could be absolute or relative
-        let file_path = if path.starts_with('/') {
-            path.to_string()
-        } else {
-            format!("{}/{}", build_dir, path)
-        };
-
-        log::info!("SSR: Loading markdown from {}", file_path);
-
-        match std::fs::read_to_string(&file_path) {
-            Ok(content) => Ok(content),
-            Err(e) => Err(format!(
-                "SSR: Failed to read markdown file {}: {}",
-                file_path, e
-            )),
-        }
-    }
-
-    // Add this default case for when neither feature is enabled
-    #[cfg(not(any(feature = "csr", feature = "ssr")))]
-    {
-        Err("Markdown fetching is not available in this configuration".to_string())
-    }
+    // Convert bytes to string
+    String::from_utf8(binary_data)
+        .map_err(|e| format!("Failed to convert markdown content to string: {}", e))
 }
 
 #[cfg(feature = "yew-preview")]

@@ -50,6 +50,7 @@ sbom = ["cargo-cyclonedx"]
 csr = [
     "yew/csr",
     "gloo",
+    "konnektoren-core/csr",
     "web-sys",
     "js-sys",
     "wasm-bindgen",
