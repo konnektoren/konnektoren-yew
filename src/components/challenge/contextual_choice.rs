@@ -26,6 +26,9 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
         return html! {};
     }
 
+    // Force UI update when item_index changes
+    let component_key = format!("contextual-choice-item-{}", *item_index);
+
     let handle_action = create_action_handler(
         item_index.clone(),
         show_help.clone(),
@@ -46,7 +49,7 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
     let template_parts: Vec<&str> = current_item.template.split("{}").collect();
 
     html! {
-        <div class="contextual-choice">
+        <div class="contextual-choice" key={component_key}>
             <div class="contextual-choice__progress">
                 <ProgressBar
                     value={*item_index}
@@ -57,6 +60,31 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
             <div class="contextual-choice__item">
                 { render_template_parts(template_parts, current_item, &selections, *item_index, handle_option_selection) }
             </div>
+
+            // Add help section that is shown/hidden based on show_help state
+            if *show_help {
+                <div class="contextual-choice__help">
+                    <h3 class="contextual-choice__help-title">{"Help"}</h3>
+                    <p class="contextual-choice__help-text">
+                        {"Fill in the blanks by selecting the appropriate option for each dropdown."}
+                    </p>
+                    <div class="contextual-choice__help-hints">
+                        <h4 class="contextual-choice__help-hints-title">{"Hints:"}</h4>
+                        <ul>
+                            {
+                                current_item.choices.iter().map(|choice| {
+                                    html! {
+                                        <li class="contextual-choice__help-hint">
+                                            {"The correct answer is: "}<strong>{&choice.correct_answer}</strong>
+                                        </li>
+                                    }
+                                }).collect::<Html>()
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
             <ChallengeActionsComponent on_action={handle_action} />
         </div>
     }
@@ -86,11 +114,14 @@ fn handle_next_action(
 ) {
     if **item_index < total_items - 1 {
         let next_item_index = **item_index + 1;
-        item_index.set(next_item_index);
 
+        // Clear selections for the next item explicitly
         let mut new_selections = (**selections).clone();
         new_selections.retain(|&(item, _), _| item != next_item_index);
         selections.set(new_selections);
+
+        // Set the new item index after clearing selections
+        item_index.set(next_item_index);
 
         if let Some(on_command) = on_command {
             let command = Command::Challenge(ChallengeCommand::NextTask);
@@ -106,12 +137,14 @@ fn handle_previous_action(
 ) {
     if **item_index > 0 {
         let previous_item_index = **item_index - 1;
-        item_index.set(previous_item_index);
 
-        // Clear selections for the previous item
+        // Clear selections for the previous item explicitly
         let mut new_selections = (**selections).clone();
         new_selections.retain(|&(item, _), _| item != previous_item_index);
         selections.set(new_selections);
+
+        // Set the new item index after clearing selections
+        item_index.set(previous_item_index);
 
         if let Some(on_command) = on_command {
             let command = Command::Challenge(ChallengeCommand::PreviousTask);
@@ -140,7 +173,13 @@ fn create_option_selection_handler(
                 choice_index,
                 option_index,
             );
-            check_for_task_completion(&item_index, &challenge, &challenge_result, &on_command);
+            check_for_task_completion(
+                &item_index,
+                &challenge,
+                &challenge_result,
+                &on_command,
+                &selections,
+            );
         }
     })
 }
@@ -217,6 +256,7 @@ fn check_for_task_completion(
     challenge: &ContextualChoice,
     challenge_result: &UseStateHandle<ChallengeResult>,
     on_command: &Option<Callback<Command>>,
+    selections: &UseStateHandle<HashMap<(usize, usize), usize>>,
 ) {
     if **item_index < challenge.items.len() {
         if **item_index == challenge.items.len() - 1 {
@@ -227,7 +267,15 @@ fn check_for_task_completion(
             }
         } else {
             let next_index = **item_index + 1;
+
+            // Clear selections for the next item explicitly
+            let mut new_selections = (**selections).clone();
+            new_selections.retain(|&(item, _), _| item != next_index);
+            selections.set(new_selections);
+
+            // Set the new item index after clearing selections
             item_index.set(next_index);
+
             if let Some(on_command) = on_command {
                 let command = Command::Challenge(ChallengeCommand::NextTask);
                 on_command.emit(command);
@@ -272,13 +320,21 @@ fn render_select(
 ) -> Html {
     let selected_value = (**selections).get(&(item_index, choice_index)).cloned();
 
+    // Create a unique ID for this select element based on item_index and choice_index
+    let select_id = format!("choice-select-{}-{}", item_index, choice_index);
+
     #[cfg(feature = "csr")]
     let onchange = {
         let handle_option_selection = handle_option_selection.clone();
+
         Callback::from(move |e: yew::Event| {
             use wasm_bindgen::JsCast;
             if let Some(target) = e.target_dyn_into::<web_sys::HtmlSelectElement>() {
-                handle_option_selection.emit((choice_index, target.selected_index() as usize - 1));
+                // Only process valid selections (index > 0 since index 0 is "Select an option")
+                if target.selected_index() > 0 {
+                    handle_option_selection
+                        .emit((choice_index, target.selected_index() as usize - 1));
+                }
             }
         })
     };
@@ -288,8 +344,9 @@ fn render_select(
 
     html! {
         <select
+            id={select_id.clone()}
             class="contextual-choice__select"
-            value={selected_value.map(|v| v.to_string()).unwrap_or_default()}
+            key={select_id.clone()} // Using clone to avoid move issues
             onchange={onchange}
         >
             <option value="" disabled=true selected={selected_value.is_none()}>
