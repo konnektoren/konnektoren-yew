@@ -3,10 +3,10 @@ use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
     AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
     ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent,
-    ContextualChoiceComponent, DomainSelectorComponent, FeedbackPopup, LeaderboardComp, Logo,
-    MusicComponent, MusicConfig, ProgressBar, RatingStarsComponent, SelectDesign, SelectTheme,
-    SettingsComponent, SharePageComp, SocialLinks, SoundConfig, StatusMessage, SwipeComponent,
-    TranslateComponent, VideoComponent,
+    ContextualChoiceComponent, ContextualChoiceResultComponent, DomainSelectorComponent,
+    FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar,
+    RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks,
+    SoundConfig, StatusMessage, SwipeComponent, TranslateComponent, VideoComponent,
 };
 use crate::prelude::create_i18n_config;
 
@@ -142,6 +142,7 @@ pub fn App() -> Html {
             MultipleChoiceCircleComponent::preview(),
             SortTableComponent::preview(),
             ContextualChoiceComponent::preview(),
+            ContextualChoiceResultComponent::preview(),
             GapFillComponent::preview(),
             OrderingComponent::preview(),
             OrderingResultComponent::preview(),

@@ -18,7 +18,7 @@
 }
 
 .contextual-choice__select {
-    @apply select select-bordered select-primary;
+    @apply select select-primary;
     @apply inline-block min-w-[160px] mx-1;
     @apply border-2 border-primary rounded-sm px-2 py-1;
     @apply cursor-pointer transition-all duration-300;
