@@ -137,7 +137,7 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
             html! {
                 <ReadText
                     text={current_question.explanation.clone()}
-                    lang={"de-DE".to_string()}
+                    lang={props.challenge.lang.clone()}
                 />
             }
         }
