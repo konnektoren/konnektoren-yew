@@ -27,7 +27,7 @@ mod tests {
 
     #[test]
     fn test_get_all() {
-        let json_data = include_str!("../assets/i18n/en.json");
+        let json_data = include_str!("../../assets/i18n/en.json");
         let loader = I18nJsonLoader::new(json_data);
         let data = loader.get_all();
         assert!(data.is_some());

@@ -3,7 +3,7 @@ use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, Translation
 use rust_embed::RustEmbed;
 
 #[derive(RustEmbed)]
-#[folder = "$CARGO_MANIFEST_DIR/assets/i18n"]
+#[folder = "$CARGO_MANIFEST_DIR/assets/i18n/"]
 pub struct LocalI18nAssets;
 
 pub fn create_i18n_config() -> I18nConfig {
