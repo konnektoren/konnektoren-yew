@@ -23,6 +23,16 @@ impl SelectedLanguage {
     }
 
     pub fn get(&self) -> Language {
+        // For SSR, always prioritize the LANG environment variable
+        #[cfg(feature = "ssr")]
+        {
+            if let Ok(lang) = std::env::var("LANG") {
+                let lang_code = Language::from_code(&lang);
+                return lang_code;
+            }
+        }
+
+        // For CSR (browser), use localStorage (unchanged)
         #[cfg(not(feature = "ssr"))]
         {
             use gloo::storage::{LocalStorage, Storage};
@@ -32,16 +42,7 @@ impl SelectedLanguage {
             }
         }
 
-        // Default behavior for SSR or when storage fails
-        // Try to get from LANGUAGE environment variable if in SSR mode
-        #[cfg(feature = "ssr")]
-        {
-            if let Ok(lang) = std::env::var("LANGUAGE") {
-                return Language::from_code(&lang);
-            }
-        }
-
-        // Fallback to current language
+        // Fallback to the language stored in this instance
         self.language.clone()
     }
 }

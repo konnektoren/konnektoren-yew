@@ -66,8 +66,29 @@ fn get_browser_language(_supported_languages: &[Language]) -> Option<Language> {
     None
 }
 
+#[cfg(feature = "ssr")]
+fn get_env_language() -> Option<Language> {
+    std::env::var("LANG").ok().map(|lang| {
+        log::debug!("🌐 Using language from environment: LANG={}", lang);
+        Language::from_code(&lang)
+    })
+}
+
+#[cfg(not(feature = "ssr"))]
+fn get_env_language() -> Option<Language> {
+    None
+}
+
 fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) -> Language {
     let supported_languages = config.supported_languages();
+
+    // Priority in SSR: environment variable
+    #[cfg(feature = "ssr")]
+    {
+        if let Some(env_lang) = get_env_language() {
+            return env_lang;
+        }
+    }
 
     // Priority: URL path → URL query param → settings → browser language → default
     get_path_language(&supported_languages)
@@ -98,6 +119,12 @@ pub struct I18nProviderProps {
 
 #[function_component(I18nProvider)]
 pub fn i18n_provider(props: &I18nProviderProps) -> Html {
+    #[cfg(feature = "ssr")]
+    {
+        use crate::i18n::log_language_info;
+        log_language_info("I18nProvider initialization");
+    }
+
     let settings = use_settings();
 
     // Initialize selected_language first
@@ -140,30 +167,17 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
 
 #[hook]
 pub fn use_i18n() -> UseStateHandle<I18nConfig> {
-    #[cfg(feature = "ssr")]
-    {
-        use_state(|| I18nConfig::default())
-    }
-    #[cfg(not(feature = "ssr"))]
-    {
-        use_context::<I18nContext>()
-            .expect("No I18n context provided")
-            .config
-    }
+    use_context::<I18nContext>()
+        .expect("No I18n context provided")
+        .config
 }
 
 #[hook]
 pub fn use_selected_language() -> SelectedLanguage {
-    #[cfg(feature = "ssr")]
-    {
-        SelectedLanguage::new("en")
-    }
-    #[cfg(not(feature = "ssr"))]
-    {
-        use_context::<I18nContext>()
-            .expect("No I18n context provided")
-            .selected_language
-    }
+    // Always use the context version which has the full translations loaded
+    use_context::<I18nContext>()
+        .expect("No I18n context provided")
+        .selected_language
 }
 
 #[hook]

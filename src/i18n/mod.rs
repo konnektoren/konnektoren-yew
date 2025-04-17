@@ -113,6 +113,59 @@ pub fn language_name(lang: &'static str) -> &'static str {
     }
 }
 
+pub fn log_language_info(context: &str) {
+    #[cfg(feature = "ssr")]
+    {
+        use log::{info, warn};
+
+        // Get language from environment and log it along with the flag
+        if let Ok(lang) = std::env::var("LANG") {
+            let flag_emoji = match lang.as_str() {
+                "en" => "🇺🇸",
+                "de" => "🇩🇪",
+                "uk" => "🇺🇦",
+                "zh" => "🇨🇳",
+                "ar" => "🇸🇦",
+                "pl" => "🇵🇱",
+                "tr" => "🇹🇷",
+                "es" => "🇪🇸",
+                "vi" => "🇻🇳",
+                _ => "🌐",
+            };
+
+            let lang_name = match lang.as_str() {
+                "en" => "English",
+                "de" => "Deutsch",
+                "uk" => "Українська",
+                "zh" => "中文",
+                "ar" => "العربية",
+                "pl" => "Polski",
+                "tr" => "Türkçe",
+                "es" => "Español",
+                "vi" => "Tiếng Việt",
+                _ => "Unknown",
+            };
+
+            info!(
+                "🌐 LANG={}  {} {} | Context: {}",
+                lang, flag_emoji, lang_name, context
+            );
+        } else {
+            warn!(
+                "⚠️ No LANG environment variable set! | Context: {}",
+                context
+            );
+        }
+
+        // Also check all environment variables related to language
+        for (key, value) in std::env::vars() {
+            if key.contains("LANG") || key.contains("lang") || key.contains("LOCALE") {
+                info!("  ENV: {}={}", key, value);
+            }
+        }
+    }
+}
+
 /// Unit tests for the `supported_language` and `flag` functions.
 #[cfg(test)]
 mod tests {

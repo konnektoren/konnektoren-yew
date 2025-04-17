@@ -3,13 +3,27 @@ use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, Translation
 use rust_embed::RustEmbed;
 
 #[derive(RustEmbed)]
-#[folder = "$CARGO_MANIFEST_DIR/src/assets/i18n/"]
+#[folder = "$CARGO_MANIFEST_DIR/assets/i18n"]
 pub struct LocalI18nAssets;
 
 pub fn create_i18n_config() -> I18nConfig {
     let mut config = I18nConfig::with_assets(CombinedTranslationAsset::<
         konnektoren_platform::i18n::I18nAssets,
     >::new("i18n.yml"));
+
+    // Set default language based on environment variable in SSR mode
+    #[cfg(feature = "ssr")]
+    {
+        if let Ok(lang_code) = std::env::var("LANG") {
+            log::debug!(
+                "🌐 Setting default language from LANG environment variable: {}",
+                lang_code
+            );
+            config.default_language = Language::from_code(&lang_code);
+        } else {
+            log::warn!("⚠️ LANG environment variable not set in SSR mode, using default language");
+        }
+    }
 
     // Then merge local translations
     let local_translations =
