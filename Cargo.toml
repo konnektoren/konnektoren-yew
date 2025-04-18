@@ -38,6 +38,7 @@ certificates = [
     "konnektoren-core/achievements",
     "konnektoren-core/certificates",
 ]
+chat = []
 effects = ["gloo/timers", "gloo/futures"]
 marketplace = ["konnektoren-core/marketplace"]
 music = []

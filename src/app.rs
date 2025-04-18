@@ -2,13 +2,16 @@ use crate::components::analytics::{AverageTimeTakenComponent, SuccessRateCompone
 use crate::components::{
     challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
     AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp, ChatComponent,
+    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp,
     ContextualChoiceComponent, ContextualChoiceResultComponent, DomainSelectorComponent,
     FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar,
     RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks,
     SoundConfig, StatusMessage, SwipeComponent, TranslateComponent, VideoComponent,
 };
 use crate::prelude::create_i18n_config;
+
+#[cfg(feature = "chat")]
+use crate::components::chat::ChatComponent;
 
 #[cfg(feature = "yew-preview")]
 use crate::components::navigation::menu::preview::ExampleMenu;
@@ -228,6 +231,7 @@ pub fn App() -> Html {
             Badge::preview(),
             SocialLinks::preview(),
             Logo::preview(),
+            #[cfg(feature = "chat")]
             ChatComponent::preview(),
             StatusMessage::preview(),
             FeedbackPopup::preview(),

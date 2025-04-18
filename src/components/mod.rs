@@ -15,6 +15,7 @@ pub mod challenge_presence;
 pub mod challenge_rating;
 pub mod challenge_review;
 pub mod challenge_timer;
+#[cfg(feature = "chat")]
 pub mod chat;
 pub mod domain_selector;
 pub mod feedback_popup;
@@ -61,6 +62,7 @@ pub use challenge_presence::ChallengePresenceComponent;
 pub use challenge_rating::ChallengeRatingComponent;
 pub use challenge_review::ChallengeReviewComponent;
 pub use challenge_timer::ChallengeTimerComponent;
+#[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::DomainSelectorComponent;
 pub use feedback_popup::FeedbackPopup;
