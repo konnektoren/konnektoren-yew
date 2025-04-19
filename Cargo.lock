@@ -2770,7 +2770,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-core"
 version = "0.4.6"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#5fc9d557218467a99c5cc4489a2fa6d3f57ca759"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#9d6196bf301820dd42fd0892f3628f9a762f1432"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -2810,7 +2810,7 @@ dependencies = [
 [[package]]
 name = "konnektoren-platform"
 version = "0.1.0"
-source = "git+https://github.com/konnektoren/konnektoren-rs.git#5fc9d557218467a99c5cc4489a2fa6d3f57ca759"
+source = "git+https://github.com/konnektoren/konnektoren-rs.git#9d6196bf301820dd42fd0892f3628f9a762f1432"
 dependencies = [
  "config",
  "isolang",
@@ -4329,9 +4329,9 @@ dependencies = [
 
 [[package]]
 name = "scc"
-version = "2.3.3"
+version = "2.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea091f6cac2595aa38993f04f4ee692ed43757035c36e67c180b6828356385b1"
+checksum = "22b2d775fb28f245817589471dd49c5edf64237f4a19d10ce9a92ff4651a27f4"
 dependencies = [
  "sdd",
 ]
@@ -4620,9 +4620,9 @@ dependencies = [
 
 [[package]]
 name = "signal-hook-registry"
-version = "1.4.3"
+version = "1.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c28b4eafe8a2d82f83559ef5941afff1ccba3da8e375c8f148efd75df181bf4f"
+checksum = "a1ee1aca2bc74ef9589efa7ccaa0f3752751399940356209b3fd80c078149b5e"
 dependencies = [
  "libc",
 ]
