@@ -1,25 +1,129 @@
 .domain-selector {
-    @apply flex flex-col items-center;
+    @apply flex flex-col items-center relative;
+}
 
+.domain-selector__select {
+    @apply select w-full max-w-[300px];
+    @apply transition-all duration-300;
+}
+
+.domain-selector__select:hover {
+    @apply select-primary -translate-y-0.5;
+}
+
+.domain-selector__option {
+    @apply flex items-center gap-2 p-2;
+}
+
+.domain-selector__option[selected] {
+    @apply bg-primary/10 text-primary font-medium;
+}
+
+@screen sm {
     .domain-selector__select {
-        @apply select select-md w-full max-w-[300px];
+        @apply select-sm max-w-[200px];
+    }
+}
+
+/* Cards Style */
+.domain-selector-cards {
+    @apply w-full;
+}
+
+.domain-selector-cards__grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
+}
+
+.domain-selector-cards__card {
+    @apply card bg-base-100 shadow-sm border border-base-300;
+    @apply cursor-pointer transition-all duration-300;
+}
+
+.domain-selector-cards__card:hover {
+    @apply shadow-md border-primary -translate-y-1;
+}
+
+.domain-selector-cards__card--active {
+    @apply border-primary bg-primary/10;
+}
+
+.domain-selector-cards__card-body {
+    @apply card-body p-4 flex flex-col items-center justify-center;
+}
+
+.domain-selector-cards__icon {
+    @apply text-xl mb-1;
+}
+
+.domain-selector-cards__name {
+    @apply font-medium;
+}
+
+.domain-selector-cards__description {
+    @apply text-sm text-base-content/80 mt-2 text-center;
+}
+
+/* Button Group Style */
+.domain-selector-buttons {
+    @apply join flex-wrap;
+}
+
+.domain-selector-buttons__button {
+    @apply join-item btn btn-outline gap-2;
+}
+
+.domain-selector-buttons__button:hover {
+    @apply btn-primary;
+}
+
+.domain-selector-buttons__button--active {
+    @apply btn-primary;
+}
+
+.domain-selector-buttons__icon {
+    @apply text-lg;
+}
+
+.domain-selector-buttons__name {
+    @apply whitespace-nowrap overflow-hidden text-ellipsis;
+    max-width: 100px;
+}
+
+@screen sm {
+    .domain-selector-buttons {
+        @apply flex-row flex-nowrap;
     }
 
-    .domain-selector__select:hover {
-        @apply select-primary -translate-y-0.5;
+    .domain-selector-buttons__button {
+        @apply btn-sm;
     }
+}
 
-    .domain-selector__option {
-        @apply flex items-center gap-2 p-2;
-    }
+/* Pills Style */
+.domain-selector-pills {
+    @apply flex flex-wrap gap-2;
+}
 
-    .domain-selector__option[selected] {
-        @apply bg-primary/10 text-primary font-medium;
-    }
+.domain-selector-pills__pill {
+    @apply badge badge-lg gap-1 cursor-pointer;
+    @apply hover:badge-primary transition-all duration-300;
+}
 
-    @screen sm {
-        .domain-selector__select {
-            @apply select-sm max-w-[200px];
-        }
+.domain-selector-pills__pill--active {
+    @apply badge-primary;
+}
+
+.domain-selector-pills__icon {
+    @apply text-sm;
+}
+
+.domain-selector-pills__name {
+    @apply whitespace-nowrap overflow-hidden text-ellipsis;
+    max-width: 80px;
+}
+
+@screen sm {
+    .domain-selector-pills__name {
+        max-width: 120px;
     }
 }
