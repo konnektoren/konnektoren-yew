@@ -1,0 +1,9 @@
+@utility page-layout {
+    @apply min-h-screen bg-base-100 flex flex-col items-center justify-center;
+    @apply p-8 pt-[calc(2rem+80px)] pb-24;
+}
+
+@utility page-title {
+    @apply text-3xl md:text-4xl font-bold text-primary mb-8 text-center;
+    @apply sm:text-2xl sm:mb-4;
+}

@@ -3,4 +3,5 @@
 @import "./atoms/index.css";
 @import "./base/index.css";
 @import "./components/index.css";
+@import "./layouts/index.css";
 @import "./themes/index.css";
