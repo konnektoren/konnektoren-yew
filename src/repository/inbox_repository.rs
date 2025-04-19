@@ -99,6 +99,7 @@ mod tests {
     wasm_bindgen_test_configure!(run_in_browser);
 
     #[wasm_bindgen_test]
+    #[cfg(test)]
     async fn test_inbox_repository() {
         let storage = MemoryStorage::default();
         let repo = InboxRepository::new(storage);
@@ -151,11 +152,13 @@ mod tests {
 
         let final_inbox = repo.get_inbox(key).await.unwrap().unwrap();
         assert_eq!(final_inbox.read_messages.as_ref().unwrap().len(), 3);
-        assert!(final_inbox
-            .read_messages
-            .as_ref()
-            .unwrap()
-            .contains(&"3".to_string()));
+        assert!(
+            final_inbox
+                .read_messages
+                .as_ref()
+                .unwrap()
+                .contains(&"3".to_string())
+        );
 
         // Test deleting the inbox
         repo.delete_inbox(key).await.unwrap();

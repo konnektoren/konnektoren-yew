@@ -1,4 +1,3 @@
-use crate::i18n::{I18nLoader, I18nYmlLoader, SelectedLanguage};
 use konnektoren_core::challenges::{Custom, Package, PackageReader};
 use konnektoren_core::commands::Command;
 use konnektoren_core::events::Event;
@@ -109,6 +108,10 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
     // Effect to process the loaded package after loading is complete
     #[cfg(feature = "csr")]
     {
+        use crate::i18n::I18nLoader;
+        use crate::prelude::I18nYmlLoader;
+        use crate::prelude::SelectedLanguage;
+
         let konnektoren_js = konnektoren_js.clone();
         let package = package.clone();
         let loading = loading.clone();

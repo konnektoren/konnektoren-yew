@@ -1,5 +1,5 @@
-use konnektoren_core::challenges::placeholder::PlaceholderType;
 use konnektoren_core::challenges::Placeholder;
+use konnektoren_core::challenges::placeholder::PlaceholderType;
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use yew::prelude::*;
 

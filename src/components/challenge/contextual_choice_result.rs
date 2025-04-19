@@ -21,7 +21,7 @@ pub fn contextual_choice_result_component(props: &ContextualChoiceResultComponen
 
                 // Check correctness with 0-based indices
                 let is_correct = item.choices.iter().zip(&answer.ids).all(|(choice, &id)| {
-                    choice.options.get(id).map_or(false, |selected| *selected == choice.correct_answer)
+                    choice.options.get(id).is_some_and(|selected| *selected == choice.correct_answer)
                 });
 
                 let class_name = if is_correct {
@@ -102,7 +102,7 @@ fn fill_template(
     }
 
     // Create a list of available indices for unnumbered placeholders
-    let mut available_indices: Vec<usize> = (0..choices.len())
+    let available_indices: Vec<usize> = (0..choices.len())
         .filter(|idx| !used_indices.contains(idx))
         .collect();
 

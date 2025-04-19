@@ -1,6 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent, OptionsComponent, QuestionComponent};
-use crate::components::challenge::MultipleChoiceResultComponent;
 use crate::components::ProgressBar;
+use crate::components::challenge::MultipleChoiceResultComponent;
 #[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::{
@@ -26,7 +26,7 @@ pub fn is_correct(
 ) -> bool {
     let question = challenge.questions.get(index);
     let result = match challenge_result {
-        ChallengeResult::MultipleChoice(ref mc) => mc.get(index),
+        ChallengeResult::MultipleChoice(mc) => mc.get(index),
         _ => None,
     };
     match (question, result) {
@@ -100,12 +100,10 @@ pub fn create_handle_option_selection(
             if let Some(on_command) = on_command.as_ref() {
                 on_command.emit(Command::Challenge(ChallengeCommand::NextTask));
             }
-        } else {
-            if let Some(on_command) = on_command.as_ref() {
-                on_command.emit(Command::Challenge(ChallengeCommand::Finish(Some(
-                    challenge_result_update.clone(),
-                ))));
-            }
+        } else if let Some(on_command) = on_command.as_ref() {
+            on_command.emit(Command::Challenge(ChallengeCommand::Finish(Some(
+                challenge_result_update.clone(),
+            ))));
         }
     })
 }

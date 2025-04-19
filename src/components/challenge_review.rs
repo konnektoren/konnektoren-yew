@@ -50,7 +50,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
         Callback::from(move |_: MouseEvent| {
             #[cfg(feature = "csr")]
             {
-                use crate::tools::{update_trace_from_response, TracedRequest};
+                use crate::tools::{TracedRequest, update_trace_from_response};
                 use gloo::net::http::Request;
                 use konnektoren_core::challenges::Review;
 

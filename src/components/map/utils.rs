@@ -1,5 +1,4 @@
 use crate::components::map::bounds::Bounds;
-use crate::prelude::ModelCoordinate;
 use konnektoren_core::game::GamePath;
 
 pub trait Zoom {

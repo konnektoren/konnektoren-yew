@@ -1,8 +1,8 @@
 use super::{OptionsComponent, QuestionComponent};
-use crate::components::challenge::multiple_choice::{
-    create_handle_option_selection, MultipleChoiceComponentProps,
-};
 use crate::components::ProgressBar;
+use crate::components::challenge::multiple_choice::{
+    MultipleChoiceComponentProps, create_handle_option_selection,
+};
 #[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::ChallengeResult;

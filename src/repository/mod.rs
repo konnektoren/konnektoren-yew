@@ -19,15 +19,15 @@ mod storage;
 mod storage_error;
 
 #[cfg(feature = "backup")]
-pub use backup::{Backup, BackupError, BackupInfo, BACKUP_KEY};
+pub use backup::{BACKUP_KEY, Backup, BackupError, BackupInfo};
 pub use certificate_repository::{
-    CertificateRepository, CertificateRepositoryTrait, CERTIFICATE_STORAGE_KEY,
+    CERTIFICATE_STORAGE_KEY, CertificateRepository, CertificateRepositoryTrait,
 };
 pub use game_state_persistence_impl::GameStatePersistenceImpl;
-pub use inbox_repository::{InboxRepository, InboxRepositoryTrait, INBOX_STORAGE_KEY};
-pub use profile_repository::{ProfileRepository, ProfileRepositoryTrait, PROFILE_STORAGE_KEY};
-pub use session_repository::{SessionRepository, SessionRepositoryTrait, SESSION_STORAGE_KEY};
-pub use settings_repository::{SettingsRepository, SettingsRepositoryTrait, SETTINGS_STORAGE_KEY};
+pub use inbox_repository::{INBOX_STORAGE_KEY, InboxRepository, InboxRepositoryTrait};
+pub use profile_repository::{PROFILE_STORAGE_KEY, ProfileRepository, ProfileRepositoryTrait};
+pub use session_repository::{SESSION_STORAGE_KEY, SessionRepository, SessionRepositoryTrait};
+pub use settings_repository::{SETTINGS_STORAGE_KEY, SettingsRepository, SettingsRepositoryTrait};
 
 pub use local_storage::LocalStorage;
 pub use memory_storage::MemoryStorage;

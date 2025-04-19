@@ -6,8 +6,8 @@ use std::env;
 use std::error::Error;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
-use yew_router::prelude::*;
 use yew_router::Routable;
+use yew_router::prelude::*;
 use yew_ssg::generators::{MetaTagGenerator, OpenGraphGenerator};
 use yew_ssg::{SsgConfigBuilder, StaticSiteGenerator};
 

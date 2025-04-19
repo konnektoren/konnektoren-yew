@@ -1,5 +1,5 @@
 use crate::model::Inbox;
-use crate::repository::{InboxRepositoryTrait, INBOX_STORAGE_KEY};
+use crate::repository::{INBOX_STORAGE_KEY, InboxRepositoryTrait};
 use std::sync::Arc;
 use yew::prelude::*;
 

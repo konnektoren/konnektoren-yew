@@ -1,6 +1,6 @@
 use crate::{
     model::SessionInitializer,
-    repository::{SessionRepositoryTrait, SESSION_STORAGE_KEY},
+    repository::{SESSION_STORAGE_KEY, SessionRepositoryTrait},
 };
 use konnektoren_core::session::Session;
 use std::sync::Arc;

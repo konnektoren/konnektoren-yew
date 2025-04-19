@@ -16,7 +16,7 @@ use yew::prelude::*;
 pub mod ssr_impl {
     use super::*;
     use crate::repository::{
-        RepositoryError, CERTIFICATE_STORAGE_KEY, INBOX_STORAGE_KEY, PROFILE_STORAGE_KEY,
+        CERTIFICATE_STORAGE_KEY, INBOX_STORAGE_KEY, PROFILE_STORAGE_KEY, RepositoryError,
         SESSION_STORAGE_KEY, SETTINGS_STORAGE_KEY,
     };
     use async_trait::async_trait;

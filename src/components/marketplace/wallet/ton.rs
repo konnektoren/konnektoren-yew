@@ -3,8 +3,8 @@ use async_trait::async_trait;
 use futures::channel::oneshot;
 use js_sys::Function;
 use std::sync::{Arc, RwLock};
-use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
 #[wasm_bindgen(module = "/src/components/marketplace/wallet/ton_wallet.js")]

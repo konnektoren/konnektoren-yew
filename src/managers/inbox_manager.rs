@@ -38,7 +38,7 @@ pub fn inbox_manager(props: &InboxManagerProps) -> Html {
         None => {
             return html! {
                 <InboxComponent inbox={(*inbox_state).clone()} on_read_message={mark_as_read.clone()} />
-            }
+            };
         }
     }
 }

@@ -1,12 +1,5 @@
-use crate::components::analytics::{AverageTimeTakenComponent, SuccessRateComponent};
-use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
-};
+use crate::components::{challenge::ChallengeComponent, game_path::GamePathComponent};
 use crate::prelude::create_i18n_config;
-use crate::prelude::GameControllerProvider;
-use crate::prelude::SelectDesign;
-use crate::prelude::SelectTheme;
-use crate::providers::ClientSideRouter;
 
 #[cfg(feature = "yew-preview")]
 use crate::components::navigation::menu::preview::ExampleMenu;
@@ -14,13 +7,13 @@ use crate::components::navigation::menu::preview::ExampleMenu;
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
-#[cfg(feature = "effects")]
-use crate::effects::{BlinkAnimation, ReadText};
-use crate::i18n::I18nProvider;
 use crate::model::DefaultSessionInitializer;
-use crate::prelude::DesignProvider;
-use crate::prelude::RepositoryProvider;
-use crate::prelude::ThemeProvider;
+#[cfg(feature = "yew-preview")]
+use crate::prelude::{
+    AverageTimeTakenComponent, ClientSideRouter, DesignProvider, GameControllerProvider,
+    I18nProvider, RepositoryProvider, SelectDesign, SelectTheme, SuccessRateComponent,
+    ThemeProvider,
+};
 use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
@@ -30,7 +23,6 @@ use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
 use yew_preview::{create_component_group, create_component_item, prelude::*};
-use yew_router::prelude::BrowserRouter;
 
 #[function_component]
 pub fn Example() -> Html {

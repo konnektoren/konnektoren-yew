@@ -1,4 +1,4 @@
-use super::{SessionRepositoryTrait, SESSION_STORAGE_KEY};
+use super::{SESSION_STORAGE_KEY, SessionRepositoryTrait};
 use anyhow::Result;
 use konnektoren_core::game::GameState;
 use konnektoren_core::persistence::GameStatePersistence;

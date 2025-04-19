@@ -2,7 +2,6 @@ use crate::components::challenge::informative::InformativeComponentProps;
 use konnektoren_core::asset_loader::AssetLoader;
 use konnektoren_core::challenges::ChallengeResult;
 use konnektoren_core::commands::{ChallengeCommand, Command};
-use std::future::Future;
 use yew::prelude::*;
 
 pub enum LoadingState {
@@ -61,8 +60,8 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
         Callback::from(move |_| {
             #[cfg(feature = "csr")]
             {
-                use wasm_bindgen::prelude::*;
                 use wasm_bindgen::JsCast;
+                use wasm_bindgen::prelude::*;
                 use web_sys::HtmlElement;
 
                 use gloo::timers::future::TimeoutFuture;

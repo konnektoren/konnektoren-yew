@@ -1,7 +1,7 @@
+use crate::components::map::SCALE;
 use crate::components::map::bounds::Bounds;
 use crate::components::map::svg_challenge::SvgChallenge;
 use crate::components::map::svg_path::SvgPath;
-use crate::components::map::SCALE;
 use crate::components::{BrowserCoordinate, ModelCoordinate, SvgCoordinate};
 use crate::prelude::ChallengeIndex;
 use konnektoren_core::challenges::ChallengeConfig;
@@ -29,10 +29,10 @@ pub struct SvgMapProps {
 pub fn svg_map(props: &SvgMapProps) -> Html {
     let view_box = format!(
         "{} {} {} {}",
-        props.view_box.0 .0,
-        props.view_box.0 .1,
-        props.view_box.1 .0 - props.view_box.0 .0,
-        props.view_box.1 .1 - props.view_box.0 .1
+        props.view_box.0.0,
+        props.view_box.0.1,
+        props.view_box.1.0 - props.view_box.0.0,
+        props.view_box.1.1 - props.view_box.0.1
     );
 
     let on_map_click = {

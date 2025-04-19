@@ -58,10 +58,11 @@ mod tests {
 
         if let Html::VTag(vtag) = result {
             assert_eq!(vtag.tag(), "button");
-            assert!(vtag
-                .children()
-                .into_iter()
-                .any(|child| matches!(child, Html::VText(vtext) if vtext.text.contains("Start"))));
+            assert!(
+                vtag.children().into_iter().any(
+                    |child| matches!(child, Html::VText(vtext) if vtext.text.contains("Start"))
+                )
+            );
         } else {
             panic!("Expected VTag");
         }

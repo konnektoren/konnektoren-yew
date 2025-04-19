@@ -1,4 +1,3 @@
-use crate::i18n::{I18nLoader, I18nYmlLoader, SelectedLanguage};
 use konnektoren_core::challenges::Custom;
 use konnektoren_core::commands::Command;
 use konnektoren_core::events::Event;
@@ -95,6 +94,9 @@ pub fn custom_component(props: &CustomComponentProps) -> Html {
     // Effect to process the loaded content after loading is complete
     #[cfg(feature = "csr")]
     {
+        use crate::i18n::I18nLoader;
+        use crate::prelude::I18nYmlLoader;
+        use crate::prelude::SelectedLanguage;
         let konnektoren_js = konnektoren_js.clone();
         let challenge = props.challenge.clone();
         let js_code = (*js_content).clone();

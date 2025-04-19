@@ -1,7 +1,10 @@
-use crate::components::custom::fetch_content;
-use crate::i18n::{I18nLoader, I18nYmlLoader, SelectedLanguage};
 use konnektoren_core::challenges::{Custom, CustomChallengeResult};
 use yew::prelude::*;
+
+#[cfg(feature = "csr")]
+use crate::i18n::I18nLoader;
+#[cfg(feature = "csr")]
+use crate::prelude::I18nYmlLoader;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct CustomResultComponentProps {
@@ -48,6 +51,7 @@ pub fn custom_result(props: &CustomResultComponentProps) -> Html {
         use_effect_with(props.challenge.id.clone(), move |_| {
             #[cfg(feature = "csr")]
             {
+                use crate::prelude::custom::fetch_content;
                 use wasm_bindgen_futures::spawn_local;
 
                 spawn_local(async move {
@@ -70,6 +74,7 @@ pub fn custom_result(props: &CustomResultComponentProps) -> Html {
     {
         #[cfg(feature = "csr")]
         {
+            use crate::prelude::SelectedLanguage;
             let konnektoren_js = konnektoren_js.clone();
             let i18n_content = i18n_content.clone();
 

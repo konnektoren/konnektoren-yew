@@ -1,4 +1,4 @@
-use crate::i18n::{flag, language_name, use_i18n, use_selected_language, LANGUAGES};
+use crate::i18n::{LANGUAGES, flag, language_name, use_i18n, use_selected_language};
 use crate::providers::use_settings;
 use yew::prelude::*;
 

@@ -1,6 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
-use konnektoren_core::challenges::{ChallengeResult, ContextItemChoiceAnswers, ContextualChoice};
+use konnektoren_core::challenges::{ChallengeResult, ContextualChoice};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use std::collections::HashMap;
@@ -131,6 +131,7 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
         Callback::from(move |(choice_index, option_index): (usize, usize)| {
             #[cfg(feature = "csr")]
             {
+                use konnektoren_core::challenges::ContextItemChoiceAnswers;
                 // Update selections - STORE 0-BASED INDICES DIRECTLY
                 let mut new_selections = (*selections).clone();
                 new_selections.insert((*item_index, choice_index), option_index); // No more +1
@@ -341,13 +342,7 @@ fn render_template_parts(
             let digit_str = digit_match.as_str();
             if digit_str.is_empty() {
                 // For {} (unnumbered), use the next available index
-                if let Some(idx) = available_indices.pop() {
-                    idx
-                } else {
-                    // If we've used all available indices, just use index 0
-                    // (this shouldn't happen if the template is well-formed)
-                    0
-                }
+                available_indices.pop().unwrap_or(0)
             } else {
                 // For {0}, {1}, etc., use the specified index
                 digit_str.parse().unwrap_or(0)

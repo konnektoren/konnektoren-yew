@@ -18,7 +18,7 @@ fn test_all_used_classes_have_styles() {
     // 2. Collect all classes used in Rust files
     let rust_classes: HashSet<String> = collect_rust_classes()
         .into_iter()
-        .filter(|class| !is_font_awesome_class(&class))
+        .filter(|class| !is_font_awesome_class(class))
         .collect();
 
     // 3. Compare and report
@@ -50,7 +50,7 @@ fn test_no_unused_styles() {
     // 2. Collect all classes used in Rust files
     let rust_classes: HashSet<String> = collect_rust_classes()
         .into_iter()
-        .filter(|class| !is_font_awesome_class(&class))
+        .filter(|class| !is_font_awesome_class(class))
         .collect();
 
     // 3. Compare and report
@@ -84,7 +84,7 @@ fn collect_rust_classes() -> HashSet<String> {
 
     for entry in WalkDir::new("src") {
         let entry = entry.unwrap();
-        if entry.path().extension().map_or(false, |ext| ext == "rs") {
+        if entry.path().extension().is_some_and(|ext| ext == "rs") {
             let content = fs::read_to_string(entry.path()).unwrap();
 
             for cap in re.captures_iter(&content) {
@@ -111,7 +111,7 @@ fn collect_scss_classes() -> HashSet<String> {
 
     for entry in WalkDir::new("scss") {
         let entry = entry.unwrap();
-        if entry.path().extension().map_or(false, |ext| ext == "scss") {
+        if entry.path().extension().is_some_and(|ext| ext == "scss") {
             let content = fs::read_to_string(entry.path()).unwrap();
             process_scss_content(&content, &mut context);
         }

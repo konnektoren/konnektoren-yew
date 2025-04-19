@@ -1,5 +1,5 @@
-use crate::components::settings::sound_config::SoundConfig;
 use crate::components::MusicConfig;
+use crate::components::settings::sound_config::SoundConfig;
 use crate::model::Settings;
 use crate::prelude::use_settings;
 use yew::prelude::*;

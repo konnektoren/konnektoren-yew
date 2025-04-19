@@ -1,9 +1,9 @@
-use axum::{response::Html as AxumHtml, routing::get, Router};
+use axum::{Router, response::Html as AxumHtml, routing::get};
 use konnektoren_yew::components::{AppVersionComponent, Badge};
 use konnektoren_yew::prelude::App;
 use log::info;
-use yew::prelude::*;
 use yew::ServerRenderer;
+use yew::prelude::*;
 
 // Wrapper for AppVersionComponent
 #[function_component(AppVersionWrapper)]

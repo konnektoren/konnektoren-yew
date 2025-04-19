@@ -1,2 +1,2 @@
 mod traced_request;
-pub use traced_request::{update_trace_from_response, TracedRequest, TracedResponse};
+pub use traced_request::{TracedRequest, TracedResponse, update_trace_from_response};

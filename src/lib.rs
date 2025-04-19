@@ -26,5 +26,5 @@ pub mod prelude {
     pub use crate::managers::*;
     pub use crate::model::*;
     pub use crate::providers::*;
-    pub use crate::tools::{update_trace_from_response, TracedRequest, TracedResponse};
+    pub use crate::tools::{TracedRequest, TracedResponse, update_trace_from_response};
 }

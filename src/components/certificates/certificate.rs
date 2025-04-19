@@ -1,5 +1,4 @@
 use crate::prelude::CertificateImageComponent;
-use gloo::timers::callback::Timeout;
 use konnektoren_core::certificates::CertificateData;
 use urlencoding::encode;
 use yew::prelude::*;
@@ -40,7 +39,7 @@ pub fn certificate(props: &CertificateProps) -> Html {
                 clipboard_handle.write_text(data.to_string());
                 show_copied_message.set(true);
                 let show_copied_message = show_copied_message.clone();
-                Timeout::new(3000, move || {
+                gloo::timers::callback::Timeout::new(3000, move || {
                     show_copied_message.set(false);
                 })
                 .forget();

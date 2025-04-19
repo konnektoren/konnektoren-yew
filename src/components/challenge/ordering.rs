@@ -1,9 +1,9 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
-use konnektoren_core::challenges::{ChallengeResult, Ordering, OrderingItem, OrderingResult};
+use konnektoren_core::challenges::{ChallengeResult, Ordering, OrderingResult};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
-use rand::prelude::{thread_rng, SliceRandom};
+use rand::prelude::{SliceRandom, thread_rng};
 use yew::prelude::*;
 
 // Props for the OrderingElement component
@@ -457,6 +457,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
+    use konnektoren_core::challenges::OrderingItem;
     use yew_preview::prelude::*;
 
     fn create_test_challenge() -> Ordering {

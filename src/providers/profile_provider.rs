@@ -1,4 +1,4 @@
-use crate::repository::{ProfileRepositoryTrait, PROFILE_STORAGE_KEY};
+use crate::repository::{PROFILE_STORAGE_KEY, ProfileRepositoryTrait};
 use konnektoren_core::prelude::PlayerProfile;
 use std::sync::Arc;
 use yew::prelude::*;

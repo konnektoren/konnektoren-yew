@@ -179,11 +179,3 @@ pub fn use_selected_language() -> SelectedLanguage {
         .expect("No I18n context provided")
         .selected_language
 }
-
-#[hook]
-pub fn use_translation() -> impl Fn(&str) -> String {
-    let config = use_i18n();
-    let selected_language = use_selected_language();
-
-    move |key: &str| config.t_with_lang(key, &selected_language.get())
-}

@@ -1,5 +1,4 @@
 use crate::providers::use_profile_repository;
-use crate::repository::PROFILE_STORAGE_KEY;
 use konnektoren_core::prelude::PlayerProfile;
 use yew::prelude::*;
 
@@ -11,6 +10,7 @@ pub fn profile_config_component() -> Html {
 
     #[cfg(feature = "csr")]
     {
+        use crate::repository::PROFILE_STORAGE_KEY;
         let profile = profile.clone();
         let name = name.clone();
         let profile_repository = profile_repository.clone();
@@ -46,6 +46,7 @@ pub fn profile_config_component() -> Html {
         Callback::from(move |_| {
             #[cfg(feature = "csr")]
             {
+                use crate::repository::PROFILE_STORAGE_KEY;
                 let mut updated_profile = (*profile).clone();
                 updated_profile.name = (*name).clone();
 

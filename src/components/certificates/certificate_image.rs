@@ -1,4 +1,4 @@
-use konnektoren_core::certificates::{create_certificate_data_url, CertificateData};
+use konnektoren_core::certificates::{CertificateData, create_certificate_data_url};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone, Debug, Default)]

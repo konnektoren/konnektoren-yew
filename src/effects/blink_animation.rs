@@ -40,7 +40,7 @@ pub fn blink_animation(props: &BlinkAnimationProps) -> Html {
     {
         use gloo::timers::future::TimeoutFuture;
         use wasm_bindgen::JsCast;
-        use web_sys::{window, HtmlElement};
+        use web_sys::{HtmlElement, window};
 
         use_effect_with(target_id.clone(), move |_| {
             if let Some(document) = window()

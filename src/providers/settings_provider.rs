@@ -1,5 +1,5 @@
 use crate::model::Settings;
-use crate::repository::{SettingsRepositoryTrait, SETTINGS_STORAGE_KEY};
+use crate::repository::{SETTINGS_STORAGE_KEY, SettingsRepositoryTrait};
 use std::sync::Arc;
 use yew::prelude::*;
 

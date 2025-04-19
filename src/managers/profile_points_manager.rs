@@ -1,4 +1,4 @@
-use crate::prelude::{use_profile, ProfilePointsComponent};
+use crate::prelude::{ProfilePointsComponent, use_profile};
 use std::rc::Rc;
 use yew::prelude::*;
 

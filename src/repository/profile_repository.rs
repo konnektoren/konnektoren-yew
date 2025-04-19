@@ -9,7 +9,7 @@ pub const PROFILE_STORAGE_KEY: &str = "konnektoren_profile";
 #[async_trait]
 pub trait ProfileRepositoryTrait: Send + Sync {
     async fn save_profile(&self, key: &str, profile: &PlayerProfile)
-        -> Result<(), RepositoryError>;
+    -> Result<(), RepositoryError>;
     async fn get_profile(&self, key: &str) -> Result<Option<PlayerProfile>, RepositoryError>;
     async fn delete_profile(&self, key: &str) -> Result<(), RepositoryError>;
     async fn update_profile(

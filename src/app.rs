@@ -1,13 +1,4 @@
-use crate::components::analytics::{AverageTimeTakenComponent, SuccessRateComponent};
-use crate::components::{
-    challenge::ChallengeComponent, game_path::GamePathComponent, AdvertisementComponent,
-    AppVersionComponent, Badge, BuyMeCoffeeComponent, ChallengeConfigComponent,
-    ChallengeInfoComponent, ChallengeTimerComponent, ChallengesSummaryComp,
-    ContextualChoiceComponent, ContextualChoiceResultComponent, DomainSelectorComponent,
-    FeedbackPopup, LeaderboardComp, Logo, MusicComponent, MusicConfig, ProgressBar,
-    RatingStarsComponent, SelectDesign, SelectTheme, SettingsComponent, SharePageComp, SocialLinks,
-    SoundConfig, StatusMessage, SwipeComponent, TranslateComponent, VideoComponent,
-};
+use crate::components::{challenge::ChallengeComponent, game_path::GamePathComponent};
 use crate::prelude::create_i18n_config;
 
 #[cfg(feature = "chat")]
@@ -16,39 +7,17 @@ use crate::components::chat::ChatComponent;
 #[cfg(feature = "yew-preview")]
 use crate::components::navigation::menu::preview::ExampleMenu;
 
-#[cfg(feature = "marketplace")]
-use crate::components::marketplace::{
-    CartBadgeComponent, ProductCatalogComponent, ProductComponent, ShoppingCartComponent,
-    WalletComponent,
-};
+#[cfg(feature = "yew-preview")]
+use crate::prelude::*;
 
-#[cfg(feature = "sbom")]
-use crate::components::app_dependencies::AppDependenciesComponent;
-
-#[cfg(feature = "tour")]
-use crate::components::tour::{TourButton, TourConfig};
+#[cfg(feature = "yew-preview")]
+use yew_router::BrowserRouter;
 
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
-use crate::components::challenge::{
-    GapFillComponent, MultipleChoiceCircleComponent, MultipleChoiceComponent, OrderingComponent,
-    OrderingResultComponent, PlaceholderComponent, SortTableComponent,
-};
-#[cfg(feature = "certificates")]
-use crate::components::{
-    AchievementComponent, AchievementsComponent, CertificateComponent, CertificateImageComponent,
-};
-#[cfg(feature = "effects")]
-use crate::effects::{BlinkAnimation, ReadText};
-use crate::i18n::I18nProvider;
 use crate::model::DefaultSessionInitializer;
-use crate::prelude::{
-    BrowserCoordinate, ChallengeActionsComponent, ChallengeIndex, ChallengeRatingComponent,
-    ChallengeReviewComponent, DesignProvider, GameControllerProvider, InformativeComponent,
-    InformativeMarkdownComponent, MapComponent, OptionsComponent, ProfilePointsManager,
-    QuestionComponent, RepositoryProvider, SelectLanguage, SelectLevelComp, ThemeProvider,
-};
+use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
@@ -57,7 +26,6 @@ use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
 use yew_preview::{create_component_group, create_component_item, prelude::*};
-use yew_router::prelude::BrowserRouter;
 
 #[function_component]
 pub fn Example() -> Html {
@@ -239,7 +207,7 @@ pub fn App() -> Html {
             AdvertisementComponent::preview(),
         ),
         #[cfg(feature = "tour")]
-        create_component_group!("Tour", TourConfig::preview(), TourButton::preview()),
+        create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),
     ];
 
     let i18n_config = create_i18n_config();

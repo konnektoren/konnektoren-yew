@@ -12,7 +12,7 @@ mod i18n_yml_loader;
 /// The `selected_language` module manages the state of the currently selected language.
 mod selected_language;
 
-pub use config::{create_i18n_config, I18nConfig};
+pub use config::{I18nConfig, create_i18n_config};
 
 pub use i18n_json_loader::I18nJsonLoader;
 pub use i18n_loader::I18nLoader;
@@ -30,7 +30,7 @@ pub const LANGUAGES: [&str; 9] = ["en", "uk", "ar", "de", "zh", "pl", "tr", "es"
 /// - `use_selected_language`: A hook to get or set the selected language.
 /// - `I18nProvider`: A component that provides i18n context to the application.
 /// - `I18nProviderProps`: The properties for the `I18nProvider` component.
-pub use provider::{use_i18n, use_selected_language, I18nProvider, I18nProviderProps};
+pub use provider::{I18nProvider, I18nProviderProps, use_i18n, use_selected_language};
 
 /// Re-export the `SelectedLanguage` type from the `selected_language` module.
 pub use selected_language::SelectedLanguage;

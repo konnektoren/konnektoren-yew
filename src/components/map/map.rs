@@ -1,7 +1,7 @@
+use crate::components::map::SCALE;
 use crate::components::map::bounds::Bounds;
 use crate::components::map::svg_map::SvgMap;
 use crate::components::map::utils::Zoom;
-use crate::components::map::SCALE;
 use crate::components::{BrowserCoordinate, ChallengeIndex, SvgCoordinate};
 use konnektoren_core::game::GamePath;
 use konnektoren_core::prelude::ChallengeConfig;
@@ -158,8 +158,8 @@ pub fn map_component(props: &MapComponentProps) -> Html {
 
                 zoom_level.set(new_zoom);
 
-                let width = ((svg_bounds.1 .0 - svg_bounds.0 .0) as f64 / new_zoom) as i32;
-                let height = ((svg_bounds.1 .1 - svg_bounds.0 .1) as f64 / new_zoom) as i32;
+                let width = ((svg_bounds.1.0 - svg_bounds.0.0) as f64 / new_zoom) as i32;
+                let height = ((svg_bounds.1.1 - svg_bounds.0.1) as f64 / new_zoom) as i32;
 
                 let new_min_x = center.0 - width / 2;
                 let new_min_y = center.1 - height / 2;
@@ -214,8 +214,8 @@ fn calculate_challenge_focus(
     let challenge_pos = challenge.position.unwrap_or((0, 0));
     let center = SvgCoordinate(challenge_pos.0 * SCALE, challenge_pos.1 * SCALE);
 
-    let width = (bounds.1 .0 - bounds.0 .0) as f64;
-    let height = (bounds.1 .1 - bounds.0 .1) as f64;
+    let width = (bounds.1.0 - bounds.0.0) as f64;
+    let height = (bounds.1.1 - bounds.0.1) as f64;
     let zoom = (width.min(height) / (5.0 * SCALE as f64)).clamp(MIN_ZOOM, MAX_ZOOM);
 
     (center, zoom)
@@ -296,17 +296,17 @@ fn adjust_zoom(
     let new_zoom = (*(*zoom_level) + zoom_delta).clamp(MIN_ZOOM, MAX_ZOOM);
     zoom_level.set(new_zoom);
 
-    let width = ((bounds.1 .0 - bounds.0 .0) as f64 / new_zoom).max(1.0);
-    let height = ((bounds.1 .1 - bounds.0 .1) as f64 / new_zoom).max(1.0);
+    let width = ((bounds.1.0 - bounds.0.0) as f64 / new_zoom).max(1.0);
+    let height = ((bounds.1.1 - bounds.0.1) as f64 / new_zoom).max(1.0);
 
     let new_min_x = view_box_position
         .0
-        .min(bounds.1 .0 - width as i32)
-        .max(bounds.0 .0);
+        .min(bounds.1.0 - width as i32)
+        .max(bounds.0.0);
     let new_min_y = view_box_position
         .1
-        .min(bounds.1 .1 - height as i32)
-        .max(bounds.0 .1);
+        .min(bounds.1.1 - height as i32)
+        .max(bounds.0.1);
 
     let updated_view_box: (SvgCoordinate, SvgCoordinate) = (
         SvgCoordinate(new_min_x, new_min_y),
@@ -395,8 +395,8 @@ fn calculate_mouse_delta(client_x: i32, client_y: i32, last_pos: &(f64, f64)) ->
 }
 
 fn calculate_view_box_size(bounds: (SvgCoordinate, SvgCoordinate), zoom_level: f64) -> (i32, i32) {
-    let view_box_width = ((bounds.1 .0 - bounds.0 .0) as f64 / zoom_level) as i32;
-    let view_box_height = ((bounds.1 .1 - bounds.0 .1) as f64 / zoom_level) as i32;
+    let view_box_width = ((bounds.1.0 - bounds.0.0) as f64 / zoom_level) as i32;
+    let view_box_height = ((bounds.1.1 - bounds.0.1) as f64 / zoom_level) as i32;
     (view_box_width, view_box_height)
 }
 
@@ -413,14 +413,14 @@ fn calculate_new_view_box_position(
 
     let new_view_box_x = clamp_position(
         new_view_box_x,
-        bounds.0 .0 - SCALE,
-        bounds.1 .0 - view_box_width + SCALE,
+        bounds.0.0 - SCALE,
+        bounds.1.0 - view_box_width + SCALE,
         "x",
     );
     let new_view_box_y = clamp_position(
         new_view_box_y,
-        bounds.0 .1 - SCALE,
-        bounds.1 .1 - view_box_height + SCALE,
+        bounds.0.1 - SCALE,
+        bounds.1.1 - view_box_height + SCALE,
         "y",
     );
 

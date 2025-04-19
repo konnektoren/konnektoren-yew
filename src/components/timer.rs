@@ -40,11 +40,9 @@ fn format_duration(duration: Duration, show_milliseconds: bool) -> String {
         } else {
             format!("{:02}:{:02}:{:03}", minutes, seconds, milliseconds)
         }
+    } else if hours > 0 {
+        format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
     } else {
-        if hours > 0 {
-            format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
-        } else {
-            format!("{:02}:{:02}", minutes, seconds)
-        }
+        format!("{:02}:{:02}", minutes, seconds)
     }
 }

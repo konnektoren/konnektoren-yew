@@ -34,7 +34,7 @@ mod tests {
         assert_eq!(settings.music_volume, 0.0);
         assert_eq!(settings.sound_volume, 0.8);
         assert_eq!(settings.theme, "light");
-        assert_eq!(settings.show_helpers, true);
+        assert!(settings.show_helpers);
     }
 
     #[test]

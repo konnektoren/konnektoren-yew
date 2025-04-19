@@ -1,7 +1,7 @@
 use chrono::Duration;
-use konnektoren_core::analytics::metrics::SuccessRateMetric;
 use konnektoren_core::analytics::Metric;
 use konnektoren_core::analytics::Trend;
+use konnektoren_core::analytics::metrics::SuccessRateMetric;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]

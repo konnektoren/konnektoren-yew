@@ -1,4 +1,4 @@
-use crate::repository::{CertificateRepositoryTrait, CERTIFICATE_STORAGE_KEY};
+use crate::repository::{CERTIFICATE_STORAGE_KEY, CertificateRepositoryTrait};
 use konnektoren_core::certificates::CertificateData;
 use std::sync::Arc;
 use yew::prelude::*;
