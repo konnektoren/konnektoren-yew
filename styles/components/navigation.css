@@ -1,12 +1,13 @@
 .navigation-wrapper {
     @apply fixed left-0 bottom-0;
     @apply z-50 w-full;
-    @apply flex items-center justify-around bg-base-200;
+    @apply flex flex-col items-center justify-around bg-base-200;
 }
 
 .navigation {
     @apply flex justify-around items-center w-full bg-base-200;
     @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)] shadow-lg;
+    padding-bottom: env(safe-area-inset-bottom, 0);
 
     & .nav-group {
         @apply flex flex-col items-center;
@@ -32,10 +33,11 @@
 }
 
 .navigation-dropdown {
-    @apply absolute bottom-full left-0 w-4/5;
+    @apply absolute bottom-full left-0 w-4/5 max-w-xs;
     @apply bg-base-200 p-2 rounded-t-2xl;
     @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)];
     animation: slideUp 0.3s ease;
+    z-index: 60; /* One higher than navigation-wrapper */
 
     & nav {
         @apply flex flex-col;
@@ -45,6 +47,7 @@
         @apply flex items-center p-2;
         @apply text-base-content/70 no-underline;
         @apply transition-all duration-300;
+        @apply rounded-lg;
 
         & i {
             @apply mr-2;

@@ -7270,7 +7270,7 @@ dependencies = [
 [[package]]
 name = "yew-ssg"
 version = "0.2.0"
-source = "git+https://github.com/chriamue/yew-ssg#300e63f24c168fb4047ed3b457e506678335e3d2"
+source = "git+https://github.com/chriamue/yew-ssg#4483d54cf5baaaaeb5064893406a36285aeddd7b"
 dependencies = [
  "async-trait",
  "log",
@@ -7287,7 +7287,7 @@ dependencies = [
 [[package]]
 name = "yew-ssg-router"
 version = "0.2.0"
-source = "git+https://github.com/chriamue/yew-ssg#300e63f24c168fb4047ed3b457e506678335e3d2"
+source = "git+https://github.com/chriamue/yew-ssg#4483d54cf5baaaaeb5064893406a36285aeddd7b"
 dependencies = [
  "log",
  "serial_test",
@@ -7302,7 +7302,7 @@ dependencies = [
 [[package]]
 name = "yew-ssg-router-macros"
 version = "0.2.0"
-source = "git+https://github.com/chriamue/yew-ssg#300e63f24c168fb4047ed3b457e506678335e3d2"
+source = "git+https://github.com/chriamue/yew-ssg#4483d54cf5baaaaeb5064893406a36285aeddd7b"
 dependencies = [
  "proc-macro2",
  "quote",
