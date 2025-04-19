@@ -1,9 +1,0 @@
-.shopping-cart {
-    @include grid-layout(
-        (
-            template: repeat(auto-fit, minmax(250px, 1fr)),
-            gap: "md",
-            align: start,
-        )
-    );
-}

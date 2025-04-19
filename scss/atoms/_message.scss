@@ -1,9 +1,0 @@
-@mixin status-message($color: "success") {
-    font-size: font-size("sm");
-    color: color($color);
-    margin-top: spacing("xs");
-}
-
-%success-message {
-    @include status-message("success");
-}

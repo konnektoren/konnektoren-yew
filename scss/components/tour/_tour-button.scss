@@ -1,7 +1,0 @@
-.tour-button {
-    z-index: z-index("tour-button");
-
-    &__btn {
-        @include primary-button("md");
-    }
-}

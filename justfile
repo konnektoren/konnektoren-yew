@@ -1,8 +1,5 @@
 # justfile
 
-# Import styles justfile
-styles := "scss"
-
 # Set default values for environment variables
 export BUILD_DIR := env_var_or_default("BUILD_DIR", "dist")
 export REPORTS_DIR := env_var_or_default("REPORTS_DIR", "reports")
@@ -12,7 +9,7 @@ default:
     @just --list
 
 # Setup everything
-setup: setup-rust setup-styles
+setup: setup-rust
 
 # Setup Rust tools
 setup-rust:
@@ -20,16 +17,12 @@ setup-rust:
     cargo install wasm-pack
     rustup target add wasm32-unknown-unknown
 
-# Setup styles
-setup-styles:
-    cd {{styles}} && just setup-vendors
-
 # Start development server
 serve:
     trunk serve --features=csr,yew-preview
 
 # Build the project for release
-build: styles-check sbom
+build: sbom
     #!/usr/bin/env bash
     set -euo pipefail
     echo "Building with BUILD_DIR=${BUILD_DIR}"
@@ -94,29 +87,13 @@ config:
     @echo "BUILD_DIR: ${BUILD_DIR}"
 
 # Update all dependencies
-update: update-rust update-styles
+update: update-rust
 
 # Update Rust dependencies
 update-rust:
     cargo update
 
-# Check styles before build
-styles-check:
-    cd {{styles}} && just vendor-status
-
-# Update style dependencies
-update-styles:
-    cd {{styles}} && just update-vendors
-
-# Show styles status
-styles-status:
-    cd {{styles}} && just vendor-status
-
-lint-style:
-    npx stylelint "scss/**/*.{css,scss}" --config scss/.stylelintrc.json --ignore-path scss/.stylelintignore
-
-# You might want to update your existing lint command to include style linting
-lint: lint-style
+lint:
     cargo clippy -- -D warnings
 
 # Generate SBOM
