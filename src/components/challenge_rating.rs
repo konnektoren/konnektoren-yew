@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use crate::tools::TracedResponse;
 use gloo::net::http::Request;
 use yew::prelude::*;
@@ -12,6 +13,7 @@ pub struct ChallengeRatingProps {
 
 #[function_component(ChallengeRatingComponent)]
 pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
+    let i18n = use_i18n();
     let average = use_state(|| props.default_rating);
     {
         let challenge_id = props.challenge_id.clone();
@@ -45,7 +47,7 @@ pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
             if let Some(avg) = *average {
                 <span>{format!("{:.1}", avg)}</span>
             } else {
-                <span>{"Loading..."}</span>
+                <span>{ i18n.t("Loading...") }</span>
             }
         </div>
     }

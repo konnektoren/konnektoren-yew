@@ -1,9 +1,9 @@
 use crate::components::{SeoComponent, SeoConfig};
+use crate::i18n::use_i18n;
 use konnektoren_core::{
     game::{Game, GamePath},
     prelude::ChallengeConfig,
 };
-
 use yew::prelude::*;
 
 #[derive(Properties, Clone, PartialEq)]
@@ -32,29 +32,32 @@ pub struct ChallengeInfoBlockProps {
 
 #[function_component(ChallengeInfoBlock)]
 pub fn challenge_info_block(props: &ChallengeInfoBlockProps) -> Html {
+    let i18n = use_i18n();
     let challenge = &props.challenge;
 
     html! {
         <div class="challenge-block">
             <div class="challenge-block__header">
-                <h3 class="challenge-block__title">{&challenge.name}</h3>
-                <span class="challenge-block__points">{format!("{} XP required", challenge.unlock_points)}</span>
+                <h3 class="challenge-block__title">{ i18n.t(&challenge.name) }</h3>
+                <span class="challenge-block__points">
+                    { format!("{} {}", challenge.unlock_points, i18n.t("XP required")) }
+                </span>
             </div>
             <div class="challenge-block__content">
-                <p class="challenge-block__description">{&challenge.description}</p>
+                <p class="challenge-block__description">{ i18n.t(&challenge.description) }</p>
                 <div class="challenge-block__details">
                     <div class="challenge-block__detail">
-                        <span class="challenge-block__detail-label">{"Type:"}</span>
-                        <span class="challenge-block__detail-value">{&challenge.challenge}</span>
+                        <span class="challenge-block__detail-label">{ i18n.t("Type:") }</span>
+                        <span class="challenge-block__detail-value">{ i18n.t(&challenge.challenge) }</span>
                     </div>
                     <div class="challenge-block__detail">
-                        <span class="challenge-block__detail-label">{"Tasks:"}</span>
-                        <span class="challenge-block__detail-value">{format!("{:?}", challenge.tasks)}</span>
+                        <span class="challenge-block__detail-label">{ i18n.t("Tasks:") }</span>
+                        <span class="challenge-block__detail-value">{ format!("{:?}", challenge.tasks) }</span>
                     </div>
                     if let Some(variant) = &challenge.variant {
                         <div class="challenge-block__detail">
-                            <span class="challenge-block__detail-label">{"Variant:"}</span>
-                            <span class="challenge-block__detail-value">{format!("{:?}", variant)}</span>
+                            <span class="challenge-block__detail-label">{ i18n.t("Variant:") }</span>
+                            <span class="challenge-block__detail-value">{ format!("{:?}", variant) }</span>
                         </div>
                     }
                 </div>
@@ -63,7 +66,7 @@ pub fn challenge_info_block(props: &ChallengeInfoBlockProps) -> Html {
                        class="challenge-block__link"
                        target="_blank"
                        rel="noopener noreferrer">
-                        {"View Challenge →"}
+                        { i18n.t("View Challenge →") }
                     </a>
                 </div>
             </div>
@@ -71,17 +74,25 @@ pub fn challenge_info_block(props: &ChallengeInfoBlockProps) -> Html {
     }
 }
 
-fn level_section(level: &GamePath) -> Html {
+#[derive(Properties, Clone, PartialEq)]
+pub struct LevelSectionProps {
+    pub level: GamePath,
+}
+
+#[function_component(LevelSection)]
+fn level_section(props: &LevelSectionProps) -> Html {
+    let i18n = use_i18n();
+    let level = &props.level;
     html! {
         <section class="level-section">
             <div class="level-section__header">
-                <h2 class="level-section__title">{&level.name}</h2>
+                <h2 class="level-section__title">{ i18n.t(&level.name) }</h2>
                 <div class="level-section__meta">
                     <span class="level-section__count">
-                        {format!("{} Challenges", level.challenges.len())}
+                        { format!("{} {}", level.challenges.len(), i18n.t("Challenges")) }
                     </span>
                     <span class="level-section__id">
-                        {format!("ID: {}", level.id)}
+                        { format!("{} {}", i18n.t("ID:"), level.id) }
                     </span>
                 </div>
             </div>
@@ -98,6 +109,7 @@ fn level_section(level: &GamePath) -> Html {
 
 #[function_component(ChallengesSummaryComp)]
 pub fn challenges_summary(props: &ChallengesSummaryProps) -> Html {
+    let i18n = use_i18n();
     let levels = &props.game.game_paths;
     let config = &props.config;
 
@@ -175,13 +187,13 @@ pub fn challenges_summary(props: &ChallengesSummaryProps) -> Html {
                 </style>
                 <div class="challenges-summary__container">
                     <header class="challenges-summary__header">
-                        <h1 class="challenges-summary__title">{&config.title}</h1>
+                        <h1 class="challenges-summary__title">{ i18n.t(&config.title) }</h1>
                         <p class="challenges-summary__description">
-                            {&config.description}
+                            { i18n.t(&config.description) }
                         </p>
                     </header>
                     <div class="challenges-summary__content">
-                        {for levels.iter().map(level_section)}
+                        {for levels.iter().map(|level| html!{ <LevelSection level={level.clone()} /> })}
                     </div>
                 </div>
             </div>

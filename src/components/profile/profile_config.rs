@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use crate::providers::use_profile_repository;
 use konnektoren_core::prelude::PlayerProfile;
 use yew::prelude::*;
@@ -5,6 +6,7 @@ use yew::prelude::*;
 #[function_component(ProfileConfigComponent)]
 pub fn profile_config_component() -> Html {
     let profile_repository = use_profile_repository();
+    let i18n = use_i18n();
     let profile = use_state(PlayerProfile::default);
     let name = use_state(|| profile.name.clone());
 
@@ -75,7 +77,7 @@ pub fn profile_config_component() -> Html {
 
     let save_button = if has_changes() {
         html! {
-            <button onclick={on_save}>{ "Save" }</button>
+            <button onclick={on_save}>{ i18n.t("Save") }</button>
         }
     } else {
         html! {}
@@ -83,9 +85,8 @@ pub fn profile_config_component() -> Html {
 
     html! {
         <div class="profile-config">
-            <h2>{ "Player Profile" }</h2>
-
-            <label for="name">{ "Name" }</label>
+            <h2>{ i18n.t("Player Profile") }</h2>
+            <label for="name">{ i18n.t("Name") }</label>
             <input id="name" type="text" value={(*name).clone()} oninput={on_name_change} />
             { save_button }
         </div>

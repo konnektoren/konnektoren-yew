@@ -1,5 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, ContextualChoice};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
@@ -22,14 +23,12 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
     let show_help = use_state(|| false);
     let selections = use_state(HashMap::new);
 
-    // Create a struct to hold the dependencies for our effect
     #[derive(PartialEq)]
     struct EffectDeps {
         selections: HashMap<(usize, usize), usize>,
         item_index: usize,
     }
 
-    // Effect to validate selections when they change
     {
         let item_index = item_index.clone();
         let challenge = props.challenge.clone();
@@ -49,7 +48,6 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
             } else {
                 let current_item = &challenge.items[deps.item_index];
 
-                // Check if all options are selected for this item
                 let all_options_selected = current_item
                     .choices
                     .iter()
@@ -57,7 +55,6 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                     .all(|(idx, _)| deps.selections.get(&(deps.item_index, idx)).is_some());
 
                 if all_options_selected {
-                    // Only evaluate when all options are selected using 0-based indices
                     let all_correct =
                         current_item
                             .choices
@@ -67,7 +64,6 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                                 if let Some(&selected_idx) =
                                     deps.selections.get(&(deps.item_index, choice_idx))
                                 {
-                                    // Use 0-based indexing directly
                                     selected_idx < choice.options.len()
                                         && choice.options[selected_idx] == choice.correct_answer
                                 } else {
@@ -75,7 +71,6 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                                 }
                             });
 
-                    // Emit appropriate event based on correctness
                     if let Some(on_event) = &on_event {
                         if all_correct {
                             on_event.emit(Event::Challenge(ChallengeEvent::SolvedCorrect(
@@ -88,25 +83,17 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                         }
                     }
 
-                    // Auto-advance regardless of correctness
                     if deps.item_index < challenge.items.len() - 1 {
-                        // Move to next item
                         let next_idx = deps.item_index + 1;
-
-                        // Clear selections for next item
                         let mut new_selections = deps.selections.clone();
                         new_selections.retain(|&(item, _), _| item != next_idx);
                         selections.set(new_selections);
-
-                        // Update item index
                         item_index.set(next_idx);
 
-                        // Emit command
                         if let Some(cmd) = &on_command {
                             cmd.emit(Command::Challenge(ChallengeCommand::NextTask));
                         }
                     } else if all_correct {
-                        // Only finish if this is the last item AND all answers are correct
                         if let Some(cmd) = &on_command {
                             cmd.emit(Command::Challenge(ChallengeCommand::Finish(Some(
                                 (*challenge_result).clone(),
@@ -115,13 +102,10 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                     }
                 }
             }
-
-            // Single closure return point
             || {}
         });
     }
 
-    // Keep the option selection handler simple - just update selections and challenge result
     let handle_option_selection = {
         let selections = selections.clone();
         let challenge = props.challenge.clone();
@@ -132,11 +116,9 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
             #[cfg(feature = "csr")]
             {
                 use konnektoren_core::challenges::ContextItemChoiceAnswers;
-                // Update selections - STORE 0-BASED INDICES DIRECTLY
                 let mut new_selections = (*selections).clone();
-                new_selections.insert((*item_index, choice_index), option_index); // No more +1
+                new_selections.insert((*item_index, choice_index), option_index);
 
-                // Generate the IDs vector before moving new_selections
                 let item_choices = &challenge.items[*item_index].choices;
                 let ids: Vec<usize> = item_choices
                     .iter()
@@ -145,14 +127,12 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                         new_selections
                             .get(&(*item_index, choice_index))
                             .cloned()
-                            .unwrap_or(0) // Default value for unselected (0 means unselected)
+                            .unwrap_or(0)
                     })
                     .collect();
 
-                // Now it's safe to move new_selections
                 selections.set(new_selections);
 
-                // Update challenge result with the previously calculated IDs
                 let mut new_result = (*challenge_result).clone();
                 match &mut new_result {
                     ChallengeResult::ContextualChoice(answers) => {
@@ -178,7 +158,6 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
         return html! {};
     }
 
-    // Force UI update when item_index changes
     let component_key = format!("contextual-choice-item-{}", *item_index);
 
     let handle_action = create_action_handler(
@@ -193,43 +172,213 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
 
     html! {
         <div class="contextual-choice" key={component_key}>
-            <div class="contextual-choice__progress">
-                <ProgressBar
-                    value={*item_index}
-                    max={props.challenge.items.len()}
-                    label={format!("Item {} of {}", *item_index + 1, props.challenge.items.len())}
+            <ContextualChoiceProgress
+                item_index={*item_index}
+                total_items={props.challenge.items.len()}
+            />
+            <div class="contextual-choice__item">
+                <ContextualChoiceTemplate
+                    current_item={current_item.clone()}
+                    selections={(*selections).clone()}
+                    item_index={*item_index}
+                    handle_option_selection={handle_option_selection.clone()}
                 />
             </div>
-            <div class="contextual-choice__item">
-                { render_template_parts(current_item, &selections, *item_index, handle_option_selection) }
-            </div>
-
-            // Help section
             if *show_help {
-                <div class="contextual-choice__help">
-                    <h3 class="contextual-choice__help-title">{"Help"}</h3>
-                    <p class="contextual-choice__help-text">
-                        {"Fill in the blanks by selecting the appropriate option for each dropdown."}
-                    </p>
-                    <div class="contextual-choice__help-hints">
-                        <h4 class="contextual-choice__help-hints-title">{"Hints:"}</h4>
-                        <ul>
-                            {
-                                current_item.choices.iter().map(|choice| {
-                                    html! {
-                                        <li class="contextual-choice__help-hint">
-                                            {"The correct answer is: "}<strong>{&choice.correct_answer}</strong>
-                                        </li>
-                                    }
-                                }).collect::<Html>()
-                            }
-                        </ul>
-                    </div>
-                </div>
+                <ContextualChoiceHelp current_item={current_item.clone()} />
             }
-
             <ChallengeActionsComponent on_action={handle_action} />
         </div>
+    }
+}
+
+#[derive(Properties, PartialEq)]
+pub struct ContextualChoiceProgressProps {
+    pub item_index: usize,
+    pub total_items: usize,
+}
+
+#[function_component(ContextualChoiceProgress)]
+fn contextual_choice_progress(props: &ContextualChoiceProgressProps) -> Html {
+    let i18n = use_i18n();
+    html! {
+        <div class="contextual-choice__progress">
+            <ProgressBar
+                value={props.item_index}
+                max={props.total_items}
+                label={format!("{} {} {} {}", i18n.t("Item"), props.item_index + 1, i18n.t("of"), props.total_items)}
+            />
+        </div>
+    }
+}
+
+#[derive(Properties, PartialEq)]
+pub struct ContextualChoiceHelpProps {
+    pub current_item: konnektoren_core::challenges::ContextItem,
+}
+
+#[function_component(ContextualChoiceHelp)]
+fn contextual_choice_help(props: &ContextualChoiceHelpProps) -> Html {
+    let i18n = use_i18n();
+    html! {
+        <div class="contextual-choice__help">
+            <h3 class="contextual-choice__help-title">{ i18n.t("Help") }</h3>
+            <p class="contextual-choice__help-text">
+                { i18n.t("Fill in the blanks by selecting the appropriate option for each dropdown.") }
+            </p>
+            <div class="contextual-choice__help-hints">
+                <h4 class="contextual-choice__help-hints-title">{ i18n.t("Hints:") }</h4>
+                <ul>
+                    {
+                        props.current_item.choices.iter().map(|choice| {
+                            html! {
+                                <li class="contextual-choice__help-hint">
+                                    { i18n.t("The correct answer is: ") }
+                                    <strong>{ &choice.correct_answer }</strong>
+                                </li>
+                            }
+                        }).collect::<Html>()
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+#[derive(Properties, PartialEq)]
+pub struct ContextualChoiceTemplateProps {
+    pub current_item: konnektoren_core::challenges::ContextItem,
+    pub selections: HashMap<(usize, usize), usize>,
+    pub item_index: usize,
+    pub handle_option_selection: Callback<(usize, usize)>,
+}
+
+#[function_component(ContextualChoiceTemplate)]
+fn contextual_choice_template(props: &ContextualChoiceTemplateProps) -> Html {
+    let re = regex::Regex::new(r"\{(\d*)\}").unwrap();
+
+    let mut used_indices = std::collections::HashSet::new();
+    for cap in re.captures_iter(&props.current_item.template) {
+        if let Some(digit_match) = cap.get(1) {
+            let digit_str = digit_match.as_str();
+            if !digit_str.is_empty() {
+                if let Ok(idx) = digit_str.parse::<usize>() {
+                    used_indices.insert(idx);
+                }
+            }
+        }
+    }
+
+    let mut available_indices: Vec<usize> = (0..props.current_item.choices.len())
+        .filter(|idx| !used_indices.contains(idx))
+        .collect();
+
+    let mut last_end = 0;
+    let mut result = Vec::new();
+
+    for cap in re.captures_iter(&props.current_item.template) {
+        let whole_match = cap.get(0).unwrap();
+
+        if whole_match.start() > last_end {
+            result.push(html! {
+                <span>{ &props.current_item.template[last_end..whole_match.start()] }</span>
+            });
+        }
+
+        let choice_index = if let Some(digit_match) = cap.get(1) {
+            let digit_str = digit_match.as_str();
+            if digit_str.is_empty() {
+                available_indices.pop().unwrap_or(0)
+            } else {
+                digit_str.parse().unwrap_or(0)
+            }
+        } else {
+            0
+        };
+
+        if choice_index < props.current_item.choices.len() {
+            result.push(html! {
+                <ContextualChoiceSelect
+                    choice_index={choice_index}
+                    current_item={props.current_item.clone()}
+                    selections={props.selections.clone()}
+                    item_index={props.item_index}
+                    handle_option_selection={props.handle_option_selection.clone()}
+                />
+            });
+        }
+
+        last_end = whole_match.end();
+    }
+
+    if last_end < props.current_item.template.len() {
+        result.push(html! {
+            <span>{ &props.current_item.template[last_end..] }</span>
+        });
+    }
+
+    html! { <>{for result}</> }
+}
+
+#[derive(Properties, PartialEq)]
+pub struct ContextualChoiceSelectProps {
+    pub choice_index: usize,
+    pub current_item: konnektoren_core::challenges::ContextItem,
+    pub selections: HashMap<(usize, usize), usize>,
+    pub item_index: usize,
+    pub handle_option_selection: Callback<(usize, usize)>,
+}
+
+#[function_component(ContextualChoiceSelect)]
+fn contextual_choice_select(props: &ContextualChoiceSelectProps) -> Html {
+    let i18n = use_i18n();
+    let selected_value = props
+        .selections
+        .get(&(props.item_index, props.choice_index))
+        .cloned();
+    let select_id = format!("choice-select-{}-{}", props.item_index, props.choice_index);
+
+    #[cfg(feature = "csr")]
+    let onchange = {
+        let handle_option_selection = props.handle_option_selection.clone();
+        let choice_index = props.choice_index;
+        Callback::from(move |e: yew::Event| {
+            use wasm_bindgen::JsCast;
+            if let Some(target) = e.target_dyn_into::<web_sys::HtmlSelectElement>() {
+                if target.selected_index() > 0 {
+                    handle_option_selection
+                        .emit((choice_index, (target.selected_index() - 1) as usize));
+                }
+            }
+        })
+    };
+
+    #[cfg(not(feature = "csr"))]
+    let onchange = Callback::from(|_: yew::Event| ());
+
+    html! {
+        <select
+            id={select_id.clone()}
+            class="contextual-choice__select"
+            key={select_id.clone()}
+            onchange={onchange}
+        >
+            <option value="" disabled=true selected={selected_value.is_none()}>
+                { i18n.t("Select an option") }
+            </option>
+            {
+                props.current_item.choices[props.choice_index].options.iter().enumerate().map(|(j, option)| {
+                    html! {
+                        <option
+                            value={j.to_string()}
+                            selected={selected_value == Some(j)}
+                        >
+                            { option }
+                        </option>
+                    }
+                }).collect::<Html>()
+            }
+        </select>
     }
 }
 
@@ -293,143 +442,6 @@ fn handle_previous_action(
             let command = Command::Challenge(ChallengeCommand::PreviousTask);
             on_command.emit(command);
         }
-    }
-}
-
-fn render_template_parts(
-    current_item: &konnektoren_core::challenges::ContextItem,
-    selections: &UseStateHandle<HashMap<(usize, usize), usize>>,
-    item_index: usize,
-    handle_option_selection: Callback<(usize, usize)>,
-) -> Html {
-    // Regex to match both {}, {0}, {1}, etc.
-    let re = regex::Regex::new(r"\{(\d*)\}").unwrap();
-
-    // First pass: identify which choice indices are explicitly referenced
-    let mut used_indices = std::collections::HashSet::new();
-    for cap in re.captures_iter(&current_item.template) {
-        if let Some(digit_match) = cap.get(1) {
-            let digit_str = digit_match.as_str();
-            if !digit_str.is_empty() {
-                if let Ok(idx) = digit_str.parse::<usize>() {
-                    used_indices.insert(idx);
-                }
-            }
-        }
-    }
-
-    // Create a list of available indices for unnumbered placeholders
-    let mut available_indices: Vec<usize> = (0..current_item.choices.len())
-        .filter(|idx| !used_indices.contains(idx))
-        .collect();
-
-    // Second pass: generate the HTML
-    let mut last_end = 0;
-    let mut result = Vec::new();
-
-    for cap in re.captures_iter(&current_item.template) {
-        let whole_match = cap.get(0).unwrap();
-
-        // Add the text before this placeholder
-        if whole_match.start() > last_end {
-            result.push(html! {
-                <span>{ &current_item.template[last_end..whole_match.start()] }</span>
-            });
-        }
-
-        // Determine the choice index to use
-        let choice_index = if let Some(digit_match) = cap.get(1) {
-            let digit_str = digit_match.as_str();
-            if digit_str.is_empty() {
-                // For {} (unnumbered), use the next available index
-                available_indices.pop().unwrap_or(0)
-            } else {
-                // For {0}, {1}, etc., use the specified index
-                digit_str.parse().unwrap_or(0)
-            }
-        } else {
-            // This shouldn't happen with our regex, but just in case
-            0
-        };
-
-        // Add the select component for this placeholder
-        if choice_index < current_item.choices.len() {
-            result.push(render_select(
-                choice_index,
-                current_item,
-                selections,
-                item_index,
-                handle_option_selection.clone(),
-            ));
-        }
-
-        last_end = whole_match.end();
-    }
-
-    // Add any remaining text after the last placeholder
-    if last_end < current_item.template.len() {
-        result.push(html! {
-            <span>{ &current_item.template[last_end..] }</span>
-        });
-    }
-
-    html! { <>{for result}</> }
-}
-
-fn render_select(
-    choice_index: usize,
-    current_item: &konnektoren_core::challenges::ContextItem,
-    selections: &UseStateHandle<HashMap<(usize, usize), usize>>,
-    item_index: usize,
-    handle_option_selection: Callback<(usize, usize)>,
-) -> Html {
-    let selected_value = (**selections).get(&(item_index, choice_index)).cloned();
-
-    // Create a unique ID for this select element based on item_index and choice_index
-    let select_id = format!("choice-select-{}-{}", item_index, choice_index);
-
-    #[cfg(feature = "csr")]
-    let onchange = {
-        let handle_option_selection = handle_option_selection.clone();
-
-        Callback::from(move |e: yew::Event| {
-            use wasm_bindgen::JsCast;
-            if let Some(target) = e.target_dyn_into::<web_sys::HtmlSelectElement>() {
-                // Convert selected_index to 0-based index by subtracting 1
-                if target.selected_index() > 0 {
-                    handle_option_selection
-                        .emit((choice_index, (target.selected_index() - 1) as usize));
-                }
-            }
-        })
-    };
-
-    #[cfg(not(feature = "csr"))]
-    let onchange = Callback::from(|_: yew::Event| ());
-
-    html! {
-        <select
-            id={select_id.clone()}
-            class="contextual-choice__select"
-            key={select_id.clone()} // Using clone to avoid move issues
-            onchange={onchange}
-        >
-            <option value="" disabled=true selected={selected_value.is_none()}>
-                {"Select an option"}
-            </option>
-            {
-                current_item.choices[choice_index].options.iter().enumerate().map(|(j, option)| {
-                    html! {
-                        <option
-                            value={j.to_string()} // 0-based index
-                            selected={selected_value == Some(j)} // Compare with 0-based index
-                        >
-                            { option }
-                        </option>
-                    }
-                }).collect::<Html>()
-            }
-        </select>
     }
 }
 

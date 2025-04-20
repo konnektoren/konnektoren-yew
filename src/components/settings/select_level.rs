@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::prelude::GamePath;
 use yew::prelude::*;
 
@@ -10,6 +11,8 @@ pub struct SelectLevelCompProps {
 
 #[function_component(SelectLevelComp)]
 pub fn select_level(props: &SelectLevelCompProps) -> Html {
+    let i18n = use_i18n();
+
     let on_change = {
         let on_select = props.on_select.clone();
         Callback::from(move |e: Event| {
@@ -24,12 +27,17 @@ pub fn select_level(props: &SelectLevelCompProps) -> Html {
             }
         })
     };
+
     html! {
         <div class="select-level">
-            <select onchange={on_change} value={props.current.to_string()}>
+            <label for="level-select">{ i18n.t("Select Level") }</label>
+            <select id="level-select" onchange={on_change} value={props.current.to_string()}>
+                <option value="" disabled={true} selected={props.levels.is_empty()}>
+                    { i18n.t("Select Level") }
+                </option>
                 { for props.levels.iter().enumerate().map(|(index, level)| html! {
                     <option value={index.to_string()} selected={index == props.current}>
-                        { &level.name }
+                        { i18n.t(&level.name) }
                     </option>
                 }) }
             </select>

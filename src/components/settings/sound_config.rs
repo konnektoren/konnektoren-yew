@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use crate::model::Settings;
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct SoundConfigProps {
 
 #[function_component(SoundConfig)]
 pub fn sound_config(props: &SoundConfigProps) -> Html {
+    let i18n = use_i18n();
     let on_change = props.on_change.clone();
     let sound_volume = props.settings.sound_volume;
     let on_change_sound_volume = {
@@ -29,7 +31,7 @@ pub fn sound_config(props: &SoundConfigProps) -> Html {
 
     html! {
         <div class="sound-config">
-            <label for="sound-volume">{"Sound Volume"}</label>
+            <label for="sound-volume">{ i18n.t("Sound Volume") }</label>
             <input
                 id="sound-volume"
                 type="range"

@@ -34,11 +34,11 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
 
     html! {
         <div class="challenge-info">
-            <h2 class="challenge-info__title">{&props.challenge_config.name}</h2>
+            <h2 class="challenge-info__title">{ i18n.t(&props.challenge_config.name) }</h2>
             {rating_component}
             {presence_component}
             <div class="challenge-info__description">
-                <p>{&props.challenge_config.description}</p>
+                <p>{ i18n.t(&props.challenge_config.description) }</p>
             </div>
             <div class="challenge-info__meta">
                 <p class="challenge-info__tasks">{format!("{}: {}", i18n.t("Tasks"), props.challenge_config.tasks.len())}</p>

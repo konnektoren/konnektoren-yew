@@ -1,6 +1,6 @@
-use yew::prelude::*;
-
+use crate::i18n::use_i18n;
 use konnektoren_core::achievements::AchievementDefinition;
+use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Default)]
 pub struct AchievementComponentProps {
@@ -9,6 +9,8 @@ pub struct AchievementComponentProps {
 
 #[function_component(AchievementComponent)]
 pub fn achievement_component(props: &AchievementComponentProps) -> Html {
+    let i18n = use_i18n();
+
     let icon_html = if props.achievement.icon.starts_with("fa-") {
         html! {
             <i class={classes!("achievement__icon", "fas", &props.achievement.icon)} aria-hidden="true"></i>
@@ -17,7 +19,7 @@ pub fn achievement_component(props: &AchievementComponentProps) -> Html {
         || props.achievement.icon.starts_with("data:")
     {
         html! {
-            <img class="achievement__icon" src={props.achievement.icon.clone()} alt={props.achievement.name.clone()} />
+            <img class="achievement__icon" src={props.achievement.icon.clone()} alt={i18n.t(&props.achievement.name)} />
         }
     } else {
         html! {
@@ -28,8 +30,8 @@ pub fn achievement_component(props: &AchievementComponentProps) -> Html {
     html! {
         <div class="achievement">
             {icon_html}
-            <h3 class="achievement__name">{ &props.achievement.name }</h3>
-            <p class="achievement__description">{ &props.achievement.description }</p>
+            <h3 class="achievement__name">{ i18n.t(&props.achievement.name) }</h3>
+            <p class="achievement__description">{ i18n.t(&props.achievement.description) }</p>
         </div>
     }
 }

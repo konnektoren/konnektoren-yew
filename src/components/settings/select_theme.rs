@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use crate::model::Theme;
 use crate::providers::use_theme;
 use yew::prelude::*;
@@ -10,6 +11,7 @@ pub struct SelectThemeProps {
 
 #[function_component(SelectTheme)]
 pub fn select_theme(props: &SelectThemeProps) -> Html {
+    let i18n = use_i18n();
     let theme = use_theme();
 
     let update_theme = |new_theme: &Theme| {
@@ -69,10 +71,10 @@ pub fn select_theme(props: &SelectThemeProps) -> Html {
 
     let get_theme_name = |theme: &Theme| -> String {
         match theme {
-            Theme::Light => "Light Theme".to_string(),
-            Theme::Dark => "Dark Theme".to_string(),
-            Theme::Star => "Star Theme".to_string(),
-            Theme::Other(name) => name.to_string(),
+            Theme::Light => i18n.t("Light Theme"),
+            Theme::Dark => i18n.t("Dark Theme"),
+            Theme::Star => i18n.t("Star Theme"),
+            Theme::Other(name) => i18n.t(name),
         }
     };
 

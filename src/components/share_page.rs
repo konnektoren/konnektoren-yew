@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use urlencoding::encode;
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct SharePageProps {
 
 #[function_component(SharePageComp)]
 pub fn share_page_comp(props: &SharePageProps) -> Html {
+    let i18n = use_i18n();
     #[cfg(feature = "csr")]
     let clipboard_handle = yew_hooks::use_clipboard();
     let show_copied_message = use_state(|| false);
@@ -59,9 +61,9 @@ pub fn share_page_comp(props: &SharePageProps) -> Html {
     html! {
         <div class="share-page">
             <input type="text" class="share-page__input" readonly=true value={share_url.clone()} />
-            <button onclick={on_share_click} class="btn btn--primary">{ "Share" }</button>
+            <button onclick={on_share_click} class="btn btn--primary">{ i18n.t("Share") }</button>
             if *show_copied_message {
-                <p class="share-page__message">{"Link copied to clipboard!"}</p>
+                <p class="share-page__message">{ i18n.t("Link copied to clipboard!") }</p>
             }
         </div>
     }

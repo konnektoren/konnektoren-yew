@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use chrono::Duration;
 use konnektoren_core::analytics::Metric;
 use konnektoren_core::analytics::Trend;
@@ -13,24 +14,25 @@ pub struct AverageTimeTakenProps {
 
 #[function_component(AverageTimeTakenComponent)]
 pub fn average_time_taken(props: &AverageTimeTakenProps) -> Html {
+    let i18n = use_i18n();
     let value = props.metric.value();
     let trend = props.metric.get_trend(props.trend_window);
 
     html! {
         <div class="average-time-taken">
             <div class="average-time-taken__header">
-                <h3 class="average-time-taken__title">{ props.metric.name() }</h3>
+                <h3 class="average-time-taken__title">{ i18n.t(props.metric.name()) }</h3>
                 <div class={classes!("average-time-taken__trend", get_trend_modifier(&trend))}>
                     <i class={classes!("average-time-taken__trend-icon", "fas", get_trend_icon(&trend))}></i>
-                    <span class="average-time-taken__trend-label">{ trend.to_string() }</span>
+                    <span class="average-time-taken__trend-label">{ i18n.t(&trend.to_string()) }</span>
                 </div>
             </div>
             <div class="average-time-taken__content">
                 <p class="average-time-taken__value">
-                    { format!("{:.1} seconds", value) }
+                    { format!("{} {}", value, i18n.t("seconds")) }
                 </p>
                 <p class="average-time-taken__description">
-                    { props.metric.description() }
+                    { i18n.t(props.metric.description()) }
                 </p>
             </div>
         </div>

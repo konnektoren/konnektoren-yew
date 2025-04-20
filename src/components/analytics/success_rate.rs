@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use chrono::Duration;
 use konnektoren_core::analytics::Metric;
 use konnektoren_core::analytics::Trend;
@@ -13,16 +14,17 @@ pub struct SuccessRateProps {
 
 #[function_component(SuccessRateComponent)]
 pub fn success_rate(props: &SuccessRateProps) -> Html {
+    let i18n = use_i18n();
     let value = props.metric.value();
     let trend = props.metric.get_trend(props.trend_window);
 
     html! {
         <div class="success-rate">
             <div class="success-rate__header">
-                <h3 class="success-rate__title">{ props.metric.name() }</h3>
+                <h3 class="success-rate__title">{ i18n.t(props.metric.name()) }</h3>
                 <div class={classes!("success-rate__trend", get_trend_modifier(&trend))}>
                     <i class={classes!("success-rate__trend-icon", "fas", get_trend_icon(&trend))}></i>
-                    <span class="success-rate__trend-label">{ trend.to_string() }</span>
+                    <span class="success-rate__trend-label">{ i18n.t(&trend.to_string()) }</span>
                 </div>
             </div>
 
@@ -32,7 +34,7 @@ pub fn success_rate(props: &SuccessRateProps) -> Html {
                         <span class="success-rate__percentage">
                             { format!("{:.1}%", value) }
                         </span>
-                        <span class="success-rate__label">{"Success Rate"}</span>
+                        <span class="success-rate__label">{ i18n.t("Success Rate") }</span>
                     </div>
                     <div class="success-rate__gauge">
                         <div
@@ -44,9 +46,9 @@ pub fn success_rate(props: &SuccessRateProps) -> Html {
 
                 <div class="success-rate__details">
                     <p class="success-rate__description">
-                        { props.metric.description() }
+                        { i18n.t(&props.metric.description()) }
                     </p>
-                    { render_thresholds() }
+                    <SuccessRateThresholds />
                 </div>
             </div>
         </div>
@@ -69,24 +71,27 @@ fn get_trend_icon(trend: &Trend) -> &'static str {
     }
 }
 
-fn render_thresholds() -> Html {
+#[function_component(SuccessRateThresholds)]
+fn success_rate_thresholds() -> Html {
+    let i18n = use_i18n();
     html! {
         <div class="success-rate__thresholds">
             <div class="success-rate__threshold">
                 <span class="success-rate__threshold-marker success-rate__threshold-marker--high">{"80%"}</span>
-                <span class="success-rate__threshold-label">{"High Performance"}</span>
+                <span class="success-rate__threshold-label">{ i18n.t("High Performance") }</span>
             </div>
             <div class="success-rate__threshold">
                 <span class="success-rate__threshold-marker success-rate__threshold-marker--medium">{"60%"}</span>
-                <span class="success-rate__threshold-label">{"Medium Performance"}</span>
+                <span class="success-rate__threshold-label">{ i18n.t("Medium Performance") }</span>
             </div>
             <div class="success-rate__threshold">
                 <span class="success-rate__threshold-marker success-rate__threshold-marker--low">{"40%"}</span>
-                <span class="success-rate__threshold-label">{"Needs Improvement"}</span>
+                <span class="success-rate__threshold-label">{ i18n.t("Needs Improvement") }</span>
             </div>
         </div>
     }
 }
+
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
@@ -94,15 +99,12 @@ mod preview {
     use yew_preview::prelude::*;
 
     fn create_metric_with_value(_value: f64, _trend: Trend) -> SuccessRateMetric {
-        // Create a mock history that will result in the desired value and trend
         let history = ChallengeHistory::new();
-        // You might need to add appropriate challenges here to achieve the desired value
         SuccessRateMetric::new(history)
     }
 
     yew_preview::create_preview!(
         SuccessRateComponent,
-        // Default example
         SuccessRateProps {
             metric: create_metric_with_value(75.0, Trend::Stable),
             trend_window: Duration::days(7),

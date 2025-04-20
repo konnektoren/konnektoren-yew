@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use crate::prelude::{AchievementComponent, CertificateComponent};
 use konnektoren_core::{certificates::CertificateData, prelude::AchievementDefinition};
 use std::rc::Rc;
@@ -15,20 +16,21 @@ pub struct AchievementsProps {
 
 #[function_component(AchievementsComponent)]
 pub fn achievements_component(props: &AchievementsProps) -> Html {
+    let i18n = use_i18n();
     let selected_certificate = use_state(|| None);
     let sorted_certificates = sort_certificates(&props.certificates);
     let on_certificate_click = create_certificate_click_handler(selected_certificate.clone());
 
     html! {
         <div class="achievements">
-            <h2 class="achievements__title">{ "Achievements and Certificates" }</h2>
+            <h2 class="achievements__title">{ i18n.t("Achievements and Certificates") }</h2>
             <div class="achievements__container">
                 <div class="achievements__achievements-list">
-                    <h3 class="achievements__subtitle">{ "Achievements" }</h3>
+                    <h3 class="achievements__subtitle">{ i18n.t("Achievements") }</h3>
                     { render_achievements(&props.achievements) }
                 </div>
                 <div class="achievements__certificates-list">
-                    <h3 class="achievements__subtitle">{ "Certificates" }</h3>
+                    <h3 class="achievements__subtitle">{ i18n.t("Certificates") }</h3>
                     <ul class="achievements__list">
                         { render_certificates(&sorted_certificates, &selected_certificate, on_certificate_click, props) }
                     </ul>
@@ -94,7 +96,7 @@ fn render_certificate_item(
             is_selected.then_some("achievements__certificate-item--selected")
         )}>
             <div class="achievements__certificate-summary" {onclick}>
-                { render_certificate_summary(cert) }
+                <CertificateSummary cert={cert.clone()} />
             </div>
             if is_selected {
                 <div class="achievements__certificate-details">
@@ -109,11 +111,19 @@ fn render_certificate_item(
     }
 }
 
-fn render_certificate_summary(cert: &CertificateData) -> Html {
+#[derive(Properties, PartialEq, Clone)]
+pub struct CertificateSummaryProps {
+    pub cert: CertificateData,
+}
+
+#[function_component(CertificateSummary)]
+pub fn certificate_summary(props: &CertificateSummaryProps) -> Html {
+    let i18n = use_i18n();
+    let cert = &props.cert;
     html! {
         <>
             <span class="achievements__date">{ cert.date.format("%Y-%m-%d").to_string() }</span>
-            <span class="achievements__name">{ &cert.game_path_name }</span>
+            <span class="achievements__name">{ i18n.t(&cert.game_path_name) }</span>
             <span class="achievements__performance">{ format!("{}%", cert.performance_percentage) }</span>
         </>
     }

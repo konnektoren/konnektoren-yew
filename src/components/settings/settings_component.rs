@@ -1,11 +1,13 @@
 use crate::components::MusicConfig;
 use crate::components::settings::sound_config::SoundConfig;
+use crate::i18n::use_i18n;
 use crate::model::Settings;
 use crate::prelude::use_settings;
 use yew::prelude::*;
 
 #[function_component(SettingsComponent)]
 pub fn settings_component() -> Html {
+    let i18n = use_i18n();
     let settings = use_settings();
     let initial_settings = use_state(|| (*settings).clone());
 
@@ -32,11 +34,11 @@ pub fn settings_component() -> Html {
 
     html! {
         <div class="settings">
-        <h2>{ "Settings" }</h2>
+            <h2>{ i18n.t("Settings") }</h2>
 
-        <MusicConfig settings={(*settings).clone()} on_change={on_change.clone()} />
-        <SoundConfig settings={(*settings).clone()} on_change={on_change.clone()} />
-        <button onclick={on_save} disabled={!has_changes()}>{ "Save" }</button>
+            <MusicConfig settings={(*settings).clone()} on_change={on_change.clone()} />
+            <SoundConfig settings={(*settings).clone()} on_change={on_change.clone()} />
+            <button onclick={on_save} disabled={!has_changes()}>{ i18n.t("Save") }</button>
         </div>
     }
 }
