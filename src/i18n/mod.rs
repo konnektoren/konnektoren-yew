@@ -30,7 +30,10 @@ pub const LANGUAGES: [&str; 9] = ["en", "uk", "ar", "de", "zh", "pl", "tr", "es"
 /// - `use_selected_language`: A hook to get or set the selected language.
 /// - `I18nProvider`: A component that provides i18n context to the application.
 /// - `I18nProviderProps`: The properties for the `I18nProvider` component.
-pub use provider::{I18nProvider, I18nProviderProps, use_i18n, use_selected_language};
+pub use provider::{
+    BrowserI18nProvider, I18nContext, I18nProvider, I18nProviderProps, use_i18n,
+    use_selected_language,
+};
 
 /// Re-export the `SelectedLanguage` type from the `selected_language` module.
 pub use selected_language::SelectedLanguage;

@@ -105,6 +105,32 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
         .unwrap_or_else(|| config.default_language.clone())
 }
 
+fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&str>) -> Language {
+    let supported_languages = config.supported_languages();
+
+    // If a default language code was provided, try to use it
+    if let Some(code) = default_lang_code {
+        let lang = Language::from_code(code);
+        if supported_languages.contains(&lang) {
+            return lang;
+        }
+    }
+
+    // Priority in SSR: environment variable
+    #[cfg(feature = "ssr")]
+    {
+        if let Some(env_lang) = get_env_language() {
+            return env_lang;
+        }
+    }
+
+    // Priority: URL path → URL query param → browser language → default
+    get_path_language(&supported_languages)
+        .or_else(|| get_url_language(&supported_languages))
+        .or_else(|| get_browser_language(&supported_languages))
+        .unwrap_or_else(|| Language::from_code("en"))
+}
+
 #[derive(Clone, PartialEq)]
 pub struct I18nContext {
     pub config: UseStateHandle<I18nConfig>,
@@ -153,6 +179,206 @@ pub fn i18n_provider(props: &I18nProviderProps) -> Html {
         });
     }
 
+    let context = I18nContext {
+        config: config_ctx,
+        selected_language,
+    };
+
+    html! {
+        <ContextProvider<I18nContext> {context}>
+            { for props.children.iter() }
+        </ContextProvider<I18nContext>>
+    }
+}
+
+#[function_component(BrowserI18nProvider)]
+pub fn browser_i18n_provider(props: &I18nProviderProps) -> Html {
+    log::info!("🌐 BrowserI18nProvider initialization");
+
+    // Start with the config from props
+    let initial_config = props.config.clone();
+    let supported_languages = initial_config.supported_languages();
+
+    // Explicitly check URL parameters for debugging
+    #[cfg(feature = "csr")]
+    {
+        use gloo::utils::window;
+        use web_sys::UrlSearchParams;
+
+        let window = window();
+        if let Ok(search) = window.location().search() {
+            log::info!("URL search string: {}", search);
+
+            if !search.is_empty() {
+                if let Ok(search_params) = UrlSearchParams::new_with_str(&search) {
+                    if let Some(lang) = search_params.get("lang") {
+                        log::info!("Found lang parameter: {}", lang);
+
+                        if supported_languages.iter().any(|l| l.code() == lang) {
+                            log::info!("Language '{}' is supported, will use it", lang);
+                        } else {
+                            log::warn!(
+                                "Language '{}' is not in supported languages: {:?}",
+                                lang,
+                                supported_languages
+                                    .iter()
+                                    .map(|l| l.code())
+                                    .collect::<Vec<_>>()
+                            );
+                        }
+                    } else {
+                        log::info!("No lang parameter found in URL");
+                    }
+                } else {
+                    log::warn!("Could not parse URL search params");
+                }
+            }
+        } else {
+            log::warn!("Could not get search string from URL");
+        }
+    }
+
+    // Determine the language with explicit logging
+    let language = {
+        #[cfg(feature = "csr")]
+        {
+            // Try URL path first
+            if let Some(path_lang) = get_path_language(&supported_languages) {
+                log::info!("Using language from URL path: {}", path_lang.code());
+                path_lang
+            }
+            // Then URL query parameter
+            else if let Some(url_lang) = get_url_language(&supported_languages) {
+                log::info!("Using language from URL parameter: {}", url_lang.code());
+                url_lang
+            }
+            // Then browser language
+            else if let Some(browser_lang) = get_browser_language(&supported_languages) {
+                log::info!(
+                    "Using language from browser settings: {}",
+                    browser_lang.code()
+                );
+                browser_lang
+            }
+            // Fallback to default (en)
+            else {
+                log::info!("Falling back to default language: en");
+                Language::from_code("en")
+            }
+        }
+
+        #[cfg(not(feature = "csr"))]
+        {
+            determine_browser_language(&initial_config, Some("en"))
+        }
+    };
+
+    log::info!("Final selected language: {}", language.code());
+
+    // Create selected language state
+    let selected_language = SelectedLanguage::new(language.code());
+
+    // Create config state and update default language if needed
+    let config_ctx = use_state(|| {
+        let mut config = initial_config.clone();
+        if config.default_language.code() != language.code() {
+            config.default_language = language.clone();
+        }
+        log::info!(
+            "Config state initialized with language: {}",
+            config.default_language.code()
+        );
+        config
+    });
+
+    // Effect to update language if URL or browser settings change
+    {
+        let config_ctx = config_ctx.clone();
+        let initial_config = initial_config.clone();
+
+        use_effect_with((), move |_| {
+            #[cfg(feature = "csr")]
+            {
+                use gloo::events::EventListener;
+                use gloo::utils::window;
+
+                let window = window();
+
+                // Immediate check for URL parameters
+                if let Ok(search) = window.location().search() {
+                    if !search.is_empty() {
+                        if let Ok(search_params) = web_sys::UrlSearchParams::new_with_str(&search) {
+                            if let Some(lang) = search_params.get("lang") {
+                                log::info!("Effect: Found lang parameter: {}", lang);
+
+                                let language = Language::from_code(&lang);
+                                let mut new_config = initial_config.clone();
+
+                                if new_config.default_language.code() != language.code() {
+                                    log::info!("Effect: Updating language to {}", language.code());
+                                    new_config.default_language = language;
+                                    config_ctx.set(new_config);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Create popstate event listener for navigation changes
+                let listener = EventListener::new(&window, "popstate", move |_| {
+                    log::info!("Popstate event detected, checking language");
+
+                    let supported_langs = initial_config.supported_languages();
+
+                    // Try URL path first
+                    if let Some(path_lang) = get_path_language(&supported_langs) {
+                        log::info!(
+                            "Popstate: Using language from URL path: {}",
+                            path_lang.code()
+                        );
+                        let mut new_config = initial_config.clone();
+                        new_config.default_language = path_lang;
+                        config_ctx.set(new_config);
+                        return;
+                    }
+
+                    // Then URL query parameter
+                    if let Some(url_lang) = get_url_language(&supported_langs) {
+                        log::info!(
+                            "Popstate: Using language from URL parameter: {}",
+                            url_lang.code()
+                        );
+                        let mut new_config = initial_config.clone();
+                        new_config.default_language = url_lang;
+                        config_ctx.set(new_config);
+                        return;
+                    }
+
+                    // Default fallback
+                    log::info!("Popstate: No language in URL, using default");
+                    let default_lang = Language::from_code("en");
+                    let mut new_config = initial_config.clone();
+
+                    if new_config.default_language.code() != default_lang.code() {
+                        new_config.default_language = default_lang;
+                        config_ctx.set(new_config);
+                    }
+                });
+
+                // Keep listener alive until component is unmounted
+                return move || {
+                    drop(listener);
+                };
+            }
+
+            #[cfg(not(feature = "csr"))]
+            {
+                || ()
+            }
+        });
+    }
+
+    // Use the existing I18nContext structure
     let context = I18nContext {
         config: config_ctx,
         selected_language,
