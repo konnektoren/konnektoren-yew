@@ -62,7 +62,7 @@ pub fn challenge_info_block(props: &ChallengeInfoBlockProps) -> Html {
                     }
                 </div>
                 <div class="challenge-block__actions">
-                    <a href={format!("/challenge/{}", &challenge.id)}
+                    <a href={format!("/challenge/{}/", &challenge.id)}
                        class="challenge-block__link"
                        target="_blank"
                        rel="noopener noreferrer">
