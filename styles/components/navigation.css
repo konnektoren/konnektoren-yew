@@ -1,77 +1,125 @@
+/* Base navigation container */
 .navigation-wrapper {
     @apply fixed left-0 bottom-0;
     @apply z-50 w-full;
-    @apply flex flex-col items-center justify-around bg-base-200;
+    @apply flex flex-col bg-base-200;
 }
 
+/* Navigation bar */
 .navigation {
-    @apply flex justify-around items-center w-full bg-base-200;
-    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)] shadow-lg;
+    @apply flex justify-around items-center w-full;
+    @apply shadow-lg;
     padding-bottom: env(safe-area-inset-bottom, 0);
-
-    & .nav-group {
-        @apply flex flex-col items-center;
-        @apply text-base-content/70 bg-transparent border-none p-2;
-        @apply cursor-pointer transition-all duration-300;
-
-        &.active {
-            @apply text-primary -translate-y-[5px];
-        }
-
-        & i {
-            @apply text-3xl mb-1;
-        }
-
-        & span {
-            @apply text-sm;
-        }
-
-        &:hover {
-            @apply text-primary/80 -translate-y-[5px];
-        }
-    }
 }
 
+/* Nav groups */
+.navigation .nav-group {
+    @apply flex flex-col items-center;
+    @apply text-base-content/70 bg-transparent border-none p-2;
+    @apply cursor-pointer transition-all duration-300;
+}
+
+.navigation .nav-group.active {
+    @apply text-primary -translate-y-[5px];
+}
+
+.navigation .nav-group:hover {
+    @apply text-primary/80 -translate-y-[5px];
+}
+
+.navigation .nav-group i {
+    @apply text-3xl mb-1;
+}
+
+.navigation .nav-group span {
+    @apply text-sm;
+}
+
+/* Route links - match the group styling */
+.navigation a {
+    @apply flex flex-col items-center;
+    @apply text-base-content/70 p-2;
+    @apply transition-all duration-300;
+    @apply cursor-pointer;
+}
+
+.navigation a:hover {
+    @apply text-primary/80 -translate-y-[5px];
+}
+
+.navigation a i {
+    @apply text-3xl mb-1;
+}
+
+.navigation a span {
+    @apply text-sm;
+}
+
+/* Component containers */
+.navigation .nav-extra-inline {
+    @apply flex items-center justify-center p-2;
+    @apply transition-all duration-300;
+    @apply cursor-pointer;
+}
+
+.navigation .nav-extra-inline:hover {
+    @apply -translate-y-[5px];
+}
+
+/* Active/click effect for components */
+.navigation .nav-extra-inline:active {
+    @apply scale-95;
+}
+
+/* Dropdown menu */
 .navigation-dropdown {
-    @apply absolute bottom-full left-0 w-4/5 max-w-xs;
-    @apply bg-base-200 p-2 rounded-t-2xl;
-    @apply shadow-[0_-5px_15px_rgba(0,0,0,0.2)];
+    @apply absolute bottom-full left-0;
+    @apply w-4/5 max-w-xs p-2;
+    @apply bg-base-200 rounded-t-2xl shadow-lg;
+    @apply z-[60];
     animation: slideUp 0.3s ease;
-    z-index: 60; /* One higher than navigation-wrapper */
-
-    & nav {
-        @apply flex flex-col;
-    }
-
-    & a {
-        @apply flex items-center p-2;
-        @apply text-base-content/70 no-underline;
-        @apply transition-all duration-300;
-        @apply rounded-lg;
-
-        & i {
-            @apply mr-2;
-        }
-
-        &:hover {
-            @apply text-primary/80 bg-primary/10 translate-x-[5px];
-        }
-    }
 }
 
-.nav-extras {
-    @apply p-2 border-t border-base-300/10 mt-2;
-    @apply flex flex-col gap-2;
-
-    :global(.social-links) {
-        @apply flex gap-2 justify-center;
-    }
-
-    :global(.theme-toggle) {
-        @apply flex justify-center;
-    }
+.navigation-dropdown nav {
+    @apply flex flex-col;
 }
 
+.navigation-dropdown a {
+    @apply flex flex-row items-center;
+    @apply p-2 rounded-lg;
+    @apply text-base-content/70 no-underline;
+    @apply transition-all duration-300;
+}
+
+.navigation-dropdown a i {
+    @apply mr-2 mb-0 text-lg;
+}
+
+.navigation-dropdown a:hover {
+    @apply text-primary/80 bg-primary/10 translate-x-[5px];
+}
+
+.navigation-dropdown .nav-item-component {
+    @apply p-2 flex items-center;
+    @apply transition-all duration-300;
+    @apply rounded-lg cursor-pointer;
+}
+
+.navigation-dropdown .nav-item-component:hover {
+    @apply bg-primary/10;
+}
+
+/* Active/click effect for dropdown components */
+.navigation-dropdown .nav-item-component:active {
+    @apply scale-95 bg-primary/20;
+}
+
+/* Error message */
+.nav-item-error {
+    @apply text-error text-sm p-2;
+}
+
+/* Animation - fixed without @apply */
 @keyframes slideUp {
     from {
         transform: translateY(100%);
@@ -83,24 +131,25 @@
     }
 }
 
+/* Responsive adjustments */
 @screen sm {
-    .navigation-wrapper .navigation .nav-group {
-        & i {
-            @apply text-sm;
-        }
-        & span {
-            @apply text-xs;
-        }
+    .navigation .nav-group i,
+    .navigation a i {
+        @apply text-sm;
+    }
+    .navigation .nav-group span,
+    .navigation a span {
+        @apply text-xs;
     }
 }
 
 @screen md {
-    .navigation-wrapper .navigation .nav-group {
-        & i {
-            @apply text-xl;
-        }
-        & span {
-            @apply text-xs;
-        }
+    .navigation .nav-group i,
+    .navigation a i {
+        @apply text-xl;
+    }
+    .navigation .nav-group span,
+    .navigation a span {
+        @apply text-xs;
     }
 }

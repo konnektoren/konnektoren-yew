@@ -1,6 +1,18 @@
+use yew::Html;
+
 #[derive(Clone, PartialEq)]
-pub struct NavItem<Route> {
-    pub name: &'static str,
-    pub route: Route,
-    pub icon: &'static str,
+pub enum NavItem<Route> {
+    Route {
+        name: &'static str,
+        route: Route,
+        icon: &'static str,
+    },
+    Component {
+        component: Html,
+    },
+    Group {
+        name: &'static str,
+        icon: &'static str,
+        items: Vec<NavItem<Route>>,
+    },
 }

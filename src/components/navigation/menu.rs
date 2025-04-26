@@ -1,11 +1,11 @@
-use super::{NavExtra, NavGroup};
+use super::NavItem;
 use crate::i18n::use_i18n;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
 #[derive(Properties, PartialEq, Default)]
 pub struct MenuProps<Route: yew_router::Routable + 'static> {
-    pub groups: Vec<NavGroup<Route>>,
+    pub items: Vec<NavItem<Route>>,
 }
 
 #[function_component(NavigationMenu)]
@@ -84,42 +84,52 @@ pub fn navigation_menu<Route: yew_router::Routable + std::fmt::Debug + 'static>(
         });
     }
 
+    // Get only group items for dropdown logic
+    let group_items: Vec<_> = props
+        .items
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, item)| {
+            if let NavItem::Group { .. } = item {
+                Some((idx, item))
+            } else {
+                None
+            }
+        })
+        .collect();
+
     html! {
         <div class="navigation-wrapper">
             {
                 if let Some(active_idx) = *active_group {
-                    html! {
-                        <div class="navigation-dropdown" ref={dropdown_ref}>
-                            <nav>
-                                {
-                                    props.groups[active_idx].items.iter().map(|item| {
-                                        html! {
-                                            <Link<Route> to={item.route.clone()}>
-                                                <i class={item.icon}></i>
-                                                <span>{ i18n.t(item.name) }</span>
-                                            </Link<Route>>
-                                        }
-                                    }).collect::<Html>()
-                                }
-                                {
-                                    if let Some(extras) = &props.groups[active_idx].extras {
-                                        html! {
-                                            <div class="nav-extras">
-                                                {
-                                                    extras.iter().map(|extra| {
-                                                        match extra {
-                                                            NavExtra::Component(component) => component.clone(),
-                                                        }
-                                                    }).collect::<Html>()
+                    if let Some(&(_, NavItem::Group { items, .. })) = group_items.get(active_idx) {
+                        html! {
+                            <div class="navigation-dropdown" ref={dropdown_ref}>
+                                <nav>
+                                    {
+                                        items.iter().map(|item| {
+                                            match item {
+                                                NavItem::Route { name, route, icon } => html! {
+                                                    <Link<Route> to={route.clone()}>
+                                                        <i class={*icon}></i>
+                                                        <span>{ i18n.t(name) }</span>
+                                                    </Link<Route>>
+                                                },
+                                                NavItem::Component { component } => html! {
+                                                    <div class="nav-item-component">{ component.clone() }</div>
+                                                },
+                                                NavItem::Group { .. } => html! {
+                                                    // Nested groups not rendered in dropdown
+                                                    <div class="nav-item-error">{ "Nested groups not supported" }</div>
                                                 }
-                                            </div>
-                                        }
-                                    } else {
-                                        html! {}
+                                            }
+                                        }).collect::<Html>()
                                     }
-                                }
-                            </nav>
-                        </div>
+                                </nav>
+                            </div>
+                        }
+                    } else {
+                        html! {}
                     }
                 } else {
                     html! {}
@@ -127,16 +137,32 @@ pub fn navigation_menu<Route: yew_router::Routable + std::fmt::Debug + 'static>(
             }
             <nav class="navigation">
                 {
-                    props.groups.iter().enumerate().map(|(idx, group)| {
-                        let is_active = Some(idx) == *active_group;
-                        html! {
-                            <button
-                                class={if is_active { "nav-group active" } else { "nav-group" }}
-                                onclick={toggle_group(idx)}
-                            >
-                                <i class={group.icon}></i>
-                                <span>{ i18n.t(group.name) }</span>
-                            </button>
+                    props.items.iter().enumerate().map(|(idx, item)| {
+                        match item {
+                            NavItem::Route { name, route, icon } => html! {
+                                <Link<Route> to={route.clone()} >
+                                    <i class={*icon}></i>
+                                    <span>{ i18n.t(name) }</span>
+                                </Link<Route>>
+                            },
+                            NavItem::Component { component } => html! {
+                                <div class="nav-extra-inline">{ component.clone() }</div>
+                            },
+                            NavItem::Group { name, icon, .. } => {
+                                // Find group index in the filtered group_items
+                                let group_idx = group_items.iter().position(|&(original_idx, _)| original_idx == idx)
+                                    .unwrap_or(0);
+                                let is_active = Some(group_idx) == *active_group;
+                                html! {
+                                    <button
+                                        class={if is_active { "nav-group active" } else { "nav-group" }}
+                                        onclick={toggle_group(group_idx)}
+                                    >
+                                        <i class={*icon}></i>
+                                        <span>{ i18n.t(name) }</span>
+                                    </button>
+                                }
+                            }
                         }
                     }).collect::<Html>()
                 }
@@ -147,8 +173,8 @@ pub fn navigation_menu<Route: yew_router::Routable + std::fmt::Debug + 'static>(
 
 #[cfg(feature = "yew-preview")]
 pub mod preview {
-    use super::super::NavItem;
     use super::*;
+    use yew::prelude::*;
     use yew_preview::prelude::*;
 
     #[derive(Routable, PartialEq, Clone, Debug, Default)]
@@ -160,41 +186,45 @@ pub mod preview {
         Home,
     }
 
-    fn get_groups() -> Vec<NavGroup<Route>> {
+    fn get_nav_items() -> Vec<NavItem<Route>> {
         vec![
-            NavGroup {
+            NavItem::Group {
                 name: "Home",
                 icon: "fas fa-home",
                 items: vec![
-                    NavItem {
+                    NavItem::Route {
                         name: "Root",
                         route: Route::Root,
                         icon: "fas fa-home",
                     },
-                    NavItem {
+                    NavItem::Route {
                         name: "Home",
                         route: Route::Home,
                         icon: "fas fa-home",
                     },
                 ],
-                extras: None,
             },
-            NavGroup {
+            NavItem::Component {
+                component: html! { <span class="inbox-icon">{"📬"}</span> },
+            },
+            NavItem::Group {
                 name: "Mail",
                 icon: "fas fa-briefcase",
                 items: vec![
-                    NavItem {
+                    NavItem::Route {
                         name: "Root",
                         route: Route::Root,
                         icon: "fas fa-home",
                     },
-                    NavItem {
-                        name: "Home",
-                        route: Route::Home,
-                        icon: "fas fa-home",
+                    NavItem::Component {
+                        component: html! { <span>{"Custom Component"}</span> },
                     },
                 ],
-                extras: None,
+            },
+            NavItem::Route {
+                name: "Direct Link",
+                route: Route::Home,
+                icon: "fas fa-link",
             },
         ]
     }
@@ -203,9 +233,9 @@ pub mod preview {
     pub struct ExampleMenuProps;
 
     #[function_component(ExampleMenu)]
-    pub fn exampe_menu(_props: &ExampleMenuProps) -> Html {
+    pub fn example_menu(_props: &ExampleMenuProps) -> Html {
         html! {
-            <NavigationMenu<Route> groups={get_groups()} />
+            <NavigationMenu<Route> items={get_nav_items()} />
         }
     }
 
