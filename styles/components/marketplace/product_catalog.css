@@ -1,8 +1,12 @@
 .product-catalog {
     @apply grid gap-6;
     @apply p-4;
-    @apply w-full min-w-[800px] max-w-[1400px];
+    @apply w-full max-w-[1400px];
     @apply grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
+
+    @screen sm {
+        @apply grid-cols-[repeat(auto-fit,minmax(240px,1fr))];
+    }
 
     @screen md {
         @apply p-6;
@@ -10,5 +14,12 @@
 
     @screen lg {
         @apply p-8;
+    }
+}
+
+@media (max-width: 639px) {
+    .product-catalog {
+        @apply grid-cols-1 gap-4 p-2;
+        min-width: 0; /* Explicitly override any min-width */
     }
 }
