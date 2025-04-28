@@ -1,15 +1,9 @@
 .challenge-info {
-    @apply card bg-base-100 p-6 shadow-md text-base-content;
-    @apply flex flex-col w-full flex-1;
-    @apply transition-all duration-300 ease-in-out;
-}
-
-.challenge-info:hover {
-    @apply -translate-y-0.5 shadow-lg;
+    @apply collapse collapse-arrow card bg-base-100 shadow-md;
 }
 
 .challenge-info__title {
-    @apply mb-4;
+    @apply collapse-title font-semibold;
 }
 
 .challenge-info__description {

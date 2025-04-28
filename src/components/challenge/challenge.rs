@@ -28,7 +28,6 @@ pub struct ChallengeComponentProps {
 #[function_component(ChallengeComponent)]
 pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
     let challenge_result = use_state(|| Option::<ChallengeResult>::None);
-    let show_challenge_info = use_state(|| false);
 
     let handle_event = {
         let on_event = props.on_event.clone();
@@ -126,25 +125,18 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         _ => html! {},
     };
 
-    let challenge_info = {
-        let show_info = *show_challenge_info;
+    let challenge_header = {
         html! {
-            <>
-                <button class="challenge-info-button" onclick={
-                Callback::from(move |_| show_challenge_info.set(!show_info))}>
-                    {if show_info { "X" } else { "?" }}
-                </button>
-                <div class="challenge-info" style={if show_info { "display: block;" } else { "display: none;" }}>
+            <div class="challenge__header">
                 <ChallengeInfoComponent challenge_config={props.challenge.challenge_config.clone()} />
                 <ChallengeTimerComponent challenge={props.challenge.clone()} running={true} />
-                </div>
-            </>
+            </div>
         }
     };
 
     html! {
         <div class="challenge">
-            {challenge_info}
+            {challenge_header}
             {challenge_component}
             {challenge_result_component}
         </div>

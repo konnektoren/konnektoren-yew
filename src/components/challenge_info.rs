@@ -33,8 +33,9 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
     };
 
     html! {
-        <div class="challenge-info">
-            <h2 class="challenge-info__title">{ i18n.t(&props.challenge_config.name) }</h2>
+        <details class="challenge-info">
+            <summary class="challenge-info__title">{ i18n.t(&props.challenge_config.name) }</summary>
+
             {rating_component}
             {presence_component}
             <div class="challenge-info__description">
@@ -44,7 +45,7 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
                 <p class="challenge-info__tasks">{format!("{}: {}", i18n.t("Tasks"), props.challenge_config.tasks.len())}</p>
                 <p class="challenge-info__unlock-points">{format!("{}: {}", i18n.t("Unlock Points"), props.challenge_config.unlock_points)}</p>
             </div>
-        </div>
+        </details>
     }
 }
 
