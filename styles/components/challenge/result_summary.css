@@ -1,0 +1,115 @@
+.result-summary {
+    @apply bg-base-100 shadow-md rounded-lg border border-base-300;
+    @apply w-full my-4;
+}
+
+/* Style for the summary/header */
+.result-summary__header {
+    @apply py-3 px-4 flex items-center gap-2 cursor-pointer;
+    @apply border-l-4;
+    @apply list-none; /* Remove default bullet */
+}
+
+/* Make sure content is visible when open */
+.result-summary[open] .result-summary__content {
+    @apply bg-base-100 text-base-content;
+    @apply p-4 pt-0 pb-6;
+}
+
+/* Ensure the summary keeps its styling when open */
+.result-summary[open] .result-summary__header {
+    @apply border-b border-base-200 mb-4;
+}
+
+/* Performance modifiers */
+.result-summary__header--excellent {
+    @apply border-success bg-success/5 text-success;
+}
+
+.result-summary__header--good {
+    @apply border-info bg-info/5 text-info;
+}
+
+.result-summary__header--fair {
+    @apply border-warning bg-warning/5 text-warning;
+}
+
+.result-summary__header--needs-improvement {
+    @apply border-error bg-error/5 text-error;
+}
+
+/* Performance display */
+.result-summary__performance {
+    @apply flex items-center gap-3;
+}
+
+.result-summary__score {
+    @apply text-2xl font-bold;
+}
+
+.result-summary__text {
+    @apply text-lg;
+}
+
+/* Content area */
+.result-summary__content {
+    @apply flex flex-col gap-4;
+}
+
+.result-summary__title {
+    @apply text-xl font-semibold text-base-content;
+    @apply mb-4;
+}
+
+.result-summary__timer {
+    @apply flex justify-end mb-2;
+}
+
+.result-summary__congratulation {
+    @apply text-base italic text-success;
+    @apply my-4;
+}
+
+.result-summary__message {
+    @apply text-sm text-base-content/80 italic;
+    @apply mt-2;
+}
+
+.result-summary__details {
+    @apply mt-4 pt-3 border-t border-base-300;
+}
+
+.result-summary__challenge-name {
+    @apply text-sm font-medium text-base-content;
+}
+
+/* Remove default styling for details/summary */
+.result-summary summary::marker,
+.result-summary summary::-webkit-details-marker {
+    @apply hidden;
+}
+
+/* Add a custom arrow indicator */
+.result-summary summary::after {
+    content: "▼";
+    @apply ml-auto text-xs opacity-70 transition-transform;
+}
+
+.result-summary[open] summary::after {
+    @apply transform rotate-180;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .result-summary__title {
+        @apply text-lg;
+    }
+
+    .result-summary__score {
+        @apply text-xl;
+    }
+
+    .result-summary__text {
+        @apply text-base;
+    }
+}
