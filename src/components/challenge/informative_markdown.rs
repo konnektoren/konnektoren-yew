@@ -1,4 +1,5 @@
 use crate::components::challenge::informative::InformativeComponentProps;
+use crate::i18n::use_i18n;
 use konnektoren_core::asset_loader::AssetLoader;
 use konnektoren_core::challenges::ChallengeResult;
 use konnektoren_core::commands::{ChallengeCommand, Command};
@@ -40,6 +41,7 @@ pub fn load_markdown_for_ssg(path: &str) -> String {
 
 #[function_component(InformativeMarkdownComponent)]
 pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html {
+    let i18n = use_i18n();
     let loading_state = use_state(|| LoadingState::Loading);
     let language = props.language.as_deref().unwrap_or("en");
     let asset_loader = use_state(AssetLoader::default);
@@ -95,8 +97,8 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
     let fallback_path = match fallback_path {
         Some(text) => text.text,
         None => {
-            loading_state.set(LoadingState::FetchError("No text found".to_string()));
-            "No text found".to_string()
+            loading_state.set(LoadingState::FetchError(i18n.t("No text found")));
+            i18n.t("No text found")
         }
     };
 
@@ -157,7 +159,7 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
 
     match *loading_state {
         LoadingState::Loading => {
-            html! {<p>{"Loading..."}</p>}
+            html! {<p>{i18n.t("Loading...")}</p>}
         }
         LoadingState::FetchError(ref error) => {
             html! {<p>{error}</p>}
@@ -167,11 +169,11 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
             html! {
                 <div class="informative-markdown">
                     <h2>{&props.challenge.description}</h2>
-                    <button onclick={scroll_to_bottom}>{"Scroll down"}</button>
+                    <button onclick={scroll_to_bottom}>{i18n.t("Scroll down")}</button>
                     <div class="markdown-content">
                         {content}
                     </div>
-                    <button id="finish-button" onclick={on_finish}>{"Next"}</button>
+                    <button id="finish-button" onclick={on_finish}>{i18n.t("Next")}</button>
                 </div>
             }
         }
