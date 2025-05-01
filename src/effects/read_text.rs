@@ -1,3 +1,5 @@
+#[cfg(feature = "csr")]
+use log::{debug, warn};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -23,13 +25,26 @@ pub fn read_text(props: &ReadTextProps) -> Html {
         use_effect(move || {
             let settings = settings.clone();
             Timeout::new(0, move || {
-                if let Ok(speech_synthesis) = window().speech_synthesis() {
-                    let utterance = SpeechSynthesisUtterance::new().unwrap();
-                    utterance.set_text(&text_clone);
-                    utterance.set_lang(&lang_clone);
-                    utterance.set_volume(settings.sound_volume);
-
-                    speech_synthesis.speak(&utterance);
+                // Try to get speech synthesis
+                match window().speech_synthesis() {
+                    Ok(speech_synthesis) => {
+                        // Try to create a new utterance
+                        match SpeechSynthesisUtterance::new() {
+                            Ok(utterance) => {
+                                utterance.set_text(&text_clone);
+                                utterance.set_lang(&lang_clone);
+                                utterance.set_volume(settings.sound_volume);
+                                speech_synthesis.speak(&utterance);
+                                debug!("Requested text-to-speech for: {}", text_clone);
+                            }
+                            Err(err) => {
+                                debug!("Failed to create speech utterance: {:?}", err);
+                            }
+                        }
+                    }
+                    Err(_) => {
+                        warn!("Speech synthesis not available in this browser");
+                    }
                 }
             })
             .forget();
