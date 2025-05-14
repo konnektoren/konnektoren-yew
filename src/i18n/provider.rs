@@ -74,11 +74,6 @@ fn get_env_language() -> Option<Language> {
     })
 }
 
-#[cfg(not(feature = "ssr"))]
-fn get_env_language() -> Option<Language> {
-    None
-}
-
 fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) -> Language {
     let supported_languages = config.supported_languages();
 

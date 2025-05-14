@@ -63,7 +63,7 @@ pub fn certificate(props: &CertificateProps) -> Html {
                 <p class="certificate__info"><strong>{ "Solved Challenges: " }</strong>{ &props.certificate_data.solved_challenges }</p>
                 <p class="certificate__info"><strong>{ "Performance Percentage: " }</strong>{ format!("{}%", &props.certificate_data.performance_percentage) }</p>
                 <p class="certificate__info"><strong>{ "Date: " }</strong>{ &props.certificate_data.date.to_string() }</p>
-                { render_verification_status(verified) }
+                { render_verification_status(verified.is_ok()) }
             </div>
             <div class="certificate__share">
                 <input type="text" class="certificate__share-input" readonly=true value={share_url.clone()} />
@@ -115,7 +115,7 @@ mod preview {
             "Player".to_string(),
             Default::default(),
         );
-        certificate.create_signature();
+        let _ = certificate.create_signature();
         certificate
     }
 

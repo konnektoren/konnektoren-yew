@@ -130,7 +130,6 @@ rust-embed = { version = "8.5.0", features = [
 ] }
 strum = { version = "0.26", features = ["derive"] }
 strum_macros = "0.26"
-anyhow = "1.0.86"
 serde = { version = "1.0.204", features = ["derive"] }
 js-sys = { version = "0.3.69", optional = true }
 serde_yaml = "0.9.34+deprecated"

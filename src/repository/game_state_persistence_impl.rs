@@ -1,7 +1,6 @@
 use super::{SESSION_STORAGE_KEY, SessionRepositoryTrait};
-use anyhow::Result;
 use konnektoren_core::game::GameState;
-use konnektoren_core::persistence::GameStatePersistence;
+use konnektoren_core::persistence::{GameStatePersistence, Result};
 use std::sync::{Arc, RwLock};
 
 pub struct GameStatePersistenceImpl {
