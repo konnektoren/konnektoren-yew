@@ -33,7 +33,7 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
     };
 
     html! {
-        <details class="challenge-info">
+        <details class="challenge-info" open={true}>
             <summary class="challenge-info__title">{ i18n.t(&props.challenge_config.name) }</summary>
 
             {rating_component}
