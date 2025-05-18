@@ -1,0 +1,44 @@
+.multiple-choice-4 {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
+}
+
+.multiple-choice-4__content {
+    @apply flex flex-col gap-6; /* Adds spacing between the question and options */
+}
+
+.multiple-choice-4 .progress {
+    @apply w-full;
+}
+
+.multiple-choice-4 .multiple-choice-options {
+    @apply grid grid-cols-2 gap-4 w-full; /* 2x2 grid for options */
+}
+
+.multiple-choice-4 .multiple-choice-option span {
+    @apply card bg-base-100 shadow-sm p-2;
+    @apply flex items-center justify-center;
+    @apply min-w-[50px] min-h-[50px] max-w-[240px];
+    @apply rounded-full cursor-pointer;
+    @apply transition-all duration-300 ease-in-out;
+    @apply text-sm text-center hyphens-auto;
+}
+
+.multiple-choice-4 .multiple-choice-option span:hover {
+    @apply scale-110 bg-primary text-primary-content z-30;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .multiple-choice-4 {
+        @apply p-4;
+    }
+
+    .multiple-choice-4 .question {
+        @apply mb-4; /* Adjust spacing for smaller screens */
+    }
+
+    .multiple-choice-4 .multiple-choice-options {
+        @apply grid-cols-2 gap-2; /* Adjust spacing for smaller screens */
+    }
+}
