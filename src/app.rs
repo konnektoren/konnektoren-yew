@@ -110,6 +110,7 @@ pub fn App() -> Html {
             #[cfg(feature = "effects")]
             BlinkAnimation::preview(),
             MultipleChoiceComponent::preview(),
+            MultipleChoice4Component::preview(),
             MultipleChoiceCircleComponent::preview(),
             SortTableComponent::preview(),
             ContextualChoiceComponent::preview(),
