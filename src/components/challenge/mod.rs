@@ -26,6 +26,7 @@ pub mod question;
 pub mod result_summary;
 pub mod sort_table;
 pub mod sort_table_result;
+pub mod vocabulary;
 
 pub use actions::{ChallengeActions, ChallengeActionsComponent};
 pub use challenge::ChallengeComponent;
@@ -55,3 +56,4 @@ pub use question::QuestionComponent;
 pub use result_summary::ResultSummaryComponent;
 pub use sort_table::SortTableComponent;
 pub use sort_table_result::SortTableResultComponent;
+pub use vocabulary::VocabularyComponent;

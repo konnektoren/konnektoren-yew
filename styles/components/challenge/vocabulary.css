@@ -1,0 +1,402 @@
+.vocabulary {
+    @apply flex flex-col gap-8 items-stretch;
+    @apply max-w-[1400px] min-w-[400px] w-fit mx-auto p-8;
+}
+
+.vocabulary__header {
+    @apply card bg-base-100 shadow-sm p-6;
+    @apply text-center flex flex-col items-center gap-4;
+}
+
+.vocabulary__title {
+    @apply text-2xl font-bold text-base-content;
+    @apply flex items-center gap-3;
+}
+
+.vocabulary__challenge-icon {
+    @apply text-primary text-3xl;
+}
+
+.vocabulary__description {
+    @apply text-base text-base-content/60 leading-normal;
+    @apply max-w-[600px];
+}
+
+.vocabulary__content {
+    @apply w-full;
+}
+
+.vocabulary__empty {
+    @apply card bg-base-100 p-8 shadow-sm;
+    @apply text-center text-base-content/60;
+    @apply border-2 border-dashed border-base-300;
+}
+
+.vocabulary__help {
+    @apply card bg-base-200 p-6 shadow-sm;
+    @apply border-l-4 border-info;
+    animation: slideInHelp 0.3s ease-out;
+}
+
+.vocabulary__help-title {
+    @apply text-lg font-semibold text-base-content mb-3;
+}
+
+.vocabulary__help-text {
+    @apply text-base text-base-content/70 mb-4;
+}
+
+.vocabulary__help-navigation {
+    @apply pt-3 border-t border-base-300;
+}
+
+.vocabulary__help-navigation p {
+    @apply text-sm text-base-content/60 italic;
+}
+
+/* Vocabulary Grid Container - Responsive grid for up to 10 items */
+.vocabulary-grid {
+    @apply grid gap-4 w-full;
+    /* Mobile: 1 column */
+    @apply grid-cols-1;
+    /* Small tablets: 2 columns */
+    @apply sm:grid-cols-2;
+    /* Tablets: 3 columns */
+    @apply md:grid-cols-3;
+    /* Desktop: 4 columns */
+    @apply lg:grid-cols-4;
+    /* Large desktop: 5 columns for 10 items in 2 rows */
+    @apply xl:grid-cols-5;
+}
+
+/* Vocabulary Card */
+.vocabulary-card {
+    @apply card bg-base-100 shadow-md;
+    @apply flex flex-col h-full;
+    @apply transition-all duration-300 ease-in-out;
+    @apply border border-base-300;
+    @apply min-h-[280px];
+}
+
+.vocabulary-card:hover {
+    @apply -translate-y-1 shadow-lg border-primary/30;
+}
+
+.vocabulary-card__header {
+    @apply card-body pb-2;
+    @apply flex justify-center items-center;
+    @apply min-h-[80px] flex-shrink-0;
+}
+
+.vocabulary-card__icon {
+    @apply text-4xl text-primary;
+    @apply transition-all duration-300;
+}
+
+.vocabulary-card__icon i {
+    @apply drop-shadow-sm;
+}
+
+.vocabulary-card__icon:hover i {
+    @apply scale-110 text-primary/80;
+}
+
+.vocabulary-card__icon-image {
+    @apply max-w-[60px] max-h-[60px] object-contain;
+    @apply rounded-lg shadow-sm;
+    @apply transition-transform duration-300;
+}
+
+.vocabulary-card__icon-image:hover {
+    @apply scale-110;
+}
+
+.vocabulary-card__content {
+    @apply card-body pt-2 pb-4;
+    @apply flex-grow text-center;
+    @apply flex flex-col justify-between;
+}
+
+.vocabulary-card__text {
+    @apply text-lg font-bold text-base-content;
+    @apply mb-2 leading-tight;
+    @apply break-words hyphens-auto;
+}
+
+.vocabulary-card__translation {
+    @apply text-sm text-base-content/70;
+    @apply mb-2 italic;
+    @apply break-words;
+}
+
+.vocabulary-card__phonetic {
+    @apply text-xs text-base-content/50;
+    @apply font-mono bg-base-200 px-2 py-1 rounded;
+    @apply inline-block mb-2;
+}
+
+.vocabulary-card__actions {
+    @apply card-actions justify-center p-3 pt-0;
+    @apply mt-auto;
+}
+
+.vocabulary-card__read-button {
+    @apply btn btn-primary btn-xs gap-1;
+    @apply transition-all duration-300;
+    @apply w-full;
+}
+
+.vocabulary-card__read-button:hover {
+    @apply scale-105 shadow-md;
+}
+
+.vocabulary-card__read-button i {
+    @apply text-xs;
+}
+
+/* Adjust grid for different item counts */
+.vocabulary-grid:has(.vocabulary-card:nth-child(1):nth-last-child(1)) {
+    /* 1 item - center it */
+    @apply max-w-[300px] mx-auto grid-cols-1;
+}
+
+.vocabulary-grid:has(.vocabulary-card:nth-child(2):nth-last-child(1)) {
+    /* 2 items - 2 columns on larger screens */
+    @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
+}
+
+.vocabulary-grid:has(.vocabulary-card:nth-child(3):nth-last-child(1)) {
+    /* 3 items - 3 columns on larger screens */
+    @apply lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
+}
+
+.vocabulary-grid:has(.vocabulary-card:nth-child(4):nth-last-child(1)) {
+    /* 4 items - 2x2 grid */
+    @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
+}
+
+.vocabulary-grid:has(.vocabulary-card:nth-child(5):nth-last-child(1)) {
+    /* 5 items - 5 columns on XL screens */
+    @apply xl:grid-cols-5 max-w-[1300px] mx-auto;
+}
+
+/* Animations */
+@keyframes slideInHelp {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cardPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.vocabulary-card__read-button:active {
+    animation: cardPulse 0.3s ease;
+}
+
+/* Responsive Design */
+@screen sm {
+    .vocabulary {
+        @apply p-4 gap-6;
+    }
+
+    .vocabulary__header {
+        @apply p-4;
+    }
+
+    .vocabulary__title {
+        @apply text-xl;
+    }
+
+    .vocabulary__challenge-icon {
+        @apply text-2xl;
+    }
+
+    .vocabulary__description {
+        @apply text-sm;
+    }
+
+    .vocabulary-grid {
+        @apply gap-3;
+    }
+
+    .vocabulary-card {
+        @apply min-h-[240px];
+    }
+
+    .vocabulary-card__header {
+        @apply min-h-[60px];
+    }
+
+    .vocabulary-card__icon {
+        @apply text-3xl;
+    }
+
+    .vocabulary-card__icon-image {
+        @apply max-w-[45px] max-h-[45px];
+    }
+
+    .vocabulary-card__text {
+        @apply text-base;
+    }
+
+    .vocabulary-card__translation {
+        @apply text-xs;
+    }
+
+    .vocabulary-card__phonetic {
+        @apply text-xs px-1;
+    }
+
+    .vocabulary__help {
+        @apply p-4;
+    }
+
+    .vocabulary__help-title {
+        @apply text-base;
+    }
+
+    .vocabulary__help-text {
+        @apply text-sm;
+    }
+}
+
+/* Medium screens - optimize for tablets */
+@screen md {
+    .vocabulary-card__text {
+        @apply text-lg;
+    }
+
+    .vocabulary-card__translation {
+        @apply text-sm;
+    }
+
+    .vocabulary-card__read-button {
+        @apply btn-sm gap-2;
+    }
+
+    .vocabulary-card__read-button i {
+        @apply text-sm;
+    }
+}
+
+/* Large screens - better spacing */
+@screen lg {
+    .vocabulary-grid {
+        @apply gap-5;
+    }
+
+    .vocabulary-card {
+        @apply min-h-[300px];
+    }
+
+    .vocabulary-card__header {
+        @apply min-h-[90px];
+    }
+
+    .vocabulary-card__icon {
+        @apply text-5xl;
+    }
+
+    .vocabulary-card__icon-image {
+        @apply max-w-[70px] max-h-[70px];
+    }
+
+    .vocabulary-card__text {
+        @apply text-xl;
+    }
+
+    .vocabulary-card__translation {
+        @apply text-base;
+    }
+}
+
+/* Extra large screens - maximum spacing */
+@screen xl {
+    .vocabulary {
+        @apply gap-10;
+    }
+
+    .vocabulary-grid {
+        @apply gap-6;
+    }
+
+    .vocabulary-card {
+        @apply min-h-[320px];
+    }
+
+    .vocabulary-card__header {
+        @apply min-h-[100px];
+    }
+
+    .vocabulary-card__text {
+        @apply text-xl;
+    }
+
+    .vocabulary-card__read-button {
+        @apply btn-sm;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .vocabulary-card {
+        @apply border-2 border-base-content/20;
+    }
+
+    .vocabulary-card__text {
+        @apply font-extrabold;
+    }
+
+    .vocabulary-card__read-button {
+        @apply border-2 border-primary;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .vocabulary-card,
+    .vocabulary-card__icon,
+    .vocabulary-card__icon-image,
+    .vocabulary-card__read-button {
+        @apply transition-none;
+    }
+
+    .vocabulary-card:hover {
+        @apply transform-none;
+    }
+
+    .vocabulary__help {
+        animation: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .vocabulary-card__actions {
+        @apply hidden;
+    }
+
+    .vocabulary-grid {
+        @apply grid-cols-2 gap-4;
+    }
+
+    .vocabulary-card {
+        @apply shadow-none border border-gray-300;
+        break-inside: avoid;
+    }
+}

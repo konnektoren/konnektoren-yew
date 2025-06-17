@@ -3,7 +3,7 @@ use super::{
     CustomPackageComponent, GapFillComponent, GapFillResultComponent, InformativeComponent,
     InformativeMarkdownComponent, MultipleChoice4Component, MultipleChoiceCircleComponent,
     MultipleChoiceComponent, MultipleChoiceResultComponent, OrderingComponent,
-    OrderingResultComponent, PlaceholderComponent, SortTableComponent,
+    OrderingResultComponent, PlaceholderComponent, SortTableComponent, VocabularyComponent,
 };
 use crate::components::{ChallengeInfoComponent, ChallengeTimerComponent};
 use konnektoren_core::challenges::ChallengeVariant;
@@ -112,6 +112,9 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         },
         (None, ChallengeType::Placeholder(challenge), _) => html! {
             <PlaceholderComponent challenge={challenge.clone()} on_command={handle_command} language={props.language.clone()} />
+        },
+        (None, ChallengeType::Vocabulary(challenge), _) => html! {
+            <VocabularyComponent challenge={challenge.clone()} on_command={handle_command} />
         },
         _ => html! {},
     };
