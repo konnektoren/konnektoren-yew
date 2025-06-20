@@ -78,5 +78,13 @@
   "No text found": "未找到文本",
   "Scroll down": "向下滚动",
   "Next": "下一步",
-  "Select Level": "选择级别"
+  "Select Level": "选择级别",
+  "Read aloud": "朗读",
+  "Listen": "听",
+  "No vocabulary items available.": "没有可用的词汇项目。",
+  "Page": "页面",
+  "items": "项目",
+  "Review these vocabulary words and their meanings. Click the listen button to hear the pronunciation.": "复习这些词汇及其含义。点击听取按钮以听取发音。",
+  "Use the Previous/Next buttons to navigate between vocabulary pages.": "使用上一页/下一页按钮在词汇页面之间导航。",
+  "Previous": "上一页"
 }

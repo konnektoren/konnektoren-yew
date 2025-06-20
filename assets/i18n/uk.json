@@ -78,5 +78,13 @@
   "No text found": "Текст не знайдено",
   "Scroll down": "Прокрутити вниз",
   "Next": "Далі",
-  "Select Level": "Вибрати рівень"
+  "Select Level": "Вибрати рівень",
+  "Read aloud": "Читати вголос",
+  "Listen": "Слухати",
+  "No vocabulary items available.": "Немає доступних елементів словникового запасу.",
+  "Page": "Сторінка",
+  "items": "елементи",
+  "Review these vocabulary words and their meanings. Click the listen button to hear the pronunciation.": "Переглянь ці словникові слова та їх значення. Натисни кнопку слухати, щоб почути вимову.",
+  "Use the Previous/Next buttons to navigate between vocabulary pages.": "Використовуй кнопки Попередня/Наступна для навігації між сторінками словника.",
+  "Previous": "Попередня"
 }

@@ -78,5 +78,13 @@
   "No text found": "Metin bulunamadı",
   "Scroll down": "Aşağı kaydır",
   "Next": "İleri",
-  "Select Level": "Seviye Seç"
+  "Select Level": "Seviye Seç",
+  "Read aloud": "Sesli oku",
+  "Listen": "Dinle",
+  "No vocabulary items available.": "Mevcut kelime öğesi yok.",
+  "Page": "Sayfa",
+  "items": "öğeler",
+  "Review these vocabulary words and their meanings. Click the listen button to hear the pronunciation.": "Bu kelime öğelerini ve anlamlarını gözden geçirin. Telaffuzu duymak için dinle düğmesine tıklayın.",
+  "Use the Previous/Next buttons to navigate between vocabulary pages.": "Kelime sayfaları arasında gezinmek için Önceki/Sonraki düğmelerini kullanın.",
+  "Previous": "Önceki"
 }

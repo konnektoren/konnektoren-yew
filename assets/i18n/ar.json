@@ -78,5 +78,13 @@
   "No text found": "لم يتم العثور على نص",
   "Scroll down": "التمرير لأسفل",
   "Next": "التالي",
-  "Select Level": "اختر المستوى"
+  "Select Level": "اختر المستوى",
+  "Read aloud": "قراءة بصوت عال",
+  "Listen": "استمع",
+  "No vocabulary items available.": "لا توجد عناصر مفردات متاحة.",
+  "Page": "صفحة",
+  "items": "عناصر",
+  "Review these vocabulary words and their meanings. Click the listen button to hear the pronunciation.": "راجع هذه الكلمات المفردات ومعانيها. انقر على زر الاستماع لسماع النطق.",
+  "Use the Previous/Next buttons to navigate between vocabulary pages.": "استخدم أزرار السابق/التالي للتنقل بين صفحات المفردات.",
+  "Previous": "السابق"
 }

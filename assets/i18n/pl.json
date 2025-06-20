@@ -78,5 +78,13 @@
   "No text found": "Nie znaleziono tekstu",
   "Scroll down": "Przewiń w dół",
   "Next": "Dalej",
-  "Select Level": "Wybierz poziom"
+  "Select Level": "Wybierz poziom",
+  "Read aloud": "Czytaj na głos",
+  "Listen": "Słuchaj",
+  "No vocabulary items available.": "Brak dostępnych elementów słownictwa.",
+  "Page": "Strona",
+  "items": "elementy",
+  "Review these vocabulary words and their meanings. Click the listen button to hear the pronunciation.": "Przejrzyj te słowa i ich znaczenia. Kliknij przycisk słuchaj, aby usłyszeć wymowę.",
+  "Use the Previous/Next buttons to navigate between vocabulary pages.": "Użyj przycisków Poprzedni/Następny, aby nawigować między stronami słownictwa.",
+  "Previous": "Poprzedni"
 }
