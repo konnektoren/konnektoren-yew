@@ -110,6 +110,15 @@ fn vocabulary_card(props: &VocabularyCardProps) -> Html {
 
     html! {
         <div class="vocabulary-card">
+            // Read button positioned in top-right corner
+            <button
+                class="vocabulary-card__read-button"
+                onclick={handle_read}
+                title={i18n.t("Read aloud")}
+            >
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+
             <div class="vocabulary-card__header">
                 if let Some(icon) = &props.item.icon {
                     <div class="vocabulary-card__icon">
@@ -132,17 +141,6 @@ fn vocabulary_card(props: &VocabularyCardProps) -> Html {
                 if let Some(phonetic) = &props.item.phonetic {
                     <p class="vocabulary-card__phonetic">{phonetic}</p>
                 }
-            </div>
-
-            <div class="vocabulary-card__actions">
-                <button
-                    class="vocabulary-card__read-button"
-                    onclick={handle_read}
-                    title={i18n.t("Read aloud")}
-                >
-                    <i class="fa-solid fa-volume-high"></i>
-                    {i18n.t("Listen")}
-                </button>
             </div>
 
             {read_text_component}

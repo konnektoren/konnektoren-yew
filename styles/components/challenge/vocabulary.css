@@ -54,38 +54,68 @@
     @apply text-sm text-base-content/60 italic;
 }
 
-/* Vocabulary Grid Container - Responsive grid for up to 10 items */
+.vocabulary__help-debug {
+    @apply mt-4 p-3 bg-base-300 rounded-lg;
+}
+
+.vocabulary__help-debug p {
+    @apply text-xs font-mono text-base-content/50;
+}
+
+/* Vocabulary Grid Container */
 .vocabulary-grid {
     @apply grid gap-4 w-full;
-    /* Mobile: 1 column */
     @apply grid-cols-1;
-    /* Small tablets: 2 columns */
     @apply sm:grid-cols-2;
-    /* Tablets: 3 columns */
     @apply md:grid-cols-3;
-    /* Desktop: 4 columns */
     @apply lg:grid-cols-4;
-    /* Large desktop: 5 columns for 10 items in 2 rows */
     @apply xl:grid-cols-5;
 }
 
 /* Vocabulary Card */
 .vocabulary-card {
-    @apply card bg-base-100 shadow-md;
-    @apply flex flex-col h-full;
+    @apply card bg-base-100 shadow hover:shadow-lg;
+    @apply relative flex flex-col h-full;
     @apply transition-all duration-300 ease-in-out;
-    @apply border border-base-300;
+    @apply border border-base-content/10;
     @apply min-h-[280px];
+    @apply hover:-translate-y-1;
 }
 
-.vocabulary-card:hover {
-    @apply -translate-y-1 shadow-lg border-primary/30;
+/* Read Button - Positioned in top-right corner */
+.vocabulary-card__read-button {
+    @apply btn btn-circle btn-sm btn-ghost;
+    @apply absolute top-2 right-2 z-10;
+    @apply opacity-0 hover:opacity-100 focus:opacity-100;
+    @apply transition-all duration-300 ease-in-out;
+    @apply text-primary hover:text-primary-content hover:bg-primary;
+    @apply shadow-sm hover:shadow-md;
+    @apply transform hover:scale-110;
+}
+
+.vocabulary-card__read-button i {
+    @apply text-sm;
+}
+
+/* Show read button on card hover */
+.vocabulary-card:hover .vocabulary-card__read-button {
+    @apply opacity-100;
+}
+
+/* Focus styles for accessibility */
+.vocabulary-card__read-button:focus {
+    @apply opacity-100 ring ring-primary ring-offset-2;
+}
+
+/* Active state animation */
+.vocabulary-card__read-button:active {
+    @apply scale-95;
+    animation: pulse-read 0.3s ease;
 }
 
 .vocabulary-card__header {
-    @apply card-body pb-2;
     @apply flex justify-center items-center;
-    @apply min-h-[80px] flex-shrink-0;
+    @apply min-h-[80px] flex-shrink-0 p-4;
 }
 
 .vocabulary-card__icon {
@@ -112,8 +142,7 @@
 }
 
 .vocabulary-card__content {
-    @apply card-body pt-2 pb-4;
-    @apply flex-grow text-center;
+    @apply flex-grow text-center p-4 pt-2;
     @apply flex flex-col justify-between;
 }
 
@@ -131,52 +160,28 @@
 
 .vocabulary-card__phonetic {
     @apply text-xs text-base-content/50;
-    @apply font-mono bg-base-200 px-2 py-1 rounded;
+    @apply font-mono bg-base-200 px-2 py-1 rounded-full;
     @apply inline-block mb-2;
 }
 
-.vocabulary-card__actions {
-    @apply card-actions justify-center p-3 pt-0;
-    @apply mt-auto;
-}
-
-.vocabulary-card__read-button {
-    @apply btn btn-primary btn-xs gap-1;
-    @apply transition-all duration-300;
-    @apply w-full;
-}
-
-.vocabulary-card__read-button:hover {
-    @apply scale-105 shadow-md;
-}
-
-.vocabulary-card__read-button i {
-    @apply text-xs;
-}
-
-/* Adjust grid for different item counts */
-.vocabulary-grid:has(.vocabulary-card:nth-child(1):nth-last-child(1)) {
-    /* 1 item - center it */
+/* Grid adjustments for different item counts */
+.vocabulary-grid--single {
     @apply max-w-[300px] mx-auto grid-cols-1;
 }
 
-.vocabulary-grid:has(.vocabulary-card:nth-child(2):nth-last-child(1)) {
-    /* 2 items - 2 columns on larger screens */
+.vocabulary-grid--double {
     @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
 }
 
-.vocabulary-grid:has(.vocabulary-card:nth-child(3):nth-last-child(1)) {
-    /* 3 items - 3 columns on larger screens */
+.vocabulary-grid--triple {
     @apply lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
 }
 
-.vocabulary-grid:has(.vocabulary-card:nth-child(4):nth-last-child(1)) {
-    /* 4 items - 2x2 grid */
+.vocabulary-grid--quad {
     @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
 }
 
-.vocabulary-grid:has(.vocabulary-card:nth-child(5):nth-last-child(1)) {
-    /* 5 items - 5 columns on XL screens */
+.vocabulary-grid--five {
     @apply xl:grid-cols-5 max-w-[1300px] mx-auto;
 }
 
@@ -192,20 +197,16 @@
     }
 }
 
-@keyframes cardPulse {
+@keyframes pulse-read {
     0% {
-        transform: scale(1);
+        transform: scale(1.1);
     }
     50% {
-        transform: scale(1.02);
+        transform: scale(1.2);
     }
     100% {
-        transform: scale(1);
+        transform: scale(1.1);
     }
-}
-
-.vocabulary-card__read-button:active {
-    animation: cardPulse 0.3s ease;
 }
 
 /* Responsive Design */
@@ -239,7 +240,7 @@
     }
 
     .vocabulary-card__header {
-        @apply min-h-[60px];
+        @apply min-h-[60px] p-3;
     }
 
     .vocabulary-card__icon {
@@ -262,6 +263,14 @@
         @apply text-xs px-1;
     }
 
+    .vocabulary-card__read-button {
+        @apply btn-xs top-1 right-1;
+    }
+
+    .vocabulary-card__read-button i {
+        @apply text-xs;
+    }
+
     .vocabulary__help {
         @apply p-4;
     }
@@ -275,7 +284,7 @@
     }
 }
 
-/* Medium screens - optimize for tablets */
+/* Medium screens */
 @screen md {
     .vocabulary-card__text {
         @apply text-lg;
@@ -286,7 +295,7 @@
     }
 
     .vocabulary-card__read-button {
-        @apply btn-sm gap-2;
+        @apply btn-sm;
     }
 
     .vocabulary-card__read-button i {
@@ -294,7 +303,7 @@
     }
 }
 
-/* Large screens - better spacing */
+/* Large screens */
 @screen lg {
     .vocabulary-grid {
         @apply gap-5;
@@ -305,7 +314,7 @@
     }
 
     .vocabulary-card__header {
-        @apply min-h-[90px];
+        @apply min-h-[90px] p-4;
     }
 
     .vocabulary-card__icon {
@@ -325,7 +334,7 @@
     }
 }
 
-/* Extra large screens - maximum spacing */
+/* Extra large screens */
 @screen xl {
     .vocabulary {
         @apply gap-10;
@@ -340,7 +349,7 @@
     }
 
     .vocabulary-card__header {
-        @apply min-h-[100px];
+        @apply min-h-[100px] p-6;
     }
 
     .vocabulary-card__text {
@@ -363,7 +372,7 @@
     }
 
     .vocabulary-card__read-button {
-        @apply border-2 border-primary;
+        @apply border-2 border-primary opacity-100;
     }
 }
 
@@ -380,6 +389,10 @@
         @apply transform-none;
     }
 
+    .vocabulary-card__read-button {
+        @apply opacity-100;
+    }
+
     .vocabulary__help {
         animation: none;
     }
@@ -387,7 +400,7 @@
 
 /* Print styles */
 @media print {
-    .vocabulary-card__actions {
+    .vocabulary-card__read-button {
         @apply hidden;
     }
 
@@ -398,5 +411,12 @@
     .vocabulary-card {
         @apply shadow-none border border-gray-300;
         break-inside: avoid;
+    }
+}
+
+/* Touch device support */
+@media (hover: none) and (pointer: coarse) {
+    .vocabulary-card__read-button {
+        @apply opacity-100;
     }
 }
