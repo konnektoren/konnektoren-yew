@@ -263,7 +263,11 @@ pub fn vocabulary_component(props: &VocabularyComponentProps) -> Html {
                 <h2 class="vocabulary__title">{&props.challenge.name}</h2>
                 if let Some(icon) = &props.challenge.icon {
                     <div class="vocabulary__challenge-icon">
-                        <i class={classes!(icon)}></i>
+                        if icon.starts_with("fa-") {
+                            <i class={classes!(icon)}></i>
+                        } else {
+                            <img src={icon.clone()} alt="" />
+                        }
                     </div>
                 }
                 <p class="vocabulary__description">{&props.challenge.description}</p>
@@ -528,6 +532,81 @@ mod preview {
         }
     }
 
+    fn create_gif_vocabulary() -> Vocabulary {
+        Vocabulary {
+            id: "gif-vocabulary".to_string(),
+            name: "Summer Vocabulary with GIFs".to_string(),
+            description: "Learn summer vocabulary with animated GIFs".to_string(),
+            icon: Some("https://media.giphy.com/media/26FLgGTPUDH6UGAbm/giphy.gif".to_string()),
+            lang: "de".to_string(),
+            items: vec![
+                VocabularyItem {
+                    id: 0,
+                    text: "der Sommer".to_string(),
+                    translation: Some("the summer".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/26FLgGTPUDH6UGAbm/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ˈzɔmɐ/".to_string()),
+                },
+                VocabularyItem {
+                    id: 1,
+                    text: "die Sonne".to_string(),
+                    translation: Some("the sun".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ˈzɔnə/".to_string()),
+                },
+                VocabularyItem {
+                    id: 2,
+                    text: "das Schwimmbad".to_string(),
+                    translation: Some("the swimming pool".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ˈʃvɪmbaːt/".to_string()),
+                },
+                VocabularyItem {
+                    id: 3,
+                    text: "baden".to_string(),
+                    translation: Some("to bathe, to swim".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/3o7TKOCXl47JSbLUGc/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ˈbaːdən/".to_string()),
+                },
+                VocabularyItem {
+                    id: 4,
+                    text: "der Strand".to_string(),
+                    translation: Some("the beach".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ʃtʁant/".to_string()),
+                },
+                VocabularyItem {
+                    id: 5,
+                    text: "das Eis".to_string(),
+                    translation: Some("the ice cream".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/3o6UBlHJQT19wSgJQk/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/aɪs/".to_string()),
+                },
+                VocabularyItem {
+                    id: 6,
+                    text: "die Sonnencreme".to_string(),
+                    translation: Some("the sunscreen".to_string()),
+                    icon: Some(
+                        "https://media.giphy.com/media/l0HlwwRxfcVEr4AUg/giphy.gif".to_string(),
+                    ),
+                    phonetic: Some("/ˈzɔnənˌkʁeːmə/".to_string()),
+                },
+            ],
+        }
+    }
+
     yew_preview::create_preview!(
         VocabularyComponent,
         VocabularyComponentProps {
@@ -547,6 +626,14 @@ mod preview {
             "Sixteen Items",
             VocabularyComponentProps {
                 challenge: create_sixteen_item_vocabulary(),
+                on_command: None,
+                on_event: None,
+            }
+        ),
+        (
+            "Summer with GIFs",
+            VocabularyComponentProps {
+                challenge: create_gif_vocabulary(),
                 on_command: None,
                 on_event: None,
             }
