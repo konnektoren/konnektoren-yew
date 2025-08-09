@@ -45,7 +45,10 @@ pub mod tour;
 pub mod translate;
 pub mod video;
 
-pub use ads::{AdNetwork, AdvertisementComponent, AdvertisementProps, BuyMeCoffeeComponent};
+pub use ads::{
+    AdNetwork, AdvertisementComponent, AdvertisementProps, BuyMeCoffeeComponent,
+    GumroadSubscribeComponent,
+};
 pub use analytics::*;
 #[cfg(feature = "sbom")]
 pub use app_dependencies::AppDependenciesComponent;

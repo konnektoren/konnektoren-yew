@@ -1,82 +1,261 @@
 .advertisement {
-    @apply card bg-base-100 shadow-sm w-full mx-auto my-8 text-center;
+    @apply card bg-base-100 shadow-lg w-full mx-auto my-8 text-center relative overflow-hidden;
+    @apply transition-all duration-300 ease-in-out;
+
+    /* Smooth transitions between ads */
+    &--fading {
+        @apply opacity-0 transform scale-95;
+    }
 
     /* Different layouts for ad types */
     &:has(.buy-me-coffee) {
-        @apply max-w-[340px] p-4;
+        @apply max-w-sm p-4;
+    }
+
+    &:has(.gumroad-subscribe-ad) {
+        @apply max-w-sm p-4;
+    }
+
+    &:has(.video) {
+        @apply max-w-lg p-4;
     }
 
     &:has(.adsbygoogle) {
         @apply max-w-full p-0;
     }
+}
 
-    .advertisement__message {
-        @apply p-4 text-base-content/60 text-sm mb-4;
-        @apply bg-base-200 rounded-md;
+.advertisement__info {
+    @apply flex items-center justify-between p-3 bg-base-200/50 border-b border-base-300;
+    @apply text-xs text-base-content/60;
+}
+
+.advertisement__label {
+    @apply uppercase tracking-wider font-medium;
+}
+
+.advertisement__timer {
+    @apply flex-1 max-w-16 ml-3 bg-base-300 rounded-full h-1 overflow-hidden;
+}
+
+.advertisement__timer-bar {
+    @apply h-full bg-primary rounded-full;
+    animation: advertisement-timer 20s linear infinite;
+}
+
+@keyframes advertisement-timer {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.advertisement__message {
+    @apply p-4 text-base-content/70 text-sm mb-4;
+    @apply bg-warning/10 border border-warning/20 rounded-lg;
+}
+
+.advertisement__container {
+    @apply flex justify-center items-center p-4;
+    @apply transition-all duration-300 ease-in-out;
+
+    /* AdSense specific styles */
+    &:has(.adsbygoogle) {
+        @apply p-0 min-h-80 w-full;
+
+        .adsbygoogle {
+            @apply block w-full h-80;
+        }
+    }
+
+    /* Video specific styles */
+    &:has(.video) {
+        @apply p-2;
+    }
+}
+
+/* Loading state */
+.advertisement--loading {
+    @apply min-h-80 flex items-center justify-center;
+    @apply text-base-content/60 text-sm;
+
+    &::after {
+        content: "";
+        @apply loading loading-spinner loading-md;
+    }
+}
+
+/* Hover effects */
+.advertisement:hover {
+    @apply shadow-xl transform translate-y-[-2px];
+}
+
+/* Responsive adjustments */
+@screen sm {
+    .advertisement {
+        @apply my-6;
+
+        &:has(.buy-me-coffee) {
+            @apply max-w-72;
+        }
+
+        &:has(.gumroad-subscribe-ad) {
+            @apply max-w-72;
+        }
+
+        &:has(.video) {
+            @apply max-w-md;
+        }
+
+        &:has(.adsbygoogle) {
+            @apply min-h-70;
+        }
     }
 
     .advertisement__container {
-        @apply flex justify-center items-center p-4;
-        @apply transition-transform duration-300;
+        @apply p-3;
 
-        /* AdSense specific styles */
         &:has(.adsbygoogle) {
-            @apply p-0 min-h-[320px] w-full;
+            @apply min-h-70;
 
             .adsbygoogle {
-                @apply block w-full h-[320px];
+                @apply min-h-70;
             }
         }
     }
 
-    .advertisement__label {
-        @apply text-xs text-base-content/60 mt-2 uppercase tracking-wider;
+    .advertisement__info {
+        @apply p-2;
     }
 
-    /* Loading state */
-    &--loading {
-        @apply min-h-[320px] flex items-center justify-center;
-        @apply text-base-content/60 text-sm;
+    .advertisement--loading {
+        @apply min-h-70 text-xs;
     }
 }
-@screen sm {
+
+@screen xs {
     .advertisement {
-        @apply my-4;
+        @apply mx-4 my-4;
 
-        &:has(.buy-me-coffee) {
-            @apply max-w-[280px];
+        &:has(.buy-me-coffee),
+        &:has(.gumroad-subscribe-ad) {
+            @apply max-w-full;
         }
+    }
+}
+``` ### `buy_me_coffee.css` ```css .buy-me-coffee {
+    @apply transition-all duration-300 ease-in-out;
 
-        &:has(.adsbygoogle) {
-            @apply min-h-[280px];
+    & a {
+        @apply block no-underline;
+    }
+
+    & img {
+        @apply block max-w-full h-auto transition-all duration-300 ease-in-out;
+        @apply rounded-lg shadow-sm;
+    }
+
+    &:hover {
+        @apply transform translate-y-[-4px];
+
+        & img {
+            @apply scale-105 shadow-lg;
         }
+    }
 
-        .advertisement__container {
-            @apply p-2;
+    &:active {
+        @apply transform translate-y-[-1px];
 
-            &:has(.adsbygoogle) {
-                @apply min-h-[280px];
-
-                .adsbygoogle {
-                    @apply min-h-[280px];
-                }
-            }
-
-            .buy-me-coffee {
-                @apply max-w-[250px];
-            }
+        & img {
+            @apply scale-102;
         }
+    }
+}
 
-        .advertisement__message {
-            @apply text-xs p-2;
+/* Responsive adjustments */
+@screen sm {
+    .buy-me-coffee {
+        & img {
+            @apply max-w-60;
         }
+    }
+}
 
-        .advertisement__label {
-            @apply text-[0.625rem];
+@screen xs {
+    .buy-me-coffee {
+        & img {
+            @apply max-w-48;
         }
+    }
+}
+``` ### `gumroad_subscribe.css` ```css .gumroad-subscribe-ad {
+    @apply flex flex-col items-center bg-gradient-to-br from-base-100 to-base-200;
+    @apply rounded-xl shadow-md p-6 mx-auto my-4 max-w-sm;
+    @apply transition-all duration-500 ease-out;
+    animation: gumroad-subscribe-ad-slide-in 0.6s
+        cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
 
-        &--loading {
-            @apply min-h-[280px] text-xs;
-        }
+@keyframes gumroad-subscribe-ad-slide-in {
+    0% {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.gumroad-subscribe-ad__message {
+    @apply text-lg font-bold text-primary mb-3;
+    @apply transition-colors duration-300;
+}
+
+.gumroad-subscribe-ad__cta {
+    @apply text-base text-base-content/80 mb-6 text-center leading-relaxed;
+}
+
+.gumroad-subscribe-ad__button {
+    @apply btn btn-primary btn-lg font-bold rounded-full px-8 py-3 text-base mb-3;
+    @apply shadow-lg transition-all duration-300 ease-out;
+    @apply hover:shadow-xl hover:scale-105 hover:-translate-y-1;
+    @apply active:scale-95 active:translate-y-0;
+}
+
+.gumroad-subscribe-ad__button:hover {
+    @apply btn-accent;
+}
+
+.gumroad-subscribe-ad__note {
+    @apply text-sm text-base-content/60 text-center;
+    @apply transition-colors duration-300;
+}
+
+/* Hover effect for the whole ad */
+.gumroad-subscribe-ad:hover {
+    @apply shadow-xl transform scale-102;
+
+    .gumroad-subscribe-ad__message {
+        @apply text-accent;
+    }
+}
+
+/* Responsive adjustments */
+@screen sm {
+    .gumroad-subscribe-ad {
+        @apply p-5 max-w-72;
+    }
+
+    .gumroad-subscribe-ad__button {
+        @apply btn-md px-6;
+    }
+}
+
+@screen xs {
+    .gumroad-subscribe-ad {
+        @apply p-4 mx-2;
     }
 }
