@@ -47,7 +47,7 @@ pub mod video;
 
 pub use ads::{
     AdNetwork, AdvertisementComponent, AdvertisementProps, BlogAdComponent, BuyMeCoffeeComponent,
-    GumroadSubscribeComponent,
+    GumroadProductAdComponent, GumroadSubscribeComponent,
 };
 pub use analytics::*;
 #[cfg(feature = "sbom")]

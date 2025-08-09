@@ -1,0 +1,166 @@
+.gumroad-product-ad {
+    @apply bg-gradient-to-br from-base-100 via-base-100 to-accent/5;
+    @apply rounded-xl shadow-lg p-6 mx-auto my-4 max-w-sm relative;
+    @apply transition-all duration-500 ease-out border border-base-300;
+    @apply overflow-hidden;
+    animation: gumroad-product-ad-slide-up 0.8s ease-out;
+}
+
+@keyframes gumroad-product-ad-slide-up {
+    0% {
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.gumroad-product-ad__badge {
+    @apply absolute -top-2 -right-2 z-10;
+}
+
+.gumroad-product-ad__discount {
+    @apply bg-error text-error-content px-3 py-1 rounded-full text-xs font-bold;
+    @apply shadow-lg transform rotate-12;
+    animation: gumroad-product-ad-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gumroad-product-ad-pulse {
+    0%,
+    100% {
+        transform: rotate(12deg) scale(1);
+    }
+    50% {
+        transform: rotate(12deg) scale(1.05);
+    }
+}
+
+.gumroad-product-ad__header {
+    @apply flex items-center gap-3 mb-4;
+}
+
+.gumroad-product-ad__icon {
+    @apply text-2xl p-2 bg-accent/10 rounded-full;
+    @apply transition-transform duration-300;
+}
+
+.gumroad-product-ad__title {
+    @apply text-lg font-bold text-accent flex-1 leading-tight;
+    @apply transition-colors duration-300;
+}
+
+.gumroad-product-ad__image {
+    @apply mb-4 rounded-lg overflow-hidden shadow-md bg-base-200;
+
+    & img {
+        @apply w-full h-36 object-cover transition-transform duration-300;
+    }
+}
+
+.gumroad-product-ad__content {
+    @apply mb-5;
+}
+
+.gumroad-product-ad__description {
+    @apply text-sm text-base-content/80 leading-relaxed mb-3;
+    @apply transition-colors duration-300;
+}
+
+.gumroad-product-ad__price {
+    @apply text-xl font-bold text-success mb-2;
+    @apply flex items-center gap-2;
+}
+
+.gumroad-product-ad__actions {
+    @apply mb-4;
+}
+
+.gumroad-product-ad__button {
+    @apply btn btn-accent btn-wide font-bold rounded-full;
+    @apply shadow-lg transition-all duration-300 ease-out;
+    @apply hover:shadow-xl hover:scale-105 hover:-translate-y-1;
+    @apply active:scale-95 active:translate-y-0;
+    @apply flex items-center justify-center gap-2;
+    @apply text-accent-content;
+}
+
+.gumroad-product-ad__button:hover {
+    @apply btn-primary;
+
+    .gumroad-product-ad__arrow {
+        @apply translate-x-1;
+    }
+}
+
+.gumroad-product-ad__arrow {
+    @apply transition-transform duration-300;
+}
+
+.gumroad-product-ad__footer {
+    @apply flex items-center justify-between text-xs text-base-content/60;
+    @apply border-t border-base-300/50 pt-3;
+}
+
+.gumroad-product-ad__powered {
+    @apply transition-colors duration-300;
+}
+
+.gumroad-product-ad__secure {
+    @apply flex items-center gap-1;
+}
+
+/* Hover effect for the whole ad */
+.gumroad-product-ad:hover {
+    @apply shadow-xl transform scale-102 border-accent/30;
+
+    .gumroad-product-ad__title {
+        @apply text-primary;
+    }
+
+    .gumroad-product-ad__icon {
+        @apply scale-110 bg-accent/20;
+    }
+
+    .gumroad-product-ad__image img {
+        @apply scale-105;
+    }
+
+    .gumroad-product-ad__powered {
+        @apply text-accent;
+    }
+}
+
+/* Responsive adjustments */
+@screen sm {
+    .gumroad-product-ad {
+        @apply p-5 max-w-80;
+    }
+
+    .gumroad-product-ad__button {
+        @apply btn-md;
+    }
+
+    .gumroad-product-ad__image {
+        & img {
+            @apply h-32;
+        }
+    }
+}
+
+@screen xs {
+    .gumroad-product-ad {
+        @apply p-4 mx-2;
+    }
+
+    .gumroad-product-ad__image {
+        & img {
+            @apply h-28;
+        }
+    }
+
+    .gumroad-product-ad__footer {
+        @apply flex-col gap-1 text-center;
+    }
+}

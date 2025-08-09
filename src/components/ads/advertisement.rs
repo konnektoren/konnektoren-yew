@@ -1,5 +1,6 @@
 use crate::components::{
-    BlogAdComponent, BuyMeCoffeeComponent, GumroadSubscribeComponent, VideoComponent,
+    BlogAdComponent, BuyMeCoffeeComponent, GumroadProductAdComponent, GumroadSubscribeComponent,
+    VideoComponent,
 };
 use crate::i18n::use_i18n;
 use gloo::timers::callback::Interval;
@@ -33,6 +34,14 @@ pub enum AdNetwork {
         title: Option<String>,
         preview_text: Option<String>,
         preview_image: Option<String>,
+    },
+    GumroadProductAd {
+        product_url: String,
+        product_name: String,
+        description: Option<String>,
+        price: Option<String>,
+        preview_image: Option<String>,
+        discount: Option<String>,
     },
 }
 
@@ -280,6 +289,28 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
                 </div>
             </div>
         },
+        Some(AdNetwork::GumroadProductAd {
+            product_url,
+            product_name,
+            description,
+            price,
+            preview_image,
+            discount,
+        }) => html! {
+            <div class={ad_class}>
+                {ad_info_label}
+                <div class="advertisement__container">
+                    <GumroadProductAdComponent
+                        product_url={product_url.clone()}
+                        product_name={product_name.clone()}
+                        description={description.clone()}
+                        price={price.clone()}
+                        preview_image={preview_image.clone()}
+                        discount={discount.clone()}
+                    />
+                </div>
+            </div>
+        },
         None => html! {},
     }
 }
@@ -322,6 +353,14 @@ mod preview {
                     title: Some("Konnektoren Blog".to_string()),
                     preview_text: Some("Discover language learning tips, cultural insights, and educational resources.".to_string()),
                     preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
+                },
+                AdNetwork::GumroadProductAd {
+                    product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                    product_name: "Book Vocabulary A1 EN".to_string(),
+                    description: Some("Master essential English vocabulary with our comprehensive A1 level guide. Perfect for beginners!".to_string()),
+                    price: Some("$9.99".to_string()),
+                    preview_image: Some("https://public-files.gumroad.com/d1mh6dq92jyw0dd3b86qu26g3514".to_string()),
+                    discount: Some("20% OFF".to_string()),
                 },
             ],
         },

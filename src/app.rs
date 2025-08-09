@@ -199,6 +199,7 @@ pub fn App() -> Html {
         create_component_group!(
             "Ads",
             GumroadSubscribeComponent::preview(),
+            GumroadProductAdComponent::preview(),
             BuyMeCoffeeComponent::preview(),
             BlogAdComponent::preview(),
             AdvertisementComponent::preview(),
