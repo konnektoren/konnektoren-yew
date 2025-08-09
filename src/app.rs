@@ -1,4 +1,5 @@
 use crate::components::{challenge::ChallengeComponent, game_path::GamePathComponent};
+use crate::prelude::ads::GumroadSubscribeComponent;
 use crate::prelude::create_i18n_config;
 
 #[cfg(feature = "chat")]
@@ -197,6 +198,12 @@ pub fn App() -> Html {
             WalletComponent::<crate::components::marketplace::wallet::solana::SolanaWalletProvider>::preview(),
         ),
         create_component_group!(
+            "Ads",
+            GumroadSubscribeComponent::preview(),
+            BuyMeCoffeeComponent::preview(),
+            AdvertisementComponent::preview(),
+        ),
+        create_component_group!(
             "Misc",
             SharePageComp::preview(),
             create_component_item!("Example", Example, vec![("default", ())]),
@@ -207,8 +214,6 @@ pub fn App() -> Html {
             ChatComponent::preview(),
             StatusMessage::preview(),
             FeedbackPopup::preview(),
-            BuyMeCoffeeComponent::preview(),
-            AdvertisementComponent::preview(),
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),

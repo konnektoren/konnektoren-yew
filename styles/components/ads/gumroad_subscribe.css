@@ -1,0 +1,41 @@
+.gumroad-subscribe-ad {
+    @apply flex flex-col items-center bg-base-100 rounded-xl shadow-md p-8 mx-auto my-8 max-w-xs;
+    animation: gumroad-subscribe-ad-pop 0.7s
+        cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes gumroad-subscribe-ad-pop {
+    0% {
+        transform: scale(0.8) translateY(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.gumroad-subscribe-ad__message {
+    @apply text-lg font-semibold text-base-content mb-2;
+}
+
+.gumroad-subscribe-ad__cta {
+    @apply text-base text-base-content/80 mb-5 text-center;
+}
+
+.gumroad-subscribe-ad__button {
+    @apply btn btn-primary font-bold rounded-lg px-6 py-3 text-base mb-2 shadow transition-transform duration-200;
+    /* Optionally add a little pop effect on hover */
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+.gumroad-subscribe-ad__button:hover,
+.gumroad-subscribe-ad__button:focus {
+    @apply btn-accent;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.gumroad-subscribe-ad__note {
+    @apply text-sm text-base-content/60 mt-1 text-center;
+}
