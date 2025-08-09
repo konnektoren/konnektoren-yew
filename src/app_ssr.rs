@@ -160,7 +160,5 @@ pub fn App() -> Html {
         </ClientSideRouter>
     }
     #[cfg(not(feature = "yew-preview"))]
-    html! {
-        <Example />
-    }
+    html! {}
 }
