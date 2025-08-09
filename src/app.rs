@@ -1,5 +1,4 @@
 use crate::components::{challenge::ChallengeComponent, game_path::GamePathComponent};
-use crate::prelude::ads::GumroadSubscribeComponent;
 use crate::prelude::create_i18n_config;
 
 #[cfg(feature = "chat")]
@@ -201,6 +200,7 @@ pub fn App() -> Html {
             "Ads",
             GumroadSubscribeComponent::preview(),
             BuyMeCoffeeComponent::preview(),
+            BlogAdComponent::preview(),
             AdvertisementComponent::preview(),
         ),
         create_component_group!(

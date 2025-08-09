@@ -1,4 +1,6 @@
-use crate::components::{BuyMeCoffeeComponent, GumroadSubscribeComponent, VideoComponent};
+use crate::components::{
+    BlogAdComponent, BuyMeCoffeeComponent, GumroadSubscribeComponent, VideoComponent,
+};
 use crate::i18n::use_i18n;
 use gloo::timers::callback::Interval;
 use rand::Rng;
@@ -25,6 +27,12 @@ pub enum AdNetwork {
         preview: Option<String>,
         title: Option<String>,
         autoplay: bool,
+    },
+    BlogAd {
+        blog_url: String,
+        title: Option<String>,
+        preview_text: Option<String>,
+        preview_image: Option<String>,
     },
 }
 
@@ -254,6 +262,24 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
                 </div>
             </div>
         },
+        Some(AdNetwork::BlogAd {
+            blog_url,
+            title,
+            preview_text,
+            preview_image,
+        }) => html! {
+            <div class={ad_class}>
+                {ad_info_label}
+                <div class="advertisement__container">
+                    <BlogAdComponent
+                        blog_url={blog_url.clone()}
+                        title={title.clone()}
+                        preview_text={preview_text.clone()}
+                        preview_image={preview_image.clone()}
+                    />
+                </div>
+            </div>
+        },
         None => html! {},
     }
 }
@@ -290,6 +316,12 @@ mod preview {
                     ),
                     title: Some("Konnektoren Video Ad".to_string()),
                     autoplay: false,
+                },
+                AdNetwork::BlogAd {
+                    blog_url: "https://www.konnektoren.blog/".to_string(),
+                    title: Some("Konnektoren Blog".to_string()),
+                    preview_text: Some("Discover language learning tips, cultural insights, and educational resources.".to_string()),
+                    preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
                 },
             ],
         },

@@ -46,7 +46,7 @@ pub mod translate;
 pub mod video;
 
 pub use ads::{
-    AdNetwork, AdvertisementComponent, AdvertisementProps, BuyMeCoffeeComponent,
+    AdNetwork, AdvertisementComponent, AdvertisementProps, BlogAdComponent, BuyMeCoffeeComponent,
     GumroadSubscribeComponent,
 };
 pub use analytics::*;
