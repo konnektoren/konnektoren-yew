@@ -15,6 +15,9 @@ pub enum AdNetwork {
         text: &'static str,
         button_colour: &'static str,
     },
+    GumroadSubscribe {
+        subscribe_url: String,
+    },
 }
 
 #[derive(Properties, PartialEq)]
@@ -159,6 +162,15 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
                 </div>
             </div>
         },
+        Some(AdNetwork::GumroadSubscribe { subscribe_url }) => html! {
+            <div class="advertisement">
+                <div class="advertisement__container">
+                    <crate::components::ads::GumroadSubscribeComponent
+                        subscribe_url={subscribe_url}
+                    />
+                </div>
+            </div>
+        },
         None => html! {},
     }
 }
@@ -184,6 +196,9 @@ mod preview {
                     data_id: "chriamue".to_string(),
                     text: "Buy me a coffee",
                     button_colour: "FFDD00",
+                },
+                AdNetwork::GumroadSubscribe {
+                    subscribe_url: "https://konnektoren.gumroad.com/subscribe".to_string(),
                 },
             ],
         },
