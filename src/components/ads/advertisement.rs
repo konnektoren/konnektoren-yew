@@ -82,8 +82,8 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
 
     match selected_network {
         Some(AdNetwork::GoogleAdsense {
-            client,
-            slot,
+            client: _,
+            slot: _,
             width: _,
             height: _,
         }) => {
