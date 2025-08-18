@@ -39,9 +39,6 @@ jobs:
         id: cache-key
         run: echo "value=${{ github.sha }}" >> $GITHUB_OUTPUT
 
-      - name: Setup styles
-        run: just setup-styles
-
       - name: Cache build environment
         uses: actions/cache@v3
         with:
