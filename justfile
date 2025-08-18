@@ -51,8 +51,7 @@ test-i18n:
 
 # Generate i18n report
 i18n-report:
-    #!/usr/bin/env bash
-    ./scripts/i18n_report.sh
+    I18N_SRC_DIR=${SRC_DIR:-src} I18N_REPORTS_DIR=${REPORTS_DIR:-reports} cargo run --bin i18n-report --features tools
 
 # CI-specific settings
 ci-test-i18n:

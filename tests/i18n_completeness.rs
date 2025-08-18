@@ -1,8 +1,8 @@
-use konnektoren_platform::tools::I18nChecker;
+use konnektoren_platform::tools::{I18nChecker, I18nReportError};
 use konnektoren_yew::i18n::create_i18n_config;
 
 #[test]
-fn test_i18n_completeness() {
+fn test_i18n_completeness() -> Result<(), I18nReportError> {
     // Initialize logging
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
@@ -17,8 +17,10 @@ fn test_i18n_completeness() {
     let report = checker.check_directory("src");
 
     // Print detailed report
-    report.print_report();
+    println!("{}", report.as_report()?);
 
     // Assert no missing translations
     assert!(!report.has_errors, "There are missing translations");
+
+    Ok(())
 }
