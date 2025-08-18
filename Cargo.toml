@@ -21,6 +21,11 @@ name = "ssg"
 path = "src/bin/ssg.rs"
 required-features = ["ssg"]
 
+[[bin]]
+name = "i18n-report"
+path = "src/bin/i18n_report.rs"
+required-features = ["tools"]
+
 [features]
 default = [
     "certificates",
@@ -61,6 +66,7 @@ csr = [
 ssr = ["yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
 ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio", "env_logger"]
 server = ["ssr", "axum", "tokio/full"]
+tools = ["konnektoren-platform/tools", "env_logger"]
 
 [dependencies]
 async-trait = "0.1.83"

@@ -9,11 +9,15 @@ on:
 jobs:
   i18n-check:
     runs-on: ubuntu-latest
+    env:
+      I18N_SRC_DIR: src
+      I18N_REPORTS_DIR: reports
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Cache Rust toolchain and dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -35,12 +39,16 @@ jobs:
         with:
           just-version: "1.14"
 
-      - name: Run i18n check
+      - name: Run i18n report generator
+        id: i18n-report
+        run: |
+          cargo run --bin i18n-report --features tools
+
+      - name: Parse missing count
         id: i18n-check
         run: |
-          just ci-test-i18n
-          if [ -f "reports/status.txt" ]; then
-            source reports/status.txt
+          if [ -f "${I18N_REPORTS_DIR}/status.txt" ]; then
+            source "${I18N_REPORTS_DIR}/status.txt"
             echo "missing_count=${MISSING_COUNT}" >> $GITHUB_OUTPUT
           else
             echo "missing_count=0" >> $GITHUB_OUTPUT
@@ -51,9 +59,10 @@ jobs:
         with:
           name: i18n-report
           path: |
-            reports/i18n_report.txt
-            reports/i18n_summary.md
-            reports/status.txt
+            ${I18N_REPORTS_DIR}/i18n_report.txt
+            ${I18N_REPORTS_DIR}/missing.yml
+            ${I18N_REPORTS_DIR}/missing.json
+            ${I18N_REPORTS_DIR}/status.txt
 
       - name: Create or Update PR Comment
         if: github.event_name == 'pull_request'
@@ -62,18 +71,36 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const fs = require('fs');
-            const summary = fs.readFileSync('reports/i18n_summary.md', 'utf8');
-            const fullReport = fs.readFileSync('reports/i18n_report.txt', 'utf8');
+            const summaryPath = process.env.I18N_REPORTS_DIR + '/i18n_report.txt';
+            const yamlPath = process.env.I18N_REPORTS_DIR + '/missing.yml';
+            const jsonPath = process.env.I18N_REPORTS_DIR + '/missing.json';
 
-            const commentBody = `${summary}
+            let summary = '';
+            let yaml = '';
+            let json = '';
+            try { summary = fs.readFileSync(summaryPath, 'utf8'); } catch {}
+            try { yaml = fs.readFileSync(yamlPath, 'utf8'); } catch {}
+            try { json = fs.readFileSync(jsonPath, 'utf8'); } catch {}
+
+            const commentBody = `
+            ${summary}
 
             <details>
-            <summary>Full I18n Report</summary>
+            <summary>Missing Translations (YAML)</summary>
 
+            \`\`\`yaml
+            ${yaml}
             \`\`\`
-            ${fullReport}
+            </details>
+
+            <details>
+            <summary>Missing Translations (JSON)</summary>
+
+            \`\`\`json
+            ${json}
             \`\`\`
-            </details>`;
+            </details>
+            `;
 
             // Get existing comments
             const { data: comments } = await github.rest.issues.listComments({
@@ -84,7 +111,7 @@ jobs:
 
             // Look for our existing comment
             const i18nComment = comments.find(comment =>
-              comment.body.includes('I18n Check Summary')
+              comment.body.includes('Translation Report')
             );
 
             if (i18nComment) {

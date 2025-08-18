@@ -1,3 +1,15 @@
+//! # Providers
+//!
+//! This module contains Yew's `ContextProvider` components and associated hooks.
+//! Providers are used to manage and share application-wide state and dependencies
+//! (like repositories, game controllers, and user settings) across the component tree.
+//!
+//! They encapsulate state management logic and make data accessible to any descendant
+//! component without prop drilling. This module also defines the `RepositoryConfig`
+//! for setting up the application's persistence layer.
+//!
+//! The `use_*` hooks provide a convenient way to access the provided contexts.
+
 pub mod certificates_provider;
 pub mod client_side_router;
 pub mod design_provider;
