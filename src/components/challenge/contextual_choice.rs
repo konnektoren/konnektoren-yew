@@ -1,7 +1,7 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
 use crate::i18n::use_i18n;
-use konnektoren_core::challenges::{ChallengeResult, ContextualChoice};
+use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, ContextualChoice};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use std::collections::HashMap;
@@ -134,28 +134,12 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                 selections.set(new_selections);
 
                 let mut new_result = (*challenge_result).clone();
-                match &mut new_result {
-                    ChallengeResult::ContextualChoice(answers) => {
-                        if answers.len() <= *item_index {
-                            answers
-                                .resize(*item_index + 1, ContextItemChoiceAnswers { ids: vec![] });
-                        }
-                        answers[*item_index].ids = ids;
-
-                        new_result
-                            .set_input(
-                                *item_index,
-                                ChallengeInput::ContextualChoice(ContextItemChoiceAnswers { ids }),
-                            )
-                            .unwrap();
-                    }
-                    _ => {
-                        new_result =
-                            ChallengeResult::ContextualChoice(vec![ContextItemChoiceAnswers {
-                                ids: vec![],
-                            }]);
-                    }
-                }
+                new_result
+                    .set_input(
+                        *item_index,
+                        ChallengeInput::ContextualChoice(ContextItemChoiceAnswers { ids }),
+                    )
+                    .unwrap();
                 challenge_result.set(new_result);
             }
         })
