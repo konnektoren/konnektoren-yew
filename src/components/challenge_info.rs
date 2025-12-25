@@ -65,6 +65,7 @@ mod preview {
                 tasks: 5.into(),
                 unlock_points: 10,
                 position: None,
+                icon: None
             },
             api_url: Some("https://api.example.com".to_string()),
         },

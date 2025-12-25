@@ -1,6 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
-use konnektoren_core::challenges::{ChallengeResult, Ordering, OrderingResult};
+use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, Ordering, OrderingResult};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use rand::prelude::{SliceRandom, thread_rng};
@@ -364,17 +364,12 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                 let result = OrderingResult {
                     order: (*current_order).clone(),
                 };
-                let mut results = match (*challenge_result).clone() {
-                    ChallengeResult::Ordering(results) => results,
-                    _ => vec![],
-                };
 
-                if results.len() <= current_index {
-                    results.push(result);
-                } else {
-                    results[current_index] = result;
-                }
-                challenge_result.set(ChallengeResult::Ordering(results));
+                let mut challenge_result_update = (*challenge_result).clone();
+                challenge_result_update
+                    .set_input(current_index, ChallengeInput::Ordering(result))
+                    .unwrap();
+                challenge_result.set(challenge_result_update);
 
                 if next_index < challenge.items.len() {
                     // Initialize order for next item

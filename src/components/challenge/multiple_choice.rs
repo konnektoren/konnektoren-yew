@@ -78,9 +78,11 @@ pub fn create_handle_option_selection(
 ) -> Callback<MultipleChoiceOption> {
     Callback::from(move |option: MultipleChoiceOption| {
         let mut challenge_result_update = (*challenge_result).clone();
+
         challenge_result_update
-            .add_input(ChallengeInput::MultipleChoice(option.clone()))
+            .set_input(*task_index, ChallengeInput::MultipleChoice(option.clone()))
             .unwrap();
+
         challenge_result.set(challenge_result_update.clone());
 
         if let Some(on_event) = on_event.as_ref() {

@@ -67,7 +67,7 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
 
                     let mut challenge_result_update = (*challenge_result).clone();
                     challenge_result_update
-                        .add_input(ChallengeInput::GapFill(answer.clone()))
+                        .set_input(*task_index, ChallengeInput::GapFill(answer.clone()))
                         .unwrap();
                     challenge_result.set(challenge_result_update.clone());
 

@@ -106,6 +106,7 @@ mod preview {
                 tasks: 5.into(),
                 unlock_points: 10,
                 position: None,
+                icon: None
             },
             on_new: None,
             api_url: None,

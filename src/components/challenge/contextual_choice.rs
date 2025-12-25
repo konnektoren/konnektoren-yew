@@ -141,6 +141,13 @@ pub fn contextual_choice_component(props: &ContextualChoiceComponentProps) -> Ht
                                 .resize(*item_index + 1, ContextItemChoiceAnswers { ids: vec![] });
                         }
                         answers[*item_index].ids = ids;
+
+                        new_result
+                            .set_input(
+                                *item_index,
+                                ChallengeInput::ContextualChoice(ContextItemChoiceAnswers { ids }),
+                            )
+                            .unwrap();
                     }
                     _ => {
                         new_result =

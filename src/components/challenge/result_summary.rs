@@ -106,6 +106,7 @@ mod preview {
                 tasks: 2.into(),
                 unlock_points: 10,
                 position: None,
+                icon: None,
             },
             challenge_result: ChallengeResult::default(),
             start_time: None,
