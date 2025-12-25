@@ -20,50 +20,90 @@ pub fn feedback_popup(props: &FeedbackPopupProps) -> Html {
     let expanded = use_state(|| props.expanded);
     let i18n = use_i18n();
 
+    // Sync state with props when they change
+    {
+        let show = show.clone();
+        let expanded = expanded.clone();
+        use_effect_with(
+            (props.show, props.expanded),
+            move |(prop_show, prop_expanded)| {
+                show.set(*prop_show);
+                expanded.set(*prop_expanded);
+            },
+        );
+    }
+
+    // Handle timeout
     {
         let show = show.clone();
         let timeout = props.timeout_seconds;
-        use_effect_with((), move |_| {
-            let handle = Timeout::new(timeout * 1000, move || {
-                show.set(true);
-            });
+        use_effect_with(timeout, move |&timeout| {
+            let handle = if timeout > 0 {
+                Some(Timeout::new(timeout * 1000, move || {
+                    show.set(true);
+                }))
+            } else {
+                None
+            };
 
-            move || {
-                handle.cancel();
-            }
+            move || drop(handle)
         });
     }
 
     let on_close = {
-        let show = show.clone();
-        Callback::from(move |_| show.set(false))
+        let expanded = expanded.clone();
+        Callback::from(move |e: MouseEvent| {
+            e.prevent_default();
+            e.stop_propagation();
+            expanded.set(false);
+        })
     };
 
     let on_toggle = {
         let expanded = expanded.clone();
-        Callback::from(move |_| expanded.set(!*expanded))
+        Callback::from(move |e: MouseEvent| {
+            e.prevent_default();
+            e.stop_propagation();
+            expanded.set(!*expanded);
+        })
     };
 
     if !*show {
         return html! {};
     }
 
+    let container_class = classes!("feedback", (*expanded).then_some("feedback--expanded"));
+
     html! {
-        <div class={classes!("feedback", if *expanded { "feedback--expanded" } else { "" })}>
-            <button class="feedback__bubble" onclick={on_toggle.clone()}>
-                <span class="feedback__bubble-icon">{"💬"}</span>
+        <div class={container_class}>
+            <button
+                class="feedback__bubble"
+                onclick={on_toggle}
+                type="button"
+                aria-label={i18n.t("Open feedback form")}
+                aria-expanded={expanded.to_string()}
+            >
+                <span class="feedback__bubble-icon" aria-hidden="true">{"💬"}</span>
                 <span class="feedback__bubble-text">{i18n.t("Feedback")}</span>
             </button>
-            if *expanded {
-                <div class="feedback__content">
-                    <button class="feedback__close" onclick={on_close}>{"×"}</button>
-                    <h3 class="feedback__title">{i18n.t("We'd love your feedback!")}</h3>
-                    <ChallengeReviewComponent
-                        api_url={props.api_url.clone()}
-                        challenge_id="general_feedback"
-                    />
-                </div>
-            }
+
+            <div class="feedback__content" role="dialog" aria-labelledby="feedback-title">
+                <button
+                    class="feedback__close"
+                    onclick={on_close}
+                    type="button"
+                    aria-label={i18n.t("Close feedback form")}
+                >
+                    {"×"}
+                </button>
+                <h3 id="feedback-title" class="feedback__title">
+                    {i18n.t("We'd love your feedback!")}
+                </h3>
+                <ChallengeReviewComponent
+                    api_url={props.api_url.clone()}
+                    challenge_id="general_feedback"
+                />
+            </div>
         </div>
     }
 }
@@ -82,20 +122,29 @@ mod preview {
             expanded: false,
         },
         (
-            "10 Seconds timeout",
+            "Expanded",
             FeedbackPopupProps {
                 api_url: "https://api.konnektoren.help".to_string(),
-                timeout_seconds: 10,
+                timeout_seconds: 0,
+                show: true,
+                expanded: true,
+            }
+        ),
+        (
+            "With Timeout",
+            FeedbackPopupProps {
+                api_url: "https://api.konnektoren.help".to_string(),
+                timeout_seconds: 5,
                 show: true,
                 expanded: false,
             }
         ),
         (
-            "5 Seconds timeout",
+            "Hidden Initially",
             FeedbackPopupProps {
                 api_url: "https://api.konnektoren.help".to_string(),
-                timeout_seconds: 5,
-                show: true,
+                timeout_seconds: 10,
+                show: false,
                 expanded: false,
             }
         )

@@ -1,53 +1,130 @@
 .feedback {
-    @apply z-30;
+    position: relative;
+    z-index: 30;
+}
 
+/* Bubble button */
+.feedback__bubble {
+    @apply btn btn-primary gap-2 flex items-center;
+}
+
+.feedback__bubble-icon {
+    @apply text-xl;
+}
+
+.feedback__bubble-text {
+    @apply text-sm font-bold;
+}
+
+/* Content container - hidden by default */
+.feedback__content {
+    @apply relative card bg-base-100 shadow-md p-6 max-w-[300px];
+    display: none;
+}
+
+/* Show content when expanded */
+.feedback--expanded .feedback__content {
+    display: block;
+}
+
+/* Hide bubble when expanded */
+.feedback--expanded .feedback__bubble {
+    display: none;
+}
+
+.feedback__title {
+    @apply text-2xl font-bold mb-4 text-base-content;
+}
+
+.feedback__close {
+    @apply btn btn-circle btn-sm btn-ghost absolute top-2 right-2;
+    @apply transition-all duration-200;
+}
+
+.feedback__close:hover {
+    @apply bg-error/10 text-error scale-110;
+}
+
+.feedback__close:active {
+    @apply scale-95;
+}
+
+/* Responsive adjustments */
+@screen sm {
     .feedback__bubble {
-        @apply btn btn-primary gap-2 flex items-center;
+        @apply px-2 py-1;
     }
 
     .feedback__bubble-icon {
-        @apply btn btn-circle btn-sm btn-ghost;
+        @apply text-lg;
     }
 
     .feedback__bubble-text {
-        @apply text-sm font-bold;
+        @apply text-xs;
     }
 
     .feedback__content {
-        @apply relative card bg-base-100 shadow-md p-6 max-w-[300px] hidden;
-    }
-
-    .feedback--expanded .feedback__content {
-        @apply block;
+        @apply p-4 max-w-[250px];
     }
 
     .feedback__title {
-        @apply text-2xl font-bold mb-4;
+        @apply text-xl;
+    }
+}
+
+/* Animation for content appearing */
+@keyframes feedbackSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.feedback--expanded .feedback__content {
+    animation: feedbackSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .feedback--expanded .feedback__content {
+        animation: none;
+    }
+
+    .feedback__close:hover,
+    .feedback__bubble:hover {
+        @apply transform-none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .feedback__content {
+        @apply border-2 border-base-content/20;
+    }
+
+    .feedback__bubble {
+        @apply border-2 border-primary;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .feedback__bubble {
+        @apply min-h-[44px] min-w-[44px]; /* Better touch target */
     }
 
     .feedback__close {
-        @apply btn btn-circle btn-sm btn-ghost absolute top-2 right-2;
+        @apply min-h-[44px] min-w-[44px];
     }
+}
 
-    .feedback--expanded .feedback__bubble {
-        @apply hidden;
-    }
-
-    @screen sm {
-        .feedback__bubble {
-            @apply px-2 py-1;
-        }
-
-        .feedback__bubble-icon {
-            @apply text-3xl;
-        }
-
-        .feedback__content {
-            @apply p-2 max-w-[250px];
-        }
-
-        .feedback__title {
-            @apply text-xl;
-        }
+/* Print - hide feedback */
+@media print {
+    .feedback {
+        display: none !important;
     }
 }
