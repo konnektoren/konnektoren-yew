@@ -1,0 +1,150 @@
+.inbox-component {
+    @apply relative;
+
+    .inbox-component__icon {
+        @apply btn btn-primary btn-circle;
+        @apply w-10 h-10;
+        @apply flex items-center justify-center;
+        @apply relative cursor-pointer;
+        @apply transition-all duration-300;
+    }
+
+    .inbox-component__icon:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .inbox-component__icon i {
+        @apply text-lg;
+    }
+
+    .inbox-component__unread-count {
+        @apply absolute -top-1 -right-1;
+        @apply badge badge-error badge-sm;
+        @apply w-[18px] h-[18px] text-xs;
+        @apply flex items-center justify-center;
+        @apply rounded-full;
+    }
+
+    .inbox-component__content {
+        @apply fixed bottom-20 right-8;
+        @apply card bg-base-100 shadow-lg;
+        @apply w-[300px] h-[400px];
+        @apply flex flex-col overflow-hidden;
+        @apply z-[100];
+        animation: slideInInbox 0.3s ease-out;
+    }
+
+    .inbox-component__header {
+        @apply flex justify-between items-center;
+        @apply px-6 py-4;
+        @apply border-b border-base-300;
+    }
+
+    .inbox-component__title {
+        @apply text-lg font-semibold m-0;
+    }
+
+    .inbox-component__close {
+        @apply btn btn-sm btn-ghost btn-circle;
+        @apply transition-transform duration-200;
+    }
+
+    .inbox-component__close:hover {
+        @apply scale-110 bg-error/10 text-error;
+    }
+
+    .inbox-component__messages {
+        @apply flex-grow overflow-y-auto p-6;
+    }
+
+    .inbox-component__message {
+        @apply card bg-base-200 p-4 mb-4;
+        @apply cursor-pointer;
+        @apply transition-all duration-200;
+        @apply border-l-4 border-transparent;
+    }
+
+    .inbox-component__message:hover {
+        @apply bg-base-300 -translate-y-0.5;
+    }
+
+    .inbox-component__message--unread {
+        @apply font-bold border-l-4 border-primary;
+        @apply bg-primary/5;
+    }
+
+    .inbox-component__message-header {
+        @apply flex justify-between items-center mb-2;
+    }
+
+    .inbox-component__message-sender {
+        @apply text-sm font-medium text-primary;
+    }
+
+    .inbox-component__message-timestamp {
+        @apply text-xs text-base-content/60;
+    }
+
+    .inbox-component__message-content {
+        @apply text-base text-base-content leading-relaxed;
+    }
+
+    .inbox-component__empty {
+        @apply flex flex-col items-center justify-center h-full;
+        @apply text-base-content/60 italic;
+    }
+
+    @screen sm {
+        .inbox-component__content {
+            @apply bottom-16 right-4;
+            @apply w-[280px] h-[350px];
+        }
+
+        .inbox-component__header {
+            @apply px-4 py-3;
+        }
+
+        .inbox-component__title {
+            @apply text-base;
+        }
+
+        .inbox-component__messages {
+            @apply p-4;
+        }
+
+        .inbox-component__message {
+            @apply p-3 mb-3;
+        }
+
+        .inbox-component__message-sender {
+            @apply text-xs;
+        }
+
+        .inbox-component__message-content {
+            @apply text-sm;
+        }
+    }
+}
+
+@keyframes slideInInbox {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .inbox-component__content {
+        animation: none;
+    }
+
+    .inbox-component__icon:hover,
+    .inbox-component__message:hover {
+        @apply transform-none;
+    }
+}

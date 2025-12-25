@@ -211,6 +211,7 @@ pub fn App() -> Html {
             Badge::preview(),
             SocialLinks::preview(),
             Logo::preview(),
+            InboxComponent::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
             StatusMessage::preview(),
