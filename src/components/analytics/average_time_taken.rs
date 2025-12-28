@@ -59,46 +59,101 @@ fn get_trend_icon(trend: &Trend) -> &'static str {
 mod preview {
     use super::*;
     use chrono::{Duration, Utc};
-    use konnektoren_core::challenges::ChallengeHistory;
+    use konnektoren_core::challenges::{
+        Challenge, ChallengeConfig, ChallengeHistory, ChallengeType,
+    };
     use yew_preview::prelude::*;
 
-    fn create_metric() -> AverageTimeTakenMetric {
-        // Create a mock history that will result in the desired value and trend
+    fn create_metric_with_challenges(challenge_times: Vec<i64>) -> AverageTimeTakenMetric {
         let mut history = ChallengeHistory::new();
-        // Mock some challenges.  Make sure elapsed time is set correctly!
-        // Challenge 1:  5 seconds
-        let mut challenge1 = konnektoren_core::challenges::Challenge::new(
-            &konnektoren_core::challenges::ChallengeType::default(),
-            &konnektoren_core::challenges::ChallengeConfig::default(),
-        );
-        challenge1.start_time = Some(Utc::now() - Duration::seconds(5));
-        challenge1.end_time = Some(Utc::now());
-        history.add_challenge(challenge1);
 
-        // Challenge 2: 10 seconds
-        let mut challenge2 = konnektoren_core::challenges::Challenge::new(
-            &konnektoren_core::challenges::ChallengeType::default(),
-            &konnektoren_core::challenges::ChallengeConfig::default(),
-        );
-        challenge2.start_time = Some(Utc::now() - Duration::seconds(10));
-        challenge2.end_time = Some(Utc::now());
-        history.add_challenge(challenge2);
+        for time in challenge_times {
+            let mut challenge =
+                Challenge::new(&ChallengeType::default(), &ChallengeConfig::default());
+            challenge.start_time = Some(Utc::now() - Duration::seconds(time));
+            challenge.end_time = Some(Utc::now());
+            history.add_challenge(challenge);
+        }
 
         AverageTimeTakenMetric::new(history)
+    }
+
+    fn create_fast_metric() -> AverageTimeTakenMetric {
+        // Fast completion times: 5, 8, 6, 7 seconds (avg ~6.5s)
+        create_metric_with_challenges(vec![5, 8, 6, 7])
+    }
+
+    fn create_medium_metric() -> AverageTimeTakenMetric {
+        // Medium completion times: 20, 25, 18, 22 seconds (avg ~21s)
+        create_metric_with_challenges(vec![20, 25, 18, 22])
+    }
+
+    fn create_slow_metric() -> AverageTimeTakenMetric {
+        // Slow completion times: 60, 75, 55, 80 seconds (avg ~67.5s)
+        create_metric_with_challenges(vec![60, 75, 55, 80])
+    }
+
+    fn create_improving_metric() -> AverageTimeTakenMetric {
+        // Times getting faster: 60, 50, 40, 30, 20 seconds
+        create_metric_with_challenges(vec![60, 50, 40, 30, 20])
+    }
+
+    fn create_declining_metric() -> AverageTimeTakenMetric {
+        // Times getting slower: 10, 20, 30, 40, 50 seconds
+        create_metric_with_challenges(vec![10, 20, 30, 40, 50])
+    }
+
+    fn create_single_challenge_metric() -> AverageTimeTakenMetric {
+        create_metric_with_challenges(vec![15])
     }
 
     yew_preview::create_preview!(
         AverageTimeTakenComponent,
         AverageTimeTakenProps {
-            metric: create_metric(),
+            metric: create_medium_metric(),
             trend_window: Duration::days(7),
         },
         (
-            "empty",
+            "Fast Performance (< 10s)",
+            AverageTimeTakenProps {
+                metric: create_fast_metric(),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Slow Performance (> 60s)",
+            AverageTimeTakenProps {
+                metric: create_slow_metric(),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Improving Trend",
+            AverageTimeTakenProps {
+                metric: create_improving_metric(),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Declining Trend",
+            AverageTimeTakenProps {
+                metric: create_declining_metric(),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Single Challenge",
+            AverageTimeTakenProps {
+                metric: create_single_challenge_metric(),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Empty (No Challenges)",
             AverageTimeTakenProps {
                 metric: AverageTimeTakenMetric::new(ChallengeHistory::new()),
                 trend_window: Duration::days(7),
             }
-        ),
+        )
     );
 }
