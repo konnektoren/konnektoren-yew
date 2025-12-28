@@ -1,41 +1,66 @@
 .gumroad-subscribe-ad {
-    @apply flex flex-col items-center bg-base-100 rounded-xl shadow-md p-8 mx-auto my-8 max-w-xs;
-    animation: gumroad-subscribe-ad-pop 0.7s
+    @apply ad-card-base;
+    @apply flex flex-col items-center;
+    @apply p-8 sm:p-5 my-8 sm:my-4 max-w-xs sm:max-w-72;
+    animation: gumroad-subscribe-slide-in 0.7s
         cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-@keyframes gumroad-subscribe-ad-pop {
-    0% {
-        transform: scale(0.8) translateY(30px);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
+@layer utilities {
+    @keyframes gumroad-subscribe-slide-in {
+        from {
+            transform: scale(0.8) translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
     }
 }
 
 .gumroad-subscribe-ad__message {
-    @apply text-lg font-semibold text-base-content mb-2;
+    @apply text-adaptive-md font-bold text-primary mb-3;
+    @apply transition-colors duration-300;
 }
 
 .gumroad-subscribe-ad__cta {
-    @apply text-base text-base-content/80 mb-5 text-center;
+    @apply text-adaptive-base text-base-content/80 mb-6;
+    @apply text-center leading-relaxed;
 }
 
 .gumroad-subscribe-ad__button {
-    @apply btn btn-primary font-bold rounded-lg px-6 py-3 text-base mb-2 shadow transition-transform duration-200;
-    /* Optionally add a little pop effect on hover */
-    transition:
-        background 0.2s,
-        transform 0.2s;
+    @apply btn btn-primary btn-lg sm:btn-md font-bold rounded-full;
+    @apply px-8 sm:px-6 mb-3 shadow-lg;
+    @apply text-primary-content; /* Ensure readable text */
+    @apply transition-all duration-300;
 }
-.gumroad-subscribe-ad__button:hover,
-.gumroad-subscribe-ad__button:focus {
-    @apply btn-accent;
-    transform: translateY(-2px) scale(1.04);
+
+.gumroad-subscribe-ad__button:hover {
+    @apply btn-secondary text-secondary-content;
+    @apply shadow-xl scale-105 -translate-y-1;
+}
+
+.gumroad-subscribe-ad__button:active {
+    @apply scale-95 translate-y-0;
 }
 
 .gumroad-subscribe-ad__note {
-    @apply text-sm text-base-content/60 mt-1 text-center;
+    @apply text-adaptive-base text-base-content/60 text-center;
+    @apply transition-colors duration-300;
+}
+
+/* Hover effect */
+.gumroad-subscribe-ad:hover {
+    @apply shadow-xl scale-102;
+}
+
+.gumroad-subscribe-ad:hover .gumroad-subscribe-ad__message {
+    @apply text-secondary;
+}
+
+@screen xs {
+    .gumroad-subscribe-ad {
+        @apply p-4 mx-2;
+    }
 }
