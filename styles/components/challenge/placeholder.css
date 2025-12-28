@@ -1,36 +1,37 @@
 .placeholder {
-    @apply card bg-base-100 p-8 shadow-md rounded-lg max-w-[800px] mx-auto;
+    @apply card-base container-lg;
 }
 
 .placeholder__header {
-    @apply flex flex-col gap-4 items-center text-center mb-8;
+    @apply flex flex-col gap-adaptive items-center text-center mb-8 sm:mb-4;
 }
 
 .placeholder__title {
-    @apply text-3xl font-bold text-base-content;
+    @apply text-adaptive-xl font-bold;
 }
 
 .placeholder__type {
     @apply badge badge-lg badge-primary rounded-full;
-    @apply inline-flex items-center gap-2 text-sm;
+    @apply inline-flex items-center gap-2;
 }
 
 .placeholder__type i {
-    @apply text-lg;
+    @apply text-lg sm:text-sm;
 }
 
 .placeholder__content {
-    @apply flex flex-col gap-6 items-center;
+    @apply flex flex-col gap-adaptive items-center;
 }
 
 .placeholder__media {
-    @apply text-center mb-6 min-h-[200px];
-    @apply flex justify-center items-center;
+    @apply flex-center text-center mb-6;
+    @apply min-h-[200px] sm:min-h-[150px];
+    @apply w-full max-w-[300px] sm:max-w-[200px];
 }
 
 .placeholder__icon-image {
-    @apply text-6xl inline-block;
-    @apply transition-all duration-300 ease-in-out;
+    @apply text-6xl sm:text-4xl inline-block;
+    @apply text-primary transition-all duration-300;
 }
 
 .placeholder__icon-image:hover {
@@ -38,13 +39,13 @@
 }
 
 .placeholder__default-icon {
-    @apply text-6xl inline-block text-primary opacity-70;
-    @apply transition-all duration-300 ease-in-out;
+    @apply text-6xl sm:text-4xl inline-block;
+    @apply text-primary opacity-70 transition-all duration-300;
 }
 
 .placeholder__image {
-    @apply max-w-[300px] w-full h-auto rounded-lg shadow-md;
-    @apply transition-all duration-300 object-cover;
+    @apply media-image-standalone rounded-lg shadow-md;
+    max-height: 300px;
 }
 
 .placeholder__image:hover {
@@ -56,16 +57,16 @@
 }
 
 .placeholder__description {
-    @apply text-base text-base-content/60 text-center;
+    @apply text-adaptive-base text-base-content/60 text-center;
     @apply max-w-[600px] mx-auto m-0;
 }
 
 .placeholder__meta {
-    @apply mt-4 flex justify-center gap-4;
+    @apply badge-group mt-4 justify-center;
 }
 
 .placeholder__time {
-    @apply badge badge-ghost rounded-full text-xs;
+    @apply badge badge-ghost rounded-full;
     @apply inline-flex items-center gap-1;
 }
 
@@ -74,11 +75,11 @@
 }
 
 .placeholder__text {
-    @apply card bg-base-200 p-6 shadow-sm rounded-md w-full;
+    @apply card bg-base-200 padding-card shadow-sm w-full;
 }
 
 .placeholder__text h1 {
-    @apply text-xl font-bold text-base-content mb-4;
+    @apply text-adaptive-lg font-bold mb-4;
 }
 
 .placeholder__actions {
@@ -86,12 +87,12 @@
 }
 
 .placeholder__button {
-    @apply btn btn-primary btn-lg;
+    @apply btn btn-primary btn-lg sm:btn-md;
 }
 
 /* Status Variants */
 .placeholder--coming-soon .placeholder__type {
-    @apply bg-primary;
+    @apply badge-primary;
 }
 
 .placeholder--coming-soon .placeholder__icon-image,
@@ -100,7 +101,7 @@
 }
 
 .placeholder--planned .placeholder__type {
-    @apply bg-info;
+    @apply badge-info;
 }
 
 .placeholder--planned .placeholder__icon-image,
@@ -109,7 +110,7 @@
 }
 
 .placeholder--under-development .placeholder__type {
-    @apply bg-warning;
+    @apply badge-warning;
 }
 
 .placeholder--under-development .placeholder__icon-image,
@@ -117,49 +118,9 @@
     @apply border-2 border-warning;
 }
 
+/* Responsive adjustments */
 @screen sm {
-    .placeholder {
-        @apply p-6;
-    }
-
-    .placeholder__title {
-        @apply text-2xl;
-    }
-
-    .placeholder__type {
-        @apply text-xs;
-    }
-
-    .placeholder__type i {
-        @apply text-sm;
-    }
-
-    .placeholder__icon-image,
-    .placeholder__default-icon {
-        @apply text-4xl;
-    }
-
-    .placeholder__description {
-        @apply text-sm;
-    }
-
-    .placeholder__text {
-        @apply p-4;
-    }
-
-    .placeholder__text h1 {
-        @apply text-lg;
-    }
-
-    .placeholder__button {
-        @apply btn-md;
-    }
-
-    .placeholder__media {
-        @apply min-h-[150px];
-    }
-
     .placeholder__image {
-        @apply max-w-[200px];
+        max-height: 200px;
     }
 }

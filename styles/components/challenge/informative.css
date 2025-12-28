@@ -1,0 +1,11 @@
+.informative {
+    @apply challenge-layout-content;
+}
+
+.informative__content {
+    @apply challenge-question-card;
+}
+
+.informative__button {
+    @apply btn btn-primary btn-lg sm:btn-md w-full;
+}

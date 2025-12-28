@@ -1,32 +1,29 @@
 .vocabulary {
-    @apply flex flex-col gap-8 items-stretch;
-    @apply max-w-[1400px] min-w-[400px] w-fit mx-auto p-8;
+    @apply challenge-layout-content max-w-[1400px] min-w-[400px];
 }
 
 .vocabulary__header {
-    @apply card bg-base-100 shadow-sm p-6;
-    @apply text-center flex flex-col items-center gap-4;
+    @apply card-base text-center;
+    @apply flex flex-col items-center gap-adaptive;
 }
 
 .vocabulary__title {
-    @apply text-2xl font-bold text-base-content;
+    @apply text-adaptive-xl font-bold;
     @apply flex items-center gap-3;
 }
 
 .vocabulary__challenge-icon {
-    @apply text-primary text-3xl;
-    @apply flex items-center justify-center;
+    @apply text-primary text-4xl sm:text-3xl;
+    @apply flex-center;
 }
 
 .vocabulary__challenge-icon img {
-    @apply max-w-[48px] max-h-[48px] object-contain;
-    @apply rounded-lg shadow-sm;
-    @apply mx-auto;
+    @apply max-w-[48px] sm:max-w-[36px] max-h-[48px] sm:max-h-[36px];
+    @apply object-contain rounded-lg shadow-sm;
 }
 
 .vocabulary__description {
-    @apply text-base text-base-content/60 leading-normal;
-    @apply max-w-[600px];
+    @apply text-adaptive-base text-base-content/60 leading-normal max-w-[600px];
 }
 
 .vocabulary__content {
@@ -34,23 +31,19 @@
 }
 
 .vocabulary__empty {
-    @apply card bg-base-100 p-8 shadow-sm;
-    @apply text-center text-base-content/60;
-    @apply border-2 border-dashed border-base-300;
+    @apply empty-state card-base border-2 border-dashed border-base-300;
 }
 
 .vocabulary__help {
-    @apply card bg-base-200 p-6 shadow-sm;
-    @apply border-l-4 border-info;
-    animation: slideInHelp 0.3s ease-out;
+    @apply challenge-help-card;
 }
 
 .vocabulary__help-title {
-    @apply text-lg font-semibold text-base-content mb-3;
+    @apply text-adaptive-md font-semibold mb-3;
 }
 
 .vocabulary__help-text {
-    @apply text-base text-base-content/70 mb-4;
+    @apply text-adaptive-base text-base-content/70 mb-4;
 }
 
 .vocabulary__help-navigation {
@@ -61,96 +54,80 @@
     @apply text-sm text-base-content/60 italic;
 }
 
-.vocabulary__help-debug {
-    @apply mt-4 p-3 bg-base-300 rounded-lg;
-}
-
-.vocabulary__help-debug p {
-    @apply text-xs font-mono text-base-content/50;
-}
-
-/* Vocabulary Grid Container */
+/* Vocabulary Grid - using template utilities */
 .vocabulary-grid {
-    @apply grid gap-4 w-full;
-    @apply grid-cols-1;
-    @apply sm:grid-cols-2;
-    @apply md:grid-cols-3;
-    @apply lg:grid-cols-4;
-    @apply xl:grid-cols-5;
+    @apply card-grid;
+}
+
+.vocabulary-grid--single {
+    @apply card-grid-single;
+}
+
+.vocabulary-grid--double {
+    @apply card-grid-double;
+}
+
+.vocabulary-grid--triple {
+    @apply card-grid-triple;
+}
+
+.vocabulary-grid--quad {
+    @apply card-grid-double;
+}
+
+.vocabulary-grid--five {
+    @apply card-grid;
+    @apply xl:grid-cols-5 max-w-[1300px] mx-auto;
 }
 
 /* Vocabulary Card */
 .vocabulary-card {
-    @apply card bg-base-100 shadow hover:shadow-lg;
-    @apply relative flex flex-col h-full;
-    @apply transition-all duration-300 ease-in-out;
-    @apply border border-base-content/10;
-    @apply min-h-[280px];
-    @apply hover:-translate-y-1;
-    @apply overflow-hidden;
+    @apply card-interactive border border-base-content/10;
+    @apply min-h-[280px] sm:min-h-[240px] lg:min-h-[320px] xl:min-h-[340px];
 }
 
-/* Read Button - Positioned in top-right corner */
 .vocabulary-card__read-button {
-    @apply btn btn-circle btn-sm btn-ghost;
-    @apply absolute top-2 right-2 z-20;
+    @apply btn btn-circle btn-sm sm:btn-xs btn-ghost;
+    @apply absolute top-2 sm:top-1 right-2 sm:right-1 z-20;
     @apply opacity-0 hover:opacity-100 focus:opacity-100;
-    @apply transition-all duration-300 ease-in-out;
+    @apply interactive;
     @apply text-primary hover:text-primary-content hover:bg-primary;
-    @apply shadow-sm hover:shadow-md;
-    @apply transform hover:scale-110;
     @apply backdrop-blur-sm bg-base-100/80;
 }
 
 .vocabulary-card__read-button i {
-    @apply text-sm;
+    @apply text-sm sm:text-xs;
 }
 
-/* Show read button on card hover */
 .vocabulary-card:hover .vocabulary-card__read-button {
     @apply opacity-100;
 }
 
-/* Focus styles for accessibility */
 .vocabulary-card__read-button:focus {
     @apply opacity-100 ring ring-primary ring-offset-2;
 }
 
-/* Active state animation */
 .vocabulary-card__read-button:active {
     @apply scale-95;
     animation: pulse-read 0.3s ease;
 }
 
 .vocabulary-card__header {
-    @apply flex justify-center items-center;
-    @apply min-h-[120px] flex-shrink-0 p-0;
-    @apply relative overflow-hidden;
+    @apply flex-center min-h-[120px] sm:min-h-[100px] lg:min-h-[140px] xl:min-h-[160px];
+    @apply flex-shrink-0 p-0 relative overflow-hidden;
     @apply bg-gradient-to-br from-base-200 to-base-300;
 }
 
 .vocabulary-card__icon {
-    @apply text-4xl text-primary;
-    @apply transition-all duration-300;
-    @apply absolute inset-0 flex items-center justify-center;
-    @apply z-10;
+    @apply media-icon absolute inset-0 flex-center z-10;
 }
 
 .vocabulary-card__icon i {
     @apply drop-shadow-sm;
 }
 
-.vocabulary-card__icon:hover i {
-    @apply scale-110 text-primary/80;
-}
-
-/* GIF-specific styles - Full size images that fill the header */
 .vocabulary-card__icon-image {
-    @apply w-full h-full object-cover;
-    @apply transition-transform duration-300;
-    @apply absolute inset-0;
-    @apply bg-base-200;
-    /* Add a subtle loading animation */
+    @apply media-image-hover absolute inset-0 bg-base-200;
     background-image: linear-gradient(
         90deg,
         transparent,
@@ -161,285 +138,60 @@
     animation: shimmer 1.5s infinite;
 }
 
-.vocabulary-card__icon-image:hover {
-    @apply scale-105;
-}
-
 .vocabulary-card__icon-image[src] {
-    /* Remove loading animation once image loads */
     animation: none;
     @apply bg-transparent;
 }
 
-/* Overlay for better text readability when image is background */
 .vocabulary-card__header::after {
     content: "";
     @apply absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent;
     @apply pointer-events-none z-5;
 }
 
-/* Error state for broken images */
-.vocabulary-card__icon-image:not([src]),
-.vocabulary-card__icon-image[src=""] {
-    @apply bg-base-300;
-    @apply flex items-center justify-center;
-    @apply text-base-content/30;
-    @apply relative;
-}
-
-.vocabulary-card__icon-image:not([src])::before,
-.vocabulary-card__icon-image[src=""]::before {
-    content: "📷";
-    @apply text-4xl;
-    @apply absolute inset-0 flex items-center justify-center;
-}
-
 .vocabulary-card__content {
-    @apply flex-grow text-center p-4 pt-3;
-    @apply flex flex-col justify-between;
-    @apply relative z-10;
-    @apply bg-base-100;
+    @apply flex-grow text-center padding-card pt-3;
+    @apply flex flex-col justify-between relative z-10 bg-base-100;
 }
 
 .vocabulary-card__text {
-    @apply text-lg font-bold text-base-content;
-    @apply mb-2 leading-tight;
-    @apply break-words hyphens-auto;
+    @apply text-adaptive-md font-bold;
+    @apply mb-2 leading-tight break-words hyphens-auto;
 }
 
 .vocabulary-card__translation {
-    @apply text-sm text-base-content/70;
-    @apply mb-2 italic;
-    @apply break-words;
+    @apply text-adaptive-base text-base-content/70 italic;
+    @apply mb-2 break-words;
 }
 
 .vocabulary-card__phonetic {
-    @apply text-xs text-base-content/50;
-    @apply font-mono bg-base-200 px-2 py-1 rounded-full;
-    @apply inline-block mb-2;
-}
-
-/* Grid adjustments for different item counts */
-.vocabulary-grid--single {
-    @apply max-w-[300px] mx-auto grid-cols-1;
-}
-
-.vocabulary-grid--double {
-    @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
-}
-
-.vocabulary-grid--triple {
-    @apply lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
-}
-
-.vocabulary-grid--quad {
-    @apply lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
-}
-
-.vocabulary-grid--five {
-    @apply xl:grid-cols-5 max-w-[1300px] mx-auto;
+    @apply text-xs sm:text-[10px] text-base-content/50;
+    @apply font-mono badge badge-ghost;
 }
 
 /* Animations */
-@keyframes slideInHelp {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
+@layer utilities {
+    @keyframes pulse-read {
+        0%,
+        100% {
+            transform: scale(1.1);
+        }
+        50% {
+            transform: scale(1.2);
+        }
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
     }
 }
 
-@keyframes pulse-read {
-    0% {
-        transform: scale(1.1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1.1);
-    }
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-/* Responsive Design */
-@screen sm {
-    .vocabulary {
-        @apply p-4 gap-6;
-    }
-
-    .vocabulary__header {
-        @apply p-4;
-    }
-
-    .vocabulary__title {
-        @apply text-xl;
-    }
-
-    .vocabulary__challenge-icon {
-        @apply text-2xl;
-    }
-
-    .vocabulary__challenge-icon img {
-        @apply max-w-[36px] max-h-[36px];
-    }
-
-    .vocabulary__description {
-        @apply text-sm;
-    }
-
-    .vocabulary-grid {
-        @apply gap-3;
-    }
-
-    .vocabulary-card {
-        @apply min-h-[240px];
-    }
-
-    .vocabulary-card__header {
-        @apply min-h-[100px];
-    }
-
-    .vocabulary-card__icon {
-        @apply text-3xl;
-    }
-
-    .vocabulary-card__icon-image:not([src])::before,
-    .vocabulary-card__icon-image[src=""]::before {
-        @apply text-3xl;
-    }
-
-    .vocabulary-card__text {
-        @apply text-base;
-    }
-
-    .vocabulary-card__translation {
-        @apply text-xs;
-    }
-
-    .vocabulary-card__phonetic {
-        @apply text-xs px-1;
-    }
-
-    .vocabulary-card__read-button {
-        @apply btn-xs top-1 right-1;
-    }
-
-    .vocabulary-card__read-button i {
-        @apply text-xs;
-    }
-
-    .vocabulary__help {
-        @apply p-4;
-    }
-
-    .vocabulary__help-title {
-        @apply text-base;
-    }
-
-    .vocabulary__help-text {
-        @apply text-sm;
-    }
-}
-
-/* Medium screens */
-@screen md {
-    .vocabulary-card__text {
-        @apply text-lg;
-    }
-
-    .vocabulary-card__translation {
-        @apply text-sm;
-    }
-
-    .vocabulary-card__read-button {
-        @apply btn-sm;
-    }
-
-    .vocabulary-card__read-button i {
-        @apply text-sm;
-    }
-
-    .vocabulary-card__header {
-        @apply min-h-[110px];
-    }
-}
-
-/* Large screens */
-@screen lg {
-    .vocabulary-grid {
-        @apply gap-5;
-    }
-
-    .vocabulary-card {
-        @apply min-h-[320px];
-    }
-
-    .vocabulary-card__header {
-        @apply min-h-[140px];
-    }
-
-    .vocabulary-card__icon {
-        @apply text-5xl;
-    }
-
-    .vocabulary-card__icon-image:not([src])::before,
-    .vocabulary-card__icon-image[src=""]::before {
-        @apply text-5xl;
-    }
-
-    .vocabulary__challenge-icon img {
-        @apply max-w-[60px] max-h-[60px];
-    }
-
-    .vocabulary-card__text {
-        @apply text-xl;
-    }
-
-    .vocabulary-card__translation {
-        @apply text-base;
-    }
-}
-
-/* Extra large screens */
-@screen xl {
-    .vocabulary {
-        @apply gap-10;
-    }
-
-    .vocabulary-grid {
-        @apply gap-6;
-    }
-
-    .vocabulary-card {
-        @apply min-h-[340px];
-    }
-
-    .vocabulary-card__header {
-        @apply min-h-[160px];
-    }
-
-    .vocabulary-card__text {
-        @apply text-xl;
-    }
-
-    .vocabulary-card__read-button {
-        @apply btn-sm;
-    }
-}
-
-/* High contrast mode support */
+/* Accessibility */
 @media (prefers-contrast: high) {
     .vocabulary-card {
         @apply border-2 border-base-content/20;
@@ -458,7 +210,6 @@
     }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     .vocabulary-card,
     .vocabulary-card__icon,
@@ -484,12 +235,10 @@
     }
 
     .vocabulary-card__icon-image {
-        /* Pause GIF animations if user prefers reduced motion */
         animation-play-state: paused !important;
     }
 }
 
-/* Print styles */
 @media print {
     .vocabulary-card__read-button {
         @apply hidden;
@@ -509,7 +258,6 @@
     }
 }
 
-/* Touch device support */
 @media (hover: none) and (pointer: coarse) {
     .vocabulary-card__read-button {
         @apply opacity-100;

@@ -1,15 +1,10 @@
 .contextual-choice {
-    @apply flex flex-col gap-8 items-stretch;
-    @apply max-w-[800px] min-w-[400px] w-fit mx-auto p-8;
-}
-
-.contextual-choice__progress {
-    @apply mb-6;
+    @apply challenge-layout-content;
 }
 
 .contextual-choice__item {
-    @apply card bg-base-100 p-6 shadow-md;
-    @apply text-center text-xl leading-relaxed text-base-content;
+    @apply challenge-question-card;
+    @apply text-adaptive-lg leading-relaxed;
     @apply flex flex-row flex-wrap items-center justify-center;
 }
 
@@ -18,42 +13,34 @@
 }
 
 .contextual-choice__select {
-    @apply select select-primary;
-    @apply inline-block min-w-[160px] mx-1;
-    @apply border-2 border-primary rounded-sm px-2 py-1;
-    @apply cursor-pointer transition-all duration-300;
-    @apply text-center font-medium;
+    @apply select select-primary select-md;
+    @apply inline-block min-w-[160px] sm:min-w-[120px] mx-1;
+    @apply interactive;
 }
 
 .contextual-choice__select:hover,
 .contextual-choice__select:focus {
-    @apply border-primary/90 shadow-md shadow-primary/20;
+    @apply select-primary shadow-md shadow-primary/20;
 }
 
 .contextual-choice__select:disabled {
     @apply opacity-70 cursor-not-allowed bg-base-200;
 }
 
-.contextual-choice__select option {
-    @apply py-1 px-2;
-}
-
 .contextual-choice__help {
-    @apply card bg-base-200 p-4 shadow-sm;
-    @apply border-l-4 border-info;
-    animation: slideInHelp 0.3s ease-out;
+    @apply challenge-help-card;
 }
 
 .contextual-choice__help-title {
-    @apply text-lg font-medium text-base-content mb-2;
+    @apply text-adaptive-md font-medium mb-2;
 }
 
 .contextual-choice__help-text {
-    @apply text-base text-base-content/60 mb-4;
+    @apply text-adaptive-base text-base-content/60 mb-4;
 }
 
 .contextual-choice__help-hints-title {
-    @apply text-base font-medium text-base-content mb-1;
+    @apply text-adaptive-base font-medium mb-1;
 }
 
 .contextual-choice__help-hint {
@@ -64,58 +51,19 @@
     @apply text-primary font-bold;
 }
 
-@keyframes slideInHelp {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Animation for select fields */
-@keyframes selectPulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.contextual-choice__select:focus {
-    animation: selectPulse 0.3s ease;
-}
-
-@screen sm {
-    .contextual-choice {
-        @apply p-4;
+@layer utilities {
+    @keyframes selectPulse {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
     }
 
-    .contextual-choice__item {
-        @apply text-lg p-4;
-    }
-
-    .contextual-choice__select {
-        @apply min-w-[120px] text-sm py-1 px-2;
-    }
-
-    .contextual-choice__help {
-        @apply p-3;
-    }
-
-    .contextual-choice__help-title {
-        @apply text-base;
-    }
-
-    .contextual-choice__help-text,
-    .contextual-choice__help-hints-title,
-    .contextual-choice__help-hint {
-        @apply text-sm;
+    .contextual-choice__select:focus {
+        animation: selectPulse 0.3s ease;
     }
 }
