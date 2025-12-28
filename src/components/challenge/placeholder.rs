@@ -155,7 +155,7 @@ mod preview {
                     name: "Image Placeholder".to_string(),
                     description: "This is a placeholder with an image.".to_string(),
                     type_: PlaceholderType::ComingSoon,
-                    image: Some("https://via.placeholder.com/300".to_string()),
+                    image: Some("https://picsum.photos/300".to_string()),
                     estimated_time: Some("TBA".to_string()),
                     text: vec![],
                 },
