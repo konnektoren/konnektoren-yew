@@ -1,91 +1,42 @@
-/* Base layout utility */
+/* Base layout utility - using atoms */
 @utility challenge-layout-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: stretch;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 2rem;
+    @apply container-challenge gap-adaptive padding-adaptive;
 }
 
-/* Question card utility */
+/* Question card utility - using atoms and daisyUI */
 @utility challenge-question-card {
-    background-color: oklch(var(--b1));
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    @apply card bg-base-100 shadow-md padding-card;
+    @apply flex flex-col items-center text-center;
 }
 
-/* Options grid utility */
+/* Options grid utility - using atoms */
 @utility challenge-options-grid-2x2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    width: 100%;
+    @apply grid-2col;
 }
 
-/* Option card utility */
+/* Option card utility - using atoms and daisyUI */
 @utility challenge-option-card {
-    background-color: oklch(var(--b1));
-    border-radius: 9999px;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 50px;
-    min-height: 50px;
-    max-width: 240px;
-    cursor: pointer;
-    transition: all 300ms ease-in-out;
-    font-size: 0.875rem;
-    text-align: center;
-    hyphens: auto;
+    @apply btn btn-lg sm:btn-md btn-outline;
+    @apply rounded-full min-h-[50px] sm:min-h-[44px] max-w-60;
+    @apply flex-center text-sm hyphens-auto;
+    @apply interactive-scale;
 }
 
-/* Help card utility */
+@layer utilities {
+    /* Hover states */
+    .challenge-option-card:hover {
+        @apply btn-primary scale-110 z-30;
+    }
+}
+
+/* Help card utility - using atoms and daisyUI */
 @utility challenge-help-card {
-    background-color: oklch(var(--b2));
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    border-left: 4px solid oklch(var(--in));
+    @apply alert alert-info padding-card;
     animation: slideIn 0.3s ease-out;
 }
 
-/* Responsive and hover states */
+/* Animation */
 @layer utilities {
-    /* Responsive overrides */
-    @media (max-width: 640px) {
-        .challenge-layout-content {
-            padding: 1rem;
-            gap: 1rem;
-        }
-
-        .challenge-question-card {
-            padding: 1rem;
-        }
-
-        .challenge-help-card {
-            padding: 1rem;
-        }
-    }
-
-    /* Hover states */
-    .challenge-option-card:hover {
-        transform: scale(1.1);
-        background-color: oklch(var(--p));
-        color: oklch(var(--pc));
-        z-index: 30;
-    }
-
-    /* Animation */
     @keyframes slideIn {
         from {
             opacity: 0;

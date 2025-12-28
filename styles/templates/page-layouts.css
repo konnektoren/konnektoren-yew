@@ -1,0 +1,18 @@
+@layer components {
+    .page-container {
+        @apply min-h-screen bg-base-100;
+        @apply flex flex-col items-center;
+        @apply p-8 sm:p-4;
+        @apply pt-[calc(2rem+80px)] pb-24;
+    }
+
+    .page-title {
+        @apply text-adaptive-xl font-bold text-primary;
+        @apply mb-8 sm:mb-4 text-center;
+    }
+
+    .page-content {
+        @apply w-full max-w-screen-xl;
+        @apply flex flex-col gap-adaptive;
+    }
+}

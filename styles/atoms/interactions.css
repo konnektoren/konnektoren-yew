@@ -1,48 +1,15 @@
 @utility interactive {
-    transition: all 300ms ease-in-out;
+    @apply transition-all duration-300;
+}
+
+@utility interactive-scale {
+    @apply transition-all duration-300 hover:scale-105 active:scale-95;
 }
 
 @utility hover-lift {
-    transition: all 300ms ease-in-out;
-}
-
-@utility hover-scale {
-    transition: all 300ms ease-in-out;
+    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg;
 }
 
 @utility active-press {
-    transition: all 300ms ease-in-out;
-}
-
-@utility clickable {
-    cursor: pointer;
-    transition: all 300ms ease-in-out;
-}
-
-@layer utilities {
-    .hover-lift:hover {
-        transform: translateY(-0.125rem);
-        box-shadow:
-            0 10px 15px -3px rgb(0 0 0 / 0.1),
-            0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-
-    .hover-scale:hover {
-        transform: scale(1.05);
-    }
-
-    .active-press:active {
-        transform: scale(0.95);
-    }
-
-    .clickable:hover {
-        transform: translateY(-0.125rem);
-        box-shadow:
-            0 10px 15px -3px rgb(0 0 0 / 0.1),
-            0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-
-    .clickable:active {
-        transform: scale(0.95);
-    }
+    @apply transition-all duration-300 active:scale-95;
 }

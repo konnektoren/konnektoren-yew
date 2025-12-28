@@ -1,12 +1,25 @@
+.multiple-choice-options {
+    @apply challenge-options-grid-2x2;
+}
+
 .multiple-choice-option span {
-    @apply card bg-base-100 shadow-sm p-2;
-    @apply flex items-center justify-center;
-    @apply min-w-[50px] min-h-[50px] max-w-[240px];
-    @apply rounded-full cursor-pointer;
-    @apply transition-all duration-300 ease-in-out;
-    @apply text-sm text-center hyphens-auto;
+    @apply btn btn-lg sm:btn-md;
+    @apply bg-base-200 hover:bg-primary hover:text-primary-content;
+    @apply interactive-scale;
 }
 
 .multiple-choice-option span:hover {
-    @apply scale-110 bg-primary text-primary-content z-30;
+    @apply bg-primary text-primary-content;
+}
+
+.multiple-choice-option span.selected {
+    @apply bg-primary text-primary-content;
+}
+
+.multiple-choice-option span.correct {
+    @apply bg-success text-success-content;
+}
+
+.multiple-choice-option span.incorrect {
+    @apply bg-error text-error-content;
 }

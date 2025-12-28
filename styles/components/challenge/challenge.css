@@ -3,8 +3,7 @@
 }
 
 .challenge__header {
-    @apply flex flex-row items-start gap-4;
-    @apply mb-6;
+    @apply flex-between gap-4 mb-6;
 }
 
 .challenge__header .challenge-info {
@@ -12,6 +11,5 @@
 }
 
 .challenge__header .challenge-timer {
-    @apply flex-shrink-0 self-start;
-    @apply min-w-[120px] mt-1;
+    @apply flex-shrink-0 min-w-[120px];
 }

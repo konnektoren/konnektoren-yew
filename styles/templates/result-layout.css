@@ -1,30 +1,28 @@
-@layer components {
-    .result-summary-card {
-        @apply surface-bordered w-full margin-section;
-    }
+@utility result-summary-card {
+    @apply card border border-base-300 w-full margin-section;
+}
 
-    .result-header {
-        @apply flex justify-between items-center mb-6 sm:mb-4;
-        @apply list-none cursor-pointer py-3 px-4 border-l-4;
-    }
+@utility result-header {
+    @apply flex-between list-none cursor-pointer;
+    @apply padding-card border-l-4;
+}
 
-    .result-header-excellent {
-        @apply border-success bg-success/5 text-success;
-    }
+@utility result-header-excellent {
+    @apply border-success bg-success/5 text-success;
+}
 
-    .result-header-good {
-        @apply border-info bg-info/5 text-info;
-    }
+@utility result-header-good {
+    @apply border-info bg-info/5 text-info;
+}
 
-    .result-header-fair {
-        @apply border-warning bg-warning/5 text-warning;
-    }
+@utility result-header-fair {
+    @apply border-warning bg-warning/5 text-warning;
+}
 
-    .result-header-poor {
-        @apply border-error bg-error/5 text-error;
-    }
+@utility result-header-poor {
+    @apply border-error bg-error/5 text-error;
+}
 
-    .result-content {
-        @apply flex flex-col gap-6 sm:gap-4 p-4;
-    }
+@utility result-content {
+    @apply flex flex-col gap-adaptive padding-card;
 }
