@@ -49,3 +49,161 @@ pub fn sort_table_result_component(props: &Props) -> Html {
         </div>
     }
 }
+
+#[cfg(feature = "yew-preview")]
+mod preview {
+    use super::*;
+    use konnektoren_core::challenges::{SortTable, SortTableRow, sort_table::SortTableColumn};
+    use yew_preview::prelude::*;
+
+    fn create_test_challenge() -> SortTable {
+        SortTable {
+            id: "personal-pronouns".to_string(),
+            name: "Personal Pronouns".to_string(),
+            description: "Match the personal pronouns in their correct case".to_string(),
+            columns: vec![
+                SortTableColumn {
+                    id: "nominativ".to_string(),
+                    title: "Nominativ".to_string(),
+                    description: "The subject of the sentence".to_string(),
+                },
+                SortTableColumn {
+                    id: "akkusativ".to_string(),
+                    title: "Akkusativ".to_string(),
+                    description: "The direct object".to_string(),
+                },
+                SortTableColumn {
+                    id: "dativ".to_string(),
+                    title: "Dativ".to_string(),
+                    description: "The indirect object".to_string(),
+                },
+            ],
+            rows: vec![
+                SortTableRow {
+                    id: 0,
+                    values: vec!["ich".to_string(), "mich".to_string(), "mir".to_string()],
+                },
+                SortTableRow {
+                    id: 1,
+                    values: vec!["du".to_string(), "dich".to_string(), "dir".to_string()],
+                },
+                SortTableRow {
+                    id: 2,
+                    values: vec![
+                        "er/sie/es".to_string(),
+                        "ihn/sie/es".to_string(),
+                        "ihm/ihr/ihm".to_string(),
+                    ],
+                },
+                SortTableRow {
+                    id: 3,
+                    values: vec!["wir".to_string(), "uns".to_string(), "uns".to_string()],
+                },
+            ],
+        }
+    }
+
+    fn create_correct_result() -> ChallengeResult {
+        ChallengeResult::SortTable(vec![
+            SortTableRow {
+                id: 0,
+                values: vec!["ich".to_string(), "mich".to_string(), "mir".to_string()],
+            },
+            SortTableRow {
+                id: 1,
+                values: vec!["du".to_string(), "dich".to_string(), "dir".to_string()],
+            },
+            SortTableRow {
+                id: 2,
+                values: vec![
+                    "er/sie/es".to_string(),
+                    "ihn/sie/es".to_string(),
+                    "ihm/ihr/ihm".to_string(),
+                ],
+            },
+            SortTableRow {
+                id: 3,
+                values: vec!["wir".to_string(), "uns".to_string(), "uns".to_string()],
+            },
+        ])
+    }
+
+    fn create_incorrect_result() -> ChallengeResult {
+        ChallengeResult::SortTable(vec![
+            SortTableRow {
+                id: 0,
+                values: vec!["mich".to_string(), "ich".to_string(), "mir".to_string()], // Wrong order
+            },
+            SortTableRow {
+                id: 1,
+                values: vec!["dich".to_string(), "du".to_string(), "dir".to_string()], // Wrong order
+            },
+            SortTableRow {
+                id: 2,
+                values: vec![
+                    "ihn/sie/es".to_string(),
+                    "er/sie/es".to_string(),
+                    "ihm/ihr/ihm".to_string(),
+                ], // Wrong order
+            },
+            SortTableRow {
+                id: 3,
+                values: vec!["uns".to_string(), "wir".to_string(), "uns".to_string()], // Wrong order
+            },
+        ])
+    }
+
+    fn create_mixed_result() -> ChallengeResult {
+        ChallengeResult::SortTable(vec![
+            SortTableRow {
+                id: 0,
+                values: vec!["ich".to_string(), "mich".to_string(), "mir".to_string()], // Correct
+            },
+            SortTableRow {
+                id: 1,
+                values: vec!["dich".to_string(), "du".to_string(), "dir".to_string()], // Wrong
+            },
+            SortTableRow {
+                id: 2,
+                values: vec![
+                    "er/sie/es".to_string(),
+                    "ihn/sie/es".to_string(),
+                    "ihm/ihr/ihm".to_string(),
+                ], // Correct
+            },
+            SortTableRow {
+                id: 3,
+                values: vec!["uns".to_string(), "wir".to_string(), "uns".to_string()], // Wrong
+            },
+        ])
+    }
+
+    yew_preview::create_preview!(
+        SortTableResultComponent,
+        Props {
+            challenge: create_test_challenge(),
+            challenge_result: create_correct_result(),
+        },
+        (
+            "All Incorrect",
+            Props {
+                challenge: create_test_challenge(),
+                challenge_result: create_incorrect_result(),
+            }
+        ),
+        (
+            "Mixed Results",
+            Props {
+                challenge: create_test_challenge(),
+                challenge_result: create_mixed_result(),
+            }
+        ),
+        (
+            "Empty Result",
+            Props {
+                challenge: create_test_challenge(),
+                challenge_result: ChallengeResult::SortTable(vec![]),
+            }
+        )
+    );
+}
