@@ -1,0 +1,59 @@
+.certificate {
+    @apply card bg-base-100 shadow-xl p-8 sm:p-4 max-w-3xl mx-auto border-2 border-base-300;
+}
+
+/* Title */
+.certificate__title {
+    @apply text-adaptive-xl text-primary text-center mb-8 sm:mb-4 font-bold border-b-2 border-primary pb-4;
+}
+
+/* Details grid */
+.certificate__details {
+    @apply flex flex-col gap-4 sm:gap-2 mb-8 sm:mb-4 bg-base-200 rounded-lg p-6 sm:p-4;
+}
+
+.certificate__info {
+    @apply flex justify-between items-center gap-4 text-base sm:text-sm py-2 border-b border-base-300 last:border-b-0;
+}
+
+.certificate__info strong {
+    @apply font-semibold min-w-[200px] sm:min-w-[140px];
+}
+
+/* Verification - using DaisyUI alerts */
+.certificate__verification {
+    @apply alert gap-2 mb-4;
+}
+
+.certificate__verification--verified {
+    @apply alert-success;
+}
+
+.certificate__verification--not-verified {
+    @apply alert-error;
+}
+
+/* Share section */
+.certificate__share {
+    @apply flex flex-col gap-4 sm:gap-2 bg-base-200 rounded-lg p-6 sm:p-4 mb-8 sm:mb-4;
+}
+
+.certificate__share-input {
+    @apply input w-full font-mono text-sm sm:text-xs bg-base-100;
+}
+
+.certificate__share-message {
+    @apply alert alert-success text-sm;
+}
+
+/* Image container */
+.certificate__image {
+    @apply mt-8 sm:mt-6 border-t-2 border-base-300 pt-8 sm:pt-6;
+}
+
+/* Responsive */
+@screen sm {
+    .certificate__info {
+        @apply flex-col items-start gap-1;
+    }
+}

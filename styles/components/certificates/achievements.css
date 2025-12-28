@@ -1,85 +1,71 @@
 .achievements {
-    @apply card bg-base-100 p-8 shadow-md max-w-[800px] mx-auto;
+    @apply card bg-base-100 shadow-md p-8 sm:p-4 max-w-[800px] mx-auto;
 }
 
 .achievements__title {
-    @apply text-primary;
+    @apply text-adaptive-xl text-primary mb-6 sm:mb-4;
 }
 
+/* Container for achievements and certificates */
 .achievements__container {
-    @apply flex flex-col gap-8 mb-8;
+    @apply flex flex-col gap-8 sm:gap-4 mb-8 sm:mb-4;
 }
 
-.achievements__achievements-list,
-.achievements__certificates-list {
-    @apply flex-1;
-}
-
+/* Section titles */
 .achievements__subtitle {
-    @apply text-primary text-xl mb-4;
+    @apply text-adaptive-lg text-primary mb-4 sm:mb-2;
 }
 
+/* Achievement grid - use Tailwind grid directly */
 .achievements__achievement-grid {
-    @apply grid gap-4;
+    @apply grid gap-4 sm:gap-2;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
+/* Certificate list */
 .achievements__list {
-    @apply flex flex-col gap-4 list-none p-0;
+    @apply flex flex-col gap-4 sm:gap-2;
 }
 
+/* Certificate item - use DaisyUI collapse */
 .achievements__certificate-item {
-    @apply card shadow-sm transition-all duration-300;
+    @apply collapse collapse-arrow bg-base-100 border border-base-300;
+    @apply hover:shadow-md transition-all duration-300;
 }
 
 .achievements__certificate-item--selected {
-    @apply shadow-[0_0_10px_rgba(var(--p),0.2)];
+    @apply border-primary shadow-lg;
 }
 
+/* Certificate summary */
 .achievements__certificate-summary {
-    @apply flex justify-between items-center p-4 cursor-pointer;
-    @apply transition-colors duration-200;
+    @apply collapse-title;
+    @apply flex justify-between items-center;
 }
 
-.achievements__certificate-summary:hover {
-    @apply bg-base-200;
+/* Certificate details */
+.achievements__certificate-details {
+    @apply collapse-content;
 }
 
+/* Date badge */
 .achievements__date {
-    @apply text-sm text-base-content/60;
+    @apply badge badge-ghost badge-sm;
 }
 
+/* Name */
 .achievements__name {
     @apply text-base font-bold text-primary;
 }
 
+/* Performance score */
 .achievements__performance {
     @apply text-lg font-bold text-success;
 }
 
-.achievements__certificate-details {
-    @apply p-4 border-t border-base-300;
-}
-
+/* Responsive grid adjustments */
 @screen sm {
-    .achievements {
-        @apply p-4;
-    }
-
-    .achievements__title {
-        @apply text-xl;
-    }
-
-    .achievements__container {
-        @apply gap-4;
-    }
-
-    .achievements__certificate-summary {
-        @apply flex-col items-start gap-1 p-2;
-    }
-
     .achievements__achievement-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        @apply gap-2;
     }
 }

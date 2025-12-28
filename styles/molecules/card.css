@@ -1,12 +1,9 @@
 @utility card-base {
-    @apply bg-base-100 rounded-lg shadow-md;
-    @apply p-6 sm:p-4;
+    @apply card bg-base-100 shadow-md p-6 sm:p-4;
 }
 
 @utility card-interactive {
-    @apply bg-base-100 rounded-lg shadow-md;
-    @apply p-6 sm:p-4;
-    @apply transition-all duration-300 cursor-pointer;
+    @apply card bg-base-100 shadow-md p-6 sm:p-4 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300;
 }
 
 @utility card-header {
@@ -14,7 +11,7 @@
 }
 
 @utility card-title {
-    @apply text-2xl font-bold text-base-content sm:text-xl;
+    @apply text-2xl font-bold sm:text-xl;
 }
 
 @utility card-content {
