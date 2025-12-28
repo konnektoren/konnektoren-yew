@@ -3,4 +3,4 @@ addresses = ["127.0.0.1"]
 port = 8080
 
 [tools]
-tailwindcss = "2.0.4"
+tailwindcss = "2.7.5"
