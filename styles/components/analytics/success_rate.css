@@ -1,97 +1,100 @@
 .success-rate {
-    @apply card bg-base-100 rounded-xl p-6 shadow-md;
+    @apply card-base;
+}
 
-    .success-rate__header {
-        @apply flex justify-between items-center mb-6;
-    }
+.success-rate__header {
+    @apply card-header;
+}
 
-    .success-rate__title {
-        @apply text-xl font-semibold m-0;
-    }
+.success-rate__title {
+    @apply card-title;
+}
 
-    .success-rate__trend {
-        @apply flex items-center gap-2 px-4 py-2 rounded-full;
-        @apply text-sm font-medium;
-    }
+.success-rate__trend {
+    @apply badge-status;
+}
 
-    .success-rate__trend--improving {
-        @apply bg-success/10 text-success;
-    }
+.success-rate__trend--improving {
+    @apply badge-success-soft;
+}
 
-    .success-rate__trend--declining {
-        @apply bg-error/10 text-error;
-    }
+.success-rate__trend--declining {
+    @apply badge-error-soft;
+}
 
-    .success-rate__trend--stable {
-        @apply bg-info/10 text-info;
-    }
+.success-rate__trend--stable {
+    @apply badge-info-soft;
+}
 
-    .success-rate__content {
-        @apply flex flex-col gap-6;
-    }
+.success-rate__content {
+    @apply card-content;
+}
 
-    .success-rate__value-container {
-        @apply flex flex-col gap-4;
-    }
+.success-rate__value-container {
+    @apply value-display;
+}
 
-    .success-rate__value {
-        @apply flex flex-col items-center;
-    }
+.success-rate__value {
+    @apply flex flex-col items-center;
+}
 
-    .success-rate__percentage {
-        @apply text-4xl font-bold text-base-content;
-    }
+.success-rate__percentage {
+    @apply value-display-large;
+}
 
-    .success-rate__label {
-        @apply text-sm text-base-content/60;
-    }
+.success-rate__label {
+    @apply value-display-label;
+}
 
-    .success-rate__gauge {
-        @apply w-full h-2 bg-base-200 rounded overflow-hidden;
-    }
+.success-rate__gauge {
+    @apply progress-bar;
+}
 
-    .success-rate__gauge-fill {
-        @apply h-full transition-[width] duration-300 ease-in-out;
-        background: linear-gradient(
-            90deg,
-            oklch(var(--p)) 0%,
-            oklch(var(--su)) 100%
-        );
-    }
+.success-rate__gauge-fill {
+    @apply progress-bar-gradient;
+}
 
-    .success-rate__details {
-        @apply flex flex-col gap-4;
-    }
+.success-rate__details {
+    @apply flex flex-col gap-4 sm:gap-2;
+}
 
-    .success-rate__description {
-        @apply text-sm text-base-content/60 m-0;
-    }
+.success-rate__description {
+    @apply text-adaptive-base text-base-content/60 m-0 leading-relaxed;
+}
 
-    .success-rate__thresholds {
-        @apply flex flex-col gap-2;
-    }
+.success-rate__thresholds {
+    @apply list-spaced;
+}
 
-    .success-rate__threshold {
-        @apply flex items-center gap-3;
-    }
+.success-rate__threshold {
+    @apply flex items-center gap-3;
+}
 
-    .success-rate__threshold-marker {
-        @apply text-xs font-semibold px-2 py-1 rounded;
-    }
+.success-rate__threshold-marker {
+    @apply badge badge-sm font-semibold;
+}
 
-    .success-rate__threshold-marker--high {
-        @apply bg-success/10 text-success;
-    }
+.success-rate__threshold-marker--high {
+    @apply badge-success-soft;
+}
 
-    .success-rate__threshold-marker--medium {
-        @apply bg-warning/10 text-warning;
-    }
+.success-rate__threshold-marker--medium {
+    @apply badge-warning-soft;
+}
 
-    .success-rate__threshold-marker--low {
-        @apply bg-error/10 text-error;
-    }
+.success-rate__threshold-marker--low {
+    @apply badge-error-soft;
+}
 
-    .success-rate__threshold-label {
-        @apply text-sm text-base-content/60;
-    }
+.success-rate__threshold-label {
+    @apply text-adaptive-base text-base-content/60;
+}
+
+/* Empty state */
+.success-rate:has(.success-rate__percentage:empty) {
+    @apply opacity-60;
+}
+
+.success-rate__empty {
+    @apply empty-state;
 }

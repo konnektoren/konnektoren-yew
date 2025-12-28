@@ -6,6 +6,28 @@
     @apply badge transition-all duration-300 cursor-pointer;
 }
 
+/* Status badges - generic for any component */
+@utility badge-status {
+    @apply badge badge-lg gap-2 rounded-full;
+    @apply text-sm font-medium;
+}
+
+@utility badge-success-soft {
+    @apply bg-success/10 text-success;
+}
+
+@utility badge-error-soft {
+    @apply bg-error/10 text-error;
+}
+
+@utility badge-warning-soft {
+    @apply bg-warning/10 text-warning;
+}
+
+@utility badge-info-soft {
+    @apply bg-info/10 text-info;
+}
+
 @layer utilities {
     .badge-interactive:hover {
         @apply badge-primary;
