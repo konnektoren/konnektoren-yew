@@ -1,34 +1,29 @@
-@layer utilities {
-    .badge-status {
-        @apply badge badge-lg gap-1;
-        @apply inline-flex items-center;
-    }
+@utility badge-status {
+    @apply badge badge-lg gap-1 inline-flex items-center;
+}
 
-    .badge-counter {
-        @apply badge badge-error badge-sm;
-        @apply w-[18px] h-[18px] text-xs;
-        @apply flex items-center justify-center;
-        @apply rounded-full font-bold;
-    }
+@utility badge-counter {
+    @apply badge badge-error badge-sm;
+    @apply w-[18px] h-[18px] text-xs;
+    @apply flex items-center justify-center rounded-full font-bold;
+}
 
-    .badge-trend {
-        @apply flex items-center gap-2 px-4 py-2 rounded-full;
-        @apply text-sm font-medium;
-    }
+@utility badge-trend {
+    @apply flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium;
+}
 
-    .badge-trend--success {
-        @apply bg-success/10 text-success;
-    }
+@utility badge-trend-success {
+    @apply bg-success/10 text-success;
+}
 
-    .badge-trend--warning {
-        @apply bg-warning/10 text-warning;
-    }
+@utility badge-trend-warning {
+    @apply bg-warning/10 text-warning;
+}
 
-    .badge-trend--error {
-        @apply bg-error/10 text-error;
-    }
+@utility badge-trend-error {
+    @apply bg-error/10 text-error;
+}
 
-    .badge-trend--info {
-        @apply bg-info/10 text-info;
-    }
+@utility badge-trend-info {
+    @apply bg-info/10 text-info;
 }

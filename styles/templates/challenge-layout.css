@@ -1,50 +1,99 @@
-@layer components {
-    .challenge-layout {
-        @apply flex-column w-full gap-standard;
+/* Base layout utility */
+@utility challenge-layout-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+}
+
+/* Question card utility */
+@utility challenge-question-card {
+    background-color: oklch(var(--b1));
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Options grid utility */
+@utility challenge-options-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+/* Option card utility */
+@utility challenge-option-card {
+    background-color: oklch(var(--b1));
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 240px;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    font-size: 0.875rem;
+    text-align: center;
+    hyphens: auto;
+}
+
+/* Help card utility */
+@utility challenge-help-card {
+    background-color: oklch(var(--b2));
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    border-left: 4px solid oklch(var(--in));
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive and hover states */
+@layer utilities {
+    /* Responsive overrides */
+    @media (max-width: 640px) {
+        .challenge-layout-content {
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .challenge-question-card {
+            padding: 1rem;
+        }
+
+        .challenge-help-card {
+            padding: 1rem;
+        }
     }
 
-    .challenge-layout-header {
-        @apply flex flex-row items-start gap-4 mb-6;
-    }
-
-    .challenge-layout-content {
-        @apply flex-column gap-standard items-stretch;
-        @apply container-md padding-container;
-    }
-
-    .challenge-layout-actions {
-        @apply card-base padding-card mt-8;
-        @apply w-full flex-center;
-    }
-
-    /* Challenge-specific patterns */
-    .challenge-question-card {
-        @apply card-base text-center;
-    }
-
-    .challenge-question-text {
-        @apply text-title leading-relaxed px-4;
-    }
-
-    .challenge-options-grid {
-        @apply grid gap-4 w-full;
-    }
-
-    .challenge-options-grid-2x2 {
-        @apply challenge-options-grid grid-cols-2;
-    }
-
-    .challenge-option-card {
-        @apply card-interactive text-body;
-        @apply min-w-[50px] min-h-[50px] max-w-[240px];
-        @apply rounded-full flex-center;
-    }
-
+    /* Hover states */
     .challenge-option-card:hover {
-        @apply bg-primary text-primary-content scale-110;
+        transform: scale(1.1);
+        background-color: oklch(var(--p));
+        color: oklch(var(--pc));
+        z-index: 30;
     }
 
-    .challenge-help-card {
-        @apply card-base border-l-4 border-info animate-slide-in;
+    /* Animation */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }

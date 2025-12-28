@@ -1,41 +1,39 @@
+@utility card-challenge {
+    @apply bg-base-100 rounded-lg shadow-md p-6 sm:p-4;
+    @apply flex flex-col items-center text-center;
+}
+
+@utility card-option {
+    @apply bg-base-100 rounded-full shadow-sm p-2;
+    @apply flex items-center justify-center;
+    @apply min-w-[50px] min-h-[50px] max-w-[240px];
+    @apply cursor-pointer transition-all duration-300;
+    @apply text-sm text-center hyphens-auto;
+}
+
+@utility card-help {
+    @apply bg-base-200 rounded-lg p-6 sm:p-4 shadow-sm;
+    @apply border-l-4 border-info;
+    animation: slideIn 0.3s ease-out;
+}
+
+@utility card-result {
+    @apply bg-base-100 rounded-lg shadow-md border border-base-300 w-full;
+}
+
 @layer utilities {
-    /* Card variations */
-    .card-challenge {
-        @apply bg-base-100 rounded-lg shadow-md p-6 sm:p-4;
-        @apply text-center;
-    }
-
-    .card-option {
-        @apply bg-base-100 rounded-full shadow-sm p-2;
-        @apply flex items-center justify-center;
-        @apply min-w-[50px] min-h-[50px] max-w-[240px];
-        @apply cursor-pointer transition-all duration-300;
-        @apply text-sm text-center hyphens-auto;
-    }
-
     .card-option:hover {
         @apply scale-110 bg-primary text-primary-content z-30;
     }
 
-    .card-help {
-        @apply bg-base-200 rounded-lg p-6 sm:p-4 shadow-sm;
-        @apply border-l-4 border-info;
-        animation: slideIn 0.3s ease-out;
-    }
-
-    .card-result {
-        @apply bg-base-100 rounded-lg shadow-md border border-base-300;
-        @apply w-full;
-    }
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }

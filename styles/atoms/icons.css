@@ -1,25 +1,24 @@
+@utility icon {
+    @apply inline-block transition-transform duration-300;
+}
+
+@utility icon-sm {
+    @apply text-lg;
+}
+
+@utility icon-md {
+    @apply text-2xl;
+}
+
+@utility icon-lg {
+    @apply text-4xl;
+}
+
+@utility icon-interactive {
+    @apply inline-block transition-transform duration-300;
+}
+
 @layer utilities {
-    /* All icon styles in utilities */
-    .icon {
-        @apply inline-block transition-transform duration-300;
-    }
-
-    .icon-sm {
-        @apply text-lg;
-    }
-
-    .icon-md {
-        @apply text-2xl;
-    }
-
-    .icon-lg {
-        @apply text-4xl;
-    }
-
-    .icon-interactive {
-        @apply inline-block transition-transform duration-300;
-    }
-
     .icon-interactive:hover {
         @apply scale-110;
     }

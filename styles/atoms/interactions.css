@@ -1,8 +1,25 @@
-@layer utilities {
-    .interactive {
-        transition: all 300ms ease-in-out;
-    }
+@utility interactive {
+    transition: all 300ms ease-in-out;
+}
 
+@utility hover-lift {
+    transition: all 300ms ease-in-out;
+}
+
+@utility hover-scale {
+    transition: all 300ms ease-in-out;
+}
+
+@utility active-press {
+    transition: all 300ms ease-in-out;
+}
+
+@utility clickable {
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+@layer utilities {
     .hover-lift:hover {
         transform: translateY(-0.125rem);
         box-shadow:
@@ -16,11 +33,6 @@
 
     .active-press:active {
         transform: scale(0.95);
-    }
-
-    .clickable {
-        cursor: pointer;
-        transition: all 300ms ease-in-out;
     }
 
     .clickable:hover {

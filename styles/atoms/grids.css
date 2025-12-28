@@ -1,22 +1,35 @@
-@layer utilities {
-    .grid-challenge-2x2 {
-        @apply grid grid-cols-2 gap-4 w-full;
-    }
+@utility grid-auto-fit {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
 
-    .grid-vocabulary {
-        @apply grid gap-4 w-full;
-        @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
-    }
+@utility grid-auto-fill {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
 
-    .grid-product {
-        @apply grid gap-6 p-4 w-full;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
+@utility card-grid {
+    @apply grid gap-4 w-full;
+    @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
+}
 
-    @screen sm {
-        .grid-product {
-            @apply gap-4 p-2;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        }
-    }
+@utility card-grid-single {
+    @apply card-grid max-w-[300px] mx-auto grid-cols-1;
+}
+
+@utility card-grid-double {
+    @apply grid gap-4 w-full lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
+}
+
+@utility card-grid-triple {
+    @apply grid gap-4 w-full lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
+}
+
+@utility product-grid {
+    @apply grid gap-6 p-4 w-full max-w-[1400px] mx-auto;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@utility challenge-grid-2x2 {
+    @apply grid gap-4 w-full grid-cols-2;
 }

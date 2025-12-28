@@ -1,9 +1,8 @@
-@layer components {
+@layer utilities {
     /* Marketplace/Product grid */
     .product-grid {
         @apply grid gap-6 p-4 w-full container-lg;
-        @apply grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
-        @apply sm:grid-cols-[repeat(auto-fit,minmax(240px,1fr))];
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 
     /* Vocabulary/Card grid */
@@ -14,7 +13,7 @@
 
     /* Adaptive grids for different counts */
     .card-grid-single {
-        @apply card-grid max-w-[300px] mx-auto grid-cols-1;
+        @apply card-grid container-sm grid-cols-1;
     }
 
     .card-grid-double {

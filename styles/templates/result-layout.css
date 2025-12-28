@@ -4,8 +4,8 @@
     }
 
     .result-header {
-        @apply card-header list-none cursor-pointer;
-        @apply py-3 px-4 border-l-4;
+        @apply flex justify-between items-center mb-6 sm:mb-4;
+        @apply list-none cursor-pointer py-3 px-4 border-l-4;
     }
 
     .result-header-excellent {
@@ -25,6 +25,6 @@
     }
 
     .result-content {
-        @apply card-content p-4;
+        @apply flex flex-col gap-6 sm:gap-4 p-4;
     }
 }
