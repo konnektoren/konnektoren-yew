@@ -12,7 +12,6 @@
     @apply transition-all duration-300;
 }
 
-/* New utility for standalone images */
 @utility media-image-standalone {
     @apply max-w-full w-auto h-auto object-contain;
     @apply transition-all duration-300;

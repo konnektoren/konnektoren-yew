@@ -1,25 +1,25 @@
 .ordering-result {
-    @apply card bg-base-100 p-6 shadow-md mt-8;
+    @apply card-base mt-8 sm:mt-6;
 }
 
 .ordering-result__title {
-    @apply text-2xl font-semibold mb-6 text-base-content;
+    @apply text-adaptive-xl font-semibold mb-6 sm:mb-4;
 }
 
 .ordering-result__table {
-    @apply table table-zebra w-full border-separate border-spacing-0;
+    @apply table-base table-zebra border-separate border-spacing-0;
 }
 
 .ordering-result__header {
-    @apply bg-primary;
+    @apply table-header bg-primary;
 }
 
 .ordering-result__header-cell {
-    @apply p-4 text-primary-content font-bold text-left;
+    @apply table-header-cell text-primary-content;
 }
 
 .ordering-result__row {
-    @apply transition-colors duration-200;
+    @apply table-row;
 }
 
 .ordering-result__row--correct:hover {
@@ -31,7 +31,7 @@
 }
 
 .ordering-result__cell {
-    @apply p-4 whitespace-normal border-b border-base-300;
+    @apply table-cell border-b border-base-300;
 }
 
 .ordering-result__cell--correct {
@@ -43,20 +43,5 @@
 }
 
 .ordering-result__correct-answer {
-    @apply mt-2 text-sm text-base-content/60 italic;
-}
-
-@screen sm {
-    .ordering-result__title {
-        @apply text-xl;
-    }
-
-    .ordering-result__header-cell,
-    .ordering-result__cell {
-        @apply p-2 text-sm;
-    }
-
-    .ordering-result__correct-answer {
-        @apply text-xs;
-    }
+    @apply mt-2 text-adaptive-base text-base-content/60 italic;
 }

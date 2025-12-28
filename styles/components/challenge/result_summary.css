@@ -1,64 +1,54 @@
 .result-summary {
-    @apply bg-base-100 shadow-md rounded-lg border border-base-300;
-    @apply w-full my-4;
+    @apply result-summary-card;
 }
 
-/* Style for the summary/header */
 .result-summary__header {
-    @apply py-3 px-4 flex items-center gap-2 cursor-pointer;
-    @apply border-l-4;
-    @apply list-none; /* Remove default bullet */
+    @apply result-header;
 }
 
-/* Make sure content is visible when open */
 .result-summary[open] .result-summary__content {
-    @apply bg-base-100 text-base-content;
-    @apply p-4 pt-0 pb-6;
+    @apply result-content;
 }
 
-/* Ensure the summary keeps its styling when open */
 .result-summary[open] .result-summary__header {
     @apply border-b border-base-200 mb-4;
 }
 
-/* Performance modifiers */
+/* Performance modifiers using template utilities */
 .result-summary__header--excellent {
-    @apply border-success bg-success/5 text-success;
+    @apply result-header-excellent;
 }
 
 .result-summary__header--good {
-    @apply border-info bg-info/5 text-info;
+    @apply result-header-good;
 }
 
 .result-summary__header--fair {
-    @apply border-warning bg-warning/5 text-warning;
+    @apply result-header-fair;
 }
 
 .result-summary__header--needs-improvement {
-    @apply border-error bg-error/5 text-error;
+    @apply result-header-poor;
 }
 
-/* Performance display */
 .result-summary__performance {
     @apply flex items-center gap-3;
 }
 
 .result-summary__score {
-    @apply text-2xl font-bold;
+    @apply text-adaptive-xl font-bold;
 }
 
 .result-summary__text {
-    @apply text-lg;
+    @apply text-adaptive-md;
 }
 
-/* Content area */
 .result-summary__content {
-    @apply flex flex-col gap-4;
+    @apply flex flex-col gap-adaptive;
 }
 
 .result-summary__title {
-    @apply text-xl font-semibold text-base-content;
-    @apply mb-4;
+    @apply text-adaptive-lg font-semibold mb-4;
 }
 
 .result-summary__timer {
@@ -66,13 +56,11 @@
 }
 
 .result-summary__congratulation {
-    @apply text-base italic text-success;
-    @apply my-4;
+    @apply text-adaptive-base italic text-success my-4;
 }
 
 .result-summary__message {
-    @apply text-sm text-base-content/80 italic;
-    @apply mt-2;
+    @apply text-adaptive-base text-base-content/80 italic mt-2;
 }
 
 .result-summary__details {
@@ -80,36 +68,21 @@
 }
 
 .result-summary__challenge-name {
-    @apply text-sm font-medium text-base-content;
+    @apply text-adaptive-base font-medium;
 }
 
-/* Remove default styling for details/summary */
+/* Remove default markers */
 .result-summary summary::marker,
 .result-summary summary::-webkit-details-marker {
     @apply hidden;
 }
 
-/* Add a custom arrow indicator */
+/* Custom arrow */
 .result-summary summary::after {
     content: "▼";
     @apply ml-auto text-xs opacity-70 transition-transform;
 }
 
 .result-summary[open] summary::after {
-    @apply transform rotate-180;
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-    .result-summary__title {
-        @apply text-lg;
-    }
-
-    .result-summary__score {
-        @apply text-xl;
-    }
-
-    .result-summary__text {
-        @apply text-base;
-    }
+    @apply rotate-180;
 }

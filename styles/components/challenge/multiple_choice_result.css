@@ -1,17 +1,17 @@
 .multiple-choice-result__table {
-    @apply table table-zebra w-full;
+    @apply table-base table-zebra;
 }
 
 .multiple-choice-result__header {
-    @apply bg-base-200 border-b border-base-300;
+    @apply table-header;
 }
 
 .multiple-choice-result__header-cell {
-    @apply p-4 sm:p-2 text-left font-medium;
+    @apply table-header-cell;
 }
 
 .multiple-choice-result__row {
-    @apply border-b border-base-200 interactive;
+    @apply table-row;
 }
 
 .multiple-choice-result__row--correct:hover {
@@ -23,7 +23,7 @@
 }
 
 .multiple-choice-result__cell {
-    @apply p-4 sm:p-2;
+    @apply table-cell;
 }
 
 .multiple-choice-result__cell--correct {
