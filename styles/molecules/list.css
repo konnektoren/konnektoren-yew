@@ -1,0 +1,35 @@
+@layer components {
+    .list-base {
+        @apply flex flex-col gap-2;
+    }
+
+    .list-item {
+        @apply flex items-center gap-4 p-4 sm:p-2;
+        @apply bg-base-100 rounded-lg border border-base-300;
+        @apply transition-all duration-300;
+    }
+
+    .list-item:hover {
+        @apply bg-base-200 -translate-y-0.5 shadow-md;
+    }
+
+    .list-item-compact {
+        @apply flex items-center gap-4 p-2;
+        @apply bg-base-100 rounded-lg border border-base-300;
+        @apply transition-all duration-300;
+    }
+
+    .list-item-compact:hover {
+        @apply bg-base-200 -translate-y-0.5 shadow-md;
+    }
+
+    .list-item-large {
+        @apply flex items-center gap-4 p-6 sm:p-4;
+        @apply bg-base-100 rounded-lg border border-base-300;
+        @apply transition-all duration-300;
+    }
+
+    .list-item-large:hover {
+        @apply bg-base-200 -translate-y-0.5 shadow-md;
+    }
+}

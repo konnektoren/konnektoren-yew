@@ -1,0 +1,27 @@
+@layer components {
+    /* Marketplace/Product grid */
+    .product-grid {
+        @apply grid gap-6 p-4 w-full container-lg;
+        @apply grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
+        @apply sm:grid-cols-[repeat(auto-fit,minmax(240px,1fr))];
+    }
+
+    /* Vocabulary/Card grid */
+    .card-grid {
+        @apply grid gap-4 w-full;
+        @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
+    }
+
+    /* Adaptive grids for different counts */
+    .card-grid-single {
+        @apply card-grid max-w-[300px] mx-auto grid-cols-1;
+    }
+
+    .card-grid-double {
+        @apply card-grid lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
+    }
+
+    .card-grid-triple {
+        @apply card-grid lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
+    }
+}

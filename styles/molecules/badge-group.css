@@ -1,0 +1,13 @@
+@layer components {
+    .badge-group {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .badge-interactive {
+        @apply badge transition-all duration-300 cursor-pointer;
+    }
+
+    .badge-interactive:hover {
+        @apply badge-primary;
+    }
+}

@@ -1,0 +1,42 @@
+@layer components {
+    .table-base {
+        @apply table w-full text-sm;
+    }
+
+    .table-header {
+        @apply bg-base-200 border-b border-base-300;
+    }
+
+    .table-header-cell {
+        @apply p-4 sm:p-2 text-left font-medium text-base-content;
+    }
+
+    .table-row {
+        @apply border-b border-base-200 transition-colors duration-200;
+    }
+
+    .table-row:hover {
+        @apply bg-base-200;
+    }
+
+    .table-cell {
+        @apply p-4 sm:p-2 whitespace-normal;
+    }
+
+    /* Row states */
+    .table-row-success:hover {
+        @apply bg-success/10;
+    }
+
+    .table-row-error:hover {
+        @apply bg-error/10;
+    }
+
+    .table-row-highlighted {
+        @apply bg-primary text-primary-content font-medium;
+    }
+
+    .table-row-highlighted:hover {
+        @apply bg-primary/90;
+    }
+}

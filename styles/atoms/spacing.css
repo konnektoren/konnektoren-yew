@@ -1,0 +1,21 @@
+@layer utilities {
+    .gap-standard {
+        @apply gap-6 sm:gap-4;
+    }
+
+    .gap-compact {
+        @apply gap-4 sm:gap-2;
+    }
+
+    .padding-card {
+        @apply p-6 sm:p-4;
+    }
+
+    .padding-container {
+        @apply p-8 sm:p-4;
+    }
+
+    .margin-section {
+        @apply my-8 sm:my-4;
+    }
+}

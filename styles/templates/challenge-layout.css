@@ -1,0 +1,50 @@
+@layer components {
+    .challenge-layout {
+        @apply flex-column w-full gap-standard;
+    }
+
+    .challenge-layout-header {
+        @apply flex flex-row items-start gap-4 mb-6;
+    }
+
+    .challenge-layout-content {
+        @apply flex-column gap-standard items-stretch;
+        @apply container-md padding-container;
+    }
+
+    .challenge-layout-actions {
+        @apply card-base padding-card mt-8;
+        @apply w-full flex-center;
+    }
+
+    /* Challenge-specific patterns */
+    .challenge-question-card {
+        @apply card-base text-center;
+    }
+
+    .challenge-question-text {
+        @apply text-title leading-relaxed px-4;
+    }
+
+    .challenge-options-grid {
+        @apply grid gap-4 w-full;
+    }
+
+    .challenge-options-grid-2x2 {
+        @apply challenge-options-grid grid-cols-2;
+    }
+
+    .challenge-option-card {
+        @apply card-interactive text-body;
+        @apply min-w-[50px] min-h-[50px] max-w-[240px];
+        @apply rounded-full flex-center;
+    }
+
+    .challenge-option-card:hover {
+        @apply bg-primary text-primary-content scale-110;
+    }
+
+    .challenge-help-card {
+        @apply card-base border-l-4 border-info animate-slide-in;
+    }
+}

@@ -1,0 +1,25 @@
+@layer utilities {
+    .loading-overlay {
+        @apply flex items-center justify-center;
+    }
+
+    .loading-overlay::after {
+        content: "";
+        @apply loading loading-spinner loading-md;
+    }
+
+    .empty-state {
+        @apply flex flex-col items-center justify-center;
+        @apply text-base-content/60 italic p-8;
+    }
+
+    .error-state {
+        @apply flex items-center gap-2 p-4 rounded-md;
+        @apply bg-error/10 text-error-content;
+    }
+
+    .success-state {
+        @apply flex items-center gap-2 p-4 rounded-md;
+        @apply bg-success/10 text-success-content;
+    }
+}

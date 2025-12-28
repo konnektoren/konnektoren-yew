@@ -1,0 +1,33 @@
+@layer components {
+    .card-base {
+        @apply bg-base-100 rounded-lg shadow-md;
+        @apply p-6 sm:p-4;
+    }
+
+    .card-interactive {
+        @apply bg-base-100 rounded-lg shadow-md;
+        @apply p-6 sm:p-4;
+        @apply transition-all duration-300 cursor-pointer;
+    }
+
+    .card-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .card-header {
+        @apply flex justify-between items-center mb-6 sm:mb-4;
+    }
+
+    .card-title {
+        @apply text-2xl font-bold text-base-content sm:text-xl;
+    }
+
+    .card-content {
+        @apply flex flex-col gap-6 sm:gap-4;
+    }
+
+    .card-footer {
+        @apply flex justify-between items-center;
+        @apply mt-auto pt-4 border-t border-base-200;
+    }
+}

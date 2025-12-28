@@ -1,0 +1,28 @@
+@layer components {
+    .media-container {
+        @apply relative overflow-hidden rounded-lg;
+    }
+
+    .media-image {
+        @apply w-full h-full object-cover;
+        @apply transition-all duration-300;
+    }
+
+    .media-image-hover {
+        @apply w-full h-full object-cover;
+        @apply transition-all duration-300;
+    }
+
+    .media-image-hover:hover {
+        @apply scale-105;
+    }
+
+    .media-icon {
+        @apply text-4xl text-primary;
+        @apply transition-transform duration-300;
+    }
+
+    .media-icon:hover {
+        @apply scale-110;
+    }
+}

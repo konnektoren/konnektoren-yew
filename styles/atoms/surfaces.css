@@ -1,0 +1,36 @@
+@layer utilities {
+    /* Base surface - simple utility */
+    .surface {
+        @apply bg-base-100 rounded-lg;
+    }
+
+    .surface-elevated {
+        @apply bg-base-100 rounded-lg shadow-md;
+    }
+
+    .surface-bordered {
+        @apply bg-base-100 rounded-lg border border-base-300;
+    }
+
+    .surface-gradient {
+        @apply bg-gradient-to-br from-base-100 to-base-200 rounded-lg;
+    }
+
+    /* Interactive versions - keep in utilities */
+    .surface-interactive {
+        @apply bg-base-100 rounded-lg shadow-md transition-all duration-300;
+    }
+
+    .surface-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .surface-gradient-interactive {
+        @apply bg-gradient-to-br from-base-100 to-base-200 rounded-lg;
+        @apply border border-base-300 transition-all duration-300;
+    }
+
+    .surface-gradient-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+}

@@ -1,0 +1,17 @@
+@layer components {
+    .input-field {
+        @apply flex flex-col gap-2;
+    }
+
+    .input-label {
+        @apply text-sm font-medium text-base-content/70;
+    }
+
+    .input-hint {
+        @apply text-sm text-base-content/60 sm:text-xs italic;
+    }
+
+    .input-error {
+        @apply text-sm text-base-content/60 sm:text-xs text-error;
+    }
+}

@@ -1,0 +1,35 @@
+@layer utilities {
+    .container-sm {
+        @apply max-w-[400px] mx-auto;
+    }
+
+    .container-md {
+        @apply max-w-[800px] mx-auto;
+    }
+
+    .container-lg {
+        @apply max-w-[1400px] mx-auto;
+    }
+
+    .flex-center {
+        @apply flex justify-center items-center;
+    }
+
+    .flex-between {
+        @apply flex justify-between items-center;
+    }
+
+    .flex-column {
+        @apply flex flex-col;
+    }
+
+    .grid-auto-fit {
+        @apply grid gap-4;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .grid-auto-fill {
+        @apply grid gap-4;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}

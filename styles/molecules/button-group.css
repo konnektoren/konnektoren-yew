@@ -1,0 +1,22 @@
+@layer components {
+    .button-group {
+        @apply flex gap-4 sm:gap-2 flex-wrap;
+    }
+
+    .button-group-vertical {
+        @apply flex flex-col gap-4 sm:gap-2;
+    }
+
+    .button-icon {
+        @apply btn-circle min-h-[44px] min-w-[44px];
+        @apply transition-all duration-300;
+    }
+
+    .button-icon:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .button-icon:active {
+        @apply scale-95;
+    }
+}

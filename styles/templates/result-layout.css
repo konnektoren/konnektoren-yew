@@ -1,0 +1,30 @@
+@layer components {
+    .result-summary-card {
+        @apply surface-bordered w-full margin-section;
+    }
+
+    .result-header {
+        @apply card-header list-none cursor-pointer;
+        @apply py-3 px-4 border-l-4;
+    }
+
+    .result-header-excellent {
+        @apply border-success bg-success/5 text-success;
+    }
+
+    .result-header-good {
+        @apply border-info bg-info/5 text-info;
+    }
+
+    .result-header-fair {
+        @apply border-warning bg-warning/5 text-warning;
+    }
+
+    .result-header-poor {
+        @apply border-error bg-error/5 text-error;
+    }
+
+    .result-content {
+        @apply card-content p-4;
+    }
+}
