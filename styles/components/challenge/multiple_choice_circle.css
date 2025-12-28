@@ -1,6 +1,7 @@
 .multiple-choice-circle {
     @apply challenge-layout-content;
-    @apply max-w-[800px] min-w-[400px] w-fit;
+    @apply max-w-[800px] w-full mx-auto;
+    @apply flex flex-col gap-4;
 }
 
 .multiple-choice-circle .progress {
@@ -8,12 +9,34 @@
 }
 
 .multiple-choice-circle__content {
-    @apply relative min-h-[400px] sm:min-h-[300px];
+    @apply relative w-full;
     @apply flex-center;
+    /* Set explicit height to contain the circular layout */
+    @apply min-h-[480px] sm:min-h-[360px];
+    /* Add padding to ensure options don't overflow */
+    @apply py-8 sm:py-6;
 }
 
 .multiple-choice-circle .question {
-    @apply absolute z-10 w-fit max-w-[90%] sm:w-[250px];
+    @apply absolute w-fit max-w-[90%] sm:max-w-[250px];
+    @apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+    /* Keep question behind options by default */
+    z-index: 5;
+    /* Transition for smooth z-index change */
+    transition: z-index 0s 1s;
+    /* Cursor pointer to indicate it's interactive */
+    cursor: pointer;
+}
+
+/* Bring question to front after hovering for 1 second */
+.multiple-choice-circle .question:hover {
+    z-index: 150;
+    transition-delay: 1s;
+}
+
+/* Reset transition when not hovering */
+.multiple-choice-circle .question:not(:hover) {
+    transition-delay: 0s;
 }
 
 .multiple-choice-circle .multiple-choice-options {
@@ -21,12 +44,24 @@
 }
 
 .multiple-choice-circle .multiple-choice-option {
-    @apply absolute z-50 font-medium;
+    @apply absolute font-medium;
     @apply min-w-[70px] min-h-[70px];
     transform-origin: center;
+    /* Base z-index for options - always above question initially */
+    z-index: 50;
+    /* Ensure smooth transitions */
+    transition:
+        z-index 0s,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-/* Position options in a circle - Desktop */
+/* Bring hovered option to front */
+.multiple-choice-circle .multiple-choice-option:hover {
+    z-index: 100;
+}
+
+/* Position options in a circle - Desktop (radius: 180px) */
 .multiple-choice-circle .multiple-choice-option:nth-child(1) {
     @apply left-1/2 top-1/2;
     transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg);
@@ -79,44 +114,65 @@
     @apply min-w-[70px] min-h-[70px];
 }
 
-/* Mobile adjustments */
+/* Ensure hover effects work with z-index */
+.multiple-choice-circle .multiple-choice-option:hover span {
+    @apply shadow-lg;
+}
+
+/* Mobile adjustments (radius: 120px for better fit) */
 @screen sm {
-    .multiple-choice-circle .multiple-choice-option span {
-        @apply min-w-[50px] min-h-[50px] max-w-[100px];
-        @apply text-sm p-1 px-2;
+    .multiple-choice-circle {
+        @apply min-w-0 max-w-full px-2;
     }
 
-    /* Smaller radius for mobile */
+    .multiple-choice-circle .multiple-choice-option span {
+        @apply min-w-[50px] min-h-[50px] max-w-[100px];
+        @apply text-xs p-1 px-2;
+    }
+
+    /* Smaller radius for mobile - 120px */
     .multiple-choice-circle .multiple-choice-option:nth-child(1) {
-        transform: translate(-50%, -50%) rotate(0deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(0deg) translateX(120px)
             rotate(0deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(2) {
-        transform: translate(-50%, -50%) rotate(45deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(45deg) translateX(120px)
             rotate(-45deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(3) {
-        transform: translate(-50%, -50%) rotate(90deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(90deg) translateX(120px)
             rotate(-90deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(4) {
-        transform: translate(-50%, -50%) rotate(135deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(135deg) translateX(120px)
             rotate(-135deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(5) {
-        transform: translate(-50%, -50%) rotate(180deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(180deg) translateX(120px)
             rotate(-180deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(6) {
-        transform: translate(-50%, -50%) rotate(225deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(225deg) translateX(120px)
             rotate(-225deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(7) {
-        transform: translate(-50%, -50%) rotate(270deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(270deg) translateX(120px)
             rotate(-270deg);
     }
     .multiple-choice-circle .multiple-choice-option:nth-child(8) {
-        transform: translate(-50%, -50%) rotate(315deg) translateX(140px)
+        transform: translate(-50%, -50%) rotate(315deg) translateX(120px)
             rotate(-315deg);
+    }
+}
+
+/* Touch device support - bring tapped item to front */
+@media (hover: none) and (pointer: coarse) {
+    .multiple-choice-circle .multiple-choice-option:active {
+        z-index: 100;
+    }
+
+    /* For touch devices, use a tap-and-hold gesture for question */
+    .multiple-choice-circle .question:active {
+        z-index: 150;
     }
 }
