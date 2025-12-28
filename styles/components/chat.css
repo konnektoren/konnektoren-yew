@@ -1,117 +1,106 @@
 .chat-content {
-    @apply max-w-[90%] w-[300px] min-w-max;
+    @apply max-w-[90%] w-[300px] sm:w-20 min-w-max;
+}
 
-    .chat__bubble {
-        @apply btn btn-primary flex items-center gap-2 whitespace-nowrap;
-    }
+.chat__bubble {
+    @apply btn btn-primary flex items-center gap-2 whitespace-nowrap;
+}
 
-    .chat__bubble-icon {
-        @apply text-xl;
-    }
+.chat__bubble-icon {
+    @apply text-xl;
+}
 
-    .chat__bubble-text {
-        @apply font-medium;
-    }
+.chat__bubble-text {
+    @apply font-medium sm:opacity-0 sm:w-0 sm:m-0 sm:overflow-hidden;
+}
 
-    .chat__content {
-        @apply card bg-base-100 shadow-lg;
-        @apply flex flex-col h-[400px] overflow-hidden;
-    }
+.chat__bubble:hover .chat__bubble-text {
+    @apply sm:opacity-100 sm:w-auto sm:ml-2;
+}
 
-    .chat__header {
-        @apply flex justify-between items-center;
-        @apply px-4 py-2 w-full;
-        @apply border-b border-base-300;
-    }
+.chat__content {
+    @apply card bg-base-100 shadow-lg;
+    @apply flex flex-col h-[400px] overflow-hidden;
+    @apply hidden;
+}
 
-    .chat__header-title {
-        @apply text-base font-medium overflow-hidden;
-    }
+.chat-content.chat--expanded .chat__bubble {
+    @apply hidden;
+}
 
-    .chat__header-close {
-        @apply btn btn-ghost btn-sm btn-circle;
-    }
+.chat-content.chat--expanded .chat__content {
+    @apply flex;
+}
 
-    .chat__messages {
-        @apply flex-1 overflow-y-auto p-4 pb-[76px];
+.chat__header {
+    @apply flex justify-between items-center;
+    @apply px-4 py-2 w-full border-b border-base-300;
+}
 
-        .chat-comp {
-            @apply flex flex-col gap-4;
-        }
+.chat__header-title {
+    @apply text-base font-medium overflow-hidden;
+}
 
-        .message-comp {
-            @apply w-full max-w-[80%];
-        }
+.chat__header-close {
+    @apply btn btn-ghost btn-sm btn-circle;
+}
 
-        .message-comp:nth-child(odd) {
-            @apply self-end;
-        }
+.chat__messages {
+    @apply flex-1 overflow-y-auto p-4 pb-[76px];
+}
 
-        .message-comp:nth-child(even) {
-            @apply self-start;
-        }
+.chat-comp {
+    @apply flex flex-col gap-4;
+}
 
-        .message-header {
-            @apply flex justify-between items-center mb-1 px-2;
-        }
+.message-comp {
+    @apply w-full max-w-[80%];
+}
 
-        .message-sender {
-            @apply text-sm font-medium text-base-content/70;
-        }
+.message-comp:nth-child(odd) {
+    @apply self-end;
+}
 
-        .message-timestamp {
-            @apply text-xs text-base-content/50;
-        }
+.message-comp:nth-child(even) {
+    @apply self-start;
+}
 
-        .message-comp:nth-child(odd) .message-content {
-            @apply chat-bubble chat-bubble-primary;
-        }
+.message-header {
+    @apply flex justify-between items-center mb-1 px-2;
+}
 
-        .message-comp:nth-child(even) .message-content {
-            @apply chat-bubble chat-bubble-secondary;
-        }
-    }
+.message-sender {
+    @apply text-sm font-medium text-base-content/70;
+}
 
-    .input-form {
-        @apply flex items-center gap-2 p-4;
-        @apply bg-base-100 border-t border-base-300;
-        @apply absolute bottom-0 left-0 right-0;
-    }
+.message-timestamp {
+    @apply text-xs text-base-content/50;
+}
 
-    .input-field {
-        @apply input  flex-1;
-    }
+.message-comp:nth-child(odd) .message-content {
+    @apply chat-bubble chat-bubble-primary;
+}
 
-    .send-button {
-        @apply btn btn-primary btn-circle;
-    }
+.message-comp:nth-child(even) .message-content {
+    @apply chat-bubble chat-bubble-secondary;
+}
 
-    &.chat--expanded {
-        .chat__bubble {
-            @apply hidden;
-        }
-        .chat__content {
-            @apply flex;
-        }
-    }
+.input-form {
+    @apply flex items-center gap-2 p-4;
+    @apply bg-base-100 border-t border-base-300;
+    @apply absolute bottom-0 left-0 right-0;
+}
 
-    @screen sm {
-        @apply w-20;
+.input-field {
+    @apply input flex-1;
+}
 
-        .chat__bubble-text {
-            @apply opacity-0 w-0 m-0 overflow-hidden;
-        }
+.send-button {
+    @apply btn btn-primary btn-circle;
+}
 
-        .chat__bubble:hover .chat__bubble-text {
-            @apply opacity-100 w-auto ml-2;
-        }
-
-        &.chat--expanded {
-            @apply w-[280px];
-
-            .chat__bubble {
-                @apply hidden;
-            }
-        }
+@screen sm {
+    .chat-content.chat--expanded {
+        @apply w-[280px];
     }
 }
