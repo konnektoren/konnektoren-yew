@@ -1,0 +1,22 @@
+@layer utilities {
+    .grid-challenge-2x2 {
+        @apply grid grid-cols-2 gap-4 w-full;
+    }
+
+    .grid-vocabulary {
+        @apply grid gap-4 w-full;
+        @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
+    }
+
+    .grid-product {
+        @apply grid gap-6 p-4 w-full;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    @screen sm {
+        .grid-product {
+            @apply gap-4 p-2;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+    }
+}
