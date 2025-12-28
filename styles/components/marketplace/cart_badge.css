@@ -1,24 +1,18 @@
 .cart__badge {
-    @apply relative rounded-full btn btn-circle btn-secondary btn-lg;
+    @apply btn btn-circle btn-secondary btn-lg;
+    @apply hover:shadow-lg active:shadow-xl;
     @apply transition-shadow duration-200;
-}
-
-.cart__badge:hover {
-    @apply shadow-lg;
-}
-
-.cart__badge:active {
-    @apply shadow-xl;
+    @apply relative;
 }
 
 .cart__icon {
     @apply text-secondary-content text-4xl;
 }
 
+/* Counter badge - positioned manually since indicator-item doesn't exist in DaisyUI 5 */
 .cart__counter {
+    @apply badge badge-error;
     @apply absolute -top-2 -right-2;
-    @apply badge badge-lg badge-error text-error-content;
-    @apply rounded-full min-w-[1.5rem] h-6;
+    @apply min-w-[1.5rem] h-6;
     @apply flex items-center justify-center;
-    @apply text-sm font-bold;
 }

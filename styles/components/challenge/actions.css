@@ -1,34 +1,20 @@
 .challenge-actions {
-    @apply card bg-base-100 p-4 shadow-md mt-8;
-    @apply w-full flex flex-row justify-center items-center;
+    @apply card-base mt-8;
+    @apply w-full flex-center;
+}
 
-    .challenge-actions__buttons {
-        @apply gap-4;
-    }
+.challenge-actions__buttons {
+    @apply button-group;
+}
 
-    .challenge-actions__button--next {
-        @apply btn btn-primary;
-    }
+.challenge-actions__button--next {
+    @apply btn btn-primary btn-lg sm:btn-md;
+}
 
-    .challenge-actions__button--previous {
-        @apply btn btn-ghost;
-    }
+.challenge-actions__button--previous {
+    @apply btn btn-ghost btn-lg sm:btn-md;
+}
 
-    .challenge-actions__button--help {
-        @apply btn btn-outline;
-    }
-
-    @screen sm {
-        .challenge-actions__button--next {
-            @apply btn-sm;
-        }
-
-        .challenge-actions__button--previous {
-            @apply btn-sm;
-        }
-
-        .challenge-actions__button--help {
-            @apply btn-sm;
-        }
-    }
+.challenge-actions__button--help {
+    @apply btn btn-outline btn-lg sm:btn-md;
 }

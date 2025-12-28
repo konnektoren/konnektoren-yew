@@ -1,0 +1,25 @@
+@utility icon {
+    @apply inline-block transition-transform duration-300;
+}
+
+@utility icon-sm {
+    @apply text-lg;
+}
+
+@utility icon-md {
+    @apply text-2xl;
+}
+
+@utility icon-lg {
+    @apply text-4xl;
+}
+
+@utility icon-interactive {
+    @apply inline-block transition-transform duration-300;
+}
+
+@layer utilities {
+    .icon-interactive:hover {
+        @apply scale-110;
+    }
+}

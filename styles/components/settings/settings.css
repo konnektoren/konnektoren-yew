@@ -1,7 +1,19 @@
 .settings {
-    @apply flex flex-col gap-4;
+    @apply flex flex-col gap-4 sm:gap-3;
+}
 
-    & button {
-        @apply btn btn-primary;
-    }
+.settings__section {
+    @apply card bg-base-100 p-4 sm:p-3;
+}
+
+.settings__title {
+    @apply text-lg font-bold text-primary mb-3;
+}
+
+.settings__button {
+    @apply btn btn-primary w-full sm:btn-md;
+}
+
+.settings__button--secondary {
+    @apply btn btn-secondary w-full sm:btn-md;
 }

@@ -1,69 +1,62 @@
 .profile-points {
     @apply relative;
+}
 
-    .profile-points__badge {
-        @apply badge bg-base-100 shadow-md;
-        @apply inline-flex flex-col items-center justify-center gap-1;
-        @apply p-3;
-        transition: all 0.3s ease;
-        min-width: min-content;
-        height: auto;
+.profile-points__badge {
+    @apply badge bg-base-100 shadow-md;
+    @apply inline-flex flex-col items-center justify-center gap-1 p-3;
+    @apply sm:scale-90;
+    @apply transition-all duration-300;
+    min-width: min-content;
+    height: auto;
+}
+
+.profile-points__badge-top {
+    @apply flex flex-col items-center gap-0.5;
+}
+
+.profile-points__icon {
+    @apply text-xl text-primary;
+}
+
+.profile-points__initial {
+    @apply text-sm font-medium text-base-content/60;
+}
+
+.profile-points__points {
+    @apply text-sm font-bold text-base-content/60;
+}
+
+.profile-points__expanded {
+    @apply card bg-base-100 shadow-md p-2;
+    @apply hidden items-center gap-2 whitespace-nowrap min-w-max;
+    @apply flex-row;
+}
+
+.profile-points__expanded .profile-points__badge-top {
+    @apply flex-row gap-2;
+}
+
+.profile-points--expanded .profile-points__badge {
+    @apply sm:hidden;
+}
+
+.profile-points--expanded .profile-points__expanded {
+    @apply sm:flex;
+    animation: slideInProfile 0.3s ease;
+}
+
+@keyframes slideInProfile {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
     }
-
-    .profile-points__badge-top {
-        @apply flex flex-col items-center gap-0.5;
-    }
-
-    .profile-points__icon {
-        @apply text-xl text-primary;
-    }
-
-    .profile-points__initial {
-        @apply text-sm font-medium text-base-content/60;
-    }
-
-    .profile-points__points {
-        @apply text-sm font-bold text-base-content/60;
-    }
-
-    .profile-points__expanded {
-        @apply card bg-base-100 shadow-md p-2 hidden items-center gap-2 whitespace-nowrap min-w-max;
-        @apply flex-row;
-
-        .profile-points__badge-top {
-            @apply flex-row gap-2;
-        }
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateX(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    /* Mobile styles and expanded state */
-    @screen sm {
-        .profile-points__badge {
-            @apply scale-90;
-        }
-
-        .profile-points--expanded .profile-points__badge {
-            @apply hidden;
-        }
-
-        .profile-points--expanded .profile-points__expanded {
-            @apply flex;
-            animation: slideIn 0.3s ease;
-        }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-/* Hover state on desktop */
 @media (hover: hover) {
     .profile-points:hover .profile-points__badge {
         @apply hidden;
@@ -71,7 +64,7 @@
 
     .profile-points:hover .profile-points__expanded {
         @apply flex;
-        animation: slideIn 0.3s ease;
+        animation: slideInProfile 0.3s ease;
     }
 
     .profile-points:hover .profile-points__points {

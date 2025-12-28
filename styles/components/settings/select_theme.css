@@ -1,11 +1,11 @@
-.select-theme button {
+.select-theme__button {
     @apply btn btn-ghost gap-2;
+}
 
-    & i {
-        @apply transition-transform duration-300 ease-in-out;
-    }
+.select-theme__icon {
+    @apply transition-transform duration-300;
+}
 
-    &:hover i {
-        @apply rotate-180;
-    }
+.select-theme__button:hover .select-theme__icon {
+    @apply rotate-180;
 }

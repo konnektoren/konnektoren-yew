@@ -1,0 +1,15 @@
+@utility text-adaptive-xl {
+    @apply text-3xl md:text-4xl sm:text-2xl;
+}
+
+@utility text-adaptive-lg {
+    @apply text-2xl md:text-3xl sm:text-xl;
+}
+
+@utility text-adaptive-md {
+    @apply text-xl md:text-2xl sm:text-lg;
+}
+
+@utility text-adaptive-base {
+    @apply text-base sm:text-sm;
+}

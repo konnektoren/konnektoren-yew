@@ -1,0 +1,19 @@
+@utility gap-adaptive {
+    @apply gap-8 sm:gap-4;
+}
+
+@utility gap-compact {
+    @apply gap-4 sm:gap-2;
+}
+
+@utility padding-adaptive {
+    @apply p-8 sm:p-4;
+}
+
+@utility padding-card {
+    @apply p-6 sm:p-4;
+}
+
+@utility margin-section {
+    @apply my-8 sm:my-4;
+}

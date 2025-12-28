@@ -1,19 +1,19 @@
 .profile-config {
     @apply flex items-center gap-4 p-2;
+}
 
-    & h2 {
-        @apply sr-only;
-    }
+.profile-config h2 {
+    @apply sr-only;
+}
 
-    & label {
-        @apply text-sm font-medium text-base-content/70 whitespace-nowrap;
-    }
+.profile-config label {
+    @apply text-sm font-medium text-base-content/70 whitespace-nowrap;
+}
 
-    & input {
-        @apply input input-sm min-w-[200px] max-w-xs;
-    }
+.profile-config input {
+    @apply input input-sm min-w-[200px] max-w-xs;
+}
 
-    & button {
-        @apply btn btn-primary btn-sm;
-    }
+.profile-config button {
+    @apply btn btn-primary btn-sm;
 }

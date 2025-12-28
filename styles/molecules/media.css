@@ -1,0 +1,37 @@
+@utility media-container {
+    @apply relative overflow-hidden rounded-lg;
+}
+
+@utility media-image {
+    @apply w-full h-full object-cover;
+    @apply transition-all duration-300;
+}
+
+@utility media-image-hover {
+    @apply w-full h-full object-cover;
+    @apply transition-all duration-300;
+}
+
+@utility media-image-standalone {
+    @apply max-w-full w-auto h-auto object-contain;
+    @apply transition-all duration-300;
+}
+
+@utility media-icon {
+    @apply text-4xl text-primary;
+    @apply transition-transform duration-300;
+}
+
+@layer utilities {
+    .media-image-hover:hover {
+        @apply scale-105;
+    }
+
+    .media-image-standalone:hover {
+        @apply -translate-y-[5px] shadow-lg;
+    }
+
+    .media-icon:hover {
+        @apply scale-110;
+    }
+}

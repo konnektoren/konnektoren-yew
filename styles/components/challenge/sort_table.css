@@ -1,33 +1,30 @@
 .sort-table {
-    @apply card bg-base-100 p-6 shadow-md;
-    @apply flex flex-col gap-6 items-stretch;
-    @apply max-w-[800px] mx-auto;
+    @apply challenge-layout-content;
 }
 
 .sort-table__title {
-    @apply text-2xl font-bold text-base-content;
+    @apply text-adaptive-xl font-bold;
 }
 
 .sort-table__description {
-    @apply text-lg text-base-content/60 leading-normal;
+    @apply text-adaptive-md text-base-content/60 leading-normal;
 }
 
 .sort-table__table {
-    @apply w-full border-separate border-spacing-0;
+    @apply table-base border-separate border-spacing-0;
     @apply rounded-md overflow-hidden shadow-sm;
 }
 
 .sort-table__header {
-    @apply bg-primary;
+    @apply table-header bg-primary;
 }
 
 .sort-table__header-cell {
-    @apply p-2 text-xl text-primary-content text-left;
-    @apply font-bold font-sans;
+    @apply table-header-cell text-adaptive-lg text-primary-content;
 }
 
 .sort-table__body-row {
-    @apply transition-colors duration-300;
+    @apply table-row;
 }
 
 .sort-table__body-row:nth-child(even) {
@@ -44,10 +41,8 @@
 }
 
 .sort-table__body-cell {
-    @apply p-2 text-lg text-base-content;
-    @apply border-b border-base-300;
+    @apply table-cell text-adaptive-md;
     @apply cursor-move select-none;
-    @apply transition-all duration-300;
 }
 
 .sort-table__body-cell:hover {
@@ -63,39 +58,9 @@
 }
 
 .sort-table__actions {
-    @apply flex justify-center gap-4;
+    @apply button-group justify-center;
 }
 
 .sort-table__actions-button {
-    @apply btn btn-primary btn-lg;
-}
-
-@screen sm {
-    .sort-table {
-        @apply p-4 gap-4;
-    }
-
-    .sort-table__title {
-        @apply text-xl;
-    }
-
-    .sort-table__description {
-        @apply text-sm;
-    }
-
-    .sort-table__table {
-        @apply rounded-sm;
-    }
-
-    .sort-table__header-cell {
-        @apply p-1 text-lg;
-    }
-
-    .sort-table__body-cell {
-        @apply p-1 text-sm;
-    }
-
-    .sort-table__actions-button {
-        @apply btn-sm;
-    }
+    @apply btn btn-primary btn-lg sm:btn-md;
 }

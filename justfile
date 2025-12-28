@@ -1,6 +1,6 @@
 # justfile
-
 # Set default values for environment variables
+
 export BUILD_DIR := env_var_or_default("BUILD_DIR", "dist")
 export REPORTS_DIR := env_var_or_default("REPORTS_DIR", "reports")
 
@@ -19,7 +19,7 @@ setup-rust:
 
 # Start development server
 serve:
-    trunk serve --features=csr,yew-preview
+    trunk serve --features=csr,yew-preview,chat
 
 # Build the project for release
 build: sbom

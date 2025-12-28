@@ -1,32 +1,46 @@
 .advertisement {
-    @apply card bg-base-100 shadow-lg w-full mx-auto my-8 text-center relative overflow-hidden;
-    @apply transition-all duration-300 ease-in-out;
-
-    /* Smooth transitions between ads */
-    &--fading {
-        @apply opacity-0 transform scale-95;
-    }
-
-    /* Different layouts for ad types */
-    &:has(.buy-me-coffee) {
-        @apply max-w-sm p-4;
-    }
-
-    &:has(.gumroad-subscribe-ad) {
-        @apply max-w-sm p-4;
-    }
-
-    &:has(.video) {
-        @apply max-w-lg p-4;
-    }
-
-    &:has(.adsbygoogle) {
-        @apply max-w-full p-0;
-    }
+    @apply card bg-base-100 shadow-lg;
+    @apply text-center relative overflow-hidden;
+    @apply transition-all duration-300;
+    @apply my-8 sm:my-6 mx-auto;
+    /* Use natural width instead of forcing full width */
+    width: fit-content;
+    max-width: min(
+        100%,
+        600px
+    ); /* Prevent becoming too wide on large screens */
 }
 
+.advertisement--fading {
+    @apply opacity-0 scale-95;
+}
+
+/* Ad type specific layouts */
+.advertisement:has(.buy-me-coffee),
+.advertisement:has(.gumroad-subscribe-ad) {
+    @apply p-4;
+    max-width: min(100%, 400px);
+}
+
+.advertisement:has(.video) {
+    @apply p-4 sm:p-2;
+    max-width: min(100%, 600px);
+}
+
+.advertisement:has(.adsbygoogle) {
+    @apply p-0;
+    max-width: 100%;
+    width: 100%;
+}
+
+.advertisement:hover {
+    @apply shadow-xl -translate-y-0.5;
+}
+
+/* Info bar */
 .advertisement__info {
-    @apply flex items-center justify-between p-3 bg-base-200/50 border-b border-base-300;
+    @apply flex items-center justify-between;
+    @apply p-3 sm:p-2 bg-base-200/50 border-b border-base-300;
     @apply text-xs text-base-content/60;
 }
 
@@ -34,228 +48,78 @@
     @apply uppercase tracking-wider font-medium;
 }
 
+/* Timer */
 .advertisement__timer {
-    @apply flex-1 max-w-16 ml-3 bg-base-300 rounded-full h-1 overflow-hidden;
+    @apply flex-1 max-w-16 ml-3;
+    @apply bg-base-300 rounded-full h-1 overflow-hidden;
 }
 
 .advertisement__timer-bar {
     @apply h-full bg-primary rounded-full;
-    animation: advertisement-timer 20s linear infinite;
+    animation: ad-timer 20s linear infinite;
 }
 
-@keyframes advertisement-timer {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 100%;
-    }
-}
-
-.advertisement__message {
-    @apply p-4 text-base-content/70 text-sm mb-4;
-    @apply bg-warning/10 border border-warning/20 rounded-lg;
-}
-
-.advertisement__container {
-    @apply flex justify-center items-center p-4;
-    @apply transition-all duration-300 ease-in-out;
-
-    /* AdSense specific styles */
-    &:has(.adsbygoogle) {
-        @apply p-0 min-h-80 w-full;
-
-        .adsbygoogle {
-            @apply block w-full h-80;
+@layer utilities {
+    @keyframes ad-timer {
+        from {
+            width: 0%;
+        }
+        to {
+            width: 100%;
         }
     }
+}
 
-    /* Video specific styles */
-    &:has(.video) {
-        @apply p-2;
-    }
+/* Message */
+.advertisement__message {
+    @apply alert alert-warning mb-4 text-sm;
+}
+
+/* Container */
+.advertisement__container {
+    @apply flex-center p-4 sm:p-3;
+    @apply transition-all duration-300;
+}
+
+.advertisement__container:has(.adsbygoogle) {
+    @apply p-0 min-h-80 sm:min-h-70 w-full;
+}
+
+.advertisement__container:has(.adsbygoogle) .adsbygoogle {
+    @apply block w-full h-80 sm:h-70;
 }
 
 /* Loading state */
 .advertisement--loading {
-    @apply min-h-80 flex items-center justify-center;
-    @apply text-base-content/60 text-sm;
-
-    &::after {
-        content: "";
-        @apply loading loading-spinner loading-md;
-    }
+    @apply loading-overlay min-h-80 sm:min-h-70;
+    @apply text-base-content/60 text-sm sm:text-xs;
 }
 
-/* Hover effects */
-.advertisement:hover {
-    @apply shadow-xl transform translate-y-[-2px];
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @screen sm {
     .advertisement {
-        @apply my-6;
-
-        &:has(.buy-me-coffee) {
-            @apply max-w-72;
-        }
-
-        &:has(.gumroad-subscribe-ad) {
-            @apply max-w-72;
-        }
-
-        &:has(.video) {
-            @apply max-w-md;
-        }
-
-        &:has(.adsbygoogle) {
-            @apply min-h-70;
-        }
+        max-width: min(100%, 500px);
     }
 
-    .advertisement__container {
-        @apply p-3;
-
-        &:has(.adsbygoogle) {
-            @apply min-h-70;
-
-            .adsbygoogle {
-                @apply min-h-70;
-            }
-        }
+    .advertisement:has(.buy-me-coffee),
+    .advertisement:has(.gumroad-subscribe-ad) {
+        max-width: min(100%, 350px);
     }
 
-    .advertisement__info {
-        @apply p-2;
-    }
-
-    .advertisement--loading {
-        @apply min-h-70 text-xs;
+    .advertisement:has(.video) {
+        max-width: min(100%, 500px);
     }
 }
 
 @screen xs {
     .advertisement {
         @apply mx-4 my-4;
-
-        &:has(.buy-me-coffee),
-        &:has(.gumroad-subscribe-ad) {
-            @apply max-w-full;
-        }
-    }
-}
-``` ### `buy_me_coffee.css` ```css .buy-me-coffee {
-    @apply transition-all duration-300 ease-in-out;
-
-    & a {
-        @apply block no-underline;
+        max-width: calc(100% - 2rem); /* Account for margins */
     }
 
-    & img {
-        @apply block max-w-full h-auto transition-all duration-300 ease-in-out;
-        @apply rounded-lg shadow-sm;
-    }
-
-    &:hover {
-        @apply transform translate-y-[-4px];
-
-        & img {
-            @apply scale-105 shadow-lg;
-        }
-    }
-
-    &:active {
-        @apply transform translate-y-[-1px];
-
-        & img {
-            @apply scale-102;
-        }
-    }
-}
-
-/* Responsive adjustments */
-@screen sm {
-    .buy-me-coffee {
-        & img {
-            @apply max-w-60;
-        }
-    }
-}
-
-@screen xs {
-    .buy-me-coffee {
-        & img {
-            @apply max-w-48;
-        }
-    }
-}
-``` ### `gumroad_subscribe.css` ```css .gumroad-subscribe-ad {
-    @apply flex flex-col items-center bg-gradient-to-br from-base-100 to-base-200;
-    @apply rounded-xl shadow-md p-6 mx-auto my-4 max-w-sm;
-    @apply transition-all duration-500 ease-out;
-    animation: gumroad-subscribe-ad-slide-in 0.6s
-        cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-@keyframes gumroad-subscribe-ad-slide-in {
-    0% {
-        transform: scale(0.9) translateY(20px);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-}
-
-.gumroad-subscribe-ad__message {
-    @apply text-lg font-bold text-primary mb-3;
-    @apply transition-colors duration-300;
-}
-
-.gumroad-subscribe-ad__cta {
-    @apply text-base text-base-content/80 mb-6 text-center leading-relaxed;
-}
-
-.gumroad-subscribe-ad__button {
-    @apply btn btn-primary btn-lg font-bold rounded-full px-8 py-3 text-base mb-3;
-    @apply shadow-lg transition-all duration-300 ease-out;
-    @apply hover:shadow-xl hover:scale-105 hover:-translate-y-1;
-    @apply active:scale-95 active:translate-y-0;
-}
-
-.gumroad-subscribe-ad__button:hover {
-    @apply btn-accent;
-}
-
-.gumroad-subscribe-ad__note {
-    @apply text-sm text-base-content/60 text-center;
-    @apply transition-colors duration-300;
-}
-
-/* Hover effect for the whole ad */
-.gumroad-subscribe-ad:hover {
-    @apply shadow-xl transform scale-102;
-
-    .gumroad-subscribe-ad__message {
-        @apply text-accent;
-    }
-}
-
-/* Responsive adjustments */
-@screen sm {
-    .gumroad-subscribe-ad {
-        @apply p-5 max-w-72;
-    }
-
-    .gumroad-subscribe-ad__button {
-        @apply btn-md px-6;
-    }
-}
-
-@screen xs {
-    .gumroad-subscribe-ad {
-        @apply p-4 mx-2;
+    .advertisement:has(.buy-me-coffee),
+    .advertisement:has(.gumroad-subscribe-ad),
+    .advertisement:has(.video) {
+        max-width: calc(100% - 2rem);
     }
 }

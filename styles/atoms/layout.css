@@ -1,0 +1,27 @@
+@utility container-challenge {
+    @apply flex flex-col items-stretch max-w-2xl w-full mx-auto;
+}
+
+@utility container-sm {
+    @apply max-w-md mx-auto;
+}
+
+@utility container-md {
+    @apply max-w-2xl mx-auto;
+}
+
+@utility container-lg {
+    @apply max-w-screen-xl mx-auto;
+}
+
+@utility grid-2col {
+    @apply grid grid-cols-2 gap-4 sm:gap-2 w-full;
+}
+
+@utility flex-center {
+    @apply flex justify-center items-center;
+}
+
+@utility flex-between {
+    @apply flex justify-between items-center;
+}

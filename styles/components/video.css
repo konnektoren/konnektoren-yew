@@ -1,43 +1,49 @@
 .video {
-    @apply relative w-full max-w-[800px] mx-auto rounded-lg overflow-hidden shadow-md cursor-pointer;
+    @apply relative w-full max-w-[800px] mx-auto;
+    @apply rounded-lg overflow-hidden shadow-md cursor-pointer;
+}
 
-    .video--playing {
-        @apply cursor-auto;
-    }
+.video--playing {
+    @apply cursor-auto;
+}
 
-    .video__preview {
-        @apply relative w-full h-0 pb-[56.25%] overflow-hidden bg-black flex justify-center items-center;
-        transition:
-            opacity 0.3s ease,
-            visibility 0s linear 0.3s;
-    }
+.video__preview {
+    @apply relative w-full h-0 pb-[56.25%];
+    @apply overflow-hidden bg-black flex justify-center items-center;
+    transition:
+        opacity 0.3s ease,
+        visibility 0s linear 0.3s;
+}
 
-    .video__preview--hidden {
-        @apply opacity-0 invisible pointer-events-none;
-    }
+.video__preview--hidden {
+    @apply opacity-0 invisible pointer-events-none;
+}
 
-    .video__preview-image {
-        @apply absolute inset-0 w-full h-full object-cover;
-        transition: transform 0.3s ease;
-    }
+.video__preview-image {
+    @apply absolute inset-0 w-full h-full object-cover;
+    transition: transform 0.3s ease;
+}
 
-    .video__preview-emoji {
-        @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-white;
-    }
+.video__preview-emoji {
+    @apply absolute top-1/2 left-1/2;
+    @apply -translate-x-1/2 -translate-y-1/2;
+    @apply text-5xl text-white;
+}
 
-    .video__play-button {
-        @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-white;
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
-        transition: transform 0.2s ease;
-    }
+.video__play-button {
+    @apply absolute top-1/2 left-1/2;
+    @apply -translate-x-1/2 -translate-y-1/2;
+    @apply text-2xl text-white;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease;
+}
 
-    .video__iframe,
-    .video__player {
-        @apply absolute inset-0 w-full h-full border-0 opacity-100 z-[1];
-        transition: opacity 0.3s ease;
-    }
+.video__iframe,
+.video__player {
+    @apply absolute inset-0 w-full h-full border-0 opacity-100 z-[1];
+    transition: opacity 0.3s ease;
+}
 
-    .video__player {
-        @apply object-cover;
-    }
+.video__player {
+    @apply object-cover;
 }

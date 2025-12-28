@@ -1,0 +1,28 @@
+@utility result-summary-card {
+    @apply card border border-base-300 w-full margin-section;
+}
+
+@utility result-header {
+    @apply flex-between list-none cursor-pointer;
+    @apply padding-card border-l-4;
+}
+
+@utility result-header-excellent {
+    @apply border-success bg-success/5 text-success;
+}
+
+@utility result-header-good {
+    @apply border-info bg-info/5 text-info;
+}
+
+@utility result-header-fair {
+    @apply border-warning bg-warning/5 text-warning;
+}
+
+@utility result-header-poor {
+    @apply border-error bg-error/5 text-error;
+}
+
+@utility result-content {
+    @apply flex flex-col gap-adaptive padding-card;
+}

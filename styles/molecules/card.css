@@ -1,0 +1,43 @@
+@utility card-base {
+    @apply card bg-base-100 shadow-md p-6 sm:p-4;
+}
+
+@utility card-interactive {
+    @apply card bg-base-100 shadow-md p-6 sm:p-4 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300;
+}
+
+@utility card-header {
+    @apply flex justify-between items-center mb-6 sm:mb-4;
+}
+
+@utility card-title {
+    @apply text-2xl font-bold sm:text-xl;
+}
+
+@utility card-content {
+    @apply flex flex-col gap-6 sm:gap-4;
+}
+
+@utility card-footer {
+    @apply flex justify-between items-center;
+    @apply mt-auto pt-4 border-t border-base-200;
+}
+
+/* Value display - reusable for stats, metrics, scores */
+@utility value-display {
+    @apply flex flex-col items-center gap-4 sm:gap-2;
+}
+
+@utility value-display-large {
+    @apply text-4xl sm:text-3xl font-bold text-base-content;
+}
+
+@utility value-display-label {
+    @apply text-sm sm:text-xs text-base-content/60;
+}
+
+@layer utilities {
+    .card-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+}

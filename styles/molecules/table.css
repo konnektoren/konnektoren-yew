@@ -1,0 +1,49 @@
+@utility table-base {
+    @apply table w-full text-sm;
+}
+
+@utility table-header {
+    @apply bg-base-200 border-b border-base-300;
+}
+
+@utility table-header-cell {
+    @apply p-4 sm:p-2 text-left font-medium text-base-content;
+}
+
+@utility table-row {
+    @apply border-b border-base-200 transition-colors duration-200;
+}
+
+@utility table-cell {
+    @apply p-4 sm:p-2 whitespace-normal;
+}
+
+@utility table-row-success {
+    @apply table-row;
+}
+
+@utility table-row-error {
+    @apply table-row;
+}
+
+@utility table-row-highlighted {
+    @apply bg-primary text-primary-content font-medium;
+}
+
+@layer utilities {
+    .table-row:hover {
+        @apply bg-base-200;
+    }
+
+    .table-row-success:hover {
+        @apply bg-success/10;
+    }
+
+    .table-row-error:hover {
+        @apply bg-error/10;
+    }
+
+    .table-row-highlighted:hover {
+        @apply bg-primary/90;
+    }
+}

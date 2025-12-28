@@ -1,0 +1,3 @@
+@utility button-group {
+    @apply join gap-4 sm:gap-2;
+}

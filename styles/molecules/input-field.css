@@ -1,0 +1,15 @@
+@utility input-field {
+    @apply flex flex-col gap-2;
+}
+
+@utility input-label {
+    @apply text-sm font-medium text-base-content/70;
+}
+
+@utility input-hint {
+    @apply text-sm text-base-content/60 sm:text-xs italic;
+}
+
+@utility input-error {
+    @apply text-sm text-base-content/60 sm:text-xs text-error;
+}

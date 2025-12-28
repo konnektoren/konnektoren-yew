@@ -1,0 +1,15 @@
+@utility interactive {
+    @apply transition-all duration-300;
+}
+
+@utility interactive-scale {
+    @apply transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
+@utility hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg;
+}
+
+@utility active-press {
+    @apply transition-all duration-300 active:scale-95;
+}

@@ -95,26 +95,117 @@ fn success_rate_thresholds() -> Html {
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
-    use konnektoren_core::challenges::ChallengeHistory;
+    use chrono::{Duration, Utc};
+    use konnektoren_core::challenges::{
+        ChallengeHistory, ChallengeType, MultipleChoice, MultipleChoiceOption, Question,
+    };
+    use konnektoren_core::prelude::{Challenge, ChallengeConfig, ChallengeResult};
     use yew_preview::prelude::*;
 
-    fn create_metric_with_value(_value: f64, _trend: Trend) -> SuccessRateMetric {
-        let history = ChallengeHistory::new();
-        SuccessRateMetric::new(history)
+    fn create_mc_challenge(id: &str, correct_answers: usize, total: usize) -> Challenge {
+        let options = vec![
+            MultipleChoiceOption {
+                id: 1,
+                name: "Answer A".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 2,
+                name: "Answer B".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 3,
+                name: "Answer C".to_string(),
+            },
+        ];
+
+        let mut questions = vec![];
+        for i in 0..total {
+            questions.push(Question {
+                question: format!("Question {}?", i + 1),
+                help: format!("Help for question {}", i + 1),
+                option: 1, // Correct answer is option 1
+                image: None,
+            });
+        }
+
+        let mc = MultipleChoice {
+            id: id.to_string(),
+            name: format!("Challenge {}", id),
+            lang: "en".to_string(),
+            options,
+            questions,
+        };
+
+        // Create result - just the selected options
+        let mut result_options = vec![];
+        for i in 0..total {
+            let user_answer = if i < correct_answers { 1 } else { 2 }; // 1 = correct, 2 = wrong
+            result_options.push(MultipleChoiceOption {
+                id: user_answer,
+                name: format!("Selected answer {}", user_answer),
+            });
+        }
+
+        let mut challenge = Challenge::new(
+            &ChallengeType::MultipleChoice(mc),
+            &ChallengeConfig {
+                id: id.to_string(),
+                ..ChallengeConfig::default()
+            },
+        );
+
+        challenge.challenge_result = ChallengeResult::MultipleChoice(result_options);
+        challenge.start_time = Some(Utc::now());
+        challenge.end_time = Some(Utc::now());
+
+        challenge
+    }
+
+    fn high_performance_history() -> ChallengeHistory {
+        let mut history = ChallengeHistory::new();
+        history.add_challenge(create_mc_challenge("high-1", 9, 10)); // 90%
+        history.add_challenge(create_mc_challenge("high-2", 10, 10)); // 100%
+        history.add_challenge(create_mc_challenge("high-3", 9, 10)); // 90%
+        history.add_challenge(create_mc_challenge("high-4", 8, 10)); // 80%
+        history
+    }
+
+    fn low_performance_history() -> ChallengeHistory {
+        let mut history = ChallengeHistory::new();
+        history.add_challenge(create_mc_challenge("low-1", 3, 10)); // 30%
+        history.add_challenge(create_mc_challenge("low-2", 4, 10)); // 40%
+        history.add_challenge(create_mc_challenge("low-3", 2, 10)); // 20%
+        history.add_challenge(create_mc_challenge("low-4", 3, 10)); // 30%
+        history
+    }
+
+    fn perfect_performance_history() -> ChallengeHistory {
+        let mut history = ChallengeHistory::new();
+        history.add_challenge(create_mc_challenge("perfect-1", 10, 10)); // 100%
+        history.add_challenge(create_mc_challenge("perfect-2", 10, 10)); // 100%
+        history.add_challenge(create_mc_challenge("perfect-3", 10, 10)); // 100%
+        history
     }
 
     yew_preview::create_preview!(
         SuccessRateComponent,
         SuccessRateProps {
-            metric: create_metric_with_value(75.0, Trend::Stable),
+            metric: SuccessRateMetric::new(low_performance_history()),
             trend_window: Duration::days(7),
         },
         (
-            "empty",
+            "High Performance (100%)",
+            SuccessRateProps {
+                metric: SuccessRateMetric::new(high_performance_history()),
+                trend_window: Duration::days(7),
+            }
+        ),
+        (
+            "Empty History",
             SuccessRateProps {
                 metric: SuccessRateMetric::new(ChallengeHistory::new()),
                 trend_window: Duration::days(7),
             }
-        ),
+        )
     );
 }

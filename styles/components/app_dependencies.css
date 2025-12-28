@@ -1,64 +1,62 @@
 .app-dependencies {
     @apply p-4;
+}
 
-    .app-dependencies__header {
-        @apply flex justify-between items-center mb-2;
-    }
+.app-dependencies__header {
+    @apply flex justify-between items-center mb-2;
+}
 
-    .app-dependencies__toggle {
-        @apply btn btn-ghost btn-sm;
-    }
+.app-dependencies__toggle {
+    @apply btn btn-ghost btn-sm;
+}
 
-    .app-dependencies__count {
-        @apply font-medium;
-    }
+.app-dependencies__count {
+    @apply font-medium;
+}
 
-    .app-dependencies__licenses {
-        @apply flex flex-wrap gap-1 mb-4;
-    }
+.app-dependencies__licenses {
+    @apply flex flex-wrap gap-1 mb-4;
+}
 
-    .app-dependencies__search {
-        @apply input w-full mb-4 text-sm;
-    }
+.app-dependencies__search {
+    @apply input w-full mb-4 text-sm;
+}
 
-    .app-dependencies__list {
-        @apply flex flex-col gap-2 max-h-[400px] overflow-y-auto;
-    }
+.app-dependencies__list {
+    @apply flex flex-col gap-2 max-h-[400px] overflow-y-auto;
+}
 
-    .app-dependencies__item {
-        @apply flex justify-between items-center p-2 border border-base-200 rounded-md text-sm;
-        @apply hover:bg-base-200 transition-colors duration-200;
-    }
+.app-dependencies__item {
+    @apply flex justify-between items-center p-2;
+    @apply border border-base-200 rounded-md text-sm;
+    @apply hover:bg-base-200 transition-colors duration-200;
+}
 
-    .app-dependencies__name {
-        @apply mr-4;
-    }
+.app-dependencies__name {
+    @apply mr-4;
+}
 
-    .app-dependencies__item-licenses {
-        @apply flex gap-2 items-center;
-    }
+.app-dependencies__item-licenses {
+    @apply flex gap-2 items-center;
+}
 
-    .license-group {
-        @apply flex gap-1 items-center;
+.license-group {
+    @apply flex gap-1 items-center;
+}
 
-        &:not(:last-child)::after {
-            content: "OR";
-            @apply text-xs text-base-content/60 mx-1;
-        }
-    }
+.license-group:not(:last-child)::after {
+    content: "OR";
+    @apply text-xs text-base-content/60 mx-1;
+}
 
-    .license-badge {
-        @apply badge badge-ghost text-sm;
+.license-badge {
+    @apply badge badge-ghost text-sm;
+}
 
-        &--small {
-            @apply badge badge-sm badge-ghost;
-        }
+.license-badge--small {
+    @apply badge badge-sm badge-ghost;
+}
 
-        &--requirement {
-            @apply badge;
-        }
-    }
-
-    .app-dependencies__list {
-    }
+.license-badge--requirement {
+    @apply badge;
 }

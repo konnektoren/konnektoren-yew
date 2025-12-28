@@ -1,0 +1,34 @@
+@utility surface {
+    @apply bg-base-100 rounded-lg;
+}
+
+@utility surface-elevated {
+    @apply bg-base-100 rounded-lg shadow-md;
+}
+
+@utility surface-bordered {
+    @apply bg-base-100 rounded-lg border border-base-300;
+}
+
+@utility surface-gradient {
+    @apply bg-gradient-to-br from-base-100 to-base-200 rounded-lg;
+}
+
+@utility surface-interactive {
+    @apply bg-base-100 rounded-lg shadow-md transition-all duration-300;
+}
+
+@utility surface-gradient-interactive {
+    @apply bg-gradient-to-br from-base-100 to-base-200 rounded-lg;
+    @apply border border-base-300 transition-all duration-300;
+}
+
+@layer utilities {
+    .surface-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+
+    .surface-gradient-interactive:hover {
+        @apply -translate-y-0.5 shadow-lg;
+    }
+}

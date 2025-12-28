@@ -1,28 +1,39 @@
 .buy-me-coffee {
-    & a {
-        @apply block no-underline;
-    }
-
-    & img {
-        @apply block max-w-full h-auto transition-transform duration-300 ease-in-out;
-    }
-
-    &:hover {
-        @apply transform translate-y-[-2px];
-
-        & img {
-            @apply scale-105;
-        }
-    }
+    @apply transition-all duration-300;
 }
 
-/* For small screens */
-@media (max-width: 640px) {
-    .buy-me-coffee {
-        @apply bottom-6 right-6 absolute;
+.buy-me-coffee a {
+    @apply block no-underline;
+}
 
-        & img {
-            @apply max-w-[180px];
-        }
+.buy-me-coffee img {
+    @apply media-image-standalone rounded-lg shadow-sm;
+    @apply max-w-full sm:max-w-60;
+}
+
+.buy-me-coffee:hover {
+    @apply -translate-y-1;
+}
+
+.buy-me-coffee:hover img {
+    @apply scale-105 shadow-lg;
+}
+
+.buy-me-coffee:active {
+    @apply -translate-y-0.5;
+}
+
+.buy-me-coffee:active img {
+    @apply scale-102;
+}
+
+/* Small screens - positioned absolutely */
+@screen xs {
+    .buy-me-coffee {
+        @apply absolute bottom-6 right-6;
+    }
+
+    .buy-me-coffee img {
+        @apply max-w-48;
     }
 }

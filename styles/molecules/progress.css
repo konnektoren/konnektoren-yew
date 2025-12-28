@@ -1,0 +1,32 @@
+@utility progress-bar {
+    @apply w-full h-2 bg-base-200 rounded overflow-hidden;
+}
+
+@utility progress-bar-fill {
+    @apply h-full transition-[width] duration-300;
+}
+
+@utility progress-bar-gradient {
+    @apply h-full transition-[width] duration-300;
+    background: linear-gradient(
+        90deg,
+        oklch(var(--p)) 0%,
+        oklch(var(--su)) 100%
+    );
+}
+
+@utility progress-bar-primary {
+    @apply h-full transition-[width] duration-300 bg-primary;
+}
+
+@utility progress-bar-success {
+    @apply h-full transition-[width] duration-300 bg-success;
+}
+
+@utility progress-bar-warning {
+    @apply h-full transition-[width] duration-300 bg-warning;
+}
+
+@utility progress-bar-error {
+    @apply h-full transition-[width] duration-300 bg-error;
+}

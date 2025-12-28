@@ -1,0 +1,25 @@
+@utility list-base {
+    @apply flex flex-col gap-0;
+}
+
+@utility list-spaced {
+    @apply flex flex-col gap-2;
+}
+
+@utility list-item-base {
+    @apply flex items-center gap-4 p-4 sm:p-2;
+    @apply bg-base-100 rounded-lg border border-base-300;
+    @apply transition-all duration-300;
+}
+
+@utility list-item-interactive {
+    @apply flex items-center gap-4 p-4 sm:p-2;
+    @apply bg-base-100 rounded-lg border border-base-300;
+    @apply transition-all duration-300 cursor-pointer;
+}
+
+@layer utilities {
+    .list-item-interactive:hover {
+        @apply bg-base-200 -translate-y-0.5 shadow-md;
+    }
+}

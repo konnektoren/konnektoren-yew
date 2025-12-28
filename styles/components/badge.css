@@ -1,11 +1,8 @@
 .badge__content {
     @apply badge badge-lg bg-primary text-primary-content shadow-lg;
     @apply cursor-pointer relative z-50 right-8;
-    @apply transition-all duration-300 ease-in-out;
-}
-
-.badge__content:hover {
-    @apply -translate-y-0.5 shadow-xl;
+    @apply hover:-translate-y-0.5 hover:shadow-xl;
+    @apply transition-all duration-300;
 }
 
 .badge__label {
@@ -13,22 +10,21 @@
 }
 
 .badge__tooltip {
-    @apply tooltip tooltip-bottom absolute -bottom-2 left-1/2;
+    @apply absolute -bottom-2 left-1/2 -translate-x-1/2;
     @apply w-[150px] text-center text-sm;
     @apply bg-primary text-primary-content;
     @apply shadow-md p-2 rounded-lg;
     @apply opacity-0 invisible -translate-y-2;
-    @apply transition-all duration-300 ease-in-out;
-    @apply z-[100] transform -translate-x-1/2;
-    @apply pointer-events-none;
+    @apply hover:opacity-100 hover:visible hover:translate-y-0;
+    @apply transition-all duration-300;
+    @apply z-[100] pointer-events-none;
 }
 
 .badge__content:hover .badge__tooltip {
     @apply opacity-100 visible translate-y-0;
 }
 
-/* Hide on small screens */
-@media (max-width: 639px) {
+@screen sm {
     .badge__content {
         @apply hidden;
     }

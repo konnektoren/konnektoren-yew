@@ -1,50 +1,40 @@
 .challenge-review {
-    @apply card bg-base-100 shadow-md p-6;
-    @apply flex flex-col gap-4;
-    @apply hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300;
+    @apply card-interactive;
+    @apply flex flex-col gap-adaptive;
+}
 
-    h3 {
-        @apply card-title text-primary mb-2;
-        @apply after:content-[''] after:block after:w-16 after:h-1 after:bg-primary/30 after:mt-2;
-    }
+.challenge-review h3 {
+    @apply card-title text-primary mb-2;
+}
 
-    .rating-stars {
-        @apply my-4 justify-center;
-    }
+.challenge-review h3::after {
+    content: "";
+    @apply block w-16 h-1 bg-primary/30 mt-2;
+}
 
-    .challenge-review__comment-input {
-        @apply w-full;
-    }
+.challenge-review .rating-stars {
+    @apply my-4 justify-center;
+}
 
-    .challenge-review__comment-input input {
-        @apply input w-full;
-        @apply focus:outline-primary focus:border-primary;
-    }
+.challenge-review__comment-input {
+    @apply input-field w-full;
+}
 
-    button {
-        @apply btn btn-primary w-full mt-2;
-        @apply disabled:bg-base-300 disabled:text-base-content/50
-               disabled:cursor-not-allowed disabled:border-base-300;
-    }
+.challenge-review__comment-input input {
+    @apply input w-full;
+    @apply focus:outline-primary focus:border-primary;
+}
 
-    p {
-        @apply text-success text-center py-2 mt-2;
-        @apply bg-success/10 rounded-lg border border-success/20;
-    }
+.challenge-review button {
+    @apply btn btn-primary btn-lg sm:btn-md w-full mt-2;
+}
 
-    @screen sm {
-        @apply p-4;
+.challenge-review button:disabled {
+    @apply bg-base-300 text-base-content/50;
+    @apply cursor-not-allowed border-base-300;
+}
 
-        h3 {
-            @apply text-xl;
-        }
-
-        .challenge-review__comment-input input {
-            @apply input-sm;
-        }
-
-        button {
-            @apply btn-sm;
-        }
-    }
+.challenge-review p {
+    @apply text-success text-center py-2 mt-2;
+    @apply bg-success/10 rounded-lg border border-success/20;
 }

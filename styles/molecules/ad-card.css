@@ -1,0 +1,38 @@
+@utility ad-card-base {
+    @apply card bg-gradient-to-br from-base-100 to-base-200;
+    @apply rounded-xl shadow-lg border border-base-300;
+    @apply p-6 sm:p-5 mx-auto my-4 max-w-sm sm:max-w-80;
+    @apply transition-all duration-500;
+}
+
+@utility ad-card-interactive {
+    @apply card bg-gradient-to-br from-base-100 to-base-200;
+    @apply rounded-xl shadow-lg border border-base-300;
+    @apply p-6 sm:p-5 mx-auto my-4 max-w-sm sm:max-w-80;
+    @apply transition-all duration-500;
+}
+
+@layer utilities {
+    .ad-card-interactive:hover {
+        @apply shadow-xl scale-102 border-primary/30;
+    }
+}
+
+/* Fixed button with better contrast */
+@utility ad-button {
+    @apply btn btn-primary btn-wide font-bold rounded-full;
+    @apply shadow-lg transition-all duration-300;
+    /* Ensure text is always readable */
+    @apply text-primary-content;
+}
+
+@layer utilities {
+    .ad-button:hover {
+        @apply btn-secondary shadow-xl scale-105 -translate-y-1;
+        @apply text-secondary-content;
+    }
+
+    .ad-button:active {
+        @apply scale-95 translate-y-0;
+    }
+}

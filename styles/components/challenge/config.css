@@ -1,4 +1,43 @@
-.challenge-config {
-    @apply card bg-base-300 z-20;
-    @apply flex flex-col w-full h-auto flex-grow;
+.challenge-info {
+    @apply collapse collapse-arrow card-base;
+}
+
+.challenge-info__title {
+    @apply collapse-title font-semibold;
+}
+
+.challenge-info__description {
+    @apply flex-1 text-adaptive-base;
+}
+
+.challenge-info__meta {
+    @apply mt-auto;
+}
+
+.challenge-info__tasks,
+.challenge-info__unlock-points {
+    @apply flex flex-col gap-2;
+    @apply pt-2 border-t border-base-300;
+}
+
+.challenge-info__tasks-title,
+.challenge-info__unlock-points-title {
+    @apply text-adaptive-md font-bold;
+}
+
+.challenge-info__tasks-text,
+.challenge-info__unlock-points-text {
+    @apply text-adaptive-base text-base-content/60 leading-normal;
+}
+
+@screen md {
+    .challenge-info {
+        @apply min-w-[250px];
+    }
+}
+
+@screen sm {
+    .challenge-info {
+        @apply min-w-[150px];
+    }
 }

@@ -4,42 +4,42 @@
     prefersdark: false;
     color-scheme: "light";
 
-    /* Base colors - more closely match your F5F5F5 background */
+    /* Base colors */
     --color-base-100: oklch(97% 0.01 0);
     --color-base-200: oklch(94% 0.01 0);
     --color-base-300: oklch(91% 0.01 0);
     --color-base-content: oklch(16% 0.01 0);
 
-    /* Primary color - More accurate orange FF8C00 */
-    --color-primary: oklch(76% 0.19 63.82);
+    /* Primary - Orange with better contrast */
+    --color-primary: oklch(65% 0.19 63.82);
     --color-primary-content: oklch(100% 0 0);
 
-    /* Secondary color - More accurate purple 8A2BE2 */
-    --color-secondary: oklch(51% 0.274 296.82);
+    /* Secondary - Purple with better contrast */
+    --color-secondary: oklch(45% 0.274 296.82);
     --color-secondary-content: oklch(100% 0 0);
 
-    /* Accent/Tertiary - Gray 808080 instead of teal */
-    --color-accent: oklch(54% 0.03 0);
+    /* Accent - Gray with better contrast */
+    --color-accent: oklch(45% 0.03 0);
     --color-accent-content: oklch(100% 0 0);
 
-    /* Other colors - adjusted to match more closely */
-    --color-neutral: oklch(54% 0.03 0); /* Gray 808080 */
+    /* Neutral - Gray */
+    --color-neutral: oklch(54% 0.03 0);
     --color-neutral-content: oklch(100% 0 0);
 
-    /* Info - #17a2b8 */
-    --color-info: oklch(65% 0.18 206.7);
+    /* Info - Brighter blue */
+    --color-info: oklch(60% 0.18 206.7);
     --color-info-content: oklch(100% 0 0);
 
-    /* Success - #28a745 */
-    --color-success: oklch(63% 0.21 142.5);
+    /* Success - Brighter green */
+    --color-success: oklch(58% 0.21 142.5);
     --color-success-content: oklch(100% 0 0);
 
-    /* Warning - #ffc107 */
-    --color-warning: oklch(85% 0.2 84.4);
+    /* Warning - Better contrast */
+    --color-warning: oklch(75% 0.2 84.4);
     --color-warning-content: oklch(16% 0.01 0);
 
-    /* Error - #dc3545 */
-    --color-error: oklch(60% 0.28 25.76);
+    /* Error - Better contrast */
+    --color-error: oklch(55% 0.28 25.76);
     --color-error-content: oklch(100% 0 0);
 
     /* Styling options */

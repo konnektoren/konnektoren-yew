@@ -1,0 +1,50 @@
+/* Base layout utility - using atoms */
+@utility challenge-layout-content {
+    @apply container-challenge gap-adaptive padding-adaptive;
+}
+
+/* Question card utility - using atoms and daisyUI */
+@utility challenge-question-card {
+    @apply card bg-base-100 shadow-md padding-card;
+    @apply flex flex-col items-center text-center;
+}
+
+/* Options grid utility - using atoms */
+@utility challenge-options-grid-2x2 {
+    @apply grid-2col;
+}
+
+/* Option card utility - using atoms and daisyUI */
+@utility challenge-option-card {
+    @apply btn btn-lg sm:btn-md btn-outline;
+    @apply rounded-full min-h-[50px] sm:min-h-[44px] max-w-60;
+    @apply flex-center text-sm hyphens-auto;
+    @apply interactive-scale;
+}
+
+@layer utilities {
+    /* Hover states */
+    .challenge-option-card:hover {
+        @apply btn-primary scale-110 z-30;
+    }
+}
+
+/* Help card utility - using atoms and daisyUI */
+@utility challenge-help-card {
+    @apply alert alert-info padding-card;
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Animation */
+@layer utilities {
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

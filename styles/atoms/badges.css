@@ -1,0 +1,9 @@
+@utility badge-status {
+    @apply badge badge-lg gap-1 inline-flex items-center;
+}
+
+@utility badge-counter {
+    @apply badge badge-error badge-sm;
+    @apply w-[18px] h-[18px] text-xs;
+    @apply flex items-center justify-center rounded-full font-bold;
+}
