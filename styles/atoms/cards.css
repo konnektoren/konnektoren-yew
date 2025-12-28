@@ -3,6 +3,12 @@
     @apply flex flex-col items-center text-center;
 }
 
+/* DELETE - use molecules/card.css instead */
+@utility card-result {
+    @apply bg-base-100 rounded-lg shadow-md border border-base-300 w-full;
+}
+
+/* KEEP - specific to challenge options */
 @utility card-option {
     @apply bg-base-100 rounded-full shadow-sm p-2;
     @apply flex items-center justify-center;
@@ -11,21 +17,20 @@
     @apply text-sm text-center hyphens-auto;
 }
 
+@layer utilities {
+    .card-option:hover {
+        @apply scale-110 bg-primary text-primary-content z-30;
+    }
+}
+
+/* KEEP - specific alert pattern */
 @utility card-help {
     @apply bg-base-200 rounded-lg p-6 sm:p-4 shadow-sm;
     @apply border-l-4 border-info;
     animation: slideIn 0.3s ease-out;
 }
 
-@utility card-result {
-    @apply bg-base-100 rounded-lg shadow-md border border-base-300 w-full;
-}
-
 @layer utilities {
-    .card-option:hover {
-        @apply scale-110 bg-primary text-primary-content z-30;
-    }
-
     @keyframes slideIn {
         from {
             opacity: 0;

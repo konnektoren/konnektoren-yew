@@ -1,151 +1,113 @@
 .swipe {
-    @apply relative w-full h-full min-h-[300px] overflow-hidden flex items-center justify-center;
+    @apply relative w-full h-full min-h-[300px] sm:min-h-[250px];
+    @apply overflow-hidden flex items-center justify-center;
     touch-action: none;
     user-select: none;
-
-    .swipe__content {
-        @apply relative w-full max-w-[300px] flex items-center justify-center;
-        aspect-ratio: 1;
-        transition: transform 0.1s ease;
-        will-change: transform;
-    }
-
-    .swipe__content:active {
-        transition: none;
-    }
-
-    .swipe__content--dragging {
-        transition: none;
-    }
-
-    .swipe__hints {
-        @apply absolute inset-0 pointer-events-none z-30 flex items-center justify-center;
-    }
-
-    .swipe__hint {
-        @apply absolute flex items-center justify-center cursor-pointer opacity-70 badge badge-lg bg-base-100 shadow-md;
-        transition: all 0.3s ease;
-    }
-
-    .swipe__hint i {
-        @apply text-2xl;
-        transition: all 0.3s ease;
-    }
-
-    .swipe__hint:hover {
-        @apply opacity-100 scale-110;
-    }
-
-    .swipe__hint--left {
-        @apply left-4 top-1/2 -translate-y-1/2;
-    }
-
-    .swipe__hint--left i {
-        @apply text-error;
-    }
-
-    .swipe__hint--left:hover {
-        @apply bg-error/10;
-    }
-
-    .swipe__hint--right {
-        @apply right-4 top-1/2 -translate-y-1/2;
-    }
-
-    .swipe__hint--right i {
-        @apply text-success;
-    }
-
-    .swipe__hint--right:hover {
-        @apply bg-success/10;
-    }
-
-    .swipe__hint--up {
-        @apply top-4 left-1/2 -translate-x-1/2;
-    }
-
-    .swipe__hint--up i {
-        @apply text-info;
-    }
-
-    .swipe__hint--up:hover {
-        @apply bg-info/10;
-    }
-
-    .swipe__hint--down {
-        @apply bottom-4 left-1/2 -translate-x-1/2;
-    }
-
-    .swipe__hint--down i {
-        @apply text-warning;
-    }
-
-    .swipe__hint--down:hover {
-        @apply bg-warning/10;
-    }
-
-    .swipe__direction {
-        @apply absolute inset-0 pointer-events-none opacity-0;
-        transition: opacity 0.3s ease;
-    }
-
-    .swipe__direction--left {
-        background: linear-gradient(
-            to left,
-            transparent,
-            oklch(var(--er) / 0.2)
-        );
-    }
-
-    .swipe__direction--right {
-        background: linear-gradient(
-            to right,
-            transparent,
-            oklch(var(--su) / 0.2)
-        );
-    }
-
-    .swipe__direction--up {
-        background: linear-gradient(
-            to top,
-            transparent,
-            oklch(var(--in) / 0.2)
-        );
-    }
-
-    .swipe__direction--down {
-        background: linear-gradient(
-            to bottom,
-            transparent,
-            oklch(var(--wa) / 0.2)
-        );
-    }
 }
 
-@screen sm {
-    .swipe {
-        @apply min-h-[250px];
-    }
+.swipe__content {
+    @apply relative w-full max-w-[300px] sm:max-w-[250px];
+    @apply flex items-center justify-center;
+    aspect-ratio: 1;
+    transition: transform 0.1s ease;
+    will-change: transform;
+}
 
-    .swipe__content {
-        @apply max-w-[250px];
-    }
+.swipe__content:active {
+    transition: none;
+}
 
-    .swipe__hint {
-        @apply badge badge-md;
-    }
+.swipe__content--dragging {
+    transition: none;
+}
 
-    .swipe__hint i {
-        @apply text-xl;
-    }
+/* Hint container */
+.swipe__hints {
+    @apply absolute inset-0 pointer-events-none z-30;
+    @apply flex items-center justify-center;
+}
 
-    .swipe__hint--left,
-    .swipe__hint--right {
-        @apply -translate-y-1/2;
-    }
+/* Individual hint */
+.swipe__hint {
+    @apply badge badge-lg bg-base-100 shadow-md;
+    @apply absolute flex items-center justify-center;
+    @apply cursor-pointer opacity-70;
+    @apply hover:opacity-100 hover:scale-110;
+    transition: all 0.3s ease;
+}
 
-    .swipe__hint--up,
-    .swipe__hint--down {
-        @apply -translate-x-1/2;
-    }
+.swipe__hint i {
+    @apply text-2xl sm:text-xl;
+    transition: all 0.3s ease;
+}
+
+/* Hint positions */
+.swipe__hint--left {
+    @apply left-4 top-1/2 -translate-y-1/2;
+}
+
+.swipe__hint--left i {
+    @apply text-error;
+}
+
+.swipe__hint--left:hover {
+    @apply bg-error/10;
+}
+
+.swipe__hint--right {
+    @apply right-4 top-1/2 -translate-y-1/2;
+}
+
+.swipe__hint--right i {
+    @apply text-success;
+}
+
+.swipe__hint--right:hover {
+    @apply bg-success/10;
+}
+
+.swipe__hint--up {
+    @apply top-4 left-1/2 -translate-x-1/2;
+}
+
+.swipe__hint--up i {
+    @apply text-info;
+}
+
+.swipe__hint--up:hover {
+    @apply bg-info/10;
+}
+
+.swipe__hint--down {
+    @apply bottom-4 left-1/2 -translate-x-1/2;
+}
+
+.swipe__hint--down i {
+    @apply text-warning;
+}
+
+.swipe__hint--down:hover {
+    @apply bg-warning/10;
+}
+
+/* Direction indicators */
+.swipe__direction {
+    @apply absolute inset-0 pointer-events-none opacity-0;
+    transition: opacity 0.3s ease;
+}
+
+.swipe__direction--left {
+    background: linear-gradient(to left, transparent, oklch(var(--er) / 0.2));
+}
+
+.swipe__direction--right {
+    background: linear-gradient(to right, transparent, oklch(var(--su) / 0.2));
+}
+
+.swipe__direction--up {
+    background: linear-gradient(to top, transparent, oklch(var(--in) / 0.2));
+}
+
+.swipe__direction--down {
+    background: linear-gradient(to bottom, transparent, oklch(var(--wa) / 0.2));
 }

@@ -2,7 +2,10 @@
     @apply flex items-center;
 }
 
-.logo__image {
+.logo img {
     @apply object-contain transition-transform duration-300;
-    @apply hover:scale-110;
+}
+
+.logo img:hover {
+    @apply scale-110;
 }

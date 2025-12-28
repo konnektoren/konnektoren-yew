@@ -1,12 +1,10 @@
 .social-links {
-    @apply flex justify-center gap-4;
-    @apply items-center;
+    @apply flex justify-center gap-4 items-center;
 }
 
 .social-links__link {
     @apply transition-transform duration-300 ease-in-out;
-    @apply inline-flex items-center justify-center;
-    @apply no-underline;
+    @apply inline-flex items-center justify-center no-underline;
     display: inline-flex !important;
     position: relative;
 }
