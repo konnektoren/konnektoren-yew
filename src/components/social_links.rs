@@ -12,6 +12,8 @@ pub struct Props {
     pub github: Option<String>,
     #[prop_or_default]
     pub web: Option<String>,
+    #[prop_or_default]
+    pub youtube: Option<String>,
 }
 
 #[function_component(SocialLinks)]
@@ -46,6 +48,7 @@ pub fn social_links(props: &Props) -> Html {
             {render_link(&props.twitter, "fa-brands fa-twitter", "Twitter")}
             {render_link(&props.github, "fa-brands fa-github", "GitHub")}
             {render_link(&props.web, "fa-solid fa-globe", "Website")}
+            {render_link(&props.youtube, "fa-brands fa-youtube", "YouTube")}
         </div>
     }
 }
@@ -66,6 +69,7 @@ mod preview {
                 twitter: Some("https://twitter.com".to_string()),
                 github: Some("https://github.com".to_string()),
                 web: Some("https://info.konnektoren.help".to_string()),
+                youtube: Some("https://youtube.com/@KonnektorenHelp".to_string()),
             }
         ),
         (
