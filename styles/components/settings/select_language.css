@@ -1,34 +1,21 @@
 .select-language {
-    @apply relative m-2;
-
-    & p {
-        @apply flex items-center gap-2 text-sm text-primary font-normal;
-    }
-
-    & select {
-        @apply select select-md inline-block text-lg;
-        @apply appearance-none pr-10;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right 0.5rem center;
-        background-repeat: no-repeat;
-        background-size: 1.5em 1.5em;
-    }
+    @apply flex flex-col gap-2 m-2;
 }
 
+.select-language__label {
+    @apply flex items-center gap-2 text-sm text-primary;
+}
+
+.select-language__select {
+    @apply select w-full;
+}
+
+/* Language flags */
 .language-flags {
-    @apply flex flex-wrap justify-center gap-1 my-2;
-
-    & span {
-        @apply cursor-pointer transition-transform duration-300 ease-in-out;
-
-        &:hover {
-            @apply scale-110;
-        }
-    }
+    @apply flex flex-wrap justify-center gap-2 my-2;
 }
 
-@screen sm {
-    .select-language select {
-        @apply text-base p-1 px-2;
-    }
+.language-flags__flag {
+    @apply cursor-pointer transition-transform duration-300;
+    @apply hover:scale-110 active:scale-95;
 }

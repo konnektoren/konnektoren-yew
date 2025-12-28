@@ -1,10 +1,31 @@
 .tour-config {
-    @apply p-4 rounded-lg shadow-md bg-base-200;
-    & label {
-        @apply flex items-center space-x-2 cursor-pointer;
-    }
-    & input[type="checkbox"] {
-        @apply checkbox-primary h-5 w-5 text-primary rounded;
-        @apply focus:ring-primary focus:border-primary;
-    }
+    @apply card bg-base-200 shadow-md p-4;
+}
+
+.tour-config__title {
+    @apply text-lg font-bold text-primary mb-4;
+}
+
+.tour-config__options {
+    @apply flex flex-col gap-3;
+}
+
+.tour-config__option {
+    @apply flex flex-col gap-1;
+}
+
+.tour-config__label {
+    @apply flex items-center gap-2 cursor-pointer;
+}
+
+.tour-config__label-text {
+    @apply text-sm font-medium;
+}
+
+.tour-config__checkbox {
+    @apply checkbox checkbox-primary;
+}
+
+.tour-config__description {
+    @apply text-xs text-base-content/60 ml-7;
 }
