@@ -9,20 +9,33 @@ pub struct ChallengeRatingProps {
     pub api_url: String,
     #[prop_or_default]
     pub default_rating: Option<f64>,
+    #[prop_or(true)]
+    pub default_endpoint: bool,
+}
+
+fn build_rating_url(api_url: &str, challenge_id: &str, default_endpoint: bool) -> String {
+    if !default_endpoint {
+        return api_url.to_string();
+    }
+
+    let base = api_url.trim_end_matches('/');
+    format!("{}/reviews/{}/average", base, challenge_id)
 }
 
 #[function_component(ChallengeRatingComponent)]
 pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
     let i18n = use_i18n();
     let average = use_state(|| props.default_rating);
+
     {
         let challenge_id = props.challenge_id.clone();
         let api_url = props.api_url.clone();
+        let default_endpoint = props.default_endpoint;
         let average = average.clone();
 
         use_effect_with((), move |_| {
             wasm_bindgen_futures::spawn_local(async move {
-                let url = format!("{}/reviews/{}/average", api_url, challenge_id);
+                let url = build_rating_url(&api_url, &challenge_id, default_endpoint);
                 let response = Request::get(&url).send_traced().await;
 
                 match response {
@@ -61,16 +74,27 @@ mod preview {
     yew_preview::create_preview!(
         ChallengeRatingComponent,
         ChallengeRatingProps {
-            challenge_id: "123".to_string(),
-            api_url: "https://api.example.com/reviews".to_string(),
+            challenge_id: "konnektoren-yew-test".to_string(),
+            api_url: "https://api.konnektoren.app/api/v1".to_string(),
             default_rating: Some(4.5),
+            default_endpoint: true,
         },
         (
             "loading rating",
             ChallengeRatingProps {
-                challenge_id: "123".to_string(),
-                api_url: "https://api.example.com/reviews".to_string(),
+                challenge_id: "konnektoren-yew-test".to_string(),
+                api_url: "https://api.konnektoren.app/api/v1".to_string(),
                 default_rating: None,
+                default_endpoint: true,
+            }
+        ),
+        (
+            "with raw url",
+            ChallengeRatingProps {
+                challenge_id: "konnektoren-yew-test".to_string(),
+                api_url: "https://api.konnektoren.app/api/v1/reviews/konnektoren-yew-challenge-rating-test/average".to_string(),
+                default_rating: None,
+                default_endpoint: false,
             }
         ),
     );

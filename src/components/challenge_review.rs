@@ -6,17 +6,27 @@ use yew::prelude::*;
 pub struct ChallengeReviewProps {
     pub challenge_id: String,
     pub api_url: String,
+    #[prop_or(true)]
+    pub default_endpoint: bool,
+}
+
+fn build_review_url(api_url: &str, default_endpoint: bool) -> String {
+    if !default_endpoint {
+        return api_url.to_string();
+    }
+
+    let base = api_url.trim_end_matches('/');
+    format!("{}/reviews", base)
 }
 
 #[function_component(ChallengeReviewComponent)]
 pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     let i18n = use_i18n();
-    let stars = use_state(|| 0); // Holds the currently selected star rating
-    let comment = use_state(String::new); // Holds the user's comment
-    let is_sending = use_state(|| false); // Tracks when the review is being sent
-    let is_sent = use_state(|| false); // Tracks whether the review has been successfully sent
+    let stars = use_state(|| 0);
+    let comment = use_state(String::new);
+    let is_sending = use_state(|| false);
+    let is_sent = use_state(|| false);
 
-    // Handles when a user clicks a star to select a rating
     let on_star_click = {
         let stars = stars.clone();
         Callback::from(move |index: usize| {
@@ -24,7 +34,6 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
         })
     };
 
-    // Handles comment input changes
     let on_comment_change = {
         let comment = comment.clone();
         Callback::from(move |e: InputEvent| {
@@ -38,7 +47,6 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
         })
     };
 
-    // Handles the submission of the review
     let on_submit = {
         let is_sending = is_sending.clone();
         let is_sent = is_sent.clone();
@@ -46,6 +54,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
         let comment = comment.clone();
         let challenge_id = props.challenge_id.clone();
         let api_url = props.api_url.clone();
+        let default_endpoint = props.default_endpoint;
 
         Callback::from(move |_: MouseEvent| {
             #[cfg(feature = "csr")]
@@ -58,10 +67,10 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                 let is_sent = is_sent.clone();
 
                 if *is_sending || *is_sent {
-                    return; // If it's already sending or sent, do nothing
+                    return;
                 }
 
-                is_sending.set(true); // Set the sending in process flag to true
+                is_sending.set(true);
 
                 let stars = *stars;
                 let comment = (*comment).clone();
@@ -70,7 +79,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
 
                 wasm_bindgen_futures::spawn_local(async move {
                     let review = Review {
-                        challenge_id,
+                        challenge_id: challenge_id.clone(),
                         rating: stars as u8,
                         comment: if comment.is_empty() {
                             None
@@ -79,7 +88,9 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                         },
                     };
 
-                    match Request::post(&api_url)
+                    let url = build_review_url(&api_url, default_endpoint);
+
+                    match Request::post(&url)
                         .with_trace()
                         .json(&review)
                         .unwrap()
@@ -91,7 +102,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                             let status = response.status();
                             if (200..300).contains(&status) {
                                 log::info!("Review submitted successfully");
-                                is_sent.set(true); // Mark the review as successfully sent
+                                is_sent.set(true);
                             } else {
                                 log::error!("Failed to submit review: status code {}", status);
                             }
@@ -101,7 +112,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                         }
                     }
 
-                    is_sending.set(false); // Release sending lock
+                    is_sending.set(false);
                 });
             }
         })
@@ -110,8 +121,16 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     html! {
         <div class="challenge-review">
             <h3>{i18n.t("Rate this Challenge")}</h3>
-            <ChallengeRatingComponent api_url={props.api_url.clone()} challenge_id={props.challenge_id.clone()} />
-            <RatingStarsComponent max_stars={5} rating={*stars as f64} on_click={Some(on_star_click)} />
+            <ChallengeRatingComponent
+                api_url={props.api_url.clone()}
+                challenge_id={props.challenge_id.clone()}
+                default_endpoint={props.default_endpoint}
+            />
+            <RatingStarsComponent
+                max_stars={5}
+                rating={*stars as f64}
+                on_click={Some(on_star_click)}
+            />
 
             <div class="challenge-review__comment-input">
                 <input
@@ -122,7 +141,6 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                 />
             </div>
 
-            // Conditionally hide the button if review is sent; show only if not sent
             if !*is_sent {
                 <button
                     onclick={on_submit}
@@ -145,8 +163,17 @@ mod preview {
     yew_preview::create_preview!(
         ChallengeReviewComponent,
         ChallengeReviewProps {
-            challenge_id: "123".to_string(),
-            api_url: "https://api.example.com/reviews".to_string(),
+            challenge_id: "konnektoren-yew-test".to_string(),
+            api_url: "https://api.konnektoren.app/api/v1".to_string(),
+            default_endpoint: true,
         },
+        (
+            "with raw url",
+            ChallengeReviewProps {
+                challenge_id: "konnektoren-yew-test".to_string(),
+                api_url: "https://api.konnektoren.app/reviews".to_string(),
+                default_endpoint: false,
+            }
+        ),
     );
 }
