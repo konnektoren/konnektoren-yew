@@ -82,10 +82,8 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
             let game = Game::default();
             let session = Arc::new(RwLock::new((*session).clone()));
 
-            let persistence = Arc::new(GameStatePersistenceImpl {
-                session_repository,
-                session,
-            });
+            let persistence = Arc::new(GameStatePersistenceImpl::new(session_repository, session));
+
             let mut controller = GameController::new(game, persistence);
             controller.register_plugin(Arc::new(ChallengeFinishPlugin));
             controller.register_plugin(Arc::new(GameXpPlugin));
@@ -93,14 +91,20 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
         }
     };
 
-    controller.load_game_state().unwrap();
+    // Load game state with error handling
+    if let Err(e) = controller.load_game_state() {
+        log::error!("Failed to load game state: {:?}", e);
+    }
+
     let context = GameControllerContext::new(controller.clone());
 
     {
         let session = session.clone();
         let controller = controller.clone();
         use_effect_with(session, move |_| {
-            controller.load_game_state().unwrap();
+            if let Err(e) = controller.load_game_state() {
+                log::error!("Failed to reload game state: {:?}", e);
+            }
         })
     }
 
