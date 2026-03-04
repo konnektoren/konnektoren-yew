@@ -16,7 +16,7 @@ impl Default for Settings {
             id: "".to_string(),
             language: "en".to_string(),
             music_volume: 0.0,
-            sound_volume: 0.8,
+            sound_volume: 0.3,
             theme: "light".to_string(),
             show_helpers: true,
         }
@@ -32,7 +32,7 @@ mod tests {
         let settings = Settings::default();
         assert_eq!(settings.language, "en");
         assert_eq!(settings.music_volume, 0.0);
-        assert_eq!(settings.sound_volume, 0.8);
+        assert_eq!(settings.sound_volume, 0.3);
         assert_eq!(settings.theme, "light");
         assert!(settings.show_helpers);
     }
