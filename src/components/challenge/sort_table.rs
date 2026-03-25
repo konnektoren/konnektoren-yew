@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, SortTable, SortTableRow};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::Event;
@@ -41,6 +42,7 @@ fn shuffle(rows: &[SortTableRow]) -> Vec<SortTableRow> {
 
 #[function_component(SortTableComponent)]
 pub fn sort_table_comp(props: &SortTableComponentProps) -> Html {
+    let i18n = use_i18n();
     let SortTableComponentProps {
         challenge,
         on_command,
@@ -276,7 +278,7 @@ pub fn sort_table_comp(props: &SortTableComponentProps) -> Html {
             </table>
             <div class="sort-table__actions">
                 <button class="sort-table__actions-button" onclick={handle_finish}>
-                    {"Finish"}
+                    { i18n.t("Finish") }
                 </button>
             </div>
         </div>

@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, ContextualChoice};
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct ContextualChoiceResultComponentProps {
 
 #[function_component(ContextualChoiceResultComponent)]
 pub fn contextual_choice_result_component(props: &ContextualChoiceResultComponentProps) -> Html {
+    let i18n = use_i18n();
     let results = match &props.challenge_result {
         ChallengeResult::ContextualChoice(answers) => props
             .challenge
@@ -42,9 +44,9 @@ pub fn contextual_choice_result_component(props: &ContextualChoiceResultComponen
                             {filled_template}
                             <span>{
                                 if is_correct {
-                                    " - Correct"
+                                    format!(" - {}", i18n.t("Correct"))
                                 } else {
-                                    " - Incorrect"
+                                    format!(" - {}", i18n.t("Incorrect"))
                                 }
                             }</span>
                         </div>
@@ -52,7 +54,7 @@ pub fn contextual_choice_result_component(props: &ContextualChoiceResultComponen
                             if !is_correct {
                                 html! {
                                     <div class="correct-answer">
-                                        {"Correct answer: "}
+                                        { i18n.t("Correct answer: ") }
                                         {fill_template(&item.template, &item.choices, &correct_indices)}
                                     </div>
                                 }
@@ -69,7 +71,7 @@ pub fn contextual_choice_result_component(props: &ContextualChoiceResultComponen
 
     html! {
         <div class="challenge-result">
-            <h2>{"Challenge Result"}</h2>
+            <h2>{ i18n.t("Challenge Result") }</h2>
             <ul>
                 {for results.into_iter()}
             </ul>

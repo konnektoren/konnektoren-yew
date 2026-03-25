@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, GapFill};
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct GapFillResultComponentProps {
 
 #[function_component(GapFillResultComponent)]
 pub fn gap_fill_result_component(props: &GapFillResultComponentProps) -> Html {
+    let i18n = use_i18n();
     let results = match &props.challenge_result {
         ChallengeResult::GapFill(answers) => answers
             .iter()
@@ -46,9 +48,9 @@ pub fn gap_fill_result_component(props: &GapFillResultComponentProps) -> Html {
                             </td>
                             <td class={classes!("gap-fill-result__cell", format!("gap-fill-result__cell--{}", modifier))}>
                                 {if is_correct {
-                                    "Correct".to_string()
+                                    i18n.t("Correct")
                                 } else {
-                                    format!("Incorrect (Correct: {})", correct_answers)
+                                    format!("{} ({}{})", i18n.t("Incorrect"), i18n.t("Correct answer: "), correct_answers)
                                 }}
                             </td>
                         </tr>
@@ -61,12 +63,12 @@ pub fn gap_fill_result_component(props: &GapFillResultComponentProps) -> Html {
 
     html! {
         <div class="gap-fill-result">
-            <h2 class="gap-fill-result__title">{"Challenge Result"}</h2>
+            <h2 class="gap-fill-result__title">{ i18n.t("Challenge Result") }</h2>
             <table class="gap-fill-result__table">
                 <thead class="gap-fill-result__header">
                     <tr>
-                        <th class="gap-fill-result__header-cell">{"Sentence"}</th>
-                        <th class="gap-fill-result__header-cell">{"Result"}</th>
+                        <th class="gap-fill-result__header-cell">{ i18n.t("Sentence") }</th>
+                        <th class="gap-fill-result__header-cell">{ i18n.t("Result") }</th>
                     </tr>
                 </thead>
                 <tbody class="gap-fill-result__body">

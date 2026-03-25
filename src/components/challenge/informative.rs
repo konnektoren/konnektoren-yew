@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, Informative};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use yew::prelude::*;
@@ -13,6 +14,7 @@ pub struct InformativeComponentProps {
 
 #[function_component(InformativeComponent)]
 pub fn informative_component(props: &InformativeComponentProps) -> Html {
+    let i18n = use_i18n();
     let language = props.language.as_deref().unwrap_or("en");
 
     let on_command = props.on_command.clone();
@@ -28,14 +30,14 @@ pub fn informative_component(props: &InformativeComponentProps) -> Html {
 
     let text = match informative_text {
         Some(text) => &text.text,
-        None => "No text found",
+        None => &i18n.t("No text found"),
     };
 
     html! {
         <div class="informative">
             <h1>{&props.challenge.description}</h1>
             <p>{text}</p>
-            <button onclick={on_finish}>{"Finish"}</button>
+            <button onclick={on_finish}>{ i18n.t("Finish") }</button>
         </div>
     }
 }

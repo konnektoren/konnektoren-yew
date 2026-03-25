@@ -1,4 +1,5 @@
 use crate::components::TranslateComponent;
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::Question;
 use yew::prelude::*;
 
@@ -11,6 +12,8 @@ pub struct QuestionComponentProps {
 
 #[function_component(QuestionComponent)]
 pub fn question_component(props: &QuestionComponentProps) -> Html {
+    let i18n = use_i18n();
+
     let image = if let Some(image) = &props.question.image {
         if image.starts_with("fa-") {
             html! {
@@ -27,7 +30,7 @@ pub fn question_component(props: &QuestionComponentProps) -> Html {
 
     html! {
         <div class="question">
-            <h2 class="question__title">{"Question"}</h2>
+            <h2 class="question__title">{ i18n.t("Question") }</h2>
             {image}
             <p class="question__text">{&props.question.question}</p>
             if props.help {

@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, Ordering};
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct OrderingResultComponentProps {
 
 #[function_component(OrderingResultComponent)]
 pub fn ordering_result_component(props: &OrderingResultComponentProps) -> Html {
+    let i18n = use_i18n();
     let results = match &props.challenge_result {
         ChallengeResult::Ordering(results) => props
             .challenge
@@ -38,13 +40,13 @@ pub fn ordering_result_component(props: &OrderingResultComponentProps) -> Html {
                         </td>
                         <td class={classes!("ordering-result__cell", format!("ordering-result__cell--{}", modifier))}>
                             {if is_correct {
-                                html! { "Correct" }
+                                html! { { i18n.t("Correct") } }
                             } else {
                                 html! {
                                     <>
-                                        {"Incorrect"}
+                                        { i18n.t("Incorrect") }
                                         <div class="ordering-result__correct-answer">
-                                            {"Correct order: "}
+                                            { i18n.t("Correct order: ") }
                                             {correct_elements.join(" → ")}
                                         </div>
                                     </>
@@ -60,12 +62,12 @@ pub fn ordering_result_component(props: &OrderingResultComponentProps) -> Html {
 
     html! {
         <div class="ordering-result">
-            <h2 class="ordering-result__title">{"Challenge Result"}</h2>
+            <h2 class="ordering-result__title">{ i18n.t("Challenge Result") }</h2>
             <table class="ordering-result__table">
                 <thead class="ordering-result__header">
                     <tr>
-                        <th class="ordering-result__header-cell">{"Your Order"}</th>
-                        <th class="ordering-result__header-cell">{"Result"}</th>
+                        <th class="ordering-result__header-cell">{ i18n.t("Your Order") }</th>
+                        <th class="ordering-result__header-cell">{ i18n.t("Result") }</th>
                     </tr>
                 </thead>
                 <tbody class="ordering-result__body">

@@ -1,6 +1,7 @@
 use super::{ChallengeActions, ChallengeActionsComponent, OptionsComponent, QuestionComponent};
 use crate::components::ProgressBar;
 use crate::components::challenge::MultipleChoiceResultComponent;
+use crate::i18n::use_i18n;
 #[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::{
@@ -112,6 +113,7 @@ pub fn create_handle_option_selection(
 
 #[function_component(MultipleChoiceComponent)]
 pub fn multiple_choice_component(props: &MultipleChoiceComponentProps) -> Html {
+    let i18n = use_i18n();
     let task_index = use_state(|| 0);
     let challenge_result = use_state(ChallengeResult::default);
     let show_help = use_state(|| false);
@@ -157,7 +159,7 @@ pub fn multiple_choice_component(props: &MultipleChoiceComponentProps) -> Html {
             <ProgressBar
                 value={*task_index}
                 max={props.challenge.questions.len()}
-                label={format!("Question {} of {}", *task_index + 1, props.challenge.questions.len())}
+                label={format!("{} {} {} {}", i18n.t("Question"), *task_index + 1, i18n.t("of"), props.challenge.questions.len())}
             />
             <QuestionComponent
                 question={props.challenge.questions[*task_index].clone()}

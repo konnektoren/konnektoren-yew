@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::Placeholder;
 use konnektoren_core::challenges::placeholder::PlaceholderType;
 use konnektoren_core::commands::{ChallengeCommand, Command};
@@ -14,6 +15,7 @@ pub struct PlaceholderComponentProps {
 
 #[function_component(PlaceholderComponent)]
 pub fn placeholder_component(props: &PlaceholderComponentProps) -> Html {
+    let i18n = use_i18n();
     let language = props.language.as_deref().unwrap_or("en");
     let challenge: Placeholder = props.challenge.clone();
 
@@ -88,7 +90,7 @@ pub fn placeholder_component(props: &PlaceholderComponentProps) -> Html {
 
             <div class="placeholder__actions">
                 <button class="placeholder__button" onclick={on_finish}>
-                    {"Continue"}
+                    { i18n.t("Continue") }
                 </button>
             </div>
         </div>

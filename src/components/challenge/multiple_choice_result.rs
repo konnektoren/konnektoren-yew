@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, MultipleChoice};
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct MultipleChoiceResultComponentProps {
 
 #[function_component(MultipleChoiceResultComponent)]
 pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentProps) -> Html {
+    let i18n = use_i18n();
     let results = match &props.challenge_result {
         ChallengeResult::MultipleChoice(options) => props
             .challenge
@@ -26,7 +28,7 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
                             {text}
                         </td>
                         <td class={classes!("multiple-choice-result__cell", format!("multiple-choice-result__cell--{}", modifier))}>
-                            {if is_correct { "Correct" } else { "Incorrect" }}
+                            {if is_correct { i18n.t("Correct") } else { i18n.t("Incorrect") }}
                         </td>
                     </tr>
                 }
@@ -37,12 +39,12 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
 
     html! {
         <div class="multiple-choice-result">
-            <h2 class="multiple-choice-result__title">{"Challenge Result"}</h2>
+            <h2 class="multiple-choice-result__title">{ i18n.t("Challenge Result") }</h2>
             <table class="multiple-choice-result__table">
                 <thead class="multiple-choice-result__header">
                     <tr>
-                        <th class="multiple-choice-result__header-cell">{"Question"}</th>
-                        <th class="multiple-choice-result__header-cell">{"Result"}</th>
+                        <th class="multiple-choice-result__header-cell">{ i18n.t("Question") }</th>
+                        <th class="multiple-choice-result__header-cell">{ i18n.t("Result") }</th>
                     </tr>
                 </thead>
                 <tbody class="multiple-choice-result__body">

@@ -104,7 +104,7 @@ pub fn multiple_choice_4_component(props: &MultipleChoiceComponentProps) -> Html
             <ProgressBar
                 value={*task_index}
                 max={props.challenge.questions.len()}
-                label={format!("Question {} of {}", *task_index + 1, props.challenge.questions.len())}
+                label={format!("{} {} {} {}", i18n.t("Question"), *task_index + 1, i18n.t("of"), props.challenge.questions.len())}
             />
             <div class="multiple-choice-4__content">
                 <QuestionComponent

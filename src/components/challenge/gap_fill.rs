@@ -1,5 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
+use crate::i18n::use_i18n;
 #[cfg(feature = "effects")]
 use crate::prelude::ReadText;
 use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, GapFill, GapFillAnswer};
@@ -18,6 +19,7 @@ pub struct GapFillComponentProps {
 
 #[function_component(GapFillComponent)]
 pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
+    let i18n = use_i18n();
     let task_index = use_state(|| 0);
     let challenge_result = use_state(|| ChallengeResult::GapFill(Vec::new()));
     let show_help = use_state(|| false);
@@ -152,7 +154,7 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
             <ProgressBar
                 value={*task_index}
                 max={props.challenge.questions.len()}
-                label={format!("Question {} of {}", *task_index + 1, props.challenge.questions.len())}
+                label={format!("{} {} {} {}", i18n.t("Question"), *task_index + 1, i18n.t("of"), props.challenge.questions.len())}
             />
 
             <div class="gap-fill__sentence">
@@ -185,7 +187,7 @@ pub fn gap_fill_component(props: &GapFillComponentProps) -> Html {
 
             if *show_help {
                 <div class="gap-fill__hints">
-                    <div class="gap-fill__hints-title">{"Hints:"}</div>
+                    <div class="gap-fill__hints-title">{ i18n.t("Hints:") }</div>
                     <ul class="gap-fill__hints-list">
                         {current_question.hints.iter().map(|hint| {
                             html! { <li>{hint}</li> }

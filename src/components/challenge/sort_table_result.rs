@@ -1,3 +1,4 @@
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, SortTable};
 use yew::prelude::*;
 
@@ -9,6 +10,7 @@ pub struct Props {
 
 #[function_component(SortTableResultComponent)]
 pub fn sort_table_result_component(props: &Props) -> Html {
+    let i18n = use_i18n();
     let results = match &props.challenge_result {
         ChallengeResult::SortTable(rows) => rows
             .iter()
@@ -22,13 +24,14 @@ pub fn sort_table_result_component(props: &Props) -> Html {
                 };
                 let text = format!("{} - {} - ", row.id, row.values.join(", "));
 
+                let i18n = i18n.clone();
                 html! {
                     <li class={class_name}>
                         <div class={class_name}>{text}<span>{
                             if is_correct {
-                                "Correct"
+                                i18n.t("Correct")
                             } else {
-                                "Incorrect"
+                                i18n.t("Incorrect")
                             }
                         }</span></div>
 
@@ -41,7 +44,7 @@ pub fn sort_table_result_component(props: &Props) -> Html {
 
     html! {
         <div class="challenge-result">
-            <h2>{"Challenge Result"}</h2>
+            <h2>{ i18n.t("Challenge Result") }</h2>
             <ul>
                 {for results.into_iter()}
             </ul>

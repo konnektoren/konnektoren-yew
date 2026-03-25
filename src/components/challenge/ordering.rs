@@ -1,5 +1,6 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
 use crate::components::ProgressBar;
+use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, Ordering, OrderingResult};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
@@ -124,6 +125,7 @@ pub struct OrderingComponentProps {
 
 #[function_component(OrderingComponent)]
 pub fn ordering_component(props: &OrderingComponentProps) -> Html {
+    let i18n = use_i18n();
     let current_item = use_state(|| 0);
     let dragged_index = use_state(|| None::<usize>);
     let drop_target_index = use_state(|| None::<usize>);
@@ -423,7 +425,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                 <ProgressBar
                     value={*current_item}
                     max={props.challenge.items.len()}
-                    label={format!("Item {} of {}", (*current_item) + 1, props.challenge.items.len())}
+                    label={format!("{} {} {} {}", i18n.t("Item"), (*current_item) + 1, i18n.t("of"), props.challenge.items.len())}
                 />
                 <div class="ordering__elements">
                     <OrderingList
