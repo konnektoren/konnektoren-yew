@@ -18,11 +18,12 @@ pub fn certificate(props: &CertificateProps) -> Html {
     let clipboard_handle: yew_hooks::UseClipboardHandle = yew_hooks::use_clipboard();
     let show_copied_message = use_state(|| false);
 
+    let base64_str = props.certificate_data.to_base64().unwrap_or_default();
     let share_url = format!(
         "{}//{}/?page=results&code={}",
         props.protocol.clone().unwrap_or_default(),
         props.hostname.clone().unwrap_or_default(),
-        encode(&props.certificate_data.to_base64())
+        encode(&base64_str)
     );
 
     let on_share_click = {

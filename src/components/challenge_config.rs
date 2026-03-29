@@ -61,7 +61,7 @@ mod tests {
             challenge: "konnektoren".to_string(),
             variant: None,
             position: None,
-            icon: None
+            icon: None,
         };
         let on_new = Some(Callback::noop());
 

@@ -12,11 +12,12 @@ pub struct CertificateImageProps {
 
 #[function_component(CertificateImageComponent)]
 pub fn certificate_image_component(props: &CertificateImageProps) -> Html {
+    let base64_str = props.certificate_data.to_base64().unwrap_or_default();
     let share_url = format!(
         "{}://{}/?page=results&code={}",
         props.protocol.clone().unwrap_or_default(),
         props.hostname.clone().unwrap_or_default(),
-        &props.certificate_data.to_base64()
+        &base64_str
     );
 
     let img_src = create_certificate_data_url(

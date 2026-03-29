@@ -192,7 +192,10 @@ extern "C" {
 
 async fn fetch_markdown_with_loader(loader: &AssetLoader, path: &str) -> Result<String, String> {
     // Load the markdown file using the asset loader
-    let binary_data = loader.load_binary(path).await?;
+    let binary_data = loader
+        .load_binary(path)
+        .await
+        .map_err(|e| format!("Failed to load markdown content: {}", e))?;
 
     // Convert bytes to string
     String::from_utf8(binary_data)
