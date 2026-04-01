@@ -23,6 +23,10 @@ pub enum Network {
     SolanaDevnet,
 }
 
+// Compile-time check: ensure at least one wallet feature is enabled
+#[cfg(not(any(feature = "csr", feature = "solana")))]
+compile_error!("At least one of 'csr' or 'solana' features must be enabled for wallet functionality");
+
 impl Display for Network {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
