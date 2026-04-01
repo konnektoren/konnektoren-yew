@@ -39,7 +39,7 @@ pub mod repository;
 pub mod prelude {
     #[cfg(feature = "csr")]
     pub use crate::app::App;
-    #[cfg(feature = "ssr")]
+    #[cfg(all(feature = "ssr", not(feature = "csr")))]
     pub use crate::app_ssr::App;
     pub use crate::components::*;
     #[cfg(feature = "effects")]

@@ -21,11 +21,9 @@ pub enum Network {
     Solana,
     #[cfg(feature = "solana")]
     SolanaDevnet,
+    #[cfg(not(any(feature = "csr", feature = "solana")))]
+    Placeholder,
 }
-
-// Compile-time check: ensure at least one wallet feature is enabled
-#[cfg(not(any(feature = "csr", feature = "solana")))]
-compile_error!("At least one of 'csr' or 'solana' features must be enabled for wallet functionality");
 
 impl Display for Network {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -38,6 +36,8 @@ impl Display for Network {
             Network::Solana => write!(f, "Solana"),
             #[cfg(feature = "solana")]
             Network::SolanaDevnet => write!(f, "Solana Devnet"),
+            #[cfg(not(any(feature = "csr", feature = "solana")))]
+            Network::Placeholder => write!(f, "Wallet (SSR Mode)"),
         }
     }
 }

@@ -37,6 +37,7 @@ pub struct WalletComponentProps<T: WalletProvider + 'static> {
     pub on_token_select: Option<Callback<Token>>,
 }
 
+#[cfg(any(feature = "csr", feature = "solana"))]
 #[function_component(WalletComponent)]
 pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProps<T>) -> Html {
     let show_full_address = use_state(|| false);
@@ -345,10 +346,15 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                                                     "wallet__payment-button",
                                                     match selected.network {
                                                         #[cfg(feature = "csr")]
+                                                        Network::Ton => "ton",
+                                                        #[cfg(feature = "csr")]
                                                         Network::TonTestnet => "ton",
                                                         #[cfg(feature = "solana")]
+                                                        Network::Solana => "solana",
+                                                        #[cfg(feature = "solana")]
                                                         Network::SolanaDevnet => "solana",
-                                                        _ => ""
+                                                        #[cfg(not(any(feature = "csr", feature = "solana")))]
+                                                        Network::Placeholder => "",
                                                     },
                                                     if *is_sending { "loading" } else { "" }
                                                 )}
@@ -376,6 +382,15 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                 </div>
             </div>
         </div>
+    }
+}
+
+// SSR placeholder wallet component when no wallet features are enabled
+#[cfg(not(any(feature = "csr", feature = "solana")))]
+#[function_component(WalletComponent)]
+pub fn wallet_component<T: WalletProvider + 'static>(_props: &WalletComponentProps<T>) -> Html {
+    html! {
+        <></>
     }
 }
 
