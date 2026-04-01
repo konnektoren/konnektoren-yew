@@ -198,8 +198,22 @@ async fn fetch_markdown_with_loader(loader: &AssetLoader, path: &str) -> Result<
         .map_err(|e| format!("Failed to load markdown content: {}", e))?;
 
     // Convert bytes to string
-    String::from_utf8(binary_data)
-        .map_err(|e| format!("Failed to convert markdown content to string: {}", e))
+    let content = String::from_utf8(binary_data)
+        .map_err(|e| format!("Failed to convert markdown content to string: {}", e))?;
+
+    // Validate that the content is not an HTML error page (404, etc.)
+    let content_lower = content.to_lowercase();
+    if content_lower.contains("<!doctype html")
+        || content_lower.contains("<html")
+        || (content_lower.contains("<script") && content_lower.contains("wasm"))
+    {
+        return Err(format!(
+            "File not found: {} (received HTML error page instead of markdown)",
+            path
+        ));
+    }
+
+    Ok(content)
 }
 
 #[cfg(feature = "yew-preview")]
@@ -215,7 +229,7 @@ mod preview {
             description: "Informative Challenge".to_string(),
             text: vec![InformativeText {
                 language: "en".to_string(),
-                text: "assets/articles.md".to_string(),
+                text: "articles.md".to_string(),
             }],
         }
     }
@@ -244,7 +258,7 @@ mod preview {
                     description: "Informative Challenge".to_string(),
                     text: vec![InformativeText {
                         language: "en".to_string(),
-                        text: "assets/unknown-en.md".to_string(),
+                        text: "unknown-en.md".to_string(),
                     }],
                 },
                 on_command: None,
