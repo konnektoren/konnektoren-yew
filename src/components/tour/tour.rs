@@ -9,10 +9,10 @@ pub struct Props {
 
 #[function_component(Tour)]
 pub fn tour(props: &Props) -> Html {
-    let config: TourConfig = serde_yaml::from_str(&props.data.clone()).unwrap();
+    let config: TourConfig = serde_yaml::from_str(&props.data).unwrap();
     html! {
-    <div>
-        <YewTour steps={config.steps} id={props.id.clone()} />
-    </div>
+        <div>
+            <YewTour steps={config.steps} id={props.id.clone()} />
+        </div>
     }
 }

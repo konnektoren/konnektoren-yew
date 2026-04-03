@@ -12,41 +12,54 @@ pub struct Props {
 #[function_component(TourButton)]
 pub fn tour_button(props: &Props) -> Html {
     let i18n = use_i18n();
-    let show_tour = use_state(|| false);
     let settings = use_settings();
+    // Incremented each click to force a fresh remount of Tour (resetting its internal state)
+    let tour_key = use_state(|| 0u32);
+    // Tracks whether Tour has ever been started this session
+    let tour_started = use_state(|| false);
 
     let on_click = {
-        let show_tour = show_tour.clone();
-        let settings = settings.clone();
+        let tour_key = tour_key.clone();
+        let tour_started = tour_started.clone();
         Callback::from(move |_| {
-            show_tour.set(true);
-            let mut new_settings = (*settings).clone();
-            new_settings.show_helpers = false;
-            settings.set(new_settings);
+            tour_key.set(*tour_key + 1);
+            tour_started.set(true);
         })
     };
 
-    match (settings.show_helpers, *show_tour) {
-        (true, false) => {
-            html! {
-                <div class="tour-button">
-                    <button class="tour-button__btn" onclick={on_click}>
-                        { i18n.t("Start Tour") }
-                    </button>
-                </div>
-            }
-        }
-        (_, true) => {
-            html! {
+    if !settings.show_helpers {
+        return html! { <></> };
+    }
+
+    html! {
+        <>
+            // Tour is rendered (and remounted via key) whenever tour_started is true.
+            // When the user dismisses the tour, yew-tou-rs hides its own overlay internally.
+            // The next button click bumps tour_key, forcing a fresh remount that restarts the tour.
+            if *tour_started {
                 <div class="tour-welcome">
                     <Tour
+                        key={*tour_key}
                         id={props.id.clone()}
                         data={props.data.clone()}
                     />
                 </div>
             }
-        }
-        _ => html! { <></> },
+            // Button is always visible when show_helpers is true.
+            // While the tour overlay is active it sits above the button (z-index 9998 vs 1000),
+            // so the button is visually hidden without needing extra state tracking.
+            <div class="tour-button">
+                <button
+                    class="tour-button__btn"
+                    onclick={on_click}
+                    title={i18n.t("Start Tour")}
+                    aria-label={i18n.t("Start Tour")}
+                >
+                    <span class="tour-button__icon">{"?"}</span>
+                    <span class="tour-button__label">{ i18n.t("Start Tour") }</span>
+                </button>
+            </div>
+        </>
     }
 }
 
@@ -59,16 +72,14 @@ mod preview {
         TourButton,
         Props {
             id: "tour".to_string(),
-            data: {
-                r#"steps:
-  - selector: ".tour-welcome"
-    content: "Welcome to Konnektoren!"
+            data: r#"steps:
+  - selector: ".tour-button"
+    content: "Welcome to Konnektoren! Click here any time to restart the tour."
   - selector: ".select-theme"
     content: "Select a theme"
   - selector: ".select-design"
     content: "Select a design""#
-                    .to_string()
-            }
+                .to_string()
         },
     );
 }

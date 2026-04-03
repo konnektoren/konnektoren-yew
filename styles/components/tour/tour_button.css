@@ -9,3 +9,7 @@
 .tour-button__icon {
     @apply text-lg;
 }
+
+.tour-button__label {
+    @apply text-sm font-medium;
+}
