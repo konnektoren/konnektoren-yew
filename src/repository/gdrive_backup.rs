@@ -1,9 +1,11 @@
-#![cfg_attr(not(target_arch = "wasm32"), allow(unused))]
+#![cfg_attr(not(feature = "csr"), allow(unused))]
 
 use super::{Backup, BackupError, BackupInfo};
 use async_trait::async_trait;
-use gloo::net::http::Request;
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "csr")]
+use gloo::net::http::Request;
 
 use chrono::{DateTime, Utc};
 
@@ -30,18 +32,18 @@ impl GDriveBackup {
     }
 }
 
-#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
-#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
+#[cfg_attr(feature = "csr", async_trait(?Send))]
+#[cfg_attr(not(feature = "csr"), async_trait)]
 impl<T: Serialize + for<'de> Deserialize<'de>> Backup<T> for GDriveBackup {
     async fn list_backups(&self) -> Result<Vec<BackupInfo>, BackupError> {
-        #[cfg(not(target_arch = "wasm32"))]
+        #[cfg(not(feature = "csr"))]
         {
             Err(BackupError::Unknown(
                 "List backups is not supported in non-web environments".to_string(),
             ))
         }
 
-        #[cfg(target_arch = "wasm32")]
+        #[cfg(feature = "csr")]
         {
             let files = fetch_google_drive_files(&self.access_token).await?;
             let backups = files.into_iter().map(|file| BackupInfo {
@@ -60,13 +62,13 @@ impl<T: Serialize + for<'de> Deserialize<'de>> Backup<T> for GDriveBackup {
     }
 
     async fn backup(&self, id: &str, value: &T) -> Result<BackupInfo, BackupError> {
-        #[cfg(not(target_arch = "wasm32"))]
+        #[cfg(not(feature = "csr"))]
         {
             Err(BackupError::Unknown(
                 "Backup is not supported in non-web environments".to_string(),
             ))
         }
-        #[cfg(target_arch = "wasm32")]
+        #[cfg(feature = "csr")]
         {
             let serialized_value = serde_json::to_string(value)
                 .map_err(|e| BackupError::Unknown(format!("Failed to serialize data: {}", e)))?;
@@ -88,14 +90,14 @@ impl<T: Serialize + for<'de> Deserialize<'de>> Backup<T> for GDriveBackup {
     }
 
     async fn restore(&self, id: &str) -> Result<T, BackupError> {
-        #[cfg(not(target_arch = "wasm32"))]
+        #[cfg(not(feature = "csr"))]
         {
             Err(BackupError::Unknown(
                 "Restore is not supported in non-web environments".to_string(),
             ))
         }
 
-        #[cfg(target_arch = "wasm32")]
+        #[cfg(feature = "csr")]
         {
             let serialized_value = fetch_session_from_drive(&self.access_token, id).await?;
             let value = serde_json::from_str::<T>(&serialized_value)
@@ -105,7 +107,7 @@ impl<T: Serialize + for<'de> Deserialize<'de>> Backup<T> for GDriveBackup {
     }
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "csr")]
 async fn fetch_google_drive_files(access_token: &str) -> Result<Vec<GoogleDriveFile>, BackupError> {
     let url = "https://www.googleapis.com/drive/v3/files?\
                spaces=drive&\
@@ -158,7 +160,7 @@ async fn fetch_google_drive_files(access_token: &str) -> Result<Vec<GoogleDriveF
     Ok(files)
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "csr")]
 async fn fetch_session_from_drive(
     access_token: &str,
     file_id: &str,
@@ -190,6 +192,7 @@ async fn fetch_session_from_drive(
     Ok(text)
 }
 
+#[cfg(feature = "csr")]
 async fn upload_session(access_token: &str, session: &str) -> Result<String, BackupError> {
     let now: DateTime<Utc> = Utc::now();
     let date_string = now.format("%Y-%m-%d_%H-%M-%S").to_string();

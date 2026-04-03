@@ -1,5 +1,3 @@
-use crate::tools::TracedResponse;
-use gloo::net::http::Request;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -37,52 +35,67 @@ fn build_presence_url(
 
 #[function_component(ChallengePresenceComponent)]
 pub fn challenge_presence(props: &ChallengePresenceProps) -> Html {
-    let count = use_state(|| None as Option<u32>);
-
+    #[cfg(feature = "csr")]
     {
-        let challenge_id = props.challenge_id.clone();
-        let api_url = props.api_url.clone();
-        let count = count.clone();
-        let read_only = props.read_only;
-        let default_endpoint = props.default_endpoint;
+        use crate::tools::TracedResponse;
+        use gloo::net::http::Request;
+        use wasm_bindgen_futures::spawn_local;
 
-        use_effect_with(challenge_id.clone(), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
-                let url = build_presence_url(&api_url, &challenge_id, read_only, default_endpoint);
+        let count = use_state(|| None as Option<u32>);
 
-                let response = if read_only {
-                    Request::get(&url)
-                } else {
-                    Request::post(&url)
-                }
-                .send_traced()
-                .await;
+        {
+            let challenge_id = props.challenge_id.clone();
+            let api_url = props.api_url.clone();
+            let count = count.clone();
+            let read_only = props.read_only;
+            let default_endpoint = props.default_endpoint;
 
-                match response {
-                    Ok(response) if response.status() == 200 => {
-                        if let Ok(stats) = response.json::<ChallengePresenceStats>().await {
-                            count.set(Some(stats.count));
+            use_effect_with(challenge_id.clone(), move |_| {
+                spawn_local(async move {
+                    let url = build_presence_url(&api_url, &challenge_id, read_only, default_endpoint);
+
+                    let response = if read_only {
+                        Request::get(&url)
+                    } else {
+                        Request::post(&url)
+                    }
+                    .send_traced()
+                    .await;
+
+                    match response {
+                        Ok(response) if response.status() == 200 => {
+                            if let Ok(stats) = response.json::<ChallengePresenceStats>().await {
+                                count.set(Some(stats.count));
+                            }
+                        }
+                        _ => {
+                            log::error!("Failed to fetch presence count.");
                         }
                     }
-                    _ => {
-                        log::error!("Failed to fetch presence count.");
-                    }
-                }
-            });
+                });
 
-            || ()
-        });
+                || ()
+            });
+        }
+
+        return html! {
+            <div class="presence-badge">
+                <i class="fas fa-users"></i>
+                if let Some(num) = *count {
+                    <span>{num}</span>
+                } else {
+                    <span>{"..."}</span>
+                }
+            </div>
+        };
     }
 
-    html! {
-        <div class="presence-badge">
-            <i class="fas fa-users"></i>
-            if let Some(num) = *count {
-                <span>{num}</span>
-            } else {
-                <span>{"..."}</span>
-            }
-        </div>
+    #[cfg(not(feature = "csr"))]
+    {
+        // Placeholder for SSR/SSG - Challenge presence requires browser APIs and HTTP requests
+        html! {
+            <div class="presence-badge" />
+        }
     }
 }
 

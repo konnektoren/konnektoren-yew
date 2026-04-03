@@ -34,54 +34,59 @@ impl GameStatePersistenceImpl {
 
 impl GameStatePersistence for GameStatePersistenceImpl {
     fn save_game_state(&self, state: &GameState) -> Result<()> {
-        let session_repository = self.session_repository.clone();
-        let session = self.session.clone();
-        let state = state.clone();
+        #[cfg(feature = "csr")]
+        {
+            use wasm_bindgen_futures::spawn_local;
 
-        wasm_bindgen_futures::spawn_local(async move {
-            let mut session_guard = match session.write() {
-                Ok(guard) => guard,
-                Err(e) => {
-                    log::error!("Failed to acquire write lock on session: {}", e);
-                    return;
-                }
-            };
+            let session_repository = self.session_repository.clone();
+            let session = self.session.clone();
+            let state = state.clone();
 
-            session_guard.game_state = state.clone();
+            spawn_local(async move {
+                let mut session_guard = match session.write() {
+                    Ok(guard) => guard,
+                    Err(e) => {
+                        log::error!("Failed to acquire write lock on session: {}", e);
+                        return;
+                    }
+                };
 
-            // Check if challenge is completed and not already in history
-            if state.challenge.start_time.is_some() && state.challenge.end_time.is_some() {
-                let is_already_saved = Self::is_challenge_in_history(
-                    &session_guard.game_state.game.challenge_history,
-                    &state.challenge,
-                );
+                session_guard.game_state = state.clone();
 
-                if !is_already_saved {
-                    log::info!(
-                        "Adding completed challenge to history: {}",
-                        state.challenge.challenge_config.id
+                // Check if challenge is completed and not already in history
+                if state.challenge.start_time.is_some() && state.challenge.end_time.is_some() {
+                    let is_already_saved = Self::is_challenge_in_history(
+                        &session_guard.game_state.game.challenge_history,
+                        &state.challenge,
                     );
 
-                    session_guard
-                        .game_state
-                        .game
-                        .challenge_history
-                        .add_challenge(state.challenge.clone());
-                } else {
-                    log::debug!(
-                        "Challenge already in history, skipping: {}",
-                        state.challenge.challenge_config.id
-                    );
-                }
-            }
+                    if !is_already_saved {
+                        log::info!(
+                            "Adding completed challenge to history: {}",
+                            state.challenge.challenge_config.id
+                        );
 
-            if let Err(e) = session_repository
-                .save_session(SESSION_STORAGE_KEY, &session_guard)
-                .await
-            {
-                log::error!("Failed to save session: {:?}", e);
-            }
-        });
+                        session_guard
+                            .game_state
+                            .game
+                            .challenge_history
+                            .add_challenge(state.challenge.clone());
+                    } else {
+                        log::debug!(
+                            "Challenge already in history, skipping: {}",
+                            state.challenge.challenge_config.id
+                        );
+                    }
+                }
+
+                if let Err(e) = session_repository
+                    .save_session(SESSION_STORAGE_KEY, &session_guard)
+                    .await
+                {
+                    log::error!("Failed to save session: {:?}", e);
+                }
+            });
+        }
         Ok(())
     }
 

@@ -1,6 +1,5 @@
 use crate::components::TimerComponent;
 use crate::i18n::use_i18n;
-use crate::tools::TracedResponse;
 use gloo::net::http::Request;
 use konnektoren_core::challenges::{PerformanceRecord, Timed};
 use serde::{Deserialize, Serialize};
@@ -31,7 +30,7 @@ pub async fn fetch_all_performance_records(
         None => api_url.to_string(),
     };
 
-    let response = Request::get(&url).send_traced().await?;
+    let response = Request::get(&url).send().await?;
 
     let leaderboard: LeaderboardV1Response = response.json().await?;
     let mut performance_records = leaderboard.performance_records;
@@ -41,80 +40,94 @@ pub async fn fetch_all_performance_records(
 
 #[function_component(LeaderboardComp)]
 pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
-    let i18n = use_i18n();
-    let leaderboard = use_state(|| match props.default_record.clone() {
-        Some(record) => vec![record],
-        None => vec![],
-    });
-
+    #[cfg(feature = "csr")]
     {
-        let default_record = props.default_record.clone();
-        let leaderboard = leaderboard.clone();
-        let leaderboard_id = props.leaderboard_id.clone();
-        let api_url = props.api_url.clone();
+        use crate::tools::TracedResponse;
+        use wasm_bindgen_futures::spawn_local;
 
-        use_effect_with(leaderboard_id.clone(), |_| {
-            wasm_bindgen_futures::spawn_local(async move {
-                match fetch_all_performance_records(&api_url, leaderboard_id).await {
-                    Ok(mut performance_records) => {
-                        if let Some(default_record) = default_record {
-                            performance_records.push(default_record);
-                        }
-                        performance_records.sort();
-                        leaderboard.set(performance_records);
-                    }
-                    Err(err) => {
-                        // Handle error appropriately
-                        log::error!("Failed to fetch leaderboard: {:?}", err);
-                    }
-                }
-            });
+        let i18n = use_i18n();
+        let leaderboard = use_state(|| match props.default_record.clone() {
+            Some(record) => vec![record],
+            None => vec![],
         });
-    }
 
-    if leaderboard.is_empty() {
+        {
+            let default_record = props.default_record.clone();
+            let leaderboard = leaderboard.clone();
+            let leaderboard_id = props.leaderboard_id.clone();
+            let api_url = props.api_url.clone();
+
+            use_effect_with(leaderboard_id.clone(), |_| {
+                spawn_local(async move {
+                    match fetch_all_performance_records(&api_url, leaderboard_id).await {
+                        Ok(mut performance_records) => {
+                            if let Some(default_record) = default_record {
+                                performance_records.push(default_record);
+                            }
+                            performance_records.sort();
+                            leaderboard.set(performance_records);
+                        }
+                        Err(err) => {
+                            // Handle error appropriately
+                            log::error!("Failed to fetch leaderboard: {:?}", err);
+                        }
+                    }
+                });
+            });
+        }
+
+        if leaderboard.is_empty() {
+            return html! {
+                <div class="leaderboard">
+                </div>
+            };
+        }
+
         return html! {
             <div class="leaderboard">
+                <div class="leaderboard__container">
+                    <table class="leaderboard__table">
+                        <thead class="leaderboard__header">
+                            <tr>
+                                <th>{i18n.t("Rank")}</th>
+                                <th>{i18n.t("Name")}</th>
+                                <th>{i18n.t("Performance")}</th>
+                                <th>{i18n.t("Time")}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { for leaderboard.iter().enumerate().map(|(i, record)| {
+                                let elapsed_time = record.elapsed_time().unwrap_or_default().num_milliseconds();
+                                html! {
+                                    <tr class={classes!(
+                                        "leaderboard__row",
+                                        record.eq(props.default_record.as_ref().unwrap_or(&PerformanceRecord::default()))
+                                            .then_some("leaderboard__row--highlighted")
+                                    )}>
+                                        <td class="leaderboard__cell leaderboard__cell--rank">{i + 1}</td>
+                                        <td class="leaderboard__cell leaderboard__cell--name">{&record.profile_name}</td>
+                                        <td class="leaderboard__cell leaderboard__cell--performance">
+                                            {format!("{:.2}%", record.performance_percentage)}
+                                        </td>
+                                        <td class="leaderboard__cell leaderboard__cell--time">
+                                            <TimerComponent milliseconds={elapsed_time} show_milliseconds={false} />
+                                        </td>
+                                    </tr>
+                                }
+                            }) }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         };
     }
 
-    html! {
-        <div class="leaderboard">
-            <div class="leaderboard__container">
-                <table class="leaderboard__table">
-                    <thead class="leaderboard__header">
-                        <tr>
-                            <th>{i18n.t("Rank")}</th>
-                            <th>{i18n.t("Name")}</th>
-                            <th>{i18n.t("Performance")}</th>
-                            <th>{i18n.t("Time")}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { for leaderboard.iter().enumerate().map(|(i, record)| {
-                            let elapsed_time = record.elapsed_time().unwrap_or_default().num_milliseconds();
-                            html! {
-                                <tr class={classes!(
-                                    "leaderboard__row",
-                                    record.eq(props.default_record.as_ref().unwrap_or(&PerformanceRecord::default()))
-                                        .then_some("leaderboard__row--highlighted")
-                                )}>
-                                    <td class="leaderboard__cell leaderboard__cell--rank">{i + 1}</td>
-                                    <td class="leaderboard__cell leaderboard__cell--name">{&record.profile_name}</td>
-                                    <td class="leaderboard__cell leaderboard__cell--performance">
-                                        {format!("{:.2}%", record.performance_percentage)}
-                                    </td>
-                                    <td class="leaderboard__cell leaderboard__cell--time">
-                                        <TimerComponent milliseconds={elapsed_time} show_milliseconds={false} />
-                                    </td>
-                                </tr>
-                            }
-                        }) }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    #[cfg(not(feature = "csr"))]
+    {
+        // Placeholder for SSR/SSG - Leaderboard requires API calls
+        html! {
+            <div class="leaderboard" />
+        }
     }
 }
 

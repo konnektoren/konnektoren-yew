@@ -30,19 +30,6 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
     let session_initializer = props.session_initializer.clone();
     let error = use_state(|| None::<String>);
 
-    #[cfg(feature = "ssr")]
-    let session = {
-        let initializer = session_initializer.clone();
-        use_state(|| match initializer.initialize(&Session::default()) {
-            Ok(session) => session,
-            Err(e) => {
-                log::error!("Failed to initialize session: {:?}", e);
-                Session::default()
-            }
-        })
-    };
-
-    #[cfg(not(feature = "ssr"))]
     let session = use_state(
         || match session_initializer.initialize(&Session::default()) {
             Ok(session) => session,
@@ -54,7 +41,7 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
     );
 
     // Load session (CSR only)
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(feature = "csr")]
     {
         let session = session.clone();
         let error = error.clone();
@@ -62,7 +49,9 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         let session_initializer = session_initializer.clone();
 
         use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
+            use wasm_bindgen_futures::spawn_local;
+
+            spawn_local(async move {
                 match session_repository.get_session(SESSION_STORAGE_KEY).await {
                     Ok(Some(loaded_session)) => {
                         match session_initializer.initialize(&loaded_session) {
@@ -92,15 +81,17 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
     }
 
     // Save session (CSR only)
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(feature = "csr")]
     {
         let session_repository = props.session_repository.clone();
         let session = session.clone();
         let error = error.clone();
 
         use_effect_with(session.clone(), move |_| {
+            use wasm_bindgen_futures::spawn_local;
+
             let session = session.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let session = session.clone();
                 if let Err(e) = session_repository
                     .update_session(SESSION_STORAGE_KEY, &session)

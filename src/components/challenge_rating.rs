@@ -1,5 +1,4 @@
 use crate::i18n::use_i18n;
-use crate::tools::TracedResponse;
 use gloo::net::http::Request;
 use yew::prelude::*;
 
@@ -24,45 +23,62 @@ fn build_rating_url(api_url: &str, challenge_id: &str, default_endpoint: bool) -
 
 #[function_component(ChallengeRatingComponent)]
 pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
-    let i18n = use_i18n();
-    let average = use_state(|| props.default_rating);
-
+    #[cfg(feature = "csr")]
     {
-        let challenge_id = props.challenge_id.clone();
-        let api_url = props.api_url.clone();
-        let default_endpoint = props.default_endpoint;
-        let average = average.clone();
+        use crate::tools::TracedResponse;
+        use wasm_bindgen_futures::spawn_local;
 
-        use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
-                let url = build_rating_url(&api_url, &challenge_id, default_endpoint);
-                let response = Request::get(&url).send_traced().await;
+        let i18n = use_i18n();
+        let average = use_state(|| props.default_rating);
 
-                match response {
-                    Ok(response) if response.status() == 200 => {
-                        if let Ok(avg) = response.json::<f64>().await {
-                            average.set(Some(avg));
+        {
+            let challenge_id = props.challenge_id.clone();
+            let api_url = props.api_url.clone();
+            let default_endpoint = props.default_endpoint;
+            let average = average.clone();
+
+            use_effect_with((), move |_| {
+                spawn_local(async move {
+                    let url = build_rating_url(&api_url, &challenge_id, default_endpoint);
+                    let response = Request::get(&url).send_traced().await;
+
+                    match response {
+                        Ok(response) if response.status() == 200 => {
+                            if let Ok(avg) = response.json::<f64>().await {
+                                average.set(Some(avg));
+                            }
+                        }
+                        _ => {
+                            log::error!("Failed to fetch the average rating.");
                         }
                     }
-                    _ => {
-                        log::error!("Failed to fetch the average rating.");
-                    }
-                }
-            });
+                });
 
-            || ()
-        });
+                || ()
+            });
+        }
+
+        return html! {
+            <div class="challenge-rating">
+                <span class="challenge-rating__star">{"★"}</span>
+                if let Some(avg) = *average {
+                    <span>{format!("{:.1}", avg)}</span>
+                } else {
+                    <span>{ i18n.t("Loading...") }</span>
+                }
+            </div>
+        };
     }
 
-    html! {
-        <div class="challenge-rating">
-            <span class="challenge-rating__star">{"★"}</span>
-            if let Some(avg) = *average {
-                <span>{format!("{:.1}", avg)}</span>
-            } else {
-                <span>{ i18n.t("Loading...") }</span>
-            }
-        </div>
+    #[cfg(not(feature = "csr"))]
+    {
+        // Placeholder for SSR/SSG - API calls not available
+        html! {
+            <div class="challenge-rating">
+                <span class="challenge-rating__star">{"★"}</span>
+                <span>{"..."}</span>
+            </div>
+        }
     }
 }
 

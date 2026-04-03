@@ -25,15 +25,19 @@ impl PartialEq for CertificatesProviderProps {
 
 #[function_component(CertificatesProvider)]
 pub fn certificates_provider(props: &CertificatesProviderProps) -> Html {
+    // IMPORTANT: use_state must be called OUTSIDE cfg blocks to maintain hook ordering
     let certificates = use_state(Vec::new);
 
-    // Load certificates
+    // Load certificates (CSR only)
+    #[cfg(feature = "csr")]
     {
         let certificates = certificates.clone();
         let certificates_repository = props.certificates_repository.clone();
 
         use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
+            use wasm_bindgen_futures::spawn_local;
+
+            spawn_local(async move {
                 if let Ok(loaded_certificates) = certificates_repository
                     .get_certificates(CERTIFICATE_STORAGE_KEY)
                     .await
@@ -45,13 +49,17 @@ pub fn certificates_provider(props: &CertificatesProviderProps) -> Html {
         });
     }
 
+    // Save certificates (CSR only)
+    #[cfg(feature = "csr")]
     {
         let certificates_repository = props.certificates_repository.clone();
         let current_certificates = (*certificates).clone();
 
         use_effect_with(current_certificates.clone(), move |_| {
+            use wasm_bindgen_futures::spawn_local;
+
             let certificates = current_certificates.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let certificates = certificates.clone();
                 if let Err(e) = certificates_repository
                     .save_certificates(CERTIFICATE_STORAGE_KEY, &certificates)

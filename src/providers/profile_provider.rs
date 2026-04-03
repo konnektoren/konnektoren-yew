@@ -24,13 +24,16 @@ impl PartialEq for ProfileProviderProps {
 pub fn profile_provider(props: &ProfileProviderProps) -> Html {
     let profile = use_state(PlayerProfile::default);
 
-    // Load profile
+    // Load profile (CSR only)
+    #[cfg(feature = "csr")]
     {
         let profile = profile.clone();
         let profile_repository = props.profile_repository.clone();
 
         use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
+            use wasm_bindgen_futures::spawn_local;
+
+            spawn_local(async move {
                 if let Ok(Some(loaded_profile)) =
                     profile_repository.get_profile(PROFILE_STORAGE_KEY).await
                 {
@@ -41,13 +44,17 @@ pub fn profile_provider(props: &ProfileProviderProps) -> Html {
         });
     }
 
+    // Save profile (CSR only)
+    #[cfg(feature = "csr")]
     {
         let profile_repository = props.profile_repository.clone();
         let profile = profile.clone();
 
         use_effect_with(profile.clone(), move |_| {
+            use wasm_bindgen_futures::spawn_local;
+
             let profile = profile.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let profile = profile.clone();
                 if let Err(e) = profile_repository
                     .update_profile(PROFILE_STORAGE_KEY, &profile)

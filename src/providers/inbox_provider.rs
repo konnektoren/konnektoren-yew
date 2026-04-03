@@ -26,13 +26,16 @@ impl PartialEq for InboxProviderProps {
 pub fn inbox_provider(props: &InboxProviderProps) -> Html {
     let inbox = use_state(Inbox::default);
 
-    // Load inbox
+    // Load inbox - CSR only
+    #[cfg(feature = "csr")]
     {
         let inbox = inbox.clone();
         let inbox_repository = props.inbox_repository.clone();
 
         use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
+            use wasm_bindgen_futures::spawn_local;
+
+            spawn_local(async move {
                 if let Ok(Some(loaded_inbox)) = inbox_repository.get_inbox(INBOX_STORAGE_KEY).await
                 {
                     log::info!("Loaded inbox: {:?}", loaded_inbox);
@@ -59,13 +62,17 @@ pub fn inbox_provider(props: &InboxProviderProps) -> Html {
         });
     }
 
+    // Save inbox - CSR only
+    #[cfg(feature = "csr")]
     {
         let inbox_repository = props.inbox_repository.clone();
         let inbox = inbox.clone();
 
         use_effect_with(inbox.clone(), move |_| {
+            use wasm_bindgen_futures::spawn_local;
+
             let inbox = inbox.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let inbox = inbox.clone();
                 if let Err(e) = inbox_repository.save_inbox(INBOX_STORAGE_KEY, &inbox).await {
                     log::error!("Failed to save inbox: {:?}", e);

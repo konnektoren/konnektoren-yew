@@ -22,14 +22,19 @@ impl PartialEq for SettingsProviderProps {
 
 #[function_component(SettingsProvider)]
 pub fn settings_provider(props: &SettingsProviderProps) -> Html {
+    // IMPORTANT: use_state must be called OUTSIDE cfg blocks to maintain hook ordering
     let settings = use_state(Settings::default);
 
+    // Load settings (CSR only)
+    #[cfg(feature = "csr")]
     {
         let settings = settings.clone();
         let settings_repository = props.settings_repository.clone();
 
         use_effect_with((), move |_| {
-            wasm_bindgen_futures::spawn_local(async move {
+            use wasm_bindgen_futures::spawn_local;
+
+            spawn_local(async move {
                 if let Ok(Some(loaded_settings)) =
                     settings_repository.get_settings(SETTINGS_STORAGE_KEY).await
                 {
@@ -40,13 +45,17 @@ pub fn settings_provider(props: &SettingsProviderProps) -> Html {
         });
     }
 
+    // Save settings (CSR only)
+    #[cfg(feature = "csr")]
     {
         let settings_repository = props.settings_repository.clone();
         let settings = settings.clone();
 
         use_effect_with(settings.clone(), move |_| {
+            use wasm_bindgen_futures::spawn_local;
+
             let settings = settings.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let settings = settings.clone();
                 if let Err(e) = settings_repository
                     .save_settings(SETTINGS_STORAGE_KEY, &settings)
