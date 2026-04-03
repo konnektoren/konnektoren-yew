@@ -1,5 +1,6 @@
 {
   "Please select a language from the dropdown.": "الرجاء اختيار لغة من القائمة المنسدلة.",
+  "Please select a language:": "الرجاء اختيار لغة:",
   "Select Language": "اختر اللغة",
   "Select language domain": "اختر دامنه لغة",
   "Tasks": "المهام",
@@ -96,5 +97,7 @@
   "Read our Blog": "اقرأ مدونتنا",
   "Want more interactive exercises?": "هل تريد المزيد من التمارين التفاعلية؟",
   "Get it now": "احصل عليه الآن",
-  "Ad blocker detected. Please consider disabling it to support us.": "تم اكتشاف مانع الإعلانات. يرجى تعطيله لدعمنا."
+  "Ad blocker detected. Please consider disabling it to support us.": "تم اكتشاف مانع الإعلانات. يرجى تعطيله لدعمنا.",
+  "Open feedback form": "فتح نموذج التعليقات",
+  "Close feedback form": "إغلاق نموذج التعليقات"
 }
