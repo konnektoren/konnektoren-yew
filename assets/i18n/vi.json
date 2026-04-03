@@ -1,5 +1,6 @@
 {
   "Please select a language from the dropdown.": "Vui lòng chọn một ngôn ngữ từ danh sách thả xuống.",
+  "Please select a language:": "Vui lòng chọn ngôn ngữ:",
   "Select Language": "Chọn Ngôn ngữ",
   "Select language domain": "Chọn Domen Ngôn ngữ",
   "Tasks": "Nhiệm vụ",
@@ -96,5 +97,7 @@
   "Read our Blog": "Đọc Blog của chúng tôi",
   "Want more interactive exercises?": "Bạn muốn có thêm bài tập tương tác?",
   "Get it now": "Nhận ngay",
-  "Ad blocker detected. Please consider disabling it to support us.": "Đã phát hiện trình chặn quảng cáo. Vui lòng tắt nó để hỗ trợ chúng tôi."
+  "Ad blocker detected. Please consider disabling it to support us.": "Đã phát hiện trình chặn quảng cáo. Vui lòng tắt nó để hỗ trợ chúng tôi.",
+  "Open feedback form": "Mở biểu mẫu phản hồi",
+  "Close feedback form": "Đóng biểu mẫu phản hồi"
 }

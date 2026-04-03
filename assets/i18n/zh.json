@@ -1,5 +1,6 @@
 {
   "Please select a language from the dropdown.": "请从下拉菜单中选择一种语言。",
+  "Please select a language:": "请选择一种语言:",
   "Select Language": "选择语言",
   "Select language domain": "选择语言领域",
   "Tasks": "任务",
@@ -96,5 +97,7 @@
   "Read our Blog": "阅读我们的博客",
   "Want more interactive exercises?": "想要更多互动练习？",
   "Get it now": "立即获取",
-  "Ad blocker detected. Please consider disabling it to support us.": "检测到广告拦截器。请考虑禁用以支持我们。"
+  "Ad blocker detected. Please consider disabling it to support us.": "检测到广告拦截器。请考虑禁用以支持我们。",
+  "Open feedback form": "打开反馈表单",
+  "Close feedback form": "关闭反馈表单"
 }

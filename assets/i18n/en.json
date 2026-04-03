@@ -1,5 +1,6 @@
 {
   "Please select a language from the dropdown.": "Please select a language from the dropdown.",
+  "Please select a language:": "Please select a language:",
   "Select Language": "Select Language",
   "Select language domain": "Select language domain",
   "Tasks": "Tasks",
@@ -96,5 +97,7 @@
   "Read our Blog": "Read our Blog",
   "Want more interactive exercises?": "Want more interactive exercises?",
   "Get it now": "Get it now",
-  "Ad blocker detected. Please consider disabling it to support us.": "Ad blocker detected. Please consider disabling it to support us."
+  "Ad blocker detected. Please consider disabling it to support us.": "Ad blocker detected. Please consider disabling it to support us.",
+  "Open feedback form": "Open feedback form",
+  "Close feedback form": "Close feedback form"
 }

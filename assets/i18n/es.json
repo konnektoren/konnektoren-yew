@@ -1,5 +1,6 @@
 {
   "Please select a language from the dropdown.": "Por favor, seleccione un idioma del menú desplegable.",
+  "Please select a language:": "Por favor seleccione un idioma:",
   "Select Language": "Seleccionar idioma",
   "Select language domain": "Seleccionar dominio de idioma",
   "Tasks": "Tareas",
@@ -96,5 +97,7 @@
   "Read our Blog": "Lee nuestro blog",
   "Want more interactive exercises?": "¿Quieres más ejercicios interactivos?",
   "Get it now": "Consíguelo ahora",
-  "Ad blocker detected. Please consider disabling it to support us.": "Se ha detectado un bloqueador de anuncios. Por favor, considera desactivarlo para apoyarnos."
+  "Ad blocker detected. Please consider disabling it to support us.": "Se ha detectado un bloqueador de anuncios. Por favor, considera desactivarlo para apoyarnos.",
+  "Open feedback form": "Abrir formulario de comentarios",
+  "Close feedback form": "Cerrar formulario de comentarios"
 }
