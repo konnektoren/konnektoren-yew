@@ -60,6 +60,8 @@ csr = [
     "wasm-bindgen",
     "yew-hooks",
     "uuid/js",
+    "dep:console_log",
+    "dep:wasm-bindgen-futures",
 ]
 ssr = ["yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
 ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio", "env_logger"]
@@ -71,7 +73,7 @@ tools = ["konnektoren-platform/tools", "env_logger"]
 async-trait = "0.1"
 bincode = "1"
 chrono = "0.4"
-console_log = "1"
+console_log = { version = "1", optional = true }
 futures = "0.3"
 hex = "0.4"
 implicit-clone = "0.4"
@@ -92,7 +94,7 @@ wasm-bindgen = { version = "0.2", optional = true, features = [
     "std",
     "serde",
 ], default-features = false }
-wasm-bindgen-futures = "0.4"
+wasm-bindgen-futures = { version = "0.4", optional = true }
 web-sys = { version = "0.3", optional = true, features = [
     "Document",
     "EventListener",
