@@ -46,7 +46,6 @@ pub fn share_page_comp(props: &SharePageProps) -> Html {
                 let clipboard_handle = clipboard_handle.clone();
                 let data = share_url.clone();
                 let show_copied_message = show_copied_message.clone();
-
                 clipboard_handle.write_text(data.to_string());
                 show_copied_message.set(true);
                 let show_copied_message = show_copied_message.clone();

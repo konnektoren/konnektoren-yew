@@ -27,13 +27,16 @@ pub fn inbox_manager(props: &InboxManagerProps) -> Html {
 
     match &props.children {
         Some(children) => {
-            let modified_children = children.iter().map(|mut item| {
-                let props = Rc::make_mut(&mut item.props);
-                props.inbox = (*inbox_state).clone();
-                props.on_read_message = mark_as_read.clone();
-                item
-            });
-            html! { for modified_children }
+            let modified_children: Vec<_> = children
+                .iter()
+                .map(|mut item| {
+                    let props = Rc::make_mut(&mut item.props);
+                    props.inbox = (*inbox_state).clone();
+                    props.on_read_message = mark_as_read.clone();
+                    item
+                })
+                .collect();
+            html! { <>{ for modified_children.into_iter() }</> }
         }
         None => {
             return html! {

@@ -1,7 +1,6 @@
 use crate::providers::use_profile;
-use std::sync::Arc;
 use yew::prelude::*;
-use yew_chat::prelude::{ChatApp, MessageHandler, RequestMessageHandler};
+use yew_chat::prelude::{ChatApp, RequestMessageHandler};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct ChatProps {
@@ -13,9 +12,9 @@ pub struct ChatProps {
 pub fn chat(props: &ChatProps) -> Html {
     let profile = use_profile();
     let channel = props.channel.clone();
-    let handler = Arc::new(RequestMessageHandler {
+    let handler = RequestMessageHandler {
         host: props.api_url.clone(),
-    }) as Arc<dyn MessageHandler>;
+    };
 
     let expanded = use_state(|| false);
 
@@ -39,7 +38,7 @@ pub fn chat(props: &ChatProps) -> Html {
                         <button class="chat__header-close" onclick={on_toggle}>{"×"}</button>
                     </div>
                     <div class="chat__messages">
-                        <ChatApp
+                        <ChatApp<RequestMessageHandler>
                             user={profile.name.clone()}
                             channel={channel.clone()}
                             handler={handler.clone()}

@@ -128,8 +128,8 @@ urlencoding = "2"
 uuid = { version = "1", features = ["v4", "fast-rng"] }
 
 # Yew ecosystem
-yew = "0.21"
-yew-hooks = { version = "0.3", optional = true }
+yew = "0.23"
+yew-hooks = { version = "0.6.3", optional = true }
 yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
 yew-ssg = { git = "https://github.com/chriamue/yew-ssg", optional = true }
 yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true }

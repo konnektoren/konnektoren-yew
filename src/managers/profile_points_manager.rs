@@ -14,12 +14,15 @@ pub fn profile_manager(props: &ProfilePointsManagerProps) -> Html {
 
     match &props.children {
         Some(children) => {
-            let modified_children = children.iter().map(|mut item| {
-                let props = Rc::make_mut(&mut item.props);
-                props.profile = (*profile_state).clone();
-                item
-            });
-            html! { for modified_children }
+            let modified_children: Vec<_> = children
+                .iter()
+                .map(|mut item| {
+                    let props = Rc::make_mut(&mut item.props);
+                    props.profile = (*profile_state).clone();
+                    item
+                })
+                .collect();
+            html! { <>{ for modified_children.into_iter() }</> }
         }
         None => html! {
             <ProfilePointsComponent profile={(*profile_state).clone()} />
