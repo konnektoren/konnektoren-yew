@@ -1,9 +1,11 @@
 use super::{
     ContextualChoiceComponent, ContextualChoiceResultComponent, CustomComponent,
-    CustomPackageComponent, GapFillComponent, GapFillResultComponent, InformativeComponent,
-    InformativeMarkdownComponent, MultipleChoice4Component, MultipleChoiceCircleComponent,
-    MultipleChoiceComponent, MultipleChoiceResultComponent, OrderingComponent,
-    OrderingResultComponent, PlaceholderComponent, SortTableComponent, VocabularyComponent,
+    CustomPackageComponent, DialogComponent, DialogObserverResultComponent, DialogResultComponent,
+    GapFillComponent,
+    GapFillResultComponent, InformativeComponent, InformativeMarkdownComponent,
+    MultipleChoice4Component, MultipleChoiceCircleComponent, MultipleChoiceComponent,
+    MultipleChoiceResultComponent, OrderingComponent, OrderingResultComponent,
+    PlaceholderComponent, SortTableComponent, VocabularyComponent,
 };
 use crate::components::{ChallengeInfoComponent, ChallengeTimerComponent};
 use konnektoren_core::challenges::ChallengeVariant;
@@ -116,6 +118,22 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         (None, ChallengeType::Vocabulary(challenge), _) => html! {
             <VocabularyComponent challenge={challenge.clone()} on_command={handle_command} />
         },
+        (None, ChallengeType::Dialog(challenge), ChallengeVariant::DialogObserver) => html! {
+            <DialogComponent
+                challenge={challenge.clone()}
+                on_event={handle_event}
+                on_command={handle_command}
+                quiz_mode={false}
+            />
+        },
+        (None, ChallengeType::Dialog(challenge), ChallengeVariant::DialogQuiz) => html! {
+            <DialogComponent
+                challenge={challenge.clone()}
+                on_event={handle_event}
+                on_command={handle_command}
+                quiz_mode={true}
+            />
+        },
         _ => html! {},
     };
 
@@ -131,6 +149,16 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
         },
         (Some(result), ChallengeType::Ordering(challenge)) => html! {
             <OrderingResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
+        },
+        (Some(_), ChallengeType::Dialog(challenge))
+            if props.variant == Some(ChallengeVariant::DialogObserver) =>
+        {
+            html! {
+                <DialogObserverResultComponent challenge={challenge.clone()} />
+            }
+        }
+        (Some(result), ChallengeType::Dialog(challenge)) => html! {
+            <DialogResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
         },
         _ => html! {},
     };

@@ -99,5 +99,10 @@
   "Get it now": "Get it now",
   "Ad blocker detected. Please consider disabling it to support us.": "Ad blocker detected. Please consider disabling it to support us.",
   "Open feedback form": "Open feedback form",
-  "Close feedback form": "Close feedback form"
+  "Close feedback form": "Close feedback form",
+  "dialog.choose_response": "Choose the correct response:",
+  "dialog.observer_complete": "You've watched the whole dialog!",
+  "dialog.not_answered": "Not answered",
+  "Speaker": "Speaker",
+  "Your Answer": "Your Answer"
 }

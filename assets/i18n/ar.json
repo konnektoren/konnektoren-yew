@@ -99,5 +99,10 @@
   "Get it now": "احصل عليه الآن",
   "Ad blocker detected. Please consider disabling it to support us.": "تم اكتشاف مانع الإعلانات. يرجى تعطيله لدعمنا.",
   "Open feedback form": "فتح نموذج التعليقات",
-  "Close feedback form": "إغلاق نموذج التعليقات"
+  "Close feedback form": "إغلاق نموذج التعليقات",
+  "dialog.choose_response": "اختر الإجابة الصحيحة:",
+  "dialog.observer_complete": "لقد شاهدت الحوار بالكامل!",
+  "dialog.not_answered": "بدون إجابة",
+  "Speaker": "المتحدث",
+  "Your Answer": "إجابتك"
 }

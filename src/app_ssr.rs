@@ -10,9 +10,9 @@ use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent}
 use crate::model::DefaultSessionInitializer;
 #[cfg(feature = "yew-preview")]
 use crate::prelude::{
-    AverageTimeTakenComponent, ClientSideRouter, DesignProvider, GameControllerProvider,
-    I18nProvider, RepositoryProvider, SelectDesign, SelectTheme, SuccessRateComponent,
-    ThemeProvider,
+    AverageTimeTakenComponent, ClientSideRouter, DesignProvider, DialogComponent,
+    DialogObserverResultComponent, DialogResultComponent, GameControllerProvider, I18nProvider,
+    RepositoryProvider, SelectDesign, SelectTheme, SuccessRateComponent, ThemeProvider,
 };
 use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
 use crate::providers::create_repositories;
@@ -101,11 +101,19 @@ pub fn Example() -> Html {
 #[function_component]
 pub fn App() -> Html {
     #[cfg(feature = "yew-preview")]
-    let groups: ComponentList = vec![create_component_group!(
-        "Analytics",
-        SuccessRateComponent::preview(),
-        AverageTimeTakenComponent::preview(),
-    )];
+    let groups: ComponentList = vec![
+        create_component_group!(
+            "Dialog",
+            DialogComponent::preview(),
+            DialogResultComponent::preview(),
+            DialogObserverResultComponent::preview(),
+        ),
+        create_component_group!(
+            "Analytics",
+            SuccessRateComponent::preview(),
+            AverageTimeTakenComponent::preview(),
+        ),
+    ];
 
     let i18n_config = create_i18n_config();
 

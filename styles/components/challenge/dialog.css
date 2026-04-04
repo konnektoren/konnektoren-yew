@@ -1,0 +1,310 @@
+/* ── Dialog challenge ────────────────────────────────────────────────────── */
+
+.dialog {
+    @apply challenge-layout-content;
+    @apply flex flex-col gap-4;
+}
+
+/* ── Scene image / icon header ───────────────────────────────────────────── */
+
+.dialog__scene {
+    @apply rounded-xl overflow-hidden;
+    @apply border border-base-300;
+    @apply mb-0;
+}
+
+.dialog__scene-image {
+    @apply w-full object-cover;
+    @apply h-36 sm:h-48;
+    @apply block;
+}
+
+.dialog__scene--icon {
+    @apply flex items-center justify-center;
+    @apply h-28 sm:h-36;
+    @apply bg-gradient-to-br from-base-200 to-base-300;
+    @apply text-6xl text-base-content/40;
+}
+
+/* ── Scenario banner ─────────────────────────────────────────────────────── */
+
+.dialog__scenario {
+    @apply challenge-question-card;
+    @apply text-center text-base-content/70 italic;
+    @apply text-adaptive-base;
+}
+
+/* ── Speaker bar ─────────────────────────────────────────────────────────── */
+
+.dialog__speakers-bar {
+    @apply flex justify-around items-center;
+    @apply py-3 px-4;
+    @apply border border-base-300 rounded-xl bg-base-200/50;
+}
+
+.dialog__speaker-badge {
+    @apply flex flex-col items-center gap-1;
+    @apply opacity-40 transition-all duration-300;
+}
+
+.dialog__speaker-badge--active {
+    @apply opacity-100 scale-110;
+}
+
+.dialog__speaker-avatar {
+    @apply w-12 h-12 rounded-full;
+    @apply bg-base-100 border-2 border-base-300;
+    @apply flex items-center justify-center text-2xl;
+    @apply transition-colors duration-300;
+}
+
+.dialog__speaker-badge--active .dialog__speaker-avatar {
+    @apply border-primary bg-primary/10 text-primary;
+}
+
+.dialog__speaker-name {
+    @apply text-sm font-medium text-base-content/70;
+}
+
+.dialog__speaker-badge--active .dialog__speaker-name {
+    @apply text-primary font-semibold;
+}
+
+/* ── Chat log ────────────────────────────────────────────────────────────── */
+
+.dialog__chat {
+    @apply flex flex-col gap-1;
+    @apply min-h-[280px] max-h-[55vh] overflow-y-auto;
+    @apply rounded-xl border border-base-300 bg-base-100;
+    @apply p-4;
+    scroll-behavior: smooth;
+}
+
+/* ── Turn (DaisyUI chat wrapper) ─────────────────────────────────────────── */
+
+.dialog__turn {
+    @apply animate-[fadeIn_0.25s_ease-in];
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dialog__avatar-circle {
+    @apply w-10 h-10 rounded-full;
+    @apply bg-base-200 border border-base-300;
+    @apply flex items-center justify-center overflow-hidden;
+}
+
+.dialog__avatar-img {
+    @apply w-full h-full object-cover rounded-full;
+}
+
+.dialog__turn-header {
+    @apply text-xs text-base-content/50 mb-0.5;
+    @apply select-none;
+}
+
+.dialog__bubble {
+    /* colour is applied via DaisyUI utilities on the element itself */
+    @apply text-adaptive-base leading-relaxed max-w-[75%];
+}
+
+/* Ghost bubble shown while the player is choosing an option */
+.dialog__bubble--pending {
+    @apply opacity-60 italic tracking-widest;
+    animation: pendingPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pendingPulse {
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+/* ── Quiz prompt ─────────────────────────────────────────────────────────── */
+
+.dialog__quiz-prompt {
+    @apply mt-2 px-2;
+}
+
+.dialog__quiz-prompt-text {
+    @apply text-center text-base-content/60 italic text-sm mb-3;
+}
+
+/* ── Option buttons ──────────────────────────────────────────────────────── */
+
+.dialog__options {
+    @apply flex flex-col gap-2;
+}
+
+.dialog__option {
+    @apply btn btn-outline btn-sm sm:btn-md;
+    @apply text-left justify-start;
+    @apply transition-all duration-150;
+    @apply w-full;
+}
+
+.dialog__option:hover:not(:disabled) {
+    @apply btn-primary;
+}
+
+.dialog__option:disabled {
+    @apply cursor-not-allowed opacity-70;
+}
+
+.dialog__option--correct {
+    @apply btn-success;
+}
+
+.dialog__option--incorrect {
+    @apply btn-error;
+}
+
+.dialog__option--selected-correct {
+    @apply btn-success;
+}
+
+/* ── Correct-answer hint (shown after a wrong pick) ─────────────────────── */
+
+.dialog__correct-hint {
+    @apply mt-2 px-4 py-2;
+    @apply rounded-lg bg-success/10 border border-success/30;
+    @apply text-sm text-success;
+}
+
+.dialog__correct-hint-label {
+    @apply font-semibold mr-1;
+}
+
+/* ── Next / Finish button ────────────────────────────────────────────────── */
+
+.dialog__next {
+    @apply flex justify-center mt-4 pb-2;
+}
+
+.dialog__next-btn {
+    @apply btn btn-primary btn-wide;
+}
+
+/* ── Result component ────────────────────────────────────────────────────── */
+
+.dialog-result {
+    @apply mt-6 px-2;
+}
+
+.dialog-result__title {
+    @apply text-xl font-bold text-center mb-4;
+}
+
+.dialog-result__observer-msg {
+    @apply text-center text-base-content/60 italic py-8;
+}
+
+.dialog-result__table-wrapper {
+    @apply overflow-x-auto rounded-xl border border-base-300;
+}
+
+.dialog-result__table {
+    @apply table table-zebra w-full;
+}
+
+.dialog-result__header-cell {
+    @apply font-semibold text-base-content/70 text-sm;
+}
+
+.dialog-result__row--correct {
+    @apply bg-success/10;
+}
+
+.dialog-result__row--incorrect {
+    @apply bg-error/10;
+}
+
+.dialog-result__cell {
+    @apply text-sm;
+}
+
+.dialog-result__cell--speaker {
+    @apply font-medium;
+}
+
+.dialog-result__cell--correct {
+    @apply text-success font-semibold;
+}
+
+.dialog-result__cell--incorrect {
+    @apply text-error font-semibold;
+}
+
+/* ── Observer result ─────────────────────────────────────────────────────── */
+
+.dialog-observer-result {
+    @apply flex flex-col items-center gap-4 py-6 px-4;
+}
+
+.dialog-observer-result__scene {
+    @apply w-full rounded-xl overflow-hidden border border-base-300;
+}
+
+.dialog-observer-result__scene-image {
+    @apply w-full h-36 sm:h-48 object-cover block;
+}
+
+.dialog-observer-result__scene--icon {
+    @apply flex items-center justify-center;
+    @apply h-28 sm:h-36;
+    @apply bg-gradient-to-br from-base-200 to-base-300;
+    @apply text-6xl text-base-content/40;
+}
+
+.dialog-observer-result__check {
+    @apply text-6xl text-success;
+    @apply drop-shadow-sm;
+}
+
+.dialog-observer-result__title {
+    @apply text-2xl font-bold text-center;
+}
+
+.dialog-observer-result__scenario {
+    @apply text-center text-base-content/60 italic;
+    @apply max-w-sm;
+}
+
+.dialog-observer-result__speakers {
+    @apply flex gap-10 justify-center mt-2;
+}
+
+.dialog-observer-result__speaker {
+    @apply flex flex-col items-center gap-2;
+}
+
+.dialog-observer-result__speaker-avatar {
+    @apply w-16 h-16 rounded-full overflow-hidden;
+    @apply bg-base-200 border-2 border-primary/30;
+    @apply flex items-center justify-center text-3xl;
+}
+
+.dialog-observer-result__avatar-img {
+    @apply w-full h-full object-cover rounded-full;
+}
+
+.dialog-observer-result__speaker-name {
+    @apply text-sm font-medium;
+}
+
+.dialog-observer-result__message {
+    @apply text-center text-base-content/60 italic mt-2;
+}

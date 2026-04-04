@@ -99,5 +99,10 @@
   "Get it now": "Şimdi alın",
   "Ad blocker detected. Please consider disabling it to support us.": "Reklam engelleyici tespit edildi. Bizi desteklemek için lütfen devre dışı bırakın.",
   "Open feedback form": "Geri bildirim formunu aç",
-  "Close feedback form": "Geri bildirim formunu kapat"
+  "Close feedback form": "Geri bildirim formunu kapat",
+  "dialog.choose_response": "Doğru yanıtı seçin:",
+  "dialog.observer_complete": "Tüm diyaloğu izlediniz!",
+  "dialog.not_answered": "Yanıtlanmadı",
+  "Speaker": "Konuşmacı",
+  "Your Answer": "Cevabınız"
 }

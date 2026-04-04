@@ -132,6 +132,9 @@ pub fn App() -> Html {
             ChallengeHistorySummaryComponent::preview(),
             ResultSummaryComponent::preview(),
             VocabularyComponent::preview(),
+            DialogComponent::preview(),
+            DialogResultComponent::preview(),
+            DialogObserverResultComponent::preview(),
             ChallengePresenceComponent::preview(),
         ),
         create_component_group!(

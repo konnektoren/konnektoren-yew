@@ -99,5 +99,10 @@
   "Get it now": "Nhận ngay",
   "Ad blocker detected. Please consider disabling it to support us.": "Đã phát hiện trình chặn quảng cáo. Vui lòng tắt nó để hỗ trợ chúng tôi.",
   "Open feedback form": "Mở biểu mẫu phản hồi",
-  "Close feedback form": "Đóng biểu mẫu phản hồi"
+  "Close feedback form": "Đóng biểu mẫu phản hồi",
+  "dialog.choose_response": "Chọn câu trả lời đúng:",
+  "dialog.observer_complete": "Bạn đã xem toàn bộ hội thoại!",
+  "dialog.not_answered": "Chưa trả lời",
+  "Speaker": "Người nói",
+  "Your Answer": "Câu trả lời của bạn"
 }
