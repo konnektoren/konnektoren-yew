@@ -8,6 +8,8 @@ pub struct SvgChallengeProps {
     pub challenge: ChallengeConfig,
     pub on_click: Callback<(ChallengeConfig, BrowserCoordinate)>,
     pub class_name: String,
+    #[prop_or(5.0)]
+    pub radius: f64,
 }
 
 #[function_component(SvgChallenge)]
@@ -18,6 +20,9 @@ pub fn svg_challenge(props: &SvgChallengeProps) -> Html {
     );
     let svg_pos = model_pos.to_svg(SCALE);
     let name = props.challenge.name.clone();
+    let radius = props.radius;
+    let font_size = (radius * 0.7).max(2.0);
+    let label_offset = radius + font_size * 0.3;
 
     let on_click = {
         let challenge = props.challenge.clone();
@@ -38,15 +43,15 @@ pub fn svg_challenge(props: &SvgChallengeProps) -> Html {
                 class={props.class_name.clone()}
                 cx={svg_pos.0.to_string()}
                 cy={svg_pos.1.to_string()}
-                r="3"
+                r={radius.to_string()}
                 onclick={on_click.clone()}
             />
             <text
                 x={svg_pos.0.to_string()}
-                y={svg_pos.1.to_string()}
-                font-size="3"
+                y={(svg_pos.1 as f64 + label_offset).to_string()}
+                font-size={font_size.to_string()}
                 text-anchor="middle"
-                alignment-baseline="middle"
+                class="map-challenge-label"
                 onclick={on_click}
             >
                 {name}

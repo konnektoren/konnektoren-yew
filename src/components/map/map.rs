@@ -1,11 +1,10 @@
 use crate::components::map::SCALE;
 use crate::components::map::bounds::Bounds;
 use crate::components::map::svg_map::SvgMap;
-use crate::components::map::utils::Zoom;
 use crate::components::{BrowserCoordinate, ChallengeIndex, SvgCoordinate};
 use konnektoren_core::game::GamePath;
-use konnektoren_core::prelude::ChallengeConfig;
 use yew::prelude::*;
+
 
 #[derive(Clone, PartialEq, Properties)]
 pub struct MapComponentProps {
@@ -39,8 +38,6 @@ impl Default for MapComponentProps {
 
 const MIN_ZOOM: f64 = 0.5;
 const MAX_ZOOM: f64 = 10.0;
-const DEFAULT_MODEL_WIDTH: u32 = 10;
-const DEFAULT_MODEL_HEIGHT: u32 = 10;
 
 #[function_component(MapComponent)]
 pub fn map_component(props: &MapComponentProps) -> Html {
@@ -48,17 +45,15 @@ pub fn map_component(props: &MapComponentProps) -> Html {
     let svg_bounds = (bounds.0.to_svg(SCALE), bounds.1.to_svg(SCALE));
 
     let view_box_state = use_state(|| svg_bounds);
-    let zoom_level = use_state(|| {
-        props
-            .game_path
-            .get_zoom(DEFAULT_MODEL_WIDTH, DEFAULT_MODEL_HEIGHT)
-    });
+    let zoom_level = use_state(|| 1.0_f64);
     let is_dragging = use_state(|| false);
     let last_touch_pos = use_state(|| (0.0, 0.0));
     let view_box_position = use_state(|| svg_bounds.0);
 
     let handle_wheel =
         handle_wheel_callback(&view_box_state, &zoom_level, &view_box_position, svg_bounds);
+
+    let display_size = (props.width, props.height);
 
     let on_mouse_move = on_mouse_move_callback(
         &is_dragging,
@@ -67,6 +62,7 @@ pub fn map_component(props: &MapComponentProps) -> Html {
         &zoom_level,
         &view_box_state,
         svg_bounds,
+        display_size,
     );
 
     let on_touch_move = on_touch_move_callback(
@@ -76,6 +72,7 @@ pub fn map_component(props: &MapComponentProps) -> Html {
         &zoom_level,
         &view_box_state,
         svg_bounds,
+        display_size,
     );
 
     let on_mouse_down = {
@@ -149,30 +146,13 @@ pub fn map_component(props: &MapComponentProps) -> Html {
         let view_box_state = view_box_state.clone();
         let game_path = props.game_path.clone();
         use_effect_with(props.game_path.clone(), move |_| {
-            let view_box_state = view_box_state.clone();
+            // Start with the full level visible so every challenge is reachable regardless
+            // of display aspect ratio.
             let bounds = game_path.get_bounds();
             let svg_bounds = (bounds.0.to_svg(SCALE), bounds.1.to_svg(SCALE));
-
-            if let Some(first_challenge) = game_path.challenges.first() {
-                let (center, new_zoom) = calculate_challenge_focus(first_challenge, svg_bounds);
-
-                zoom_level.set(new_zoom);
-
-                let width = ((svg_bounds.1.0 - svg_bounds.0.0) as f64 / new_zoom) as i32;
-                let height = ((svg_bounds.1.1 - svg_bounds.0.1) as f64 / new_zoom) as i32;
-
-                let new_min_x = center.0 - width / 2;
-                let new_min_y = center.1 - height / 2;
-
-                let updated_view_box = (
-                    SvgCoordinate(new_min_x, new_min_y),
-                    SvgCoordinate(new_min_x + width, new_min_y + height),
-                );
-
-                view_box_state.set(updated_view_box);
-                view_box_position.set(SvgCoordinate(new_min_x, new_min_y));
-            }
-
+            zoom_level.set(1.0);
+            view_box_state.set(svg_bounds);
+            view_box_position.set(svg_bounds.0);
             || ()
         });
     }
@@ -207,18 +187,28 @@ pub fn map_component(props: &MapComponentProps) -> Html {
     }
 }
 
-fn calculate_challenge_focus(
-    challenge: &ChallengeConfig,
+/// Pure function: given the full-level SVG bounds, the current viewBox size, and a pan
+/// delta (already scaled from browser pixels to SVG units), return the new clamped
+/// top-left corner of the viewBox.
+///
+/// The clamp guarantees every part of the level is reachable:
+///   min_corner = bounds.min - SCALE  (one node-radius of over-scroll)
+///   max_corner = bounds.max - vb_size + SCALE
+///
+/// When vb_size > span the max < min; in that case the full level is already in
+/// view and position is pinned to bounds.min - SCALE.
+pub(crate) fn clamp_view_box_position(
+    current: SvgCoordinate,
+    delta: (f64, f64),
+    vb_size: (i32, i32),
     bounds: (SvgCoordinate, SvgCoordinate),
-) -> (SvgCoordinate, f64) {
-    let challenge_pos = challenge.position.unwrap_or((0, 0));
-    let center = SvgCoordinate(challenge_pos.0 * SCALE, challenge_pos.1 * SCALE);
-
-    let width = (bounds.1.0 - bounds.0.0) as f64;
-    let height = (bounds.1.1 - bounds.0.1) as f64;
-    let zoom = (width.min(height) / (5.0 * SCALE as f64)).clamp(MIN_ZOOM, MAX_ZOOM);
-
-    (center, zoom)
+) -> SvgCoordinate {
+    let raw_x = current.0 - delta.0 as i32;
+    let raw_y = current.1 - delta.1 as i32;
+    SvgCoordinate(
+        clamp_position(raw_x, bounds.0.0 - SCALE, bounds.1.0 - vb_size.0 + SCALE, "x"),
+        clamp_position(raw_y, bounds.0.1 - SCALE, bounds.1.1 - vb_size.1 + SCALE, "y"),
+    )
 }
 
 fn on_touch_move_callback(
@@ -228,6 +218,7 @@ fn on_touch_move_callback(
     zoom_level: &UseStateHandle<f64>,
     view_box: &UseStateHandle<(SvgCoordinate, SvgCoordinate)>,
     bounds: (SvgCoordinate, SvgCoordinate),
+    display_size: (u32, u32),
 ) -> Callback<TouchEvent> {
     let is_dragging = is_dragging.clone();
     let last_touch_pos = last_touch_pos.clone();
@@ -249,7 +240,6 @@ fn on_touch_move_callback(
                             touch.client_y(),
                             &last_touch_pos,
                         );
-                        let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
 
                         if dx.is_nan() || dy.is_nan() {
                             log::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
@@ -261,10 +251,12 @@ fn on_touch_move_callback(
                         let (view_box_width, view_box_height) =
                             calculate_view_box_size(bounds, *zoom_level);
                         if view_box_width > 0 && view_box_height > 0 {
+                            let scale_x = view_box_width as f64 / display_size.0 as f64;
+                            let scale_y = view_box_height as f64 / display_size.1 as f64;
                             let (new_view_box_x, new_view_box_y) = calculate_new_view_box_position(
                                 &view_box_position,
-                                dx,
-                                dy,
+                                dx * scale_x,
+                                dy * scale_y,
                                 view_box_width,
                                 view_box_height,
                                 bounds,
@@ -345,6 +337,7 @@ fn on_mouse_move_callback(
     zoom_level: &UseStateHandle<f64>,
     view_box: &UseStateHandle<(SvgCoordinate, SvgCoordinate)>,
     bounds: (SvgCoordinate, SvgCoordinate),
+    display_size: (u32, u32),
 ) -> Callback<MouseEvent> {
     let is_dragging = is_dragging.clone();
     let last_mouse_pos = last_mouse_pos.clone();
@@ -355,7 +348,6 @@ fn on_mouse_move_callback(
     Callback::from(move |e: MouseEvent| {
         if *is_dragging {
             let (dx, dy) = calculate_mouse_delta(e.client_x(), e.client_y(), &last_mouse_pos);
-            let (dx, dy) = (dx.clamp(-1.0, 1.0), dy.clamp(-1.0, 1.0));
 
             if dx.is_nan() || dy.is_nan() {
                 log::error!("Invalid mouse movement delta: dx={}, dy={}", dx, dy);
@@ -366,10 +358,13 @@ fn on_mouse_move_callback(
 
             let (view_box_width, view_box_height) = calculate_view_box_size(bounds, *zoom_level);
             if view_box_width > 0 && view_box_height > 0 {
+                // Scale browser pixels to SVG units so 1px drag = proportional SVG movement
+                let scale_x = view_box_width as f64 / display_size.0 as f64;
+                let scale_y = view_box_height as f64 / display_size.1 as f64;
                 let (new_view_box_x, new_view_box_y) = calculate_new_view_box_position(
                     &view_box_position,
-                    dx,
-                    dy,
+                    dx * scale_x,
+                    dy * scale_y,
                     view_box_width,
                     view_box_height,
                     bounds,
@@ -408,23 +403,13 @@ fn calculate_new_view_box_position(
     view_box_height: i32,
     bounds: (SvgCoordinate, SvgCoordinate),
 ) -> (i32, i32) {
-    let new_view_box_x = view_box_position.0 - dx as i32;
-    let new_view_box_y = view_box_position.1 - dy as i32;
-
-    let new_view_box_x = clamp_position(
-        new_view_box_x,
-        bounds.0.0 - SCALE,
-        bounds.1.0 - view_box_width + SCALE,
-        "x",
+    let clamped = clamp_view_box_position(
+        **view_box_position,
+        (dx, dy),
+        (view_box_width, view_box_height),
+        bounds,
     );
-    let new_view_box_y = clamp_position(
-        new_view_box_y,
-        bounds.0.1 - SCALE,
-        bounds.1.1 - view_box_height + SCALE,
-        "y",
-    );
-
-    (new_view_box_x, new_view_box_y)
+    (clamped.0, clamped.1)
 }
 
 fn clamp_position(value: i32, min: i32, max: i32, axis: &str) -> i32 {
@@ -461,32 +446,204 @@ fn update_view_box(
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
+    use konnektoren_core::challenges::ChallengeConfig;
+    use konnektoren_core::game::Map;
     use yew::callback;
     use yew_preview::prelude::*;
 
-    fn props() -> MapComponentProps {
-        let callback = callback::Callback::from(
+    fn on_select() -> Callback<(Option<ChallengeIndex>, BrowserCoordinate)> {
+        callback::Callback::from(
             move |(challenge_index, coordinate): (Option<ChallengeIndex>, BrowserCoordinate)| {
-                if let Some(challenge_index) = challenge_index {
-                    log::info!("Challenge selected: {}", challenge_index);
+                if let Some(idx) = challenge_index {
+                    log::info!("Challenge selected: {}", idx);
                 } else {
-                    log::info!("Challenge deselected {} {}", coordinate.0, coordinate.1);
+                    log::info!("Deselected at {} {}", coordinate.0, coordinate.1);
                 }
             },
-        );
+        )
+    }
+
+    fn props_background() -> MapComponentProps {
         let mut props = MapComponentProps::default();
         props.current_challenge = 1;
         props.points = Some(100);
-        props.on_select_challenge = Some(callback);
+        props.on_select_challenge = Some(on_select());
         props.image_src = Some("https://picsum.photos/800".to_string());
         props.width = 800;
         props.height = 800;
         props
     }
 
+    fn props_with_map_bounds() -> MapComponentProps {
+        let game_path = konnektoren_core::game::GamePath {
+            id: "preview-map-bounds".to_string(),
+            name: "Map Bounds Preview".to_string(),
+            challenges: vec![
+                ChallengeConfig {
+                    id: "c1".to_string(),
+                    name: "Start".to_string(),
+                    position: Some((1, 2)),
+                    ..Default::default()
+                },
+                ChallengeConfig {
+                    id: "c2".to_string(),
+                    name: "Middle".to_string(),
+                    position: Some((5, 4)),
+                    ..Default::default()
+                },
+                ChallengeConfig {
+                    id: "c3".to_string(),
+                    name: "End".to_string(),
+                    position: Some((8, 7)),
+                    ..Default::default()
+                },
+            ],
+            map: Some(Map {
+                background: String::new(),
+                width: 10,
+                height: 10,
+            }),
+        };
+        MapComponentProps {
+            game_path,
+            current_challenge: 0,
+            on_select_challenge: Some(on_select()),
+            points: Some(50),
+            image_src: Some("https://picsum.photos/800".to_string()),
+            width: 800,
+            height: 800,
+        }
+    }
+
     yew_preview::create_preview!(
         MapComponent,
         MapComponentProps::default(),
-        ("Background", props())
+        ("Background", props_background()),
+        ("Map Bounds", props_with_map_bounds())
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn bounds(x0: i32, y0: i32, x1: i32, y1: i32) -> (SvgCoordinate, SvgCoordinate) {
+        (SvgCoordinate(x0, y0), SvgCoordinate(x1, y1))
+    }
+
+    // ── clamp_view_box_position ─────────────────────────────────────────────
+
+    #[test]
+    fn no_delta_stays_in_place() {
+        let b = bounds(0, 0, 100, 100);
+        let pos = SvgCoordinate(10, 20);
+        let result = clamp_view_box_position(pos, (0.0, 0.0), (50, 50), b);
+        assert_eq!(result, SvgCoordinate(10, 20));
+    }
+
+    #[test]
+    fn delta_moves_view_by_delta() {
+        let b = bounds(0, 0, 200, 200);
+        let pos = SvgCoordinate(50, 50);
+        // delta (10, 5) → pos.0 - 10 = 40, pos.1 - 5 = 45
+        let result = clamp_view_box_position(pos, (10.0, 5.0), (50, 50), b);
+        assert_eq!(result, SvgCoordinate(40, 45));
+    }
+
+    // ── Portrait map (4×5) on landscape screen (vb 5×4 ratio) ───────────────
+    // Map SVG: (0,0)-(40,50).  ViewBox sized for landscape display: 50 wide × 32 tall.
+
+    #[test]
+    fn portrait_map_landscape_vb_bottom_reachable() {
+        let b = bounds(0, 0, 40, 50);
+        let vb = (50, 32);
+        // max_y = 50 - 32 + SCALE = 28  →  viewBox bottom = 28 + 32 = 60 ≥ 50
+        let max_y = b.1.1 - vb.1 + SCALE;
+        assert!(
+            max_y + vb.1 >= b.1.1,
+            "bottom of map not reachable: max_y={max_y}, vb_h={}, map_bottom={}",
+            vb.1,
+            b.1.1
+        );
+        // Clamp must produce a valid position when dragging to the bottom
+        let at_top = clamp_view_box_position(SvgCoordinate(0, 0), (0.0, -100.0), vb, b);
+        assert!(at_top.1 + vb.1 >= b.1.1, "bottom challenge unreachable after full drag");
+    }
+
+    // ── Landscape map (5×4) on portrait screen (vb 4×5 ratio) ──────────────
+    // Map SVG: (0,0)-(50,40).  ViewBox: 32 wide × 50 tall.
+
+    #[test]
+    fn landscape_map_portrait_vb_right_reachable() {
+        let b = bounds(0, 0, 50, 40);
+        let vb = (32, 50);
+        // max_x = 50 - 32 + SCALE = 28  →  viewBox right = 28 + 32 = 60 ≥ 50
+        let max_x = b.1.0 - vb.0 + SCALE;
+        assert!(
+            max_x + vb.0 >= b.1.0,
+            "right edge of map not reachable: max_x={max_x}, vb_w={}, map_right={}",
+            vb.0,
+            b.1.0
+        );
+        // Drag leftward (negative x delta) to pan right in SVG space
+        let at_right = clamp_view_box_position(SvgCoordinate(0, 0), (-200.0, 0.0), vb, b);
+        assert!(
+            at_right.0 + vb.0 >= b.1.0,
+            "right edge unreachable after full drag: pos={}, vb_w={}, map_right={}",
+            at_right.0,
+            vb.0,
+            b.1.0
+        );
+    }
+
+    // ── ViewBox larger than map: full content still reachable ───────────────
+
+    #[test]
+    fn oversized_vb_full_map_stays_visible() {
+        // vb_height (62) > map_height (50):
+        //   max_y = 50 - 62 + SCALE = -2,  min_y = -10  →  range [-10, -2]
+        // The entire map (y 0..50) fits inside any viewBox position in that range.
+        let b = bounds(0, 0, 40, 50);
+        let vb = (62, 62);
+        let result = clamp_view_box_position(SvgCoordinate(0, 0), (0.0, 5.0), vb, b);
+        // result.1 must be within [-10, -2] and the viewBox must cover the full map height
+        assert!(result.1 >= b.0.1 - SCALE, "position below min");
+        assert!(result.1 <= b.1.1 - vb.1 + SCALE, "position above max");
+        assert!(result.1 + vb.1 >= b.1.1, "map bottom not covered");
+    }
+
+    // ── calculate_view_box_size ─────────────────────────────────────────────
+
+    #[test]
+    fn view_box_size_at_zoom_1() {
+        let b = bounds(0, 0, 60, 80);
+        let (w, h) = calculate_view_box_size(b, 1.0);
+        assert_eq!(w, 60);
+        assert_eq!(h, 80);
+    }
+
+    #[test]
+    fn view_box_size_halves_at_zoom_2() {
+        let b = bounds(0, 0, 60, 80);
+        let (w, h) = calculate_view_box_size(b, 2.0);
+        assert_eq!(w, 30);
+        assert_eq!(h, 40);
+    }
+
+    // ── Non-zero origin bounds ───────────────────────────────────────────────
+
+    #[test]
+    fn non_zero_origin_bottom_reachable() {
+        // Challenges at SVG (20,10)-(80,90), vb sized for a wide screen
+        let b = bounds(20, 10, 80, 90);
+        let vb = (80, 50); // wider than span (60), shorter than span (80)
+        let max_y = b.1.1 - vb.1 + SCALE;
+        let min_y = b.0.1 - SCALE;
+        // if range is valid, bottom must be reachable
+        if max_y >= min_y {
+            assert!(max_y + vb.1 >= b.1.1);
+        }
+        let at_top = clamp_view_box_position(SvgCoordinate(20, 10), (0.0, -200.0), vb, b);
+        assert!(at_top.1 + vb.1 >= b.1.1, "bottom unreachable from non-zero origin");
+    }
 }

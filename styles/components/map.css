@@ -1,0 +1,114 @@
+.map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+
+.map:active {
+  cursor: grabbing;
+}
+
+.map h2 {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  margin: 0;
+  z-index: 10;
+  pointer-events: none;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.game-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Challenge nodes */
+.selected-circle {
+  fill: var(--color-primary, #f0a500);
+  stroke: #fff;
+  stroke-width: 0.3;
+  filter: drop-shadow(0 0 4px rgba(240, 165, 0, 0.8));
+  cursor: pointer;
+  transition: r 0.15s ease;
+}
+
+.unselected-circle {
+  fill: var(--color-secondary, #3a86ff);
+  stroke: #fff;
+  stroke-width: 0.3;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+.unselected-circle:hover {
+  fill: var(--color-primary, #f0a500);
+}
+
+.locked-circle {
+  fill: #888;
+  stroke: #555;
+  stroke-width: 0.3;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.unlocked-circle {
+  /* inherits from selected/unselected */
+}
+
+/* Path between challenges */
+.map-path {
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-dasharray: 4 3;
+}
+
+/* Challenge labels */
+.map-challenge-label {
+  fill: #fff;
+  font-weight: 600;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Zoom controls — top-right, clear of any bottom UI */
+.zoom-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  z-index: 10;
+}
+
+.zoom-controls button {
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.zoom-controls button:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.zoom-controls button:active {
+  background: rgba(255, 255, 255, 0.15);
+}

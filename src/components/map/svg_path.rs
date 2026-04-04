@@ -5,6 +5,8 @@ use yew::prelude::*;
 #[derive(Clone, PartialEq, Properties)]
 pub struct SvgPathProps {
     pub(crate) poly: Vec<ModelCoordinate>,
+    #[prop_or(1.5)]
+    pub stroke_width: f64,
 }
 
 #[function_component(SvgPath)]
@@ -23,9 +25,9 @@ pub fn svg_path(props: &SvgPathProps) -> Html {
     html! {
         <path
             d={d}
+            class="map-path"
             fill="none"
-            stroke="black"
-            stroke-width="2"
+            stroke-width={props.stroke_width.to_string()}
         />
     }
 }
