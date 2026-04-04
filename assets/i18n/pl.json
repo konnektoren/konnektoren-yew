@@ -99,5 +99,10 @@
   "Get it now": "Zdobądź to teraz",
   "Ad blocker detected. Please consider disabling it to support us.": "Wykryto blokadę reklam. Prosimy o jej wyłączenie, aby nas wesprzeć.",
   "Open feedback form": "Otwórz formularz opinii",
-  "Close feedback form": "Zamknij formularz opinii"
+  "Close feedback form": "Zamknij formularz opinii",
+  "dialog.choose_response": "Wybierz poprawną odpowiedź:",
+  "dialog.observer_complete": "Obejrzałeś cały dialog!",
+  "dialog.not_answered": "Bez odpowiedzi",
+  "Speaker": "Mówca",
+  "Your Answer": "Twoja odpowiedź"
 }

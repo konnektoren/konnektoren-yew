@@ -99,5 +99,10 @@
   "Get it now": "Отримати зараз",
   "Ad blocker detected. Please consider disabling it to support us.": "Виявлено блокувальник реклами. Будь ласка, вимкніть його, щоб підтримати нас.",
   "Open feedback form": "Відкрити форму зворотного зв'язку",
-  "Close feedback form": "Закрити форму зворотного зв'язку"
+  "Close feedback form": "Закрити форму зворотного зв'язку",
+  "dialog.choose_response": "Виберіть правильну відповідь:",
+  "dialog.observer_complete": "Ви переглянули весь діалог!",
+  "dialog.not_answered": "Без відповіді",
+  "Speaker": "Мовець",
+  "Your Answer": "Ваша відповідь"
 }
