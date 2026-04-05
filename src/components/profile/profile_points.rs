@@ -50,25 +50,57 @@ pub fn profile_points_component(props: &ProfilePointsProps) -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
-    yew_preview::create_preview!(
-        ProfilePointsComponent,
-        ProfilePointsProps {
+    yew_preview::create_preview_with_tests!(
+        component: ProfilePointsComponent,
+        default_props: ProfilePointsProps {
             profile: PlayerProfile {
                 id: "1".to_string(),
                 name: "Test Player".to_string(),
                 xp: 100,
             },
         },
-        (
-            "long name",
-            ProfilePointsProps {
-                profile: PlayerProfile {
-                    id: "2".to_string(),
-                    name: "Test Player with a long name".to_string(),
-                    xp: 0,
-                },
-            }
-        ),
+        variants: [
+            (
+                "long name",
+                ProfilePointsProps {
+                    profile: PlayerProfile {
+                        id: "2".to_string(),
+                        name: "Test Player with a long name".to_string(),
+                        xp: 0,
+                    },
+                }
+            ),
+            (
+                "zero xp",
+                ProfilePointsProps {
+                    profile: PlayerProfile {
+                        id: "3".to_string(),
+                        name: "Beginner".to_string(),
+                        xp: 0,
+                    },
+                }
+            ),
+            (
+                "high xp",
+                ProfilePointsProps {
+                    profile: PlayerProfile {
+                        id: "4".to_string(),
+                        name: "Expert".to_string(),
+                        xp: 9999,
+                    },
+                }
+            ),
+        ],
+        tests: [
+            ("Has profile-points wrapper", has_class("profile-points")),
+            ("Shows star icon", has_text("⭐️")),
+            ("Shows xp points", has_text("100")),
+            ("Shows first initial", has_text("T")),
+            ("Shows player name", has_text("Test Player")),
+            ("Has badge element", exists("profile-points__badge")),
+            ("Has expanded element", exists("profile-points__expanded")),
+        ]
     );
 }

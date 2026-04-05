@@ -97,6 +97,17 @@ pub fn profile_config_component() -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
-    yew_preview::create_preview!(ProfileConfigComponent, (),);
+    yew_preview::create_preview_with_tests!(
+        component: ProfileConfigComponent,
+        default_props: (),
+        variants: [],
+        tests: [
+            ("Has profile-config wrapper", has_class("profile-config")),
+            ("Shows Player Profile heading", has_text("Player Profile")),
+            ("Has name input field", exists("<input")),
+            ("Has name label", has_text("Name")),
+        ]
+    );
 }

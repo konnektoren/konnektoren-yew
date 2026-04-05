@@ -29,42 +29,49 @@
 
 .profile-points__expanded {
     @apply card bg-base-100 shadow-md p-2;
-    @apply hidden items-center gap-2 whitespace-nowrap min-w-max;
-    @apply flex-row;
+    @apply flex items-center gap-2 whitespace-nowrap min-w-max flex-row;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+    pointer-events: none;
 }
 
 .profile-points__expanded .profile-points__badge-top {
     @apply flex-row gap-2;
 }
 
+.profile-points__badge {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 .profile-points--expanded .profile-points__badge {
-    @apply sm:hidden;
+    @apply sm:opacity-0 sm:pointer-events-none;
 }
 
 .profile-points--expanded .profile-points__expanded {
-    @apply sm:flex;
-    animation: slideInProfile 0.3s ease;
-}
-
-@keyframes slideInProfile {
-    from {
-        opacity: 0;
-        transform: translateX(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    @apply sm:visible sm:pointer-events-auto;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
 }
 
 @media (hover: hover) {
     .profile-points:hover .profile-points__badge {
-        @apply hidden;
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
     }
 
     .profile-points:hover .profile-points__expanded {
-        @apply flex;
-        animation: slideInProfile 0.3s ease;
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+        pointer-events: auto;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
     }
 
     .profile-points:hover .profile-points__points {
