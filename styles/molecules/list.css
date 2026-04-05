@@ -13,9 +13,7 @@
 }
 
 @utility list-item-interactive {
-    @apply flex items-center gap-4 p-4 sm:p-2;
-    @apply bg-base-100 rounded-lg border border-base-300;
-    @apply transition-all duration-300 cursor-pointer;
+    @apply list-item-base cursor-pointer;
 }
 
 @layer utilities {

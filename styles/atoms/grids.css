@@ -9,25 +9,38 @@
 }
 
 @utility card-grid {
-    @apply grid gap-4 w-full;
+    @apply grid gap-4 sm:gap-3 w-full;
     @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
 }
 
 @utility card-grid-single {
-    @apply card-grid max-w-[300px] mx-auto grid-cols-1;
+    @apply card-grid container-sm grid-cols-1;
 }
 
 @utility card-grid-double {
-    @apply grid gap-4 w-full lg:grid-cols-2 xl:grid-cols-2 max-w-[700px] mx-auto;
+    @apply card-grid container-md lg:grid-cols-2 xl:grid-cols-2;
 }
 
 @utility card-grid-triple {
-    @apply grid gap-4 w-full lg:grid-cols-3 xl:grid-cols-3 max-w-[1000px] mx-auto;
+    @apply card-grid lg:grid-cols-3 xl:grid-cols-3 max-w-4xl mx-auto;
 }
 
 @utility product-grid {
-    @apply grid gap-6 p-4 w-full max-w-[1400px] mx-auto;
+    @apply grid gap-6 sm:gap-4 p-4 sm:p-2 w-full max-w-[1400px] mx-auto;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@screen sm {
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 639px) {
+    .product-grid {
+        @apply grid-cols-1;
+        min-width: 0;
+    }
 }
 
 @utility challenge-grid-2x2 {

@@ -33,15 +33,17 @@ pub fn challenge_actions_component(props: &ChallengeActionsComponentProps) -> Ht
 
     html! {
         <div class="challenge-actions">
-            <button class="challenge-actions__button challenge-actions__button--previous" onclick={on_previous}>
-                { i18n.t("Previous") }
-            </button>
-            <button class="challenge-actions__button challenge-actions__button--next" onclick={on_next}>
-                { i18n.t("Next") }
-            </button>
-            <button class="challenge-actions__button challenge-actions__button--help" onclick={on_help}>
-                { i18n.t("Help") }
-            </button>
+            <div class="challenge-actions__buttons">
+                <button class="challenge-actions__button challenge-actions__button--previous" onclick={on_previous}>
+                    { i18n.t("Previous") }
+                </button>
+                <button class="challenge-actions__button challenge-actions__button--next" onclick={on_next}>
+                    { i18n.t("Next") }
+                </button>
+                <button class="challenge-actions__button challenge-actions__button--help" onclick={on_help}>
+                    { i18n.t("Help") }
+                </button>
+            </div>
         </div>
     }
 }

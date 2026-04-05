@@ -5,9 +5,7 @@
 }
 
 @utility nav-item-active {
-    @apply flex flex-col items-center;
-    @apply text-primary p-2 -translate-y-[5px];
-    @apply transition-all duration-300 cursor-pointer;
+    @apply nav-item text-primary -translate-y-[5px];
 }
 
 @utility nav-item-icon {

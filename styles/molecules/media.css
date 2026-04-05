@@ -8,8 +8,7 @@
 }
 
 @utility media-image-hover {
-    @apply w-full h-full object-cover;
-    @apply transition-all duration-300;
+    @apply media-image;
 }
 
 @utility media-image-standalone {

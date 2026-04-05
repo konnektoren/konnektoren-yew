@@ -6,10 +6,7 @@
 }
 
 @utility ad-card-interactive {
-    @apply card bg-gradient-to-br from-base-100 to-base-200;
-    @apply rounded-xl shadow-lg border border-base-300;
-    @apply p-6 sm:p-5 mx-auto my-4 max-w-sm sm:max-w-80;
-    @apply transition-all duration-500;
+    @apply ad-card-base;
 }
 
 @layer utilities {

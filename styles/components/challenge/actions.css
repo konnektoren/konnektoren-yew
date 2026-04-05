@@ -1,10 +1,9 @@
 .challenge-actions {
-    @apply card-base mt-8;
-    @apply w-full flex-center;
+    @apply w-full flex-center mt-8;
 }
 
 .challenge-actions__buttons {
-    @apply button-group;
+    @apply flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-2;
 }
 
 .challenge-actions__button--next {
