@@ -1,0 +1,28 @@
+.challenge-help {
+    @apply challenge-help-card;
+}
+
+.challenge-help__title {
+    @apply text-adaptive-md font-medium mb-2;
+}
+
+.challenge-help__text {
+    @apply text-info-content/80 mb-4;
+}
+
+.challenge-help__content {
+    @apply flex flex-col gap-1;
+}
+
+.challenge-help__hints-title {
+    @apply font-medium mb-1;
+}
+
+.challenge-help__hint {
+    @apply text-info-content/80 italic;
+}
+
+.challenge-help__hint strong,
+.challenge-help__hint b {
+    @apply text-info-content font-bold not-italic;
+}

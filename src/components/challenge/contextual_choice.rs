@@ -1,4 +1,4 @@
-use super::{ChallengeActions, ChallengeActionsComponent};
+use super::{ChallengeActions, ChallengeActionsComponent, ChallengeHelpComponent};
 use crate::components::ProgressBar;
 use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, ContextualChoice};
@@ -211,28 +211,22 @@ pub struct ContextualChoiceHelpProps {
 #[function_component(ContextualChoiceHelp)]
 fn contextual_choice_help(props: &ContextualChoiceHelpProps) -> Html {
     let i18n = use_i18n();
+    let hints_title = i18n.t("Hints:");
+    let hint_label = i18n.t("The correct answer is: ");
     html! {
-        <div class="contextual-choice__help">
-            <h3 class="contextual-choice__help-title">{ i18n.t("Help") }</h3>
-            <p class="contextual-choice__help-text">
-                { i18n.t("Fill in the blanks by selecting the appropriate option for each dropdown.") }
-            </p>
-            <div class="contextual-choice__help-hints">
-                <h4 class="contextual-choice__help-hints-title">{ i18n.t("Hints:") }</h4>
-                <ul>
-                    {
-                        props.current_item.choices.iter().map(|choice| {
-                            html! {
-                                <li class="contextual-choice__help-hint">
-                                    { i18n.t("The correct answer is: ") }
-                                    <strong>{ &choice.correct_answer }</strong>
-                                </li>
-                            }
-                        }).collect::<Html>()
-                    }
-                </ul>
-            </div>
-        </div>
+        <ChallengeHelpComponent
+            text={AttrValue::from(i18n.t("Fill in the blanks by selecting the appropriate option for each dropdown."))}
+        >
+            <p class="challenge-help__hints-title">{ hints_title }</p>
+            <ul>
+                { props.current_item.choices.iter().map(|choice| html! {
+                    <li class="challenge-help__hint">
+                        { hint_label.clone() }
+                        <strong>{ &choice.correct_answer }</strong>
+                    </li>
+                }).collect::<Html>() }
+            </ul>
+        </ChallengeHelpComponent>
     }
 }
 

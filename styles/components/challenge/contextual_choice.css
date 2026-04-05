@@ -27,30 +27,6 @@
     @apply opacity-70 cursor-not-allowed bg-base-200;
 }
 
-.contextual-choice__help {
-    @apply challenge-help-card;
-}
-
-.contextual-choice__help-title {
-    @apply text-adaptive-md font-medium mb-2;
-}
-
-.contextual-choice__help-text {
-    @apply text-adaptive-base text-base-content/60 mb-4;
-}
-
-.contextual-choice__help-hints-title {
-    @apply text-adaptive-base font-medium mb-1;
-}
-
-.contextual-choice__help-hint {
-    @apply text-base-content/60 italic mb-1;
-}
-
-.contextual-choice__help-hint strong {
-    @apply text-primary font-bold;
-}
-
 /* Animation for select fields */
 @layer utilities {
     @keyframes selectPulse {
