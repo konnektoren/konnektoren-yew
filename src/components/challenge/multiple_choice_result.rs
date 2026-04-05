@@ -2,7 +2,7 @@ use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeResult, MultipleChoice};
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Clone)]
 pub struct MultipleChoiceResultComponentProps {
     pub challenge: MultipleChoice,
     pub challenge_result: ChallengeResult,
@@ -20,7 +20,6 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
             .map(|(question, option)| {
                 let is_correct = question.option == option.id;
                 let modifier = if is_correct { "correct" } else { "incorrect" };
-                let text = format!("{}: {}", question.question, option.name);
                 let correct_name = props
                     .challenge
                     .options
@@ -32,15 +31,14 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
                 html! {
                     <tr class={classes!("multiple-choice-result__row", format!("multiple-choice-result__row--{}", modifier))}>
                         <td class="multiple-choice-result__cell">
-                            {text}
+                            { &question.question }
                         </td>
                         <td class={classes!("multiple-choice-result__cell", format!("multiple-choice-result__cell--{}", modifier))}>
                             if is_correct {
-                                { i18n.t("Correct") }
+                                { format!("✅ {}", option.name) }
                             } else {
                                 <>
-                                    { i18n.t("Incorrect") }
-                                    {" → "}
+                                    { format!("✘ {} → ✅ ", option.name) }
                                     <span class="multiple-choice-result__correct-answer">{ correct_name }</span>
                                 </>
                             }
@@ -76,6 +74,7 @@ mod preview {
     use konnektoren_core::challenges::MultipleChoiceOption;
     use konnektoren_core::prelude::{ChallengeType, Game};
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
     fn articles_challenge() -> MultipleChoice {
         let game = Game::default();
@@ -95,7 +94,6 @@ mod preview {
             .enumerate()
             .map(|(i, q)| {
                 if i < correct {
-                    // correct answer
                     challenge
                         .options
                         .iter()
@@ -103,7 +101,6 @@ mod preview {
                         .cloned()
                         .unwrap_or_else(|| challenge.options[0].clone())
                 } else {
-                    // pick the first option that is NOT the correct answer
                     challenge
                         .options
                         .iter()
@@ -116,34 +113,44 @@ mod preview {
         ChallengeResult::MultipleChoice(options)
     }
 
-    yew_preview::create_preview!(
-        MultipleChoiceResultComponent,
-        MultipleChoiceResultComponentProps {
+    yew_preview::create_preview_with_tests!(
+        component: MultipleChoiceResultComponent,
+        default_props: MultipleChoiceResultComponentProps {
             challenge: articles_challenge(),
             challenge_result: {
                 let ch = articles_challenge();
                 make_result(&ch, ch.questions.len())
             },
         },
-        (
-            "Mixed results",
-            MultipleChoiceResultComponentProps {
-                challenge: articles_challenge(),
-                challenge_result: {
-                    let ch = articles_challenge();
-                    make_result(&ch, 3)
-                },
-            }
-        ),
-        (
-            "All incorrect",
-            MultipleChoiceResultComponentProps {
-                challenge: articles_challenge(),
-                challenge_result: {
-                    let ch = articles_challenge();
-                    make_result(&ch, 0)
-                },
-            }
-        )
+        variants: [
+            (
+                "Mixed results",
+                MultipleChoiceResultComponentProps {
+                    challenge: articles_challenge(),
+                    challenge_result: {
+                        let ch = articles_challenge();
+                        make_result(&ch, 3)
+                    },
+                }
+            ),
+            (
+                "All incorrect",
+                MultipleChoiceResultComponentProps {
+                    challenge: articles_challenge(),
+                    challenge_result: {
+                        let ch = articles_challenge();
+                        make_result(&ch, 0)
+                    },
+                }
+            ),
+        ],
+        tests: [
+            ("Has result table", exists("table")),
+            ("Has result rows", exists("tr")),
+            ("Has correct CSS class", has_class("multiple-choice-result")),
+            ("Shows checkmark for correct answers", has_text("✓")),
+            ("Shows correct answer hint for incorrect rows", has_text("→")),
+            ("Correct answer hint uses correct CSS class", has_class("multiple-choice-result__correct-answer")),
+        ]
     );
 }
