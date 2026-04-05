@@ -20,7 +20,14 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
             .map(|(question, option)| {
                 let is_correct = question.option == option.id;
                 let modifier = if is_correct { "correct" } else { "incorrect" };
-                let text = format!("{}: {} - ", question.question, option.name);
+                let text = format!("{}: {}", question.question, option.name);
+                let correct_name = props
+                    .challenge
+                    .options
+                    .iter()
+                    .find(|o| o.id == question.option)
+                    .map(|o| o.name.clone())
+                    .unwrap_or_default();
 
                 html! {
                     <tr class={classes!("multiple-choice-result__row", format!("multiple-choice-result__row--{}", modifier))}>
@@ -28,7 +35,15 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
                             {text}
                         </td>
                         <td class={classes!("multiple-choice-result__cell", format!("multiple-choice-result__cell--{}", modifier))}>
-                            {if is_correct { i18n.t("Correct") } else { i18n.t("Incorrect") }}
+                            if is_correct {
+                                { i18n.t("Correct") }
+                            } else {
+                                <>
+                                    { i18n.t("Incorrect") }
+                                    {" → "}
+                                    <span class="multiple-choice-result__correct-answer">{ correct_name }</span>
+                                </>
+                            }
                         </td>
                     </tr>
                 }
@@ -53,4 +68,82 @@ pub fn multiple_choice_result_component(props: &MultipleChoiceResultComponentPro
             </table>
         </div>
     }
+}
+
+#[cfg(feature = "yew-preview")]
+mod preview {
+    use super::*;
+    use konnektoren_core::challenges::MultipleChoiceOption;
+    use konnektoren_core::prelude::{ChallengeType, Game};
+    use yew_preview::prelude::*;
+
+    fn articles_challenge() -> MultipleChoice {
+        let game = Game::default();
+        let challenge = game.create_challenge("articles-1").unwrap();
+        match challenge.challenge_type {
+            ChallengeType::MultipleChoice(mc) => mc,
+            _ => unreachable!(),
+        }
+    }
+
+    /// Build a result where the first `correct` questions are answered right
+    /// and the rest are answered with the first available (wrong) option.
+    fn make_result(challenge: &MultipleChoice, correct: usize) -> ChallengeResult {
+        let options = challenge
+            .questions
+            .iter()
+            .enumerate()
+            .map(|(i, q)| {
+                if i < correct {
+                    // correct answer
+                    challenge
+                        .options
+                        .iter()
+                        .find(|o| o.id == q.option)
+                        .cloned()
+                        .unwrap_or_else(|| challenge.options[0].clone())
+                } else {
+                    // pick the first option that is NOT the correct answer
+                    challenge
+                        .options
+                        .iter()
+                        .find(|o| o.id != q.option)
+                        .cloned()
+                        .unwrap_or_else(|| MultipleChoiceOption { id: 0, name: "?".into() })
+                }
+            })
+            .collect();
+        ChallengeResult::MultipleChoice(options)
+    }
+
+    yew_preview::create_preview!(
+        MultipleChoiceResultComponent,
+        MultipleChoiceResultComponentProps {
+            challenge: articles_challenge(),
+            challenge_result: {
+                let ch = articles_challenge();
+                make_result(&ch, ch.questions.len())
+            },
+        },
+        (
+            "Mixed results",
+            MultipleChoiceResultComponentProps {
+                challenge: articles_challenge(),
+                challenge_result: {
+                    let ch = articles_challenge();
+                    make_result(&ch, 3)
+                },
+            }
+        ),
+        (
+            "All incorrect",
+            MultipleChoiceResultComponentProps {
+                challenge: articles_challenge(),
+                challenge_result: {
+                    let ch = articles_challenge();
+                    make_result(&ch, 0)
+                },
+            }
+        )
+    );
 }

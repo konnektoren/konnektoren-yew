@@ -33,3 +33,7 @@
 .multiple-choice-result__cell--incorrect {
     @apply text-error font-medium;
 }
+
+.multiple-choice-result__correct-answer {
+    @apply text-success font-semibold;
+}

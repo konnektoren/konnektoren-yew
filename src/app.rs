@@ -112,6 +112,7 @@ pub fn App() -> Html {
             MultipleChoiceComponent::preview(),
             MultipleChoice4Component::preview(),
             MultipleChoiceCircleComponent::preview(),
+            MultipleChoiceResultComponent::preview(),
             SortTableComponent::preview(),
             SortTableResultComponent::preview(),
             ContextualChoiceComponent::preview(),
