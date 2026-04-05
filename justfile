@@ -45,9 +45,7 @@ test-cargo:
 
 # Run i18n completeness check
 test-i18n:
-    #!/usr/bin/env bash
-    chmod +x ./scripts/i18n_report.sh
-    ./scripts/i18n_report.sh
+    cargo test --test i18n_completeness
 
 # Generate i18n report
 i18n-report:
