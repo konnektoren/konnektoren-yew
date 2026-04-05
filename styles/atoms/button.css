@@ -1,26 +1,26 @@
 /* Base button styles — no color set here so DaisyUI variants (ghost, outline, etc.) work correctly */
 button {
     @apply btn normal-case h-auto;
-    @apply transition-all duration-300;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply transition duration-300;
+    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Primary variant */
 .btn-primary {
     @apply bg-primary text-primary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Secondary variant */
 .btn-secondary {
     @apply bg-secondary text-secondary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Tertiary variant */
 .btn-tertiary {
     @apply bg-accent text-accent-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Size variants */
@@ -49,6 +49,6 @@ button {
     @apply btn;
     @apply bg-gradient-to-r from-primary to-secondary;
     @apply text-primary-content;
-    @apply transition-all duration-300;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:brightness-90;
+    @apply transition duration-300;
+    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
