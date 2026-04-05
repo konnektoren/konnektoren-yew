@@ -100,3 +100,25 @@ sbom:
 
 server:
     cargo run --bin konnektoren-yew-server --features server,yew-preview
+
+# Generate static HTML component catalog (builds trunk first to get compiled CSS)
+catalog:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p dist
+    trunk build --features=csr,yew-preview
+    find dist -name "*.css" | sort | xargs cat > dist/.catalog-combined.css
+    OUTPUT=dist/catalog.html CSS_FILE=dist/.catalog-combined.css cargo run --bin catalog --features catalog
+    rm -f dist/.catalog-combined.css
+
+# Generate catalog using already-built CSS in dist/ (fast, requires prior trunk build)
+catalog-quick:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! ls dist/*.css 1>/dev/null 2>&1; then
+        echo "No CSS found in dist/ — run 'just catalog' or 'just build' first."
+        exit 1
+    fi
+    find dist -name "*.css" | sort | xargs cat > dist/.catalog-combined.css
+    OUTPUT=dist/catalog.html CSS_FILE=dist/.catalog-combined.css cargo run --bin catalog --features catalog
+    rm -f dist/.catalog-combined.css

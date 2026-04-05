@@ -98,10 +98,9 @@ pub fn Example() -> Html {
     }
 }
 
-#[function_component]
-pub fn App() -> Html {
-    #[cfg(feature = "yew-preview")]
-    let groups: ComponentList = vec![
+#[cfg(feature = "yew-preview")]
+pub fn preview_groups() -> ComponentList {
+    vec![
         create_component_group!(
             "Dialog",
             DialogComponent::preview(),
@@ -113,7 +112,13 @@ pub fn App() -> Html {
             SuccessRateComponent::preview(),
             AverageTimeTakenComponent::preview(),
         ),
-    ];
+    ]
+}
+
+#[function_component]
+pub fn App() -> Html {
+    #[cfg(feature = "yew-preview")]
+    let groups: ComponentList = preview_groups();
 
     let i18n_config = create_i18n_config();
 

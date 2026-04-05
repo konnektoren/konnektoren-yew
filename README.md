@@ -1,6 +1,7 @@
 # Konnektoren-Yew
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Component Catalog](https://img.shields.io/badge/Component%20Catalog-📄-blue)](https://konnektoren.github.io/konnektoren-yew/catalog.html)
 
 **Konnektoren-Yew** is the interactive web frontend for the Konnektoren language learning platform. Built with Rust and Yew, it provides a performant and type-safe user interface for engaging grammar challenges, vocabulary exercises, and learning tools. This repository focuses on the UI components and their integration with the `konnektoren-core` logic.
 
@@ -11,6 +12,7 @@
 *   **Internationalization (i18n):** Full support for multiple languages with a flexible translation system.
 *   **Theming & Design Modes:** Switch between light/dark themes and desktop/mobile layouts.
 *   **Component Preview:** Integrated `yew-preview` for isolated component development and testing.
+*   **Component Catalog:** Auto-generated static HTML catalog of all components — browsable offline and linkable in PRs.
 *   **Progress Persistence:** Uses local storage for saving user progress and settings.
 *   **Server-Side Rendering (SSR):** Supports SSR for improved SEO and initial load performance.
 *   **Build-time SBOM:** Generates a Software Bill of Materials for enhanced supply chain security.
@@ -55,6 +57,22 @@ To create a production-ready static build, including Static Site Generation (SSG
 just build
 ```
 The output will be generated in the `dist/` directory.
+
+### Component Catalog
+
+Generate a self-contained HTML file showing every component with all its variants and test cases:
+
+```bash
+# Full build (compiles CSS via trunk, then generates catalog)
+just catalog
+
+# Fast path — reuse CSS already in dist/ from a previous build
+just catalog-quick
+```
+
+The catalog is written to `dist/catalog.html` and is also deployed automatically to GitHub Pages on every push to `main`:
+
+🔗 **[konnektoren.github.io/konnektoren-yew/catalog.html](https://konnektoren.github.io/konnektoren-yew/catalog.html)**
 
 ### Running the SSR Server (Optional)
 
@@ -113,7 +131,8 @@ konnektoren-yew/
 ├── src/
 │   ├── app.rs               # Main Yew application for Client-Side Rendering (CSR)
 │   ├── app_ssr.rs           # Main Yew application for Server-Side Rendering (SSR)
-│   ├── bin/                 # Executable binaries (server, ssg)
+│   ├── bin/                 # Executable binaries (server, ssg, catalog)
+│   │   ├── catalog.rs       # Generates static HTML component catalog
 │   │   ├── server.rs        # Axum server for SSR demonstration
 │   │   └── ssg.rs           # Static Site Generation tool
 │   ├── components/          # Reusable Yew UI components (structured by domain)

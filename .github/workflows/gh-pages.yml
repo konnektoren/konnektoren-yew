@@ -79,6 +79,11 @@ jobs:
       - name: Build
         run: trunk build --verbose --features=yew-preview,csr --release --public-url /konnektoren-yew/
 
+      - name: Generate component catalog
+        run: |
+          find dist -name "*.css" | sort | xargs cat > /tmp/catalog.css
+          OUTPUT=dist/catalog.html CSS_FILE=/tmp/catalog.css cargo run --bin catalog --features catalog
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

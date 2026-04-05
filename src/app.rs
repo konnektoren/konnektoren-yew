@@ -101,10 +101,9 @@ pub fn Example() -> Html {
     }
 }
 
-#[function_component]
-pub fn App() -> Html {
-    #[cfg(feature = "yew-preview")]
-    let groups: ComponentList = vec![
+#[cfg(feature = "yew-preview")]
+pub fn preview_groups() -> ComponentList {
+    vec![
         create_component_group!(
             "Challenge",
             #[cfg(feature = "effects")]
@@ -226,7 +225,13 @@ pub fn App() -> Html {
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),
-    ];
+    ]
+}
+
+#[function_component]
+pub fn App() -> Html {
+    #[cfg(feature = "yew-preview")]
+    let groups: ComponentList = preview_groups();
 
     let i18n_config = create_i18n_config();
 
@@ -260,10 +265,19 @@ pub fn App() -> Html {
                     background-color: #f8f8f8;
                     border-bottom: 1px solid #ccc;
                     flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
                 ">
-                    <h1 style="text-align: center;">
+                    <h1 style="text-align: center; margin: 0;">
                         { "Konnektoren Yew Components" }
                     </h1>
+                    <a href="catalog.html"
+                       target="_blank" rel="noopener noreferrer"
+                       style="position: absolute; right: 16px; color: #586069; font-size: 0.8rem; text-decoration: none; padding: 3px 10px; border: 1px solid #ccc; border-radius: 12px; white-space: nowrap;">
+                        { "\u{1F4C4} Catalog" }
+                    </a>
                 </div>
                 <div style="flex: 1; overflow: hidden;">
                     <PreviewPage {groups} />

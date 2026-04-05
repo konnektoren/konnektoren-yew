@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.5.4"
+version = "0.5.5"
 edition = "2024"
 
 [lib]
@@ -26,6 +26,11 @@ name = "i18n-report"
 path = "src/bin/i18n_report.rs"
 required-features = ["tools"]
 
+[[bin]]
+name = "catalog"
+path = "src/bin/catalog.rs"
+required-features = ["catalog"]
+
 [features]
 default = [
     "certificates",
@@ -47,6 +52,7 @@ marketplace = ["konnektoren-core/marketplace"]
 music = []
 storage = ["gloo/storage"]
 yew-preview = ["dep:yew-preview"]
+catalog = ["yew-preview", "yew-preview/catalog", "ssr"]
 gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
