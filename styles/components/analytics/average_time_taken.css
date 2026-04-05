@@ -66,6 +66,18 @@
     @apply progress-bar-gradient;
 }
 
+.average-time-taken__gauge-fill--fast {
+    @apply bg-success;
+}
+
+.average-time-taken__gauge-fill--medium {
+    @apply bg-warning;
+}
+
+.average-time-taken__gauge-fill--slow {
+    @apply bg-error;
+}
+
 .average-time-taken__details {
     @apply flex flex-col gap-4 sm:gap-2;
 }

@@ -45,7 +45,7 @@ pub enum AdNetwork {
     },
 }
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Clone)]
 pub struct AdvertisementProps {
     #[prop_or(30)]
     pub show_probability: u8,
@@ -319,50 +319,94 @@ pub fn advertisement(props: &AdvertisementProps) -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
-    yew_preview::create_preview!(
-        AdvertisementComponent,
-        AdvertisementProps {
+    yew_preview::create_preview_with_tests!(
+        component: AdvertisementComponent,
+        default_props: AdvertisementProps {
             show_probability: 100,
             placement: Some("preview".to_string()),
             networks: vec![
-                AdNetwork::GoogleAdsense {
-                    client: "ca-pub-5712533029715832".to_string(),
-                    slot: "1547914214".to_string(),
-                    width: "100vw".to_string(),
-                    height: "320".to_string(),
-                },
                 AdNetwork::BuyMeACoffee {
                     data_id: "chriamue".to_string(),
                     text: "Buy me a coffee",
                     button_colour: "FFDD00",
                 },
-                AdNetwork::GumroadSubscribe {
-                    subscribe_url: "https://konnektoren.gumroad.com/subscribe".to_string(),
-                },
-                AdNetwork::VideoAd {
-                    src: "https://youtu.be/ZiZibuHyU_k".to_string(),
-                    preview: Some(
-                        "https://img.youtube.com/vi/ZiZibuHyU_k/hqdefault.jpg".to_string()
-                    ),
-                    title: Some("Konnektoren Video Ad".to_string()),
-                    autoplay: false,
-                },
-                AdNetwork::BlogAd {
-                    blog_url: "https://www.konnektoren.blog/".to_string(),
-                    title: Some("Konnektoren Blog".to_string()),
-                    preview_text: Some("Discover language learning tips, cultural insights, and educational resources.".to_string()),
-                    preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
-                },
-                AdNetwork::GumroadProductAd {
-                    product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
-                    product_name: "Book Vocabulary A1 EN".to_string(),
-                    description: Some("Master essential English vocabulary with our comprehensive A1 level guide. Perfect for beginners!".to_string()),
-                    price: Some("$9.99".to_string()),
-                    preview_image: Some("https://public-files.gumroad.com/d1mh6dq92jyw0dd3b86qu26g3514".to_string()),
-                    discount: Some("20% OFF".to_string()),
-                },
             ],
         },
+        variants: [
+            (
+                "blog-only",
+                AdvertisementProps {
+                    show_probability: 100,
+                    placement: Some("blog-preview".to_string()),
+                    networks: vec![AdNetwork::BlogAd {
+                        blog_url: "https://www.konnektoren.blog/".to_string(),
+                        title: Some("Konnektoren Blog".to_string()),
+                        preview_text: Some("Discover language learning tips, cultural insights, and educational resources.".to_string()),
+                        preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
+                    }],
+                }
+            ),
+            (
+                "product-only",
+                AdvertisementProps {
+                    show_probability: 100,
+                    placement: Some("product-preview".to_string()),
+                    networks: vec![AdNetwork::GumroadProductAd {
+                        product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                        product_name: "Book Vocabulary A1 EN".to_string(),
+                        description: Some("Master essential English vocabulary with our comprehensive A1 level guide.".to_string()),
+                        price: Some("$9.99".to_string()),
+                        preview_image: None,
+                        discount: None,
+                    }],
+                }
+            ),
+            (
+                "all-networks",
+                AdvertisementProps {
+                    show_probability: 100,
+                    placement: Some("all-preview".to_string()),
+                    networks: vec![
+                        AdNetwork::BuyMeACoffee {
+                            data_id: "chriamue".to_string(),
+                            text: "Buy me a coffee",
+                            button_colour: "FFDD00",
+                        },
+                        AdNetwork::GumroadSubscribe {
+                            subscribe_url: "https://konnektoren.gumroad.com/subscribe".to_string(),
+                        },
+                        AdNetwork::BlogAd {
+                            blog_url: "https://www.konnektoren.blog/".to_string(),
+                            title: Some("Konnektoren Blog".to_string()),
+                            preview_text: Some("Discover language learning tips, cultural insights, and educational resources.".to_string()),
+                            preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
+                        },
+                        AdNetwork::GumroadProductAd {
+                            product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                            product_name: "Book Vocabulary A1 EN".to_string(),
+                            description: Some("Master essential English vocabulary with our comprehensive A1 level guide. Perfect for beginners!".to_string()),
+                            price: Some("$9.99".to_string()),
+                            preview_image: Some("https://public-files.gumroad.com/d1mh6dq92jyw0dd3b86qu26g3514".to_string()),
+                            discount: Some("20% OFF".to_string()),
+                        },
+                        AdNetwork::VideoAd {
+                            src: "https://youtu.be/ZiZibuHyU_k".to_string(),
+                            preview: Some("https://img.youtube.com/vi/ZiZibuHyU_k/hqdefault.jpg".to_string()),
+                            title: Some("Konnektoren Video Ad".to_string()),
+                            autoplay: false,
+                        },
+                    ],
+                }
+            ),
+        ],
+        tests: [
+            ("Has advertisement wrapper", has_class("advertisement")),
+            ("Shows ad info label", exists("advertisement__info")),
+            ("Shows advertisement label text", has_text("Advertisement")),
+            ("Has timer bar", exists("advertisement__timer")),
+            ("Has ad container", exists("advertisement__container")),
+        ]
     );
 }

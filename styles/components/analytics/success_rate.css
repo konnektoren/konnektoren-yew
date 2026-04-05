@@ -54,6 +54,18 @@
     @apply progress-bar-gradient;
 }
 
+.success-rate__gauge-fill--high {
+    @apply bg-success;
+}
+
+.success-rate__gauge-fill--medium {
+    @apply bg-warning;
+}
+
+.success-rate__gauge-fill--low {
+    @apply bg-error;
+}
+
 .success-rate__details {
     @apply flex flex-col gap-4 sm:gap-2;
 }

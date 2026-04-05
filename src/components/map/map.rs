@@ -5,7 +5,6 @@ use crate::components::{BrowserCoordinate, ChallengeIndex, SvgCoordinate};
 use konnektoren_core::game::GamePath;
 use yew::prelude::*;
 
-
 #[derive(Clone, PartialEq, Properties)]
 pub struct MapComponentProps {
     pub game_path: GamePath,
@@ -206,8 +205,18 @@ pub(crate) fn clamp_view_box_position(
     let raw_x = current.0 - delta.0 as i32;
     let raw_y = current.1 - delta.1 as i32;
     SvgCoordinate(
-        clamp_position(raw_x, bounds.0.0 - SCALE, bounds.1.0 - vb_size.0 + SCALE, "x"),
-        clamp_position(raw_y, bounds.0.1 - SCALE, bounds.1.1 - vb_size.1 + SCALE, "y"),
+        clamp_position(
+            raw_x,
+            bounds.0.0 - SCALE,
+            bounds.1.0 - vb_size.0 + SCALE,
+            "x",
+        ),
+        clamp_position(
+            raw_y,
+            bounds.0.1 - SCALE,
+            bounds.1.1 - vb_size.1 + SCALE,
+            "y",
+        ),
     )
 }
 
@@ -567,7 +576,10 @@ mod tests {
         );
         // Clamp must produce a valid position when dragging to the bottom
         let at_top = clamp_view_box_position(SvgCoordinate(0, 0), (0.0, -100.0), vb, b);
-        assert!(at_top.1 + vb.1 >= b.1.1, "bottom challenge unreachable after full drag");
+        assert!(
+            at_top.1 + vb.1 >= b.1.1,
+            "bottom challenge unreachable after full drag"
+        );
     }
 
     // ── Landscape map (5×4) on portrait screen (vb 4×5 ratio) ──────────────
@@ -644,6 +656,9 @@ mod tests {
             assert!(max_y + vb.1 >= b.1.1);
         }
         let at_top = clamp_view_box_position(SvgCoordinate(20, 10), (0.0, -200.0), vb, b);
-        assert!(at_top.1 + vb.1 >= b.1.1, "bottom unreachable from non-zero origin");
+        assert!(
+            at_top.1 + vb.1 >= b.1.1,
+            "bottom unreachable from non-zero origin"
+        );
     }
 }

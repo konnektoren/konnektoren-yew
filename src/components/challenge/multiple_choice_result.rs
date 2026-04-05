@@ -106,7 +106,10 @@ mod preview {
                         .iter()
                         .find(|o| o.id != q.option)
                         .cloned()
-                        .unwrap_or_else(|| MultipleChoiceOption { id: 0, name: "?".into() })
+                        .unwrap_or_else(|| MultipleChoiceOption {
+                            id: 0,
+                            name: "?".into(),
+                        })
                 }
             })
             .collect();

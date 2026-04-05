@@ -70,23 +70,52 @@ pub fn blog_ad_component(props: &BlogAdProps) -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_attribute, has_class, has_text};
 
-    yew_preview::create_preview!(
-        BlogAdComponent,
-        BlogAdProps {
+    yew_preview::create_preview_with_tests!(
+        component: BlogAdComponent,
+        default_props: BlogAdProps {
             blog_url: "https://www.konnektoren.blog/".to_string(),
             title: Some("Konnektoren Blog".to_string()),
             preview_text: Some("Explore our latest articles on language learning, cultural connections, and educational insights.".to_string()),
             preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
         },
-        (
-            "minimal",
-            BlogAdProps {
-                blog_url: "https://www.konnektoren.blog/".to_string(),
-                title: None,
-                preview_text: None,
-                preview_image: None,
-            }
-        )
+        variants: [
+            (
+                "minimal",
+                BlogAdProps {
+                    blog_url: "https://www.konnektoren.blog/".to_string(),
+                    title: None,
+                    preview_text: None,
+                    preview_image: None,
+                }
+            ),
+            (
+                "custom-title",
+                BlogAdProps {
+                    blog_url: "https://www.konnektoren.blog/".to_string(),
+                    title: Some("Learn German Online".to_string()),
+                    preview_text: Some("Tips and exercises for mastering German grammar and vocabulary.".to_string()),
+                    preview_image: None,
+                }
+            ),
+            (
+                "image-only",
+                BlogAdProps {
+                    blog_url: "https://www.konnektoren.blog/".to_string(),
+                    title: None,
+                    preview_text: None,
+                    preview_image: Some("https://konnektoren.help/favicon.png".to_string()),
+                }
+            ),
+        ],
+        tests: [
+            ("Has blog-ad wrapper", has_class("blog-ad")),
+            ("Has blog link", exists("<a")),
+            ("Link opens in new tab", has_attribute("target", "_blank")),
+            ("Shows read button", has_text("Read our Blog")),
+            ("Shows title", has_text("Konnektoren Blog")),
+            ("Has arrow indicator", has_text("→")),
+        ]
     );
 }

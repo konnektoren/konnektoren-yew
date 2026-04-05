@@ -52,7 +52,8 @@ pub fn challenge_presence(props: &ChallengePresenceProps) -> Html {
 
             use_effect_with(challenge_id.clone(), move |_| {
                 spawn_local(async move {
-                    let url = build_presence_url(&api_url, &challenge_id, read_only, default_endpoint);
+                    let url =
+                        build_presence_url(&api_url, &challenge_id, read_only, default_endpoint);
 
                     let response = if read_only {
                         Request::get(&url)

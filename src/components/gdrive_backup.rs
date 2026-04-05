@@ -44,7 +44,8 @@ pub fn gdrive_backup(props: &GDriveBackupProps) -> Html {
                     error.set(None);
 
                     spawn_local(async move {
-                        match <GDriveBackup as Backup<Session>>::list_backups::<'_, '_>(&repo).await {
+                        match <GDriveBackup as Backup<Session>>::list_backups::<'_, '_>(&repo).await
+                        {
                             Ok(list) => {
                                 backups.set(list);
                                 loading.set(false);
@@ -83,8 +84,10 @@ pub fn gdrive_backup(props: &GDriveBackupProps) -> Html {
                                     callback.emit(session.clone());
                                 }
                                 loading.set(true);
-                                match <GDriveBackup as Backup<Session>>::list_backups::<'_, '_>(&repo)
-                                    .await
+                                match <GDriveBackup as Backup<Session>>::list_backups::<'_, '_>(
+                                    &repo,
+                                )
+                                .await
                                 {
                                     Ok(list) => {
                                         backups.set(list);

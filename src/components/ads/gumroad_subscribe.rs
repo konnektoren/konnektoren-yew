@@ -37,11 +37,28 @@ pub fn gumroad_subscribe_component(props: &GumroadSubscribeProps) -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_attribute, has_class, has_text};
 
-    yew_preview::create_preview!(
-        GumroadSubscribeComponent,
-        GumroadSubscribeProps {
+    yew_preview::create_preview_with_tests!(
+        component: GumroadSubscribeComponent,
+        default_props: GumroadSubscribeProps {
             subscribe_url: "https://konnektoren.gumroad.com/subscribe".to_string(),
         },
+        variants: [
+            (
+                "custom-url",
+                GumroadSubscribeProps {
+                    subscribe_url: "https://konnektoren.gumroad.com/l/premium".to_string(),
+                }
+            ),
+        ],
+        tests: [
+            ("Has subscribe wrapper", has_class("gumroad-subscribe-ad")),
+            ("Has subscribe link", exists("<a")),
+            ("Link opens in new tab", has_attribute("target", "_blank")),
+            ("Shows subscribe CTA", has_text("Subscribe now")),
+            ("Shows no-spam note", has_text("No spam")),
+            ("Shows teaser message", has_text("interactive exercises")),
+        ]
     );
 }

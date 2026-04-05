@@ -1,8 +1,7 @@
 use super::{
     ContextualChoiceComponent, ContextualChoiceResultComponent, CustomComponent,
     CustomPackageComponent, DialogComponent, DialogObserverResultComponent, DialogResultComponent,
-    GapFillComponent,
-    GapFillResultComponent, InformativeComponent, InformativeMarkdownComponent,
+    GapFillComponent, GapFillResultComponent, InformativeComponent, InformativeMarkdownComponent,
     MultipleChoice4Component, MultipleChoiceCircleComponent, MultipleChoiceComponent,
     MultipleChoiceResultComponent, OrderingComponent, OrderingResultComponent,
     PlaceholderComponent, SortTableComponent, VocabularyComponent,

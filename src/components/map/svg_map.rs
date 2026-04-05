@@ -48,23 +48,17 @@ pub fn svg_map(props: &SvgMapProps) -> Html {
     // Image is fixed in SVG coordinate space so it zooms and pans with the challenges.
     // When the level declares map dimensions, the image covers exactly that area (origin 0,0).
     // Otherwise it falls back to the challenge-position bounds.
-    let (image_x, image_y, image_width, image_height) =
-        if let Some(map) = &props.game_path.map {
-            (
-                0,
-                0,
-                map.width as i32 * SCALE,
-                map.height as i32 * SCALE,
-            )
-        } else {
-            let bounds = props.game_path.get_bounds();
-            (
-                bounds.0.to_svg(SCALE).0,
-                bounds.0.to_svg(SCALE).1,
-                (bounds.1.0 - bounds.0.0) * SCALE,
-                (bounds.1.1 - bounds.0.1) * SCALE,
-            )
-        };
+    let (image_x, image_y, image_width, image_height) = if let Some(map) = &props.game_path.map {
+        (0, 0, map.width as i32 * SCALE, map.height as i32 * SCALE)
+    } else {
+        let bounds = props.game_path.get_bounds();
+        (
+            bounds.0.to_svg(SCALE).0,
+            bounds.0.to_svg(SCALE).1,
+            (bounds.1.0 - bounds.0.0) * SCALE,
+            (bounds.1.1 - bounds.0.1) * SCALE,
+        )
+    };
 
     let bounds = props.game_path.get_bounds();
 
@@ -134,7 +128,12 @@ fn compute_node_radius(game_path: &GamePath) -> f64 {
     (span / 15.0).clamp(2.0, 30.0)
 }
 
-fn render_challenge(props: &SvgMapProps, index: usize, node_radius: f64, stroke_width: f64) -> Html {
+fn render_challenge(
+    props: &SvgMapProps,
+    index: usize,
+    node_radius: f64,
+    stroke_width: f64,
+) -> Html {
     let challenge = props.game_path.challenges.get(index).unwrap();
     let position = challenge.position.unwrap_or((0, 0));
     let model_coord = ModelCoordinate(position.0, position.1);

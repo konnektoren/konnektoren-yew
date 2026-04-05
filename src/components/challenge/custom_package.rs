@@ -57,8 +57,10 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                                 }
                             },
                             Err(e) => {
-                                let err_msg =
-                                    format!("Failed to download package from {}: {}", package_url, e);
+                                let err_msg = format!(
+                                    "Failed to download package from {}: {}",
+                                    package_url, e
+                                );
                                 log::error!("{}", err_msg);
                                 error.set(Some(err_msg));
                                 loading.set(false);
@@ -127,7 +129,9 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                             }
 
                             // Set i18n data if available
-                            if let Some(i18n_content) = loaded_package.get_file_as_string("i18n.yml") {
+                            if let Some(i18n_content) =
+                                loaded_package.get_file_as_string("i18n.yml")
+                            {
                                 let language = SelectedLanguage::default().get();
                                 let loader = I18nYmlLoader::new(i18n_content.as_str());
                                 let translations = loader.get(language.code()).unwrap_or_default();

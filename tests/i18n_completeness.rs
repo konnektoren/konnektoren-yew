@@ -53,13 +53,9 @@ fn test_i18n_completeness() -> Result<(), I18nReportError> {
     for lang in &lang_codes {
         let stats = &report.language_stats[*lang];
         assert_eq!(
-            stats.missing_keys,
-            0,
+            stats.missing_keys, 0,
             "Language '{}' is missing {}/{} translations ({:.1}% coverage)",
-            lang,
-            stats.missing_keys,
-            stats.total_keys,
-            stats.coverage_percentage,
+            lang, stats.missing_keys, stats.total_keys, stats.coverage_percentage,
         );
     }
 

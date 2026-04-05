@@ -5,7 +5,7 @@ use konnektoren_core::analytics::Trend;
 use konnektoren_core::analytics::metrics::SuccessRateMetric;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Clone)]
 pub struct SuccessRateProps {
     pub metric: SuccessRateMetric,
     #[prop_or(Duration::days(7))]
@@ -38,7 +38,7 @@ pub fn success_rate(props: &SuccessRateProps) -> Html {
                     </div>
                     <div class="success-rate__gauge">
                         <div
-                            class="success-rate__gauge-fill"
+                            class={classes!("success-rate__gauge-fill", get_performance_modifier(value))}
                             style={format!("width: {}%", value)}
                         />
                     </div>
@@ -52,6 +52,16 @@ pub fn success_rate(props: &SuccessRateProps) -> Html {
                 </div>
             </div>
         </div>
+    }
+}
+
+fn get_performance_modifier(value: f64) -> &'static str {
+    if value >= 80.0 {
+        "success-rate__gauge-fill--high"
+    } else if value >= 60.0 {
+        "success-rate__gauge-fill--medium"
+    } else {
+        "success-rate__gauge-fill--low"
     }
 }
 
@@ -101,6 +111,7 @@ mod preview {
     };
     use konnektoren_core::prelude::{Challenge, ChallengeConfig, ChallengeResult};
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
     fn create_mc_challenge(id: &str, correct_answers: usize, total: usize) -> Challenge {
         let options = vec![
@@ -170,12 +181,35 @@ mod preview {
         history
     }
 
+    fn lower_performance_history() -> ChallengeHistory {
+        let mut history = ChallengeHistory::new();
+        // 2 out of 5 challenges pass the >=80% threshold → 40% success rate
+        history.add_challenge(create_mc_challenge("lower-1", 8, 10)); // 80% ✓
+        history.add_challenge(create_mc_challenge("lower-2", 9, 10)); // 90% ✓
+        history.add_challenge(create_mc_challenge("lower-3", 5, 10)); // 50% ✗
+        history.add_challenge(create_mc_challenge("lower-4", 4, 10)); // 40% ✗
+        history.add_challenge(create_mc_challenge("lower-5", 3, 10)); // 30% ✗
+        history
+    }
+
     fn low_performance_history() -> ChallengeHistory {
         let mut history = ChallengeHistory::new();
         history.add_challenge(create_mc_challenge("low-1", 3, 10)); // 30%
         history.add_challenge(create_mc_challenge("low-2", 4, 10)); // 40%
         history.add_challenge(create_mc_challenge("low-3", 2, 10)); // 20%
         history.add_challenge(create_mc_challenge("low-4", 3, 10)); // 30%
+        history
+    }
+
+    fn medium_performance_history() -> ChallengeHistory {
+        let mut history = ChallengeHistory::new();
+        // 4 out of 6 challenges pass the >=80% threshold → 66.7% success rate
+        history.add_challenge(create_mc_challenge("medium-1", 8, 10)); // 80% ✓
+        history.add_challenge(create_mc_challenge("medium-2", 9, 10)); // 90% ✓
+        history.add_challenge(create_mc_challenge("medium-3", 8, 10)); // 80% ✓
+        history.add_challenge(create_mc_challenge("medium-4", 8, 10)); // 80% ✓
+        history.add_challenge(create_mc_challenge("medium-5", 5, 10)); // 50% ✗
+        history.add_challenge(create_mc_challenge("medium-6", 4, 10)); // 40% ✗
         history
     }
 
@@ -187,25 +221,57 @@ mod preview {
         history
     }
 
-    yew_preview::create_preview!(
-        SuccessRateComponent,
-        SuccessRateProps {
+    yew_preview::create_preview_with_tests!(
+        component: SuccessRateComponent,
+        default_props: SuccessRateProps {
             metric: SuccessRateMetric::new(low_performance_history()),
             trend_window: Duration::days(7),
         },
-        (
-            "High Performance (100%)",
-            SuccessRateProps {
-                metric: SuccessRateMetric::new(high_performance_history()),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Empty History",
-            SuccessRateProps {
-                metric: SuccessRateMetric::new(ChallengeHistory::new()),
-                trend_window: Duration::days(7),
-            }
-        )
+        variants: [
+            (
+                "High Performance",
+                SuccessRateProps {
+                    metric: SuccessRateMetric::new(high_performance_history()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Medium Performance (~67%)",
+                SuccessRateProps {
+                    metric: SuccessRateMetric::new(medium_performance_history()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Lower Performance (40%)",
+                SuccessRateProps {
+                    metric: SuccessRateMetric::new(lower_performance_history()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Perfect Performance",
+                SuccessRateProps {
+                    metric: SuccessRateMetric::new(perfect_performance_history()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Empty History",
+                SuccessRateProps {
+                    metric: SuccessRateMetric::new(ChallengeHistory::new()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+        ],
+        tests: [
+            ("Has success-rate wrapper", has_class("success-rate")),
+            ("Shows percentage value", has_text("%")),
+            ("Shows Success Rate label", has_text("Success Rate")),
+            ("Shows gauge bar", exists("success-rate__gauge")),
+            ("Shows threshold markers", has_text("80%")),
+            ("Shows High Performance threshold", has_text("High Performance")),
+            ("Shows Needs Improvement threshold", has_text("Needs Improvement")),
+        ]
     );
 }

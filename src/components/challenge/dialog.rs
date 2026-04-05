@@ -8,7 +8,9 @@
 //! - [`DialogComponent`]     — main orchestrator
 
 use crate::i18n::use_i18n;
-use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, Dialog, DialogAnswer, Speaker};
+use konnektoren_core::challenges::{
+    ChallengeInput, ChallengeResult, Dialog, DialogAnswer, Speaker,
+};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
 use yew::prelude::*;
@@ -99,7 +101,11 @@ pub struct DialogBubbleProps {
 
 #[function_component(DialogBubble)]
 pub fn dialog_bubble(props: &DialogBubbleProps) -> Html {
-    let side = if props.is_end { "chat-end" } else { "chat-start" };
+    let side = if props.is_end {
+        "chat-end"
+    } else {
+        "chat-start"
+    };
 
     // Colour: feedback overrides the default speaker-position colour.
     let bubble_colour = match &props.state {
@@ -190,12 +196,12 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
     let i18n = use_i18n();
 
     // ── state ──────────────────────────────────────────────────────────────
-    let current_turn     = use_state(|| 0_usize);
+    let current_turn = use_state(|| 0_usize);
     let challenge_result = use_state(|| ChallengeResult::Dialog(Vec::new()));
-    let selected_option  = use_state(|| None::<usize>);
-    let is_answered      = use_state(|| false);
+    let selected_option = use_state(|| None::<usize>);
+    let is_answered = use_state(|| false);
 
-    let dialog      = &props.challenge;
+    let dialog = &props.challenge;
     let total_turns = dialog.turns.len();
 
     // Guard: nothing to show.
@@ -210,12 +216,12 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
     // ── callbacks ──────────────────────────────────────────────────────────
 
     let handle_option_select = {
-        let turn_idx         = *current_turn;
-        let selected_option  = selected_option.clone();
-        let is_answered      = is_answered.clone();
+        let turn_idx = *current_turn;
+        let selected_option = selected_option.clone();
+        let is_answered = is_answered.clone();
         let challenge_result = challenge_result.clone();
-        let on_event         = props.on_event.clone();
-        let challenge        = dialog.clone();
+        let on_event = props.on_event.clone();
+        let challenge = dialog.clone();
 
         Callback::from(move |option_index: usize| {
             if *is_answered {
@@ -225,7 +231,10 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
             is_answered.set(true);
 
             // Record the answer in the challenge result.
-            let answer = DialogAnswer { turn_index: turn_idx, selected_option: option_index };
+            let answer = DialogAnswer {
+                turn_index: turn_idx,
+                selected_option: option_index,
+            };
             let mut result = (*challenge_result).clone();
             let _ = result.add_input(ChallengeInput::Dialog(answer));
             challenge_result.set(result);
@@ -235,9 +244,11 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
                 if let Some(correct) = turn.correct_option {
                     if let Some(on_event) = &on_event {
                         if option_index == correct {
-                            on_event.emit(Event::Challenge(ChallengeEvent::SolvedCorrect(turn_idx)));
+                            on_event
+                                .emit(Event::Challenge(ChallengeEvent::SolvedCorrect(turn_idx)));
                         } else {
-                            on_event.emit(Event::Challenge(ChallengeEvent::SolvedIncorrect(turn_idx)));
+                            on_event
+                                .emit(Event::Challenge(ChallengeEvent::SolvedIncorrect(turn_idx)));
                         }
                     }
                 }
@@ -246,12 +257,12 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
     };
 
     let handle_next = {
-        let current_turn     = current_turn.clone();
-        let selected_option  = selected_option.clone();
-        let is_answered      = is_answered.clone();
+        let current_turn = current_turn.clone();
+        let selected_option = selected_option.clone();
+        let is_answered = is_answered.clone();
         let challenge_result = challenge_result.clone();
-        let on_command       = props.on_command.clone();
-        let total            = total_turns;
+        let on_command = props.on_command.clone();
+        let total = total_turns;
 
         Callback::from(move |_: MouseEvent| {
             let next = *current_turn + 1;
@@ -276,9 +287,7 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
 
     /// Returns `true` when `speaker_id` belongs to the second speaker slot,
     /// meaning the bubble should appear on the right (`chat-end`).
-    let is_end_speaker = |speaker_id: &str| -> bool {
-        dialog.speakers[1].id == speaker_id
-    };
+    let is_end_speaker = |speaker_id: &str| -> bool { dialog.speakers[1].id == speaker_id };
 
     // ── past turns ─────────────────────────────────────────────────────────
     //
@@ -290,7 +299,7 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
 
     let past_bubbles = (0..*current_turn)
         .map(|i| {
-            let turn    = &dialog.turns[i];
+            let turn = &dialog.turns[i];
             let speaker = dialog
                 .speaker_by_id(&turn.speaker)
                 .cloned()
@@ -383,8 +392,12 @@ pub fn dialog_component(props: &DialogComponentProps) -> Html {
             html! {}
         };
 
-        let is_last  = *current_turn + 1 >= total_turns;
-        let btn_text = if is_last { i18n.t("Finish") } else { i18n.t("Next") };
+        let is_last = *current_turn + 1 >= total_turns;
+        let btn_text = if is_last {
+            i18n.t("Finish")
+        } else {
+            i18n.t("Next")
+        };
 
         html! {
             <>

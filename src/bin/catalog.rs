@@ -23,13 +23,9 @@ use konnektoren_yew::prelude::{
 };
 
 fn main() {
-    let output = std::env::var("OUTPUT")
-        .ok()
-        .map(std::path::PathBuf::from);
+    let output = std::env::var("OUTPUT").ok().map(std::path::PathBuf::from);
 
-    let css_file = std::env::var("CSS_FILE")
-        .ok()
-        .map(std::path::PathBuf::from);
+    let css_file = std::env::var("CSS_FILE").ok().map(std::path::PathBuf::from);
 
     let mut options = yew_preview::CatalogOptions::new("konnektoren-yew");
 
@@ -45,8 +41,7 @@ fn main() {
         let i18n_config = create_i18n_config();
         let storage = LocalStorage::new(None);
         let session_initializer = DefaultSessionInitializer;
-        let repository_config =
-            create_repositories(storage, Arc::new(session_initializer));
+        let repository_config = create_repositories(storage, Arc::new(session_initializer));
 
         html! {
             <RepositoryProvider config={repository_config}>

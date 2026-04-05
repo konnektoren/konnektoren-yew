@@ -82,10 +82,11 @@ pub fn gumroad_product_ad_component(props: &GumroadProductAdProps) -> Html {
 mod preview {
     use super::*;
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_attribute, has_class, has_text};
 
-    yew_preview::create_preview!(
-        GumroadProductAdComponent,
-        GumroadProductAdProps {
+    yew_preview::create_preview_with_tests!(
+        component: GumroadProductAdComponent,
+        default_props: GumroadProductAdProps {
             product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
             product_name: "Book Vocabulary A1 EN".to_string(),
             description: Some("Master essential English vocabulary with our comprehensive A1 level guide. Perfect for beginners!".to_string()),
@@ -93,16 +94,50 @@ mod preview {
             preview_image: Some("https://public-files.gumroad.com/d1mh6dq92jyw0dd3b86qu26g3514".to_string()),
             discount: Some("20% OFF".to_string()),
         },
-        (
-            "minimal",
-            GumroadProductAdProps {
-                product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
-                product_name: "Book Vocabulary A1 EN".to_string(),
-                description: None,
-                price: None,
-                preview_image: None,
-                discount: None,
-            }
-        )
+        variants: [
+            (
+                "minimal",
+                GumroadProductAdProps {
+                    product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                    product_name: "Book Vocabulary A1 EN".to_string(),
+                    description: None,
+                    price: None,
+                    preview_image: None,
+                    discount: None,
+                }
+            ),
+            (
+                "price-only",
+                GumroadProductAdProps {
+                    product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                    product_name: "Book Vocabulary A1 EN".to_string(),
+                    description: None,
+                    price: Some("$4.99".to_string()),
+                    preview_image: None,
+                    discount: None,
+                }
+            ),
+            (
+                "no-discount",
+                GumroadProductAdProps {
+                    product_url: "https://konnektoren.gumroad.com/l/book-vocabulary-a1-en".to_string(),
+                    product_name: "Book Vocabulary A1 EN".to_string(),
+                    description: Some("Master essential English vocabulary.".to_string()),
+                    price: Some("$9.99".to_string()),
+                    preview_image: None,
+                    discount: None,
+                }
+            ),
+        ],
+        tests: [
+            ("Has product ad wrapper", has_class("gumroad-product-ad")),
+            ("Shows product name", has_text("Book Vocabulary A1 EN")),
+            ("Shows discount badge", has_text("20% OFF")),
+            ("Has buy link", exists("<a")),
+            ("Link opens in new tab", has_attribute("target", "_blank")),
+            ("Shows get-it-now CTA", has_text("Get it now")),
+            ("Shows price", has_text("$9.99")),
+            ("Shows Gumroad branding", has_text("Gumroad")),
+        ]
     );
 }

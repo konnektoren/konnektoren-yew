@@ -36,53 +36,56 @@ pub fn dialog_result_component(props: &DialogResultComponentProps) -> Html {
         };
     }
 
-    let rows = quiz_turns.iter().map(|(i, turn)| {
-        let answer = answers.iter().find(|a| a.turn_index == *i);
+    let rows = quiz_turns
+        .iter()
+        .map(|(i, turn)| {
+            let answer = answers.iter().find(|a| a.turn_index == *i);
 
-        let (is_correct, chosen_text) = if let Some(ans) = answer {
-            let correct = turn.correct_option == Some(ans.selected_option);
-            let text = turn
-                .options
-                .as_ref()
-                .and_then(|opts| opts.get(ans.selected_option))
-                .cloned()
-                .unwrap_or_default();
-            (correct, text)
-        } else {
-            (false, i18n.t("dialog.not_answered"))
-        };
+            let (is_correct, chosen_text) = if let Some(ans) = answer {
+                let correct = turn.correct_option == Some(ans.selected_option);
+                let text = turn
+                    .options
+                    .as_ref()
+                    .and_then(|opts| opts.get(ans.selected_option))
+                    .cloned()
+                    .unwrap_or_default();
+                (correct, text)
+            } else {
+                (false, i18n.t("dialog.not_answered"))
+            };
 
-        let modifier   = if is_correct { "correct" } else { "incorrect" };
-        let speaker_name = props
-            .challenge
-            .speaker_by_id(&turn.speaker)
-            .map(|s| s.name.as_str())
-            .unwrap_or_default()
-            .to_owned();
+            let modifier = if is_correct { "correct" } else { "incorrect" };
+            let speaker_name = props
+                .challenge
+                .speaker_by_id(&turn.speaker)
+                .map(|s| s.name.as_str())
+                .unwrap_or_default()
+                .to_owned();
 
-        html! {
-            <tr class={classes!(
-                "dialog-result__row",
-                format!("dialog-result__row--{}", modifier)
-            )}>
-                <td class="dialog-result__cell dialog-result__cell--speaker">
-                    { speaker_name }
-                </td>
-                <td class="dialog-result__cell dialog-result__cell--correct-line">
-                    { &turn.text }
-                </td>
-                <td class="dialog-result__cell dialog-result__cell--your-answer">
-                    { chosen_text }
-                </td>
-                <td class={classes!(
-                    "dialog-result__cell",
-                    format!("dialog-result__cell--{}", modifier)
+            html! {
+                <tr class={classes!(
+                    "dialog-result__row",
+                    format!("dialog-result__row--{}", modifier)
                 )}>
-                    { if is_correct { i18n.t("Correct") } else { i18n.t("Incorrect") } }
-                </td>
-            </tr>
-        }
-    }).collect::<Vec<_>>();
+                    <td class="dialog-result__cell dialog-result__cell--speaker">
+                        { speaker_name }
+                    </td>
+                    <td class="dialog-result__cell dialog-result__cell--correct-line">
+                        { &turn.text }
+                    </td>
+                    <td class="dialog-result__cell dialog-result__cell--your-answer">
+                        { chosen_text }
+                    </td>
+                    <td class={classes!(
+                        "dialog-result__cell",
+                        format!("dialog-result__cell--{}", modifier)
+                    )}>
+                        { if is_correct { i18n.t("Correct") } else { i18n.t("Incorrect") } }
+                    </td>
+                </tr>
+            }
+        })
+        .collect::<Vec<_>>();
 
     html! {
         <div class="dialog-result">
@@ -116,9 +119,18 @@ mod preview {
     /// Turn 1 correct=0, turn 3 correct=2, turn 5 correct=0.
     fn make_all_correct() -> ChallengeResult {
         ChallengeResult::Dialog(vec![
-            DialogAnswer { turn_index: 1, selected_option: 0 },
-            DialogAnswer { turn_index: 3, selected_option: 2 },
-            DialogAnswer { turn_index: 5, selected_option: 0 },
+            DialogAnswer {
+                turn_index: 1,
+                selected_option: 0,
+            },
+            DialogAnswer {
+                turn_index: 3,
+                selected_option: 2,
+            },
+            DialogAnswer {
+                turn_index: 5,
+                selected_option: 0,
+            },
         ])
     }
 
@@ -134,9 +146,18 @@ mod preview {
     ///   → selected 0 ("Tschüss! Einen schönen Tag noch!") — CORRECT
     fn make_mixed() -> ChallengeResult {
         ChallengeResult::Dialog(vec![
-            DialogAnswer { turn_index: 1, selected_option: 2 },
-            DialogAnswer { turn_index: 3, selected_option: 1 },
-            DialogAnswer { turn_index: 5, selected_option: 0 },
+            DialogAnswer {
+                turn_index: 1,
+                selected_option: 2,
+            },
+            DialogAnswer {
+                turn_index: 3,
+                selected_option: 1,
+            },
+            DialogAnswer {
+                turn_index: 5,
+                selected_option: 0,
+            },
         ])
     }
 

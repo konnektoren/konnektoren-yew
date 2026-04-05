@@ -5,11 +5,28 @@ use konnektoren_core::analytics::Trend;
 use konnektoren_core::analytics::metrics::AverageTimeTakenMetric;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Clone)]
 pub struct AverageTimeTakenProps {
     pub metric: AverageTimeTakenMetric,
     #[prop_or(Duration::days(7))]
     pub trend_window: Duration,
+}
+
+// Clamp value to a gauge width: fast (<10s) fills near 100%, slow (>120s) near 100% red.
+// We express speed as a percentage of a 120s cap so faster = higher fill.
+fn gauge_width(value: f64) -> f64 {
+    let capped = value.min(120.0);
+    (capped / 120.0 * 100.0).clamp(2.0, 100.0)
+}
+
+fn get_speed_modifier(value: f64) -> &'static str {
+    if value <= 10.0 {
+        "average-time-taken__gauge-fill--fast"
+    } else if value <= 30.0 {
+        "average-time-taken__gauge-fill--medium"
+    } else {
+        "average-time-taken__gauge-fill--slow"
+    }
 }
 
 #[function_component(AverageTimeTakenComponent)]
@@ -28,12 +45,25 @@ pub fn average_time_taken(props: &AverageTimeTakenProps) -> Html {
                 </div>
             </div>
             <div class="average-time-taken__content">
-                <p class="average-time-taken__value">
-                    { format!("{} {}", value, i18n.t("seconds")) }
-                </p>
-                <p class="average-time-taken__description">
-                    { i18n.t(props.metric.description()) }
-                </p>
+                <div class="average-time-taken__value-container">
+                    <div class="average-time-taken__value">
+                        <span class="average-time-taken__value-number">
+                            { format!("{:.0}", value) }
+                        </span>
+                        <span class="average-time-taken__value-label">{ i18n.t("seconds") }</span>
+                    </div>
+                    <div class="average-time-taken__gauge">
+                        <div
+                            class={classes!("average-time-taken__gauge-fill", get_speed_modifier(value))}
+                            style={format!("width: {}%", gauge_width(value))}
+                        />
+                    </div>
+                </div>
+                <div class="average-time-taken__details">
+                    <p class="average-time-taken__description">
+                        { i18n.t(props.metric.description()) }
+                    </p>
+                </div>
             </div>
         </div>
     }
@@ -63,6 +93,7 @@ mod preview {
         Challenge, ChallengeConfig, ChallengeHistory, ChallengeType,
     };
     use yew_preview::prelude::*;
+    use yew_preview::test_utils::{exists, has_class, has_text};
 
     fn create_metric_with_challenges(challenge_times: Vec<i64>) -> AverageTimeTakenMetric {
         let mut history = ChallengeHistory::new();
@@ -93,67 +124,94 @@ mod preview {
         create_metric_with_challenges(vec![60, 75, 55, 80])
     }
 
+    fn create_challenge_at(duration_secs: i64, days_ago: i64) -> Challenge {
+        let end = Utc::now() - Duration::days(days_ago);
+        let mut challenge = Challenge::new(&ChallengeType::default(), &ChallengeConfig::default());
+        challenge.start_time = Some(end - Duration::seconds(duration_secs));
+        challenge.end_time = Some(end);
+        challenge
+    }
+
     fn create_improving_metric() -> AverageTimeTakenMetric {
-        // Times getting faster: 60, 50, 40, 30, 20 seconds
-        create_metric_with_challenges(vec![60, 50, 40, 30, 20])
+        // Older (>7 days ago): slow ~60s; recent (<7 days): fast ~10s
+        let mut history = ChallengeHistory::new();
+        history.add_challenge(create_challenge_at(60, 10));
+        history.add_challenge(create_challenge_at(55, 9));
+        history.add_challenge(create_challenge_at(10, 2));
+        history.add_challenge(create_challenge_at(12, 1));
+        AverageTimeTakenMetric::new(history)
     }
 
     fn create_declining_metric() -> AverageTimeTakenMetric {
-        // Times getting slower: 10, 20, 30, 40, 50 seconds
-        create_metric_with_challenges(vec![10, 20, 30, 40, 50])
+        // Older (>7 days ago): fast ~10s; recent (<7 days): slow ~60s
+        let mut history = ChallengeHistory::new();
+        history.add_challenge(create_challenge_at(10, 10));
+        history.add_challenge(create_challenge_at(12, 9));
+        history.add_challenge(create_challenge_at(60, 2));
+        history.add_challenge(create_challenge_at(55, 1));
+        AverageTimeTakenMetric::new(history)
     }
 
     fn create_single_challenge_metric() -> AverageTimeTakenMetric {
         create_metric_with_challenges(vec![15])
     }
 
-    yew_preview::create_preview!(
-        AverageTimeTakenComponent,
-        AverageTimeTakenProps {
+    yew_preview::create_preview_with_tests!(
+        component: AverageTimeTakenComponent,
+        default_props: AverageTimeTakenProps {
             metric: create_medium_metric(),
             trend_window: Duration::days(7),
         },
-        (
-            "Fast Performance (< 10s)",
-            AverageTimeTakenProps {
-                metric: create_fast_metric(),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Slow Performance (> 60s)",
-            AverageTimeTakenProps {
-                metric: create_slow_metric(),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Improving Trend",
-            AverageTimeTakenProps {
-                metric: create_improving_metric(),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Declining Trend",
-            AverageTimeTakenProps {
-                metric: create_declining_metric(),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Single Challenge",
-            AverageTimeTakenProps {
-                metric: create_single_challenge_metric(),
-                trend_window: Duration::days(7),
-            }
-        ),
-        (
-            "Empty (No Challenges)",
-            AverageTimeTakenProps {
-                metric: AverageTimeTakenMetric::new(ChallengeHistory::new()),
-                trend_window: Duration::days(7),
-            }
-        )
+        variants: [
+            (
+                "Fast Performance (< 10s)",
+                AverageTimeTakenProps {
+                    metric: create_fast_metric(),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Slow Performance (> 60s)",
+                AverageTimeTakenProps {
+                    metric: create_slow_metric(),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Improving Trend",
+                AverageTimeTakenProps {
+                    metric: create_improving_metric(),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Declining Trend",
+                AverageTimeTakenProps {
+                    metric: create_declining_metric(),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Single Challenge",
+                AverageTimeTakenProps {
+                    metric: create_single_challenge_metric(),
+                    trend_window: Duration::days(7),
+                }
+            ),
+            (
+                "Empty (No Challenges)",
+                AverageTimeTakenProps {
+                    metric: AverageTimeTakenMetric::new(ChallengeHistory::new()),
+                    trend_window: Duration::days(7),
+                }
+            ),
+        ],
+        tests: [
+            ("Has average-time-taken wrapper", has_class("average-time-taken")),
+            ("Shows seconds unit", has_text("seconds")),
+            ("Shows trend label", exists("average-time-taken__trend")),
+            ("Shows value element", exists("average-time-taken__value")),
+            ("Shows description", exists("average-time-taken__description")),
+        ]
     );
 }
