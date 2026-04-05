@@ -138,6 +138,7 @@ mod preview {
 
     yew_preview::create_preview!(
         LeaderboardComp,
+        // Default: current user at bottom (0%) — tests highlighted row contrast
         LeaderboardProps {
             leaderboard_id: Some("articles-1".to_string()),
             default_record: Some(PerformanceRecord {
@@ -147,6 +148,32 @@ mod preview {
             }),
             api_url: "https://api.konnektoren.help/api/v1/leaderboard".to_string(),
         },
+        (
+            // Mid-rank: different leaderboard_id forces effect re-run when switching tabs
+            "highlighted-mid",
+            LeaderboardProps {
+                leaderboard_id: Some("konnektoren-1".to_string()),
+                default_record: Some(PerformanceRecord {
+                    profile_name: "Preview-MidUser".to_string(),
+                    performance_percentage: 50,
+                    ..Default::default()
+                }),
+                api_url: "https://api.konnektoren.help/api/v1/leaderboard".to_string(),
+            }
+        ),
+        (
+            // Top: different leaderboard_id forces effect re-run when switching tabs
+            "highlighted-top",
+            LeaderboardProps {
+                leaderboard_id: Some("adjectives-1".to_string()),
+                default_record: Some(PerformanceRecord {
+                    profile_name: "Preview-TopUser".to_string(),
+                    performance_percentage: 100,
+                    ..Default::default()
+                }),
+                api_url: "https://api.konnektoren.help/api/v1/leaderboard".to_string(),
+            }
+        ),
         (
             "empty",
             LeaderboardProps {

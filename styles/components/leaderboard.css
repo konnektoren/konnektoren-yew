@@ -35,7 +35,7 @@
 }
 
 .leaderboard__row--highlighted .timer {
-    @apply text-primary-content/90;
+    @apply bg-primary-content/20 shadow-sm text-primary-content;
 }
 
 .leaderboard__cell {
@@ -43,7 +43,7 @@
 }
 
 .leaderboard__cell--rank {
-    @apply text-center py-0 px-2 font-medium text-primary;
+    @apply text-center py-0 px-2 font-medium text-base-content;
 }
 
 .leaderboard__cell--name {
