@@ -132,9 +132,12 @@ impl Component for SwipeComponent {
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+        const SWIPE_THRESHOLD_PX: i32 = 45;
+
         match msg {
             SwipeMsg::DragStart(x, y) => {
                 self.drag_start = Some((x, y));
+                self.current_position = (0, 0);
                 true
             }
             SwipeMsg::DragMove(x, y) => {
@@ -146,19 +149,19 @@ impl Component for SwipeComponent {
                 }
             }
             SwipeMsg::DragEnd => {
-                if let Some((start_x, start_y)) = self.drag_start {
-                    let (end_x, end_y) = self.current_position;
-                    let dx = end_x - start_x;
-                    let dy = end_y - start_y;
+                if self.drag_start.is_some() {
+                    // current_position already stores the drag delta from start.
+                    let dx = self.current_position.0;
+                    let dy = self.current_position.1;
 
                     // Determine swipe direction based on the larger movement
-                    if dx.abs() > dy.abs() && dx.abs() > 50 {
+                    if dx.abs() > dy.abs() && dx.abs() > SWIPE_THRESHOLD_PX {
                         if dx > 0 {
                             ctx.props().on_swipe.emit(SwipeDirection::Right);
                         } else {
                             ctx.props().on_swipe.emit(SwipeDirection::Left);
                         }
-                    } else if dy.abs() > dx.abs() && dy.abs() > 50 {
+                    } else if dy.abs() > dx.abs() && dy.abs() > SWIPE_THRESHOLD_PX {
                         if dy > 0 {
                             ctx.props().on_swipe.emit(SwipeDirection::Down);
                         } else {
