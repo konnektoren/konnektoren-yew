@@ -24,6 +24,8 @@ pub struct ChallengeComponentProps {
     pub on_command: Option<Callback<Command>>,
     #[prop_or_default]
     pub language: Option<String>,
+    #[prop_or(false)]
+    pub preview: bool,
 }
 
 #[function_component(ChallengeComponent)]
@@ -165,7 +167,10 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
     let challenge_header = {
         html! {
             <div class="challenge__header">
-                <ChallengeInfoComponent challenge_config={props.challenge.challenge_config.clone()} />
+                <ChallengeInfoComponent
+                    challenge_config={props.challenge.challenge_config.clone()}
+                    open={!props.preview}
+                />
                 <ChallengeTimerComponent challenge={props.challenge.clone()} running={true} />
             </div>
         }
@@ -185,5 +190,15 @@ mod preview {
     use super::*;
     use yew_preview::prelude::*;
 
-    yew_preview::create_preview!(ChallengeComponent, ChallengeComponentProps::default(),);
+    yew_preview::create_preview!(
+        ChallengeComponent,
+        ChallengeComponentProps::default(),
+        (
+            "preview-mode",
+            ChallengeComponentProps {
+                preview: true,
+                ..ChallengeComponentProps::default()
+            }
+        ),
+    );
 }

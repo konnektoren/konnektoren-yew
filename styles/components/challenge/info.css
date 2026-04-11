@@ -1,33 +1,66 @@
 .challenge-info {
-    @apply collapse collapse-arrow card bg-base-100 shadow-md;
+    @apply collapse collapse-arrow card bg-base-100 shadow-md border border-base-300/70;
+    @apply overflow-hidden;
 }
 
 .challenge-info__title {
-    @apply collapse-title font-semibold;
+    @apply collapse-title;
+    @apply py-4 pr-12 pl-5;
+    @apply flex items-center justify-between gap-3;
+}
+
+.challenge-info__title-text {
+    @apply text-lg font-semibold text-base-content;
+    @apply leading-tight;
+}
+
+.challenge-info__summary-meta {
+    @apply hidden sm:flex items-center gap-2;
+}
+
+.challenge-info__summary-pill {
+    @apply badge badge-ghost border border-base-300;
+    @apply text-xs font-medium text-base-content/75;
+}
+
+.challenge-info__content {
+    @apply px-5 pb-5 pt-1;
+}
+
+.challenge-info__signals {
+    @apply flex items-center gap-2 flex-wrap mb-3;
+}
+
+.challenge-info__rating,
+.challenge-info__presence {
+    @apply inline-flex;
+}
+
+.challenge-info__presence .presence-badge {
+    @apply inline-flex items-center gap-1;
+    @apply px-2.5 py-1 rounded-full;
+    @apply bg-base-200 border border-base-300;
+    @apply text-sm font-medium text-base-content/80;
+}
+
+.challenge-info__presence .presence-badge i {
+    @apply text-primary text-sm;
 }
 
 .challenge-info__description {
-    @apply flex-1;
+    @apply text-base-content/70 text-sm leading-relaxed;
+    @apply mb-3;
 }
 
 .challenge-info__meta {
-    @apply mt-auto;
+    @apply border-t border-base-300/80 pt-2;
+    @apply flex flex-wrap gap-x-4 gap-y-1;
 }
 
 .challenge-info__tasks,
 .challenge-info__unlock-points {
-    @apply flex flex-col gap-2;
-    @apply pt-2 border-t border-base-300;
-}
-
-.challenge-info__tasks-title,
-.challenge-info__unlock-points-title {
-    @apply text-lg font-bold text-base-content;
-}
-
-.challenge-info__tasks-text,
-.challenge-info__unlock-points-text {
-    @apply text-sm text-base-content/60 leading-normal;
+    @apply text-sm text-base-content/85;
+    @apply font-medium;
 }
 
 @screen md {
@@ -41,22 +74,28 @@
         @apply min-w-[150px];
     }
 
+    .challenge-info__title {
+        @apply py-3.5 pl-4 pr-10;
+    }
+
+    .challenge-info__title-text {
+        @apply text-base;
+    }
+
+    .challenge-info__summary-meta {
+        @apply hidden;
+    }
+
+    .challenge-info__content {
+        @apply px-4 pb-4;
+    }
+
     .challenge-info__description {
-        @apply text-xs;
+        @apply text-xs mb-2.5;
     }
 
     .challenge-info__tasks,
     .challenge-info__unlock-points {
-        @apply pt-2;
-    }
-
-    .challenge-info__tasks-title,
-    .challenge-info__unlock-points-title {
-        @apply text-sm;
-    }
-
-    .challenge-info__tasks-text,
-    .challenge-info__unlock-points-text {
-        @apply text-xs leading-tight;
+        @apply text-xs;
     }
 }

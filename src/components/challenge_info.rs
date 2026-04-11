@@ -8,6 +8,8 @@ pub struct ChallengeInfoProps {
     pub challenge_config: ChallengeConfig,
     #[prop_or_default]
     pub api_url: Option<String>,
+    #[prop_or(true)]
+    pub open: bool,
 }
 
 #[function_component(ChallengeInfoComponent)]
@@ -33,17 +35,34 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
     };
 
     html! {
-        <details class="challenge-info" open={true}>
-            <summary class="challenge-info__title">{ i18n.t(&props.challenge_config.name) }</summary>
+        <details class="challenge-info" open={props.open}>
+            <summary class="challenge-info__title">
+                <span class="challenge-info__title-text">{ i18n.t(&props.challenge_config.name) }</span>
+                <span class="challenge-info__summary-meta">
+                    <span class="challenge-info__summary-pill">
+                        {format!("{} {}", i18n.t("Tasks"), props.challenge_config.tasks.len())}
+                    </span>
+                    <span class="challenge-info__summary-pill">
+                        {format!("{} XP", props.challenge_config.unlock_points)}
+                    </span>
+                </span>
+            </summary>
 
-            {rating_component}
-            {presence_component}
-            <div class="challenge-info__description">
-                <p>{ i18n.t(&props.challenge_config.description) }</p>
-            </div>
-            <div class="challenge-info__meta">
-                <p class="challenge-info__tasks">{format!("{}: {}", i18n.t("Tasks"), props.challenge_config.tasks.len())}</p>
-                <p class="challenge-info__unlock-points">{format!("{}: {}", i18n.t("Unlock Points"), props.challenge_config.unlock_points)}</p>
+            <div class="challenge-info__content">
+                if props.api_url.is_some() {
+                    <div class="challenge-info__signals">
+                        {rating_component}
+                        {presence_component}
+                    </div>
+                }
+
+                <div class="challenge-info__description">
+                    <p>{ i18n.t(&props.challenge_config.description) }</p>
+                </div>
+                <div class="challenge-info__meta">
+                    <p class="challenge-info__tasks">{format!("{}: {}", i18n.t("Tasks"), props.challenge_config.tasks.len())}</p>
+                    <p class="challenge-info__unlock-points">{format!("{}: {}", i18n.t("Unlock Points"), props.challenge_config.unlock_points)}</p>
+                </div>
             </div>
         </details>
     }
@@ -68,6 +87,25 @@ mod preview {
                 icon: None
             },
             api_url: Some("https://api.example.com".to_string()),
+            open: true,
         },
+        (
+            "collapsed",
+            ChallengeInfoProps {
+                challenge_config: ChallengeConfig {
+                    id: "".to_string(),
+                    name: "Challenge Name".to_string(),
+                    description: "Challenge Description".to_string(),
+                    challenge: "".to_string(),
+                    variant: None,
+                    tasks: 5.into(),
+                    unlock_points: 10,
+                    position: None,
+                    icon: None
+                },
+                api_url: Some("https://api.example.com".to_string()),
+                open: false,
+            }
+        ),
     );
 }
