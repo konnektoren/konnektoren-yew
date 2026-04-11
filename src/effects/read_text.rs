@@ -22,33 +22,42 @@ pub fn read_text(props: &ReadTextProps) -> Html {
 
         let text_clone = props.text.clone();
         let lang_clone = props.lang.clone();
-        use_effect(move || {
+        use_effect_with(props.text.clone(), move |_| {
             let settings = settings.clone();
-            Timeout::new(0, move || {
-                // Try to get speech synthesis
-                match window().speech_synthesis() {
-                    Ok(speech_synthesis) => {
-                        // Try to create a new utterance
-                        match SpeechSynthesisUtterance::new() {
-                            Ok(utterance) => {
-                                utterance.set_text(&text_clone);
-                                utterance.set_lang(&lang_clone);
-                                utterance.set_volume(settings.sound_volume);
-                                speech_synthesis.speak(&utterance);
-                                debug!("Requested text-to-speech for: {}", text_clone);
-                            }
-                            Err(err) => {
-                                debug!("Failed to create speech utterance: {:?}", err);
-                            }
+
+            // Resolve speech synthesis once so both the speak and cleanup share it
+            let speech_synthesis = window().speech_synthesis().ok();
+            if speech_synthesis.is_none() {
+                warn!("Speech synthesis not available in this browser");
+            }
+
+            if let Some(ss) = speech_synthesis.clone() {
+                // Cancel any queued or ongoing speech before starting the new one
+                ss.cancel();
+
+                Timeout::new(0, move || {
+                    match SpeechSynthesisUtterance::new() {
+                        Ok(utterance) => {
+                            utterance.set_text(&text_clone);
+                            utterance.set_lang(&lang_clone);
+                            utterance.set_volume(settings.sound_volume);
+                            ss.speak(&utterance);
+                            debug!("Requested text-to-speech for: {}", text_clone);
+                        }
+                        Err(err) => {
+                            debug!("Failed to create speech utterance: {:?}", err);
                         }
                     }
-                    Err(_) => {
-                        warn!("Speech synthesis not available in this browser");
-                    }
+                })
+                .forget();
+            }
+
+            // Cancel speech when text changes or component unmounts
+            move || {
+                if let Some(ss) = speech_synthesis {
+                    ss.cancel();
                 }
-            })
-            .forget();
-            || ()
+            }
         });
     }
 
