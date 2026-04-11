@@ -11,6 +11,11 @@ pub struct SessionContext {
     pub session: UseStateHandle<Session>,
 }
 
+#[cfg(feature = "csr")]
+fn should_persist_session(is_hydrated: bool) -> bool {
+    is_hydrated
+}
+
 #[derive(Properties)]
 pub struct SessionProviderProps {
     pub children: Children,
@@ -29,6 +34,8 @@ impl PartialEq for SessionProviderProps {
 pub fn session_provider(props: &SessionProviderProps) -> Html {
     let session_initializer = props.session_initializer.clone();
     let error = use_state(|| None::<String>);
+    #[cfg(feature = "csr")]
+    let is_hydrated = use_state(|| false);
 
     let session = use_state(
         || match session_initializer.initialize(&Session::default()) {
@@ -47,6 +54,7 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         let error = error.clone();
         let session_repository = props.session_repository.clone();
         let session_initializer = session_initializer.clone();
+        let is_hydrated = is_hydrated.clone();
 
         use_effect_with((), move |_| {
             use wasm_bindgen_futures::spawn_local;
@@ -58,21 +66,25 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
                             Ok(initialized_session) => {
                                 session.set(initialized_session);
                                 error.set(None);
+                                is_hydrated.set(true);
                             }
                             Err(e) => {
                                 let err_msg = format!("Failed to initialize session: {:?}", e);
                                 log::error!("{}", err_msg);
                                 error.set(Some(err_msg));
+                                is_hydrated.set(true);
                             }
                         }
                     }
                     Ok(None) => {
                         log::info!("No existing session found");
+                        is_hydrated.set(true);
                     }
                     Err(e) => {
                         let err_msg = format!("Failed to load session: {:?}", e);
                         log::error!("{}", err_msg);
                         error.set(Some(err_msg));
+                        is_hydrated.set(true);
                     }
                 }
             });
@@ -86,12 +98,18 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         let session_repository = props.session_repository.clone();
         let session = session.clone();
         let error = error.clone();
+        let is_hydrated = is_hydrated.clone();
 
-        use_effect_with(session.clone(), move |_| {
+        use_effect_with((session.clone(), *is_hydrated), move |_| {
             use wasm_bindgen_futures::spawn_local;
 
             let session = session.clone();
+            let is_hydrated = *is_hydrated;
             spawn_local(async move {
+                if !should_persist_session(is_hydrated) {
+                    return;
+                }
+
                 let session = session.clone();
                 if let Err(e) = session_repository
                     .update_session(SESSION_STORAGE_KEY, &session)
@@ -118,5 +136,18 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
             }
             { props.children.clone() }
         </ContextProvider<SessionContext>>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "csr")]
+    use super::should_persist_session;
+
+    #[cfg(feature = "csr")]
+    #[test]
+    fn session_is_not_persisted_before_hydration() {
+        assert!(!should_persist_session(false));
+        assert!(should_persist_session(true));
     }
 }

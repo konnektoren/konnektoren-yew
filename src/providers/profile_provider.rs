@@ -8,6 +8,11 @@ pub struct ProfileContext {
     pub profile: UseStateHandle<PlayerProfile>,
 }
 
+#[cfg(feature = "csr")]
+fn should_persist_profile(is_hydrated: bool) -> bool {
+    is_hydrated
+}
+
 #[derive(Properties)]
 pub struct ProfileProviderProps {
     pub children: Children,
@@ -23,12 +28,15 @@ impl PartialEq for ProfileProviderProps {
 #[function_component(ProfileProvider)]
 pub fn profile_provider(props: &ProfileProviderProps) -> Html {
     let profile = use_state(PlayerProfile::default);
+    #[cfg(feature = "csr")]
+    let is_hydrated = use_state(|| false);
 
     // Load profile (CSR only)
     #[cfg(feature = "csr")]
     {
         let profile = profile.clone();
         let profile_repository = props.profile_repository.clone();
+        let is_hydrated = is_hydrated.clone();
 
         use_effect_with((), move |_| {
             use wasm_bindgen_futures::spawn_local;
@@ -39,6 +47,7 @@ pub fn profile_provider(props: &ProfileProviderProps) -> Html {
                 {
                     profile.set(loaded_profile);
                 }
+                is_hydrated.set(true);
             });
             || ()
         });
@@ -49,12 +58,18 @@ pub fn profile_provider(props: &ProfileProviderProps) -> Html {
     {
         let profile_repository = props.profile_repository.clone();
         let profile = profile.clone();
+        let is_hydrated = is_hydrated.clone();
 
-        use_effect_with(profile.clone(), move |_| {
+        use_effect_with((profile.clone(), *is_hydrated), move |_| {
             use wasm_bindgen_futures::spawn_local;
 
             let profile = profile.clone();
+            let is_hydrated = *is_hydrated;
             spawn_local(async move {
+                if !should_persist_profile(is_hydrated) {
+                    return;
+                }
+
                 let profile = profile.clone();
                 if let Err(e) = profile_repository
                     .update_profile(PROFILE_STORAGE_KEY, &profile)
@@ -73,5 +88,18 @@ pub fn profile_provider(props: &ProfileProviderProps) -> Html {
         <ContextProvider<ProfileContext> {context}>
             { for props.children.iter() }
         </ContextProvider<ProfileContext>>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "csr")]
+    use super::should_persist_profile;
+
+    #[cfg(feature = "csr")]
+    #[test]
+    fn profile_is_not_persisted_before_hydration() {
+        assert!(!should_persist_profile(false));
+        assert!(should_persist_profile(true));
     }
 }
