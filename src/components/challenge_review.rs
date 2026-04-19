@@ -26,6 +26,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     let comment = use_state(String::new);
     let is_sending = use_state(|| false);
     let is_sent = use_state(|| false);
+    let error = use_state(|| Option::<String>::None);
 
     let on_star_click = {
         let stars = stars.clone();
@@ -50,6 +51,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
     let on_submit = {
         let is_sending = is_sending.clone();
         let is_sent = is_sent.clone();
+        let error = error.clone();
         let stars = stars.clone();
         let comment = comment.clone();
         let challenge_id = props.challenge_id.clone();
@@ -65,12 +67,14 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
 
                 let is_sending = is_sending.clone();
                 let is_sent = is_sent.clone();
+                let error = error.clone();
 
                 if *is_sending || *is_sent {
                     return;
                 }
 
                 is_sending.set(true);
+                error.set(None);
 
                 let stars = *stars;
                 let comment = (*comment).clone();
@@ -105,10 +109,12 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                                 is_sent.set(true);
                             } else {
                                 log::error!("Failed to submit review: status code {}", status);
+                                error.set(Some(format!("Failed to submit ({})", status)));
                             }
                         }
                         Err(e) => {
                             log::error!("Error while submitting review: {:?}", e);
+                            error.set(Some("Could not reach server".to_string()));
                         }
                     }
 
@@ -141,6 +147,10 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                 />
             </div>
 
+            if let Some(err) = (*error).clone() {
+                <p class="challenge-review__error">{err}</p>
+            }
+
             if !*is_sent {
                 <button
                     onclick={on_submit}
@@ -149,7 +159,7 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                     {if *is_sending { i18n.t("Submitting...") } else { i18n.t("Submit") }}
                 </button>
             } else {
-                <p>{i18n.t("Thank you for your review!")}</p>
+                <p class="challenge-review__success">{i18n.t("Thank you for your review!")}</p>
             }
         </div>
     }
@@ -173,6 +183,14 @@ mod preview {
                 challenge_id: "konnektoren-yew-test".to_string(),
                 api_url: "https://api.konnektoren.app/reviews".to_string(),
                 default_endpoint: false,
+            }
+        ),
+        (
+            "error (wrong url)",
+            ChallengeReviewProps {
+                challenge_id: "konnektoren-yew-test".to_string(),
+                api_url: "https://invalid.example.invalid/api/v1".to_string(),
+                default_endpoint: true,
             }
         ),
     );

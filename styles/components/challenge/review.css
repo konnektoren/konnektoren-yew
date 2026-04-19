@@ -34,7 +34,12 @@
     @apply cursor-not-allowed border-base-300;
 }
 
-.challenge-review p {
+.challenge-review__success {
     @apply text-success text-center py-2 mt-2;
     @apply bg-success/10 rounded-lg border border-success/20;
+}
+
+.challenge-review__error {
+    @apply text-error text-center py-2 mt-2;
+    @apply bg-error/10 rounded-lg border border-error/20;
 }
