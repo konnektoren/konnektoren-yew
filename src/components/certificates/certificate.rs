@@ -1,6 +1,5 @@
 use crate::prelude::CertificateImageComponent;
 use konnektoren_core::certificates::CertificateData;
-use urlencoding::encode;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone, Debug, Default)]
@@ -18,13 +17,22 @@ pub fn certificate(props: &CertificateProps) -> Html {
     let clipboard_handle: yew_hooks::UseClipboardHandle = yew_hooks::use_clipboard();
     let show_copied_message = use_state(|| false);
 
-    let base64_str = props.certificate_data.to_base64().unwrap_or_default();
-    let share_url = format!(
-        "{}//{}/?page=results&code={}",
-        props.protocol.clone().unwrap_or_default(),
-        props.hostname.clone().unwrap_or_default(),
-        encode(&base64_str)
-    );
+    // to_base64() now emits URL_SAFE_NO_PAD base64 — safe as a path segment.
+    let url_safe_code = props
+        .certificate_data
+        .to_base64()
+        .unwrap_or_default();
+
+    // Normalise protocol: strip a trailing ':' so we can always reconstruct
+    // the authority with "://".  This handles callers that pass "http:" (raw
+    // browser value) as well as callers that already stripped it ("http").
+    let protocol = props
+        .protocol
+        .as_deref()
+        .unwrap_or_default()
+        .trim_end_matches(':');
+    let hostname = props.hostname.clone().unwrap_or_default();
+    let share_url = format!("{}://{}/results/{}", protocol, hostname, url_safe_code);
 
     let on_share_click = {
         #[cfg(feature = "csr")]
