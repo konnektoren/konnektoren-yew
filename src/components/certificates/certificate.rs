@@ -18,10 +18,7 @@ pub fn certificate(props: &CertificateProps) -> Html {
     let show_copied_message = use_state(|| false);
 
     // to_base64() now emits URL_SAFE_NO_PAD base64 — safe as a path segment.
-    let url_safe_code = props
-        .certificate_data
-        .to_base64()
-        .unwrap_or_default();
+    let url_safe_code = props.certificate_data.to_base64().unwrap_or_default();
 
     // Normalise protocol: strip a trailing ':' so we can always reconstruct
     // the authority with "://".  This handles callers that pass "http:" (raw

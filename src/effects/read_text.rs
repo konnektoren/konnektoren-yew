@@ -35,18 +35,16 @@ pub fn read_text(props: &ReadTextProps) -> Html {
                 // Cancel any queued or ongoing speech before starting the new one
                 ss.cancel();
 
-                Timeout::new(0, move || {
-                    match SpeechSynthesisUtterance::new() {
-                        Ok(utterance) => {
-                            utterance.set_text(&text_clone);
-                            utterance.set_lang(&lang_clone);
-                            utterance.set_volume(settings.sound_volume);
-                            ss.speak(&utterance);
-                            debug!("Requested text-to-speech for: {}", text_clone);
-                        }
-                        Err(err) => {
-                            debug!("Failed to create speech utterance: {:?}", err);
-                        }
+                Timeout::new(0, move || match SpeechSynthesisUtterance::new() {
+                    Ok(utterance) => {
+                        utterance.set_text(&text_clone);
+                        utterance.set_lang(&lang_clone);
+                        utterance.set_volume(settings.sound_volume);
+                        ss.speak(&utterance);
+                        debug!("Requested text-to-speech for: {}", text_clone);
+                    }
+                    Err(err) => {
+                        debug!("Failed to create speech utterance: {:?}", err);
                     }
                 })
                 .forget();

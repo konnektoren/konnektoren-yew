@@ -135,7 +135,7 @@ fn vocabulary_card(props: &VocabularyCardProps) -> Html {
                 <h3 class="vocabulary-card__text">{&props.item.text}</h3>
 
                 if let Some(translation) = &props.item.translation {
-                    <p class="vocabulary-card__translation">{translation}</p>
+                    <p class="vocabulary-card__translation">{i18n.t(translation)}</p>
                 }
 
                 if let Some(phonetic) = &props.item.phonetic {
