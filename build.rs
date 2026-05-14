@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use vergen::*;
 
 #[cfg(feature = "sbom")]
@@ -34,7 +34,7 @@ fn generate_sbom_content() -> Result<String> {
             "-q",
         ])
         .output()
-        .context("Failed to execute cargo cyclonedx")?;
+        .map_err(|e| anyhow::anyhow!("Failed to execute cargo cyclonedx: {}", e))?;
 
     if !output.status.success() {
         return Err(anyhow::anyhow!(
@@ -45,11 +45,11 @@ fn generate_sbom_content() -> Result<String> {
 
     // Read the generated SBOM file
     let sbom = fs::read_to_string("konnektoren-yew.cdx.json")
-        .context("Failed to read generated SBOM file")?;
+        .map_err(|e| anyhow::anyhow!("Failed to read generated SBOM file: {}", e))?;
 
     // Parse and minimize the SBOM
-    let mut value: serde_json::Value =
-        serde_json::from_str(&sbom).context("Failed to parse SBOM JSON")?;
+    let mut value: serde_json::Value = serde_json::from_str(&sbom)
+        .map_err(|e| anyhow::anyhow!("Failed to parse SBOM JSON: {}", e))?;
 
     if let Some(obj) = value.as_object_mut() {
         // Keep only necessary fields
@@ -70,7 +70,8 @@ fn generate_sbom_content() -> Result<String> {
     }
 
     // Serialize the minimized SBOM
-    serde_json::to_string(&value).context("Failed to serialize minimized SBOM")
+    serde_json::to_string(&value)
+        .map_err(|e| anyhow::anyhow!("Failed to serialize minimized SBOM: {}", e))
 }
 
 #[cfg(not(feature = "sbom"))]

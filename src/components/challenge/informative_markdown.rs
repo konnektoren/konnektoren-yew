@@ -58,35 +58,6 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
         })
     };
 
-    let scroll_to_bottom = {
-        Callback::from(move |_| {
-            #[cfg(feature = "csr")]
-            {
-                use wasm_bindgen::JsCast;
-                use wasm_bindgen::prelude::*;
-                use web_sys::HtmlElement;
-
-                use gloo::timers::future::TimeoutFuture;
-
-                wasm_bindgen_futures::spawn_local(async move {
-                    // Wait a bit for the content to render
-                    TimeoutFuture::new(100).await;
-                    if let Some(window) = web_sys::window() {
-                        if let Some(document) = window.document() {
-                            if let Some(element) = document.get_element_by_id("finish-button") {
-                                if let Ok(html_element) = element.dyn_into::<HtmlElement>() {
-                                    let rect = html_element.get_bounding_client_rect();
-                                    let scroll_y = rect.top() + window.scroll_y().unwrap_or(0.0);
-                                    scrollTo(0.0, scroll_y);
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        })
-    };
-
     // Get the markdown path
     let fallback_path = props
         .challenge
@@ -165,29 +136,25 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
             html! {<p>{error}</p>}
         }
         LoadingState::FetchSuccess(ref text) => {
-            let content = Html::from_html_unchecked(AttrValue::from(markdown::to_html(text)));
+            let html = markdown::to_html_with_options(text, &markdown::Options::gfm())
+                .unwrap_or_else(|_| markdown::to_html(text));
+            let content = Html::from_html_unchecked(AttrValue::from(html));
             html! {
                 <div class="informative-markdown">
-                    <h2>{&props.challenge.description}</h2>
-                    <button onclick={scroll_to_bottom}>{i18n.t("Scroll down")}</button>
                     <div class="markdown-content">
                         {content}
                     </div>
-                    <button id="finish-button" onclick={on_finish}>{i18n.t("Next")}</button>
+                    <button
+                        id="finish-button"
+                        onclick={on_finish}
+                        class="informative-markdown__button"
+                    >
+                        {i18n.t("Next")}
+                    </button>
                 </div>
             }
         }
     }
-}
-
-#[cfg(feature = "csr")]
-use wasm_bindgen::prelude::*;
-
-#[cfg(feature = "csr")]
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = window)]
-    fn scrollTo(x: f64, y: f64);
 }
 
 async fn fetch_markdown_with_loader(loader: &AssetLoader, path: &str) -> Result<String, String> {
