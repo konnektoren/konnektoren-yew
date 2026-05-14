@@ -104,5 +104,21 @@
   "dialog.observer_complete": "Tüm diyaloğu izlediniz!",
   "dialog.not_answered": "Yanıtlanmadı",
   "Speaker": "Konuşmacı",
-  "Your Answer": "Cevabınız"
+  "Your Answer": "Cevabınız",
+  "Activity Heatmap": "Etkinlik Haritası",
+  "Activity Overview": "Etkinlik Özeti",
+  "weeks of": "haftalık",
+  "learning": "öğrenme",
+  "No challenges": "Alıştırma yok",
+  "active days": "aktif gün",
+  "total challenges": "toplam alıştırma",
+  "Less": "Az",
+  "More": "Çok",
+  "Mon": "Pzt",
+  "Wed": "Çar",
+  "Fri": "Cum",
+  "Challenges on": "Alıştırmalar",
+  "Close": "Kapat",
+  "in": "içinde",
+  "challenges": "alıştırma"
 }

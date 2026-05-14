@@ -104,5 +104,21 @@
   "dialog.observer_complete": "Ви переглянули весь діалог!",
   "dialog.not_answered": "Без відповіді",
   "Speaker": "Мовець",
-  "Your Answer": "Ваша відповідь"
+  "Your Answer": "Ваша відповідь",
+  "Activity Heatmap": "Теплова карта активності",
+  "Activity Overview": "Огляд активності",
+  "weeks of": "тижнів",
+  "learning": "навчання",
+  "No challenges": "Немає завдань",
+  "active days": "активних днів",
+  "total challenges": "завдань загалом",
+  "Less": "Менше",
+  "More": "Більше",
+  "Mon": "Пн",
+  "Wed": "Ср",
+  "Fri": "Пт",
+  "Challenges on": "Завдання",
+  "Close": "Закрити",
+  "in": "за",
+  "challenges": "завдань"
 }

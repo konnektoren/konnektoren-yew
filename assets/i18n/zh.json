@@ -104,5 +104,21 @@
   "dialog.observer_complete": "你已观看完整对话！",
   "dialog.not_answered": "未作答",
   "Speaker": "发言者",
-  "Your Answer": "你的答案"
+  "Your Answer": "你的答案",
+  "Activity Heatmap": "活动热力图",
+  "Activity Overview": "活动概览",
+  "weeks of": "周",
+  "learning": "学习",
+  "No challenges": "无练习",
+  "active days": "活跃天数",
+  "total challenges": "练习总数",
+  "Less": "少",
+  "More": "多",
+  "Mon": "周一",
+  "Wed": "周三",
+  "Fri": "周五",
+  "Challenges on": "练习日期",
+  "Close": "关闭",
+  "in": "共",
+  "challenges": "练习"
 }

@@ -196,11 +196,7 @@ pub fn activity_heatmap(props: &ActivityHeatmapProps) -> Html {
             .challenge_history
             .challenges
             .iter()
-            .filter(|c| {
-                c.end_time
-                    .map(|t| t.date_naive() == date)
-                    .unwrap_or(false)
-            })
+            .filter(|c| c.end_time.map(|t| t.date_naive() == date).unwrap_or(false))
             .cloned()
             .collect();
         let close_cb = {

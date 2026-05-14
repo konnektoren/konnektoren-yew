@@ -104,5 +104,21 @@
   "dialog.observer_complete": "You've watched the whole dialog!",
   "dialog.not_answered": "Not answered",
   "Speaker": "Speaker",
-  "Your Answer": "Your Answer"
+  "Your Answer": "Your Answer",
+  "Activity Heatmap": "Activity Heatmap",
+  "Activity Overview": "Activity Overview",
+  "weeks of": "weeks of",
+  "learning": "learning",
+  "No challenges": "No challenges",
+  "active days": "active days",
+  "total challenges": "total challenges",
+  "Less": "Less",
+  "More": "More",
+  "Mon": "Mon",
+  "Wed": "Wed",
+  "Fri": "Fri",
+  "Challenges on": "Challenges on",
+  "Close": "Close",
+  "in": "in",
+  "challenges": "challenges"
 }
