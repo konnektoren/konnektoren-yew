@@ -141,6 +141,7 @@ pub fn preview_groups() -> ComponentList {
             "Analytics",
             SuccessRateComponent::preview(),
             AverageTimeTakenComponent::preview(),
+            ActivityHeatmapComponent::preview(),
         ),
         create_component_group!(
             "Profile",

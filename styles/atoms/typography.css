@@ -13,3 +13,12 @@
 @utility text-adaptive-base {
     @apply text-base sm:text-sm;
 }
+
+@utility text-adaptive-sm {
+    @apply text-sm sm:text-xs;
+}
+
+@utility text-adaptive-xs {
+    @apply text-xs;
+    font-size: 0.7rem;
+}

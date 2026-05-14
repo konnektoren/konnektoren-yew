@@ -1,0 +1,191 @@
+/* ── Card shell ──────────────────────────────────────────────────────────── */
+
+.activity-heatmap {
+    @apply card-base;
+}
+
+.activity-heatmap__header {
+    @apply card-header;
+}
+
+.activity-heatmap__title {
+    @apply card-title;
+}
+
+.activity-heatmap__subtitle {
+    @apply text-adaptive-sm text-base-content/50;
+}
+
+/* ── Grid wrapper (scrolls horizontally on small screens) ────────────────── */
+
+.activity-heatmap__grid-wrapper {
+    @apply card-content overflow-x-auto;
+}
+
+/* ── Month labels row ────────────────────────────────────────────────────── */
+
+.activity-heatmap__months {
+    @apply flex items-end mb-1;
+}
+
+.activity-heatmap__day-label-spacer {
+    /* Matches .activity-heatmap__day-label width: w-8 = 2rem + gap-1 */
+    width: calc(2rem + 0.25rem);
+    flex-shrink: 0;
+}
+
+.activity-heatmap__months-cells {
+    display: flex;
+    gap: 1px; /* matches gap-px on .activity-heatmap__cells */
+}
+
+.activity-heatmap__month-cell {
+    /* One slot per week column — same width as a cell */
+    width: 12px;
+    flex-shrink: 0;
+    font-size: 10px;
+    line-height: 1.5rem;
+    @apply text-base-content/50 font-medium;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* ── Grid rows ───────────────────────────────────────────────────────────── */
+
+.activity-heatmap__grid {
+    @apply flex flex-col gap-px;
+}
+
+.activity-heatmap__row {
+    @apply flex items-center gap-1;
+    height: 14px;
+}
+
+.activity-heatmap__day-label {
+    @apply text-base-content/50 w-8 text-right pr-1;
+    font-size: 10px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.activity-heatmap__cells {
+    @apply flex gap-px;
+}
+
+/* ── Cells ───────────────────────────────────────────────────────────────── */
+
+.activity-heatmap__cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    @apply bg-base-200;
+    transition:
+        transform 0.1s ease,
+        outline 0.1s ease;
+    position: relative;
+}
+
+.activity-heatmap__cell--future {
+    opacity: 0.3;
+}
+
+.activity-heatmap__cell--clickable {
+    cursor: pointer;
+}
+
+.activity-heatmap__cell--clickable:hover {
+    transform: scale(1.35);
+    @apply outline outline-2 outline-primary outline-offset-1;
+    z-index: 1;
+}
+
+/* ── Heatmap levels — primary (orange) scale ─────────────────────────────── */
+
+.activity-heatmap__cell--level-0 {
+    @apply bg-base-200;
+}
+
+.activity-heatmap__cell--level-1 {
+    @apply bg-primary/20;
+}
+
+.activity-heatmap__cell--level-2 {
+    @apply bg-primary/45;
+}
+
+.activity-heatmap__cell--level-3 {
+    @apply bg-primary/70;
+}
+
+.activity-heatmap__cell--level-4 {
+    @apply bg-primary;
+}
+
+/* ── Footer / Legend ─────────────────────────────────────────────────────── */
+
+.activity-heatmap__footer {
+    @apply card-footer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2;
+}
+
+.activity-heatmap__legend {
+    @apply flex items-center gap-1;
+}
+
+.activity-heatmap__legend-label {
+    @apply text-adaptive-xs text-base-content/50;
+}
+
+.activity-heatmap__legend-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.activity-heatmap__stats {
+    @apply flex flex-wrap gap-4;
+}
+
+.activity-heatmap__stat {
+    @apply text-adaptive-xs text-base-content/50;
+}
+
+/* ── Day-detail modal ────────────────────────────────────────────────────── */
+
+.activity-heatmap__modal-box {
+    @apply max-w-lg w-full;
+}
+
+.activity-heatmap__modal-title {
+    @apply card-title mb-4;
+}
+
+.activity-heatmap__modal-time {
+    @apply text-base-content/60 text-sm tabular-nums;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .activity-heatmap__cell,
+    .activity-heatmap__legend-cell {
+        width: 10px;
+        height: 10px;
+    }
+
+    .activity-heatmap__month-cell {
+        width: 10px;
+    }
+
+    .activity-heatmap__row {
+        height: 12px;
+    }
+
+    .activity-heatmap__day-label-spacer {
+        width: calc(1.5rem + 0.25rem);
+    }
+
+    .activity-heatmap__day-label {
+        width: 1.5rem;
+        font-size: 8px;
+    }
+}
