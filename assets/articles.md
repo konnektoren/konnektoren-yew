@@ -44,6 +44,26 @@ Indefinite articles are similar to definite articles, but they are used to descr
     - Metals and chemical elements: das Gold (gold), das Silber (silver)
     - Nouns ending in -chen, -lein: das Mädchen (the girl), das Fräulein (the young lady)
 
+## Article Summary Table
+
+| Article | Gender | Example | Translation |
+|---------|--------|---------|-------------|
+| **Der** | Masculine | der Mann | the man |
+| **Die** | Feminine | die Frau | the woman |
+| **Das** | Neuter | das Kind | the child |
+| **Ein** | M/N | ein Buch | a book |
+| **Eine** | Feminine | eine Tasse | a cup |
+
+## Visual Reference
+
+![Article languages in Europe](https://upload.wikimedia.org/wikipedia/commons/e/e8/EuropeArticleLanguages.png)
+
+*Languages with definite articles system similar to German*
+
+## Further Learning
+
+For more information about German articles and their usage, visit the [German Wikipedia article on Artikel](https://de.wikipedia.org/wiki/Artikel_(Wortart)).
+
 ## Summary
 
 Using articles correctly is crucial for German grammar. Practice and continuous learning help develop a better understanding and proper application of articles.
