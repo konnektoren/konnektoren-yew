@@ -104,5 +104,21 @@
   "dialog.observer_complete": "Bạn đã xem toàn bộ hội thoại!",
   "dialog.not_answered": "Chưa trả lời",
   "Speaker": "Người nói",
-  "Your Answer": "Câu trả lời của bạn"
+  "Your Answer": "Câu trả lời của bạn",
+  "Activity Heatmap": "Biểu đồ nhiệt hoạt động",
+  "Activity Overview": "Tổng quan hoạt động",
+  "weeks of": "tuần",
+  "learning": "học tập",
+  "No challenges": "Không có bài tập",
+  "active days": "ngày hoạt động",
+  "total challenges": "tổng bài tập",
+  "Less": "Ít hơn",
+  "More": "Nhiều hơn",
+  "Mon": "Th 2",
+  "Wed": "Th 4",
+  "Fri": "Th 6",
+  "Challenges on": "Bài tập ngày",
+  "Close": "Đóng",
+  "in": "trong",
+  "challenges": "bài tập"
 }

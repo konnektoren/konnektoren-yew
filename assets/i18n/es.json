@@ -104,5 +104,21 @@
   "dialog.observer_complete": "¡Has visto todo el diálogo!",
   "dialog.not_answered": "Sin respuesta",
   "Speaker": "Hablante",
-  "Your Answer": "Tu respuesta"
+  "Your Answer": "Tu respuesta",
+  "Activity Heatmap": "Mapa de actividad",
+  "Activity Overview": "Resumen de actividad",
+  "weeks of": "semanas de",
+  "learning": "aprendizaje",
+  "No challenges": "Sin ejercicios",
+  "active days": "días activos",
+  "total challenges": "ejercicios en total",
+  "Less": "Menos",
+  "More": "Más",
+  "Mon": "Lun",
+  "Wed": "Mié",
+  "Fri": "Vie",
+  "Challenges on": "Ejercicios el",
+  "Close": "Cerrar",
+  "in": "en",
+  "challenges": "ejercicios"
 }
