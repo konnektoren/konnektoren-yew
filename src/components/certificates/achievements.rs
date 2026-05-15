@@ -23,14 +23,23 @@ pub fn achievements_component(props: &AchievementsProps) -> Html {
 
     html! {
         <div class="achievements">
-            <h2 class="achievements__title">{ i18n.t("Achievements and Certificates") }</h2>
+            <h2 class="achievements__title">
+                <i class="fa-solid fa-trophy achievements__title-icon"></i>
+                { i18n.t("Achievements and Certificates") }
+            </h2>
             <div class="achievements__container">
                 <div class="achievements__achievements-list">
-                    <h3 class="achievements__subtitle">{ i18n.t("Achievements") }</h3>
+                    <h3 class="achievements__subtitle">
+                        <i class="fa-solid fa-medal achievements__subtitle-icon"></i>
+                        { i18n.t("Achievements") }
+                    </h3>
                     { render_achievements(&props.achievements) }
                 </div>
                 <div class="achievements__certificates-list">
-                    <h3 class="achievements__subtitle">{ i18n.t("Certificates") }</h3>
+                    <h3 class="achievements__subtitle">
+                        <i class="fa-solid fa-certificate achievements__subtitle-icon"></i>
+                        { i18n.t("Certificates") }
+                    </h3>
                     <ul class="achievements__list">
                         { render_certificates(&sorted_certificates, &selected_certificate, on_certificate_click, props) }
                     </ul>
