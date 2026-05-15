@@ -85,8 +85,7 @@
 }
 
 .domain-selector-buttons__name {
-    @apply whitespace-nowrap overflow-hidden text-ellipsis;
-    max-width: 100px;
+    @apply whitespace-nowrap;
 }
 
 @screen sm {
@@ -118,12 +117,5 @@
 }
 
 .domain-selector-pills__name {
-    @apply whitespace-nowrap overflow-hidden text-ellipsis;
-    max-width: 80px;
-}
-
-@screen sm {
-    .domain-selector-pills__name {
-        max-width: 120px;
-    }
+    @apply whitespace-nowrap;
 }

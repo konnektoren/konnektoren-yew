@@ -8,19 +8,16 @@ button {
 /* Primary variant */
 .btn-primary {
     @apply bg-primary text-primary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Secondary variant */
 .btn-secondary {
     @apply bg-secondary text-secondary-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Tertiary variant */
 .btn-tertiary {
     @apply bg-accent text-accent-content;
-    @apply hover:-translate-y-0.5 hover:shadow-lg hover:opacity-90;
 }
 
 /* Size variants */

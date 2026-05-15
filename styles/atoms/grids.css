@@ -25,24 +25,4 @@
     @apply card-grid lg:grid-cols-3 xl:grid-cols-3 max-w-4xl mx-auto;
 }
 
-@utility product-grid {
-    @apply grid gap-6 sm:gap-4 p-4 sm:p-2 w-full max-w-[1400px] mx-auto;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
 
-@screen sm {
-    .product-grid {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-}
-
-@media (max-width: 639px) {
-    .product-grid {
-        @apply grid-cols-1;
-        min-width: 0;
-    }
-}
-
-@utility challenge-grid-2x2 {
-    @apply grid gap-4 w-full grid-cols-2;
-}

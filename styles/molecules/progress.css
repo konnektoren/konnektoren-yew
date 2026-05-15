@@ -1,12 +1,12 @@
-@utility progress-bar {
-    @apply w-full h-2 bg-base-200 rounded overflow-hidden;
+@utility progress-track {
+    @apply w-full h-3 bg-base-200 rounded-full overflow-hidden;
 }
 
-@utility progress-bar-fill {
+@utility progress-fill {
     @apply h-full transition-[width] duration-300;
 }
 
-@utility progress-bar-gradient {
+@utility progress-fill-gradient {
     @apply h-full transition-[width] duration-300;
     background: linear-gradient(
         90deg,
@@ -15,18 +15,18 @@
     );
 }
 
-@utility progress-bar-primary {
+@utility progress-fill-primary {
     @apply h-full transition-[width] duration-300 bg-primary;
 }
 
-@utility progress-bar-success {
+@utility progress-fill-success {
     @apply h-full transition-[width] duration-300 bg-success;
 }
 
-@utility progress-bar-warning {
+@utility progress-fill-warning {
     @apply h-full transition-[width] duration-300 bg-warning;
 }
 
-@utility progress-bar-error {
+@utility progress-fill-error {
     @apply h-full transition-[width] duration-300 bg-error;
 }

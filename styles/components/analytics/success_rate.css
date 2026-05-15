@@ -47,11 +47,11 @@
 }
 
 .success-rate__gauge {
-    @apply progress-bar;
+    @apply progress-track;
 }
 
 .success-rate__gauge-fill {
-    @apply progress-bar-gradient;
+    @apply progress-fill-gradient;
 }
 
 .success-rate__gauge-fill--high {

@@ -59,11 +59,11 @@
 }
 
 .average-time-taken__gauge {
-    @apply progress-bar;
+    @apply progress-track;
 }
 
 .average-time-taken__gauge-fill {
-    @apply progress-bar-gradient;
+    @apply progress-fill-gradient;
 }
 
 .average-time-taken__gauge-fill--fast {

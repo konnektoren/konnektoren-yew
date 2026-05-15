@@ -12,47 +12,34 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
-/* Nav groups */
+/* Nav groups — compose with nav-item molecule */
 .navigation .nav-group {
-    @apply flex flex-col items-center;
-    @apply text-base-content/70 bg-transparent border-none p-2;
-    @apply cursor-pointer transition-all duration-300;
+    @apply nav-item bg-transparent border-none cursor-pointer;
 }
 
 .navigation .nav-group.active {
-    @apply text-primary -translate-y-[5px];
-}
-
-.navigation .nav-group:hover {
-    @apply text-primary/80 -translate-y-[5px];
+    @apply nav-item-active;
 }
 
 .navigation .nav-group i {
-    @apply text-3xl mb-1;
+    @apply nav-item-icon;
 }
 
 .navigation .nav-group span {
-    @apply text-sm;
+    @apply nav-item-label;
 }
 
-/* Route links - match the group styling */
+/* Route links — same molecule */
 .navigation a {
-    @apply flex flex-col items-center;
-    @apply text-base-content/70 p-2;
-    @apply transition-all duration-300;
-    @apply cursor-pointer;
-}
-
-.navigation a:hover {
-    @apply text-primary/80 -translate-y-[5px];
+    @apply nav-item cursor-pointer;
 }
 
 .navigation a i {
-    @apply text-3xl mb-1;
+    @apply nav-item-icon;
 }
 
 .navigation a span {
-    @apply text-sm;
+    @apply nav-item-label;
 }
 
 /* Component containers */
@@ -85,18 +72,11 @@
 }
 
 .navigation-dropdown a {
-    @apply flex flex-row items-center;
-    @apply p-2 rounded-lg;
-    @apply text-base-content/70 no-underline;
-    @apply transition-all duration-300;
+    @apply nav-item-horizontal text-base-content/70 no-underline;
 }
 
 .navigation-dropdown a i {
     @apply mr-2 mb-0 text-lg;
-}
-
-.navigation-dropdown a:hover {
-    @apply text-primary/80 bg-primary/10 translate-x-[5px];
 }
 
 .navigation-dropdown .nav-item-component {
@@ -131,25 +111,4 @@
     }
 }
 
-/* Responsive adjustments */
-@screen sm {
-    .navigation .nav-group i,
-    .navigation a i {
-        @apply text-sm;
-    }
-    .navigation .nav-group span,
-    .navigation a span {
-        @apply text-xs;
-    }
-}
-
-@screen md {
-    .navigation .nav-group i,
-    .navigation a i {
-        @apply text-xl;
-    }
-    .navigation .nav-group span,
-    .navigation a span {
-        @apply text-xs;
-    }
-}
+/* Responsive icon sizes handled by nav-item-icon molecule */

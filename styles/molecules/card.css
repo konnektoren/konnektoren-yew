@@ -30,6 +30,8 @@
 
 @utility value-display-large {
     @apply text-4xl sm:text-3xl font-bold text-base-content;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
 }
 
 @utility value-display-label {
