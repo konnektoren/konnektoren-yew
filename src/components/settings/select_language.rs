@@ -32,7 +32,7 @@ pub fn select_language() -> Html {
     html! {
         <div class="select-language">
             <label class="select-language__label">
-                { i18n.t("Language") }
+                { i18n.t("Select Language") }
             </label>
             <select class="select-language__select" onchange={on_select_change} value={selected_language.get().code()}>
                 <option value="" selected={selected_language.get().code().is_empty()} disabled=true>{ i18n.t("Select Language") }</option>

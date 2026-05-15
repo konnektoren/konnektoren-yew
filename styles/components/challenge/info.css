@@ -15,12 +15,29 @@
 }
 
 .challenge-info__summary-meta {
-    @apply hidden sm:flex items-center gap-2;
+    @apply flex items-center gap-2;
 }
 
 .challenge-info__summary-pill {
     @apply badge badge-ghost border border-base-300;
     @apply text-xs font-medium text-base-content/75;
+    @apply flex items-center gap-1;
+}
+
+.challenge-info__summary-pill--tasks i {
+    @apply text-info;
+}
+
+.challenge-info__summary-pill--xp i {
+    @apply text-error;
+}
+
+.challenge-info__summary-pill--free {
+    @apply bg-success/20 border-success/40;
+}
+
+.challenge-info__summary-pill--free i {
+    @apply text-success;
 }
 
 .challenge-info__content {
@@ -52,16 +69,6 @@
     @apply mb-3;
 }
 
-.challenge-info__meta {
-    @apply border-t border-base-300/80 pt-2;
-    @apply flex flex-wrap gap-x-4 gap-y-1;
-}
-
-.challenge-info__tasks,
-.challenge-info__unlock-points {
-    @apply text-sm text-base-content/85;
-    @apply font-medium;
-}
 
 @screen md {
     .challenge-info {
@@ -82,20 +89,11 @@
         @apply text-base;
     }
 
-    .challenge-info__summary-meta {
-        @apply hidden;
-    }
-
     .challenge-info__content {
         @apply px-4 pb-4;
     }
 
     .challenge-info__description {
         @apply text-xs mb-2.5;
-    }
-
-    .challenge-info__tasks,
-    .challenge-info__unlock-points {
-        @apply text-xs;
     }
 }
