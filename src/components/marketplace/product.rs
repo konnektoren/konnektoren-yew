@@ -55,7 +55,7 @@ fn render_body(props: &ProductComponentProps) -> Html {
 fn render_image(product: &Product) -> Html {
     match &product.image {
         Some(image) if image.starts_with("fa-") => html! {
-            <div class="text-center">
+            <div class="product__icon-container">
                 <i class={format!("product__icon fas {}", image)}></i>
             </div>
         },
@@ -105,11 +105,17 @@ fn render_price(product: &Product) -> Html {
     match product.price {
         Some(price) => html! {
             <div class="product__price">
-                <label class="product__price-label">{"Price"}</label>
-                <span class="product__price-value">{price}</span>
+                <span class="product__price-value">{format!("€{:.2}", price)}</span>
             </div>
         },
-        None => html!(),
+        None => html! {
+            <div class="product__price">
+                <span class="product__price-free">
+                    <i class="fas fa-unlock"></i>
+                    {" Free"}
+                </span>
+            </div>
+        },
     }
 }
 
@@ -117,10 +123,17 @@ fn render_button(props: &ProductComponentProps) -> Html {
     if let Some(on_select) = &props.on_select {
         let on_select = on_select.clone();
         let product = props.product.clone();
+        let icon = if product.price.is_some() {
+            "fa-cart-plus"
+        } else {
+            "fa-play"
+        };
         html! {
             <button class="product__button" onclick={
                 Callback::from(move |_| on_select.emit(product.clone()))
             }>
+                <i class={format!("fas {}", icon)}></i>
+                {" "}
                 {&props.button_text}
             </button>
         }
@@ -138,32 +151,32 @@ mod preview {
         ProductComponent,
         ProductComponentProps::default(),
         (
-            "no price",
+            "free with icon",
             ProductComponentProps {
                 product: Product {
                     id: Some("test-1".to_string()),
-                    name: "Test Product".to_string(),
-                    description: "This is a Test Product".to_string(),
+                    name: "Artikel: der, die, das".to_string(),
+                    description: "Lerne die Artikel für häufige Nomen.".to_string(),
                     price: None,
-                    image: None,
-                    tags: vec![],
+                    image: Some("fa-book-open".to_string()),
+                    tags: vec!["c1".to_string(), "free".to_string()],
                     path: None
                 },
                 is_highlighted: false,
-                on_select: None,
+                on_select: Some(Callback::noop()),
                 ..Default::default()
             }
         ),
         (
-            "with price",
+            "with price and icon",
             ProductComponentProps {
                 product: Product {
                     id: Some("test-2".to_string()),
-                    name: "Test Product".to_string(),
-                    description: "This is a Test Product".to_string(),
-                    price: Some(1.0),
-                    image: None,
-                    tags: vec!["tag1".to_string(), "tag2".to_string()],
+                    name: "Articles Mastery".to_string(),
+                    description: "Dive deep into German articles with this interactive course. Learn to confidently use der, die, and das through pattern recognition.".to_string(),
+                    price: Some(4.99),
+                    image: Some("fa-graduation-cap".to_string()),
+                    tags: vec!["c1".to_string(), "articles".to_string()],
                     path: None
                 },
                 is_highlighted: false,
@@ -176,11 +189,11 @@ mod preview {
             ProductComponentProps {
                 product: Product {
                     id: Some("test-3".to_string()),
-                    name: "Highlighted Product".to_string(),
-                    description: "This is a highlighted product".to_string(),
-                    price: Some(1.0),
-                    image: None,
-                    tags: vec!["highlighted".to_string()],
+                    name: "Complete Article Package".to_string(),
+                    description: "Master German articles with our comprehensive package. Includes structured lessons on der, die, and das.".to_string(),
+                    price: Some(9.99),
+                    image: Some("fa-palette".to_string()),
+                    tags: vec!["c1".to_string(), "package".to_string(), "articles".to_string()],
                     path: None
                 },
                 is_highlighted: true,

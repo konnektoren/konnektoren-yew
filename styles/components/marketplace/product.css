@@ -1,39 +1,60 @@
 .product {
-    @apply card bg-base-100 shadow-sm;
-    @apply hover:shadow-lg transition-all duration-300;
-    @apply p-6 sm:p-4;
+    @apply card bg-base-100 shadow-md;
+    @apply hover:shadow-xl hover:-translate-y-1 transition-all duration-300;
     @apply flex flex-col overflow-hidden;
+    @apply border border-base-200;
+    @apply relative;
+}
+
+/* Colored accent band at top */
+.product::before {
+    content: "";
+    @apply block h-1 w-full bg-gradient-to-r from-primary to-primary/50;
+}
+
+.product-content {
+    @apply flex flex-col flex-1 p-6 sm:p-4;
 }
 
 .product__header {
-    @apply flex justify-between items-start mb-4 sm:mb-3;
+    @apply flex justify-between items-start mb-3 sm:mb-2;
 }
 
 .product__title {
-    @apply text-xl sm:text-lg font-bold line-clamp-2;
+    @apply text-xl sm:text-lg font-bold line-clamp-2 text-base-content;
 }
 
-.product__image {
-    @apply w-full h-48 sm:h-32 object-cover rounded-lg;
-    @apply -mx-6 sm:-mx-4 -mt-6 sm:-mt-4 mb-4;
+/* Icon in a rounded colored bubble */
+.product__icon-container {
+    @apply flex items-center justify-center mx-auto mb-4;
+    @apply w-16 h-16 rounded-2xl bg-primary/10;
+    @apply transition-transform duration-300;
+}
+
+.product:hover .product__icon-container {
+    @apply scale-110;
 }
 
 .product__icon {
-    @apply text-5xl sm:text-4xl text-primary mb-4 text-center;
+    @apply text-3xl text-primary;
+}
+
+.product__image {
+    @apply w-full h-48 sm:h-32 object-cover rounded-lg mb-4;
 }
 
 .product__description {
-    @apply text-sm text-base-content/80 mb-4;
+    @apply text-sm text-base-content/70 mb-4 leading-relaxed;
     @apply line-clamp-3 flex-grow;
 }
 
 .product__tags {
-    @apply flex flex-wrap gap-2 mb-4;
+    @apply flex flex-wrap gap-1.5 mb-4;
 }
 
 .product__tag {
-    @apply badge badge-sm hover:badge-primary;
-    @apply transition-colors duration-300 cursor-pointer;
+    @apply badge badge-sm badge-ghost border border-base-300;
+    @apply hover:badge-primary transition-colors duration-200 cursor-pointer;
 }
 
 .product__footer {
@@ -42,31 +63,44 @@
 }
 
 .product__price {
-    @apply flex flex-col gap-0.5;
-}
-
-.product__price-label {
-    @apply text-xs text-base-content/60 uppercase tracking-wide;
+    @apply flex items-baseline gap-0.5;
 }
 
 .product__price-value {
-    @apply text-2xl sm:text-xl font-bold text-primary;
+    @apply text-2xl sm:text-xl font-extrabold text-primary;
+}
+
+.product__price-free {
+    @apply inline-flex items-center gap-1.5;
+    @apply px-3 py-1 rounded-full text-sm font-semibold;
+    @apply bg-success/15 text-success border border-success/40;
 }
 
 .product__button {
-    @apply btn btn-primary sm:btn-block sm:btn-sm;
+    @apply btn btn-primary btn-sm sm:btn-block gap-2;
+    @apply transition-all duration-200;
+    @apply hover:brightness-110 hover:-translate-y-0.5;
 }
 
+/* Highlighted / featured card */
 .product--highlighted {
-    @apply border-2 border-primary relative;
+    @apply border-2 border-primary;
 }
 
 .product--highlighted::before {
+    @apply bg-gradient-to-r from-primary to-secondary;
+}
+
+.product--highlighted::after {
     content: "Featured";
     @apply badge badge-primary badge-sm;
-    @apply absolute top-3 right-3 z-10 shadow-lg;
+    @apply absolute top-4 right-4 z-10 shadow;
 }
 
 .product--highlighted .product__title {
     @apply text-primary;
+}
+
+.product--highlighted .product__icon-container {
+    @apply bg-primary/20;
 }
