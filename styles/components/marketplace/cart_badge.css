@@ -1,7 +1,9 @@
 .cart__badge {
     @apply btn btn-circle btn-secondary btn-lg;
-    @apply hover:shadow-lg active:shadow-xl;
-    @apply transition-shadow duration-200;
+    @apply shadow-md hover:shadow-xl active:shadow-xl;
+    @apply transition-all duration-200;
+    @apply hover:scale-110 hover:brightness-110;
+    @apply active:scale-95;
     @apply relative;
 }
 
