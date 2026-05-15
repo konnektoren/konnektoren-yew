@@ -34,11 +34,13 @@ pub fn settings_component() -> Html {
 
     html! {
         <div class="settings">
-            <h2>{ i18n.t("Settings") }</h2>
-
             <MusicConfig settings={(*settings).clone()} on_change={on_change.clone()} />
             <SoundConfig settings={(*settings).clone()} on_change={on_change.clone()} />
-            <button onclick={on_save} disabled={!has_changes()}>{ i18n.t("Save") }</button>
+            <div class="settings__save-row">
+                <button class="settings__button" onclick={on_save} disabled={!has_changes()}>
+                    { i18n.t("Save") }
+                </button>
+            </div>
         </div>
     }
 }

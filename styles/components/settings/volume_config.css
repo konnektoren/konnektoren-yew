@@ -1,0 +1,20 @@
+.music-config,
+.sound-config {
+    @apply flex items-center gap-4 sm:gap-2 w-full;
+}
+
+.music-config label,
+.sound-config label {
+    @apply text-sm font-medium text-base-content/80 whitespace-nowrap min-w-[9rem] sm:min-w-[7rem];
+}
+
+.music-config input[type="range"],
+.sound-config input[type="range"] {
+    @apply range range-primary range-sm flex-1;
+}
+
+.music-config output,
+.sound-config output {
+    @apply text-sm font-mono tabular-nums text-base-content/60 min-w-[2.5rem] text-right;
+    font-variant-numeric: tabular-nums;
+}

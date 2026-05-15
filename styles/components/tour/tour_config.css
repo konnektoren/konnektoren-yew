@@ -1,5 +1,5 @@
 .tour-config {
-    @apply card bg-base-200 shadow-md p-4;
+    @apply flex flex-col gap-3;
 }
 
 .tour-config__title {
@@ -18,7 +18,8 @@
     @apply flex items-center gap-2 cursor-pointer;
 }
 
-.tour-config__label-text {
+.tour-config__label-text,
+.tour-config__text {
     @apply text-sm font-medium;
 }
 

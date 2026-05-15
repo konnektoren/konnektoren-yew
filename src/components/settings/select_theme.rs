@@ -80,8 +80,8 @@ pub fn select_theme(props: &SelectThemeProps) -> Html {
 
     html! {
         <div class="select-theme">
-            <button onclick={toggle_theme}>
-                <i class={classes!("fas", get_theme_icon(&theme))}></i>
+            <button class="select-theme__button" onclick={toggle_theme}>
+                <i class={classes!("fas", get_theme_icon(&theme), "select-theme__icon")}></i>
                 <span>{get_theme_name(&theme)}</span>
             </button>
         </div>

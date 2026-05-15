@@ -18,13 +18,14 @@ pub fn tour_config() -> Html {
 
     html! {
         <div class="tour-config">
-            <label>
+            <label class="tour-config__label">
                 <input
+                    class="checkbox checkbox-primary"
                     type="checkbox"
                     checked={settings.show_helpers}
                     onclick={on_toggle}
                 />
-                { i18n.t("Show Tour Button") }
+                <span class="tour-config__text">{ i18n.t("Show Tour Button") }</span>
             </label>
         </div>
     }

@@ -1,19 +1,29 @@
 .settings {
-    @apply flex flex-col gap-4 sm:gap-3;
+    @apply flex flex-col gap-6 sm:gap-4 w-full;
 }
 
 .settings__section {
-    @apply card bg-base-100 p-4 sm:p-3;
+    @apply card bg-base-100 shadow-sm border border-base-200;
+    @apply p-6 sm:p-4 flex flex-col gap-4;
 }
 
 .settings__title {
-    @apply text-lg font-bold text-primary mb-3;
+    @apply text-base font-semibold text-primary uppercase tracking-wide;
+    @apply pb-2 border-b border-base-200;
+}
+
+.settings__row {
+    @apply flex items-center gap-4 sm:gap-2;
 }
 
 .settings__button {
-    @apply btn btn-primary w-full sm:btn-md;
+    @apply btn btn-primary w-full;
 }
 
 .settings__button--secondary {
-    @apply btn btn-secondary w-full sm:btn-md;
+    @apply btn btn-secondary w-full;
+}
+
+.settings__save-row {
+    @apply pt-2;
 }
