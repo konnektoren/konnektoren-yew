@@ -1,4 +1,3 @@
-use env_logger::{Builder, Env};
 use konnektoren_yew::app_ssr::App;
 use std::collections::HashMap;
 use std::env;
@@ -6,6 +5,7 @@ use std::error::Error;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 use tracing::{error, info};
+use tracing_subscriber::EnvFilter;
 use yew_router::Routable;
 use yew_router::prelude::*;
 use yew_ssg::generators::{MetaTagGenerator, OpenGraphGenerator};
@@ -44,7 +44,9 @@ pub enum Route {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // Initialize logger
-    Builder::from_env(Env::default().default_filter_or("info")).init();
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::from_default_env())
+        .init();
 
     info!("🏗️ Configuring static site generator...");
 

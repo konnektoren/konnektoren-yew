@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.5.13"
+version = "0.5.14"
 edition = "2024"
 
 [lib]
@@ -69,9 +69,9 @@ csr = [
     "dep:wasm-bindgen-futures",
 ]
 ssr = ["yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
-ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio", "env_logger"]
+ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio"]
 server = ["ssr", "axum", "tokio/full"]
-tools = ["konnektoren-platform/tools", "env_logger"]
+tools = ["konnektoren-platform/tools"]
 
 [dependencies]
 # Core dependencies
@@ -159,7 +159,7 @@ spl-token = { version = "7", optional = true }
 
 # Server dependencies
 axum = { version = "0.8", features = ["macros"], optional = true }
-env_logger = { version = "0.11", optional = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tokio = { version = "1", features = [
     "rt-multi-thread",
     "macros",
@@ -173,7 +173,6 @@ wasm-bindgen-test = "0.3"
 tokio = { version = "1", features = ["rt", "macros"] }
 walkdir = "2"
 serde_json = "1"
-tracing-subscriber = "0.3"
 
 [build-dependencies]
 anyhow = "1"

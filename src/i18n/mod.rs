@@ -119,7 +119,7 @@ pub fn language_name(lang: &'static str) -> &'static str {
 pub fn log_language_info(context: &str) {
     #[cfg(feature = "ssr")]
     {
-        use log::{info, warn};
+        use tracing::{info, warn};
 
         // Get language from environment and log it along with the flag
         if let Ok(lang) = std::env::var("LANG") {
