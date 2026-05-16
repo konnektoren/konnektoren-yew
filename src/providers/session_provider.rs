@@ -41,7 +41,7 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         || match session_initializer.initialize(&Session::default()) {
             Ok(session) => session,
             Err(e) => {
-                log::error!("Failed to initialize session: {:?}", e);
+                tracing::error!("Failed to initialize session: {:?}", e);
                 Session::default()
             }
         },
@@ -70,19 +70,19 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
                             }
                             Err(e) => {
                                 let err_msg = format!("Failed to initialize session: {:?}", e);
-                                log::error!("{}", err_msg);
+                                tracing::error!("{}", err_msg);
                                 error.set(Some(err_msg));
                                 is_hydrated.set(true);
                             }
                         }
                     }
                     Ok(None) => {
-                        log::info!("No existing session found");
+                        tracing::info!("No existing session found");
                         is_hydrated.set(true);
                     }
                     Err(e) => {
                         let err_msg = format!("Failed to load session: {:?}", e);
-                        log::error!("{}", err_msg);
+                        tracing::error!("{}", err_msg);
                         error.set(Some(err_msg));
                         is_hydrated.set(true);
                     }
@@ -116,7 +116,7 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
                     .await
                 {
                     let err_msg = format!("Failed to save session: {:?}", e);
-                    log::error!("{}", err_msg);
+                    tracing::error!("{}", err_msg);
                     error.set(Some(err_msg));
                 }
             });

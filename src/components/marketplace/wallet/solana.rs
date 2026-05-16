@@ -90,7 +90,7 @@ impl SolanaWalletProvider {
                     }
 
                     if let Some(ref mut adapter) = *adapter_guard {
-                        log::info!("Attempting to connect to {}", wallet_name);
+                        tracing::info!("Attempting to connect to {}", wallet_name);
 
                         // Connect to the wallet
                         match adapter.connect_by_name(&wallet_name).await {
@@ -100,7 +100,7 @@ impl SolanaWalletProvider {
                                 if let Ok(account) =
                                     adapter.connection_info().await.connected_account()
                                 {
-                                    log::info!("Got account: {}", account.address());
+                                    tracing::info!("Got account: {}", account.address());
                                     let new_connection = WalletConnection {
                                         address: account.address().to_string(),
                                         network: network.clone(),
@@ -126,7 +126,7 @@ impl SolanaWalletProvider {
                                     }
                                 }
                             }
-                            Err(e) => log::error!("Connection failed: {}", e),
+                            Err(e) => tracing::error!("Connection failed: {}", e),
                         }
                     }
                 }
@@ -491,15 +491,15 @@ impl SolanaWalletProvider {
     ) -> Result<Transaction, String> {
         // Verify the recipient address is valid
         let recipient_pubkey = Pubkey::from_str(recipient).map_err(|_| {
-            log::error!("Invalid recipient address: {}", recipient);
+            tracing::error!("Invalid recipient address: {}", recipient);
             "Invalid recipient address".to_string()
         })?;
-        log::info!("Recipient pubkey: {}", recipient_pubkey);
+        tracing::info!("Recipient pubkey: {}", recipient_pubkey);
 
         // Build the transaction
         let mut tx = match token.token_type {
             TokenType::Native => {
-                log::info!("Creating native SOL transfer for {} lamports", amount);
+                tracing::info!("Creating native SOL transfer for {} lamports", amount);
                 let transfer_instruction =
                     system_instruction::transfer(from_pubkey, &recipient_pubkey, amount);
                 Transaction::new_with_payer(&[transfer_instruction], Some(from_pubkey))
@@ -514,7 +514,7 @@ impl SolanaWalletProvider {
                     .checked_mul(10u64.pow(token.decimals as u32))
                     .ok_or_else(|| "Amount overflow".to_string())?;
 
-                log::info!(
+                tracing::info!(
                     "Creating SPL token transfer for {} tokens (decimals: {})",
                     amount_with_decimals,
                     token.decimals
@@ -530,7 +530,7 @@ impl SolanaWalletProvider {
                     token.decimals,
                 )
                 .map_err(|e| {
-                    log::error!("Error creating SPL transfer instruction: {}", e);
+                    tracing::error!("Error creating SPL transfer instruction: {}", e);
                     e.to_string()
                 })?;
 
@@ -548,11 +548,11 @@ impl SolanaWalletProvider {
     ) -> Result<String, String> {
         // Serialize the transaction
         let tx_bytes = bincode::serialize(&tx).map_err(|e| {
-            log::error!("Failed to serialize transaction: {}", e);
+            tracing::error!("Failed to serialize transaction: {}", e);
             format!("Failed to prepare transaction: {}", e)
         })?;
 
-        log::info!("Sending transaction...");
+        tracing::info!("Sending transaction...");
 
         // Send the transaction
         match adapter
@@ -561,11 +561,11 @@ impl SolanaWalletProvider {
         {
             Ok(signature) => {
                 let signature = Utils::base58_signature(signature);
-                log::info!("Transaction sent successfully: {}", signature);
+                tracing::info!("Transaction sent successfully: {}", signature);
                 Ok(signature)
             }
             Err(e) => {
-                log::error!("Transaction failed: {}", e);
+                tracing::error!("Transaction failed: {}", e);
                 Err(format!("Transaction failed: {}", e))
             }
         }
@@ -582,7 +582,7 @@ impl SolanaWalletProvider {
             .connected_account()
             .map_err(|e| e.to_string())?;
         let from_pubkey = Pubkey::from(account.public_key());
-        log::info!("From pubkey: {}", from_pubkey);
+        tracing::info!("From pubkey: {}", from_pubkey);
 
         let recent_blockhash = self.get_blockhash().await?;
 

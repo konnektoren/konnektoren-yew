@@ -105,15 +105,15 @@ pub fn challenge_review(props: &ChallengeReviewProps) -> Html {
                             update_trace_from_response(&response);
                             let status = response.status();
                             if (200..300).contains(&status) {
-                                log::info!("Review submitted successfully");
+                                tracing::info!("Review submitted successfully");
                                 is_sent.set(true);
                             } else {
-                                log::error!("Failed to submit review: status code {}", status);
+                                tracing::error!("Failed to submit review: status code {}", status);
                                 error.set(Some(format!("Failed to submit ({})", status)));
                             }
                         }
                         Err(e) => {
-                            log::error!("Error while submitting review: {:?}", e);
+                            tracing::error!("Error while submitting review: {:?}", e);
                             error.set(Some("Could not reach server".to_string()));
                         }
                     }

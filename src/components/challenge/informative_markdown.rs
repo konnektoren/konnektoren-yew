@@ -30,7 +30,7 @@ pub fn load_markdown_for_ssg(path: &str) -> String {
         if file_path.exists() {
             match std::fs::read_to_string(&file_path) {
                 Ok(content) => return content,
-                Err(e) => log::warn!("Failed to read file {}: {}", file_path.display(), e),
+                Err(e) => tracing::warn!("Failed to read file {}: {}", file_path.display(), e),
             }
         }
     }
@@ -115,7 +115,7 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
                 match fetch_markdown_with_loader(&asset_loader, &markdown_path).await {
                     Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
                     Err(err) => {
-                        log::warn!("Failed to fetch markdown {}: {}", markdown_path, err);
+                        tracing::warn!("Failed to fetch markdown {}: {}", markdown_path, err);
                         match fetch_markdown_with_loader(&asset_loader, &fallback_path).await {
                             Ok(content) => loading_state.set(LoadingState::FetchSuccess(content)),
                             Err(err) => loading_state.set(LoadingState::FetchError(err)),

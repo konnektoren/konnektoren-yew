@@ -69,7 +69,7 @@ pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
                         }
                         Err(err) => {
                             // Handle error appropriately
-                            log::error!("Failed to fetch leaderboard: {:?}", err);
+                            tracing::error!("Failed to fetch leaderboard: {:?}", err);
                         }
                     }
                 });

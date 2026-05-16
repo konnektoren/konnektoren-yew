@@ -157,7 +157,7 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                                 error_state.set(None);
                             }
                             Err(e) => {
-                                log::error!("Payment failed: {}", e);
+                                tracing::error!("Payment failed: {}", e);
                                 error_state.set(Some(e));
                             }
                         }
@@ -206,7 +206,7 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
             let error_state = error_state.clone();
 
             wasm_bindgen_futures::spawn_local(async move {
-                log::info!("Disconnecting wallet");
+                tracing::info!("Disconnecting wallet");
                 match provider.disconnect().await {
                     Ok(disconnected) => {
                         provider.set((*provider).clone());
@@ -217,7 +217,7 @@ pub fn wallet_component<T: WalletProvider + 'static>(props: &WalletComponentProp
                         }
                     }
                     Err(e) => {
-                        log::error!("Failed to disconnect wallet: {}", e);
+                        tracing::error!("Failed to disconnect wallet: {}", e);
                         error_state.set(Some(format!("Failed to disconnect wallet: {}", e)));
                     }
                 }
@@ -488,16 +488,16 @@ mod preview {
                 "0:5ca1f07c7d67fd26816a731377b6404e857265761676626a4bd6fda652293119".to_string()
             ),
             on_payment_success: Some(Callback::from(|_| {
-                log::info!("Payment successful");
+                tracing::info!("Payment successful");
             })),
             on_connect: Some(Callback::from(|conn| {
-                log::info!("TON Connected: {:?}", conn);
+                tracing::info!("TON Connected: {:?}", conn);
             })),
             on_disconnect: Some(Callback::from(|_| {
-                log::info!("TON Disconnected");
+                tracing::info!("TON Disconnected");
             })),
             on_token_select: Some(Callback::from(|token| {
-                log::info!("TON Selected token: {:?}", token);
+                tracing::info!("TON Selected token: {:?}", token);
             })),
         },
     );
@@ -511,16 +511,16 @@ mod preview {
             price: Some(10.0),
             recipient_address: Some("4Qsvf6oNaAHNpwzV2RZfnqSpMd1oP6LXgRxNT5xd72Nj".to_string()),
             on_payment_success: Some(Callback::from(|_| {
-                log::info!("Payment successful");
+                tracing::info!("Payment successful");
             })),
             on_connect: Some(Callback::from(|conn| {
-                log::info!("Solana Connected: {:?}", conn);
+                tracing::info!("Solana Connected: {:?}", conn);
             })),
             on_disconnect: Some(Callback::from(|_| {
-                log::info!("Solana Disconnected");
+                tracing::info!("Solana Disconnected");
             })),
             on_token_select: Some(Callback::from(|token| {
-                log::info!("Solana Selected token: {:?}", token);
+                tracing::info!("Solana Selected token: {:?}", token);
             })),
         },
     );

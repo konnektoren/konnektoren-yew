@@ -48,13 +48,13 @@ pub fn app_dependencies() -> Html {
         #[cfg(feature = "sbom")]
         {
             serde_json::from_str(env!("CARGO_SBOM")).unwrap_or_else(|e| {
-                log::error!("Failed to parse SBOM: {}", e);
+                tracing::error!("Failed to parse SBOM: {}", e);
                 CycloneDX { components: vec![] }
             })
         }
         #[cfg(not(feature = "sbom"))]
         {
-            log::warn!("SBOM feature is not enabled.  Returning empty SBOM.");
+            tracing::warn!("SBOM feature is not enabled.  Returning empty SBOM.");
             CycloneDX { components: vec![] }
         }
     };

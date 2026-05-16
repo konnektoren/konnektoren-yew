@@ -61,7 +61,7 @@ pub fn settings_provider(props: &SettingsProviderProps) -> Html {
                     .save_settings(SETTINGS_STORAGE_KEY, &settings)
                     .await
                 {
-                    log::error!("Failed to save settings: {:?}", e);
+                    tracing::error!("Failed to save settings: {:?}", e);
                 }
             });
             || ()

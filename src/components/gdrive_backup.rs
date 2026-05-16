@@ -157,10 +157,10 @@ pub fn gdrive_backup(props: &GDriveBackupProps) -> Html {
                     scope
                 );
 
-                log::info!("Redirecting to OAuth URL: {}", auth_url);
+                tracing::info!("Redirecting to OAuth URL: {}", auth_url);
 
                 if let Err(e) = window().location().set_href(&auth_url) {
-                    log::error!("Failed to redirect to OAuth URL: {:?}", e);
+                    tracing::error!("Failed to redirect to OAuth URL: {:?}", e);
                 }
             })
         };

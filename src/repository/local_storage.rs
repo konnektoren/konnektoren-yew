@@ -62,19 +62,19 @@ impl Storage for LocalStorage {
         key: &str,
     ) -> Result<Option<T>, StorageError> {
         // SSR/SSG: No local storage available
-        log::debug!("LocalStorage.get called during SSR/SSG for key: {}", key);
+        tracing::debug!("LocalStorage.get called during SSR/SSG for key: {}", key);
         Ok(None)
     }
 
     async fn set<T: Serialize + Sync>(&self, key: &str, value: &T) -> Result<(), StorageError> {
         // SSR/SSG: No-op
-        log::debug!("LocalStorage.set called during SSR/SSG for key: {}", key);
+        tracing::debug!("LocalStorage.set called during SSR/SSG for key: {}", key);
         Ok(())
     }
 
     async fn remove(&self, key: &str) -> Result<(), StorageError> {
         // SSR/SSG: No-op
-        log::debug!("LocalStorage.remove called during SSR/SSG for key: {}", key);
+        tracing::debug!("LocalStorage.remove called during SSR/SSG for key: {}", key);
         Ok(())
     }
 }

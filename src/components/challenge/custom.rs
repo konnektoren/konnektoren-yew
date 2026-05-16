@@ -152,7 +152,7 @@ pub async fn fetch_content(path: &str, handle: UseStateHandle<String>) {
     {
         match fetch_file(path).await {
             Ok(content) => handle.set(content),
-            Err(err) => log::error!("Failed to fetch the file content of {}: {}", path, err),
+            Err(err) => tracing::error!("Failed to fetch the file content of {}: {}", path, err),
         }
     }
 }

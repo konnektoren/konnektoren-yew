@@ -1,5 +1,5 @@
-use log::debug;
 use regex::Regex;
+use tracing::debug;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]

@@ -65,7 +65,7 @@ pub fn certificates_provider(props: &CertificatesProviderProps) -> Html {
                     .save_certificates(CERTIFICATE_STORAGE_KEY, &certificates)
                     .await
                 {
-                    log::error!("Failed to save certificates: {:?}", e);
+                    tracing::error!("Failed to save certificates: {:?}", e);
                 }
             });
             || ()

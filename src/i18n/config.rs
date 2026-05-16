@@ -15,13 +15,15 @@ pub fn create_i18n_config() -> I18nConfig {
     #[cfg(feature = "ssr")]
     {
         if let Ok(lang_code) = std::env::var("LANG") {
-            log::debug!(
+            tracing::debug!(
                 "🌐 Setting default language from LANG environment variable: {}",
                 lang_code
             );
             config.default_language = Language::from_code(&lang_code);
         } else {
-            log::warn!("⚠️ LANG environment variable not set in SSR mode, using default language");
+            tracing::warn!(
+                "⚠️ LANG environment variable not set in SSR mode, using default language"
+            );
         }
     }
 
@@ -131,29 +133,26 @@ mod tests {
 
     #[test]
     fn test_loaded_assets() {
-        let _ = env_logger::builder()
-            .filter_level(log::LevelFilter::Info)
-            .is_test(true)
-            .try_init();
+        let _ = tracing_subscriber::fmt().with_test_writer().try_init();
 
         // First, let's check what files are actually embedded
-        log::info!("Available asset files:");
+        tracing::info!("Available asset files:");
         for file in LocalI18nAssets::iter() {
-            log::info!("  {}", file);
+            tracing::info!("  {}", file);
         }
 
         let config = create_i18n_config();
 
         // Log raw translations map
-        log::info!("Raw translations map:");
-        log::info!("{:#?}", config.translations);
+        tracing::info!("Raw translations map:");
+        tracing::info!("{:#?}", config.translations);
 
         // Try to load a specific file directly
         if let Some(content) = LocalI18nAssets::get("de.json") {
             let content_str = std::str::from_utf8(&content.data).unwrap();
-            log::info!("Content of de.json:\n{}", content_str);
+            tracing::info!("Content of de.json:\n{}", content_str);
         } else {
-            log::error!("Could not load de.json");
+            tracing::error!("Could not load de.json");
         }
         let config = create_i18n_config();
 
@@ -245,10 +244,7 @@ mod tests {
 
     #[test]
     fn test_combined_platform_and_local_translations() {
-        let _ = env_logger::builder()
-            .filter_level(log::LevelFilter::Info)
-            .is_test(true)
-            .try_init();
+        let _ = tracing_subscriber::fmt().with_test_writer().try_init();
 
         let config = create_i18n_config();
 
@@ -304,10 +300,10 @@ mod tests {
         }
 
         // Log all available keys for debugging
-        log::info!("Available translation keys for German:");
+        tracing::info!("Available translation keys for German:");
         if let Some(obj) = de_translations.as_object() {
             for key in obj.keys() {
-                log::info!("  {}", key);
+                tracing::info!("  {}", key);
             }
         }
 
@@ -321,7 +317,7 @@ mod tests {
 
         // Verify translation count
         let total_keys = de_obj.len();
-        log::info!("Total number of translations in German: {}", total_keys);
+        tracing::info!("Total number of translations in German: {}", total_keys);
         assert!(
             total_keys >= local_keys.len() + platform_keys.len(),
             "Should have at least the sum of local and platform translations. Expected at least {}, got {}",
@@ -345,7 +341,7 @@ mod tests {
             // Test platform keys
             for &key in &platform_keys {
                 let result = config.t_with_lang(key, &lang);
-                log::info!(
+                tracing::info!(
                     "Platform translation for '{}' in {}: '{}'",
                     key,
                     lang.native_name(),
@@ -355,9 +351,9 @@ mod tests {
         }
 
         // Log final statistics
-        log::info!("Translation test summary:");
-        log::info!("  Local keys: {}", local_keys.len());
-        log::info!("  Platform keys: {}", platform_keys.len());
-        log::info!("  Total keys in German: {}", total_keys);
+        tracing::info!("Translation test summary:");
+        tracing::info!("  Local keys: {}", local_keys.len());
+        tracing::info!("  Platform keys: {}", platform_keys.len());
+        tracing::info!("  Total keys in German: {}", total_keys);
     }
 }

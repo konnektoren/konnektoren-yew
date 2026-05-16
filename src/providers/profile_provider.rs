@@ -75,7 +75,7 @@ pub fn profile_provider(props: &ProfileProviderProps) -> Html {
                     .update_profile(PROFILE_STORAGE_KEY, &profile)
                     .await
                 {
-                    log::error!("Failed to save profile: {:?}", e);
+                    tracing::error!("Failed to save profile: {:?}", e);
                 }
             });
             || ()

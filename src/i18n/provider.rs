@@ -69,7 +69,7 @@ fn get_browser_language(_supported_languages: &[Language]) -> Option<Language> {
 #[cfg(feature = "ssr")]
 fn get_env_language() -> Option<Language> {
     std::env::var("LANG").ok().map(|lang| {
-        log::debug!("🌐 Using language from environment: LANG={}", lang);
+        tracing::debug!("🌐 Using language from environment: LANG={}", lang);
         Language::from_code(&lang)
     })
 }

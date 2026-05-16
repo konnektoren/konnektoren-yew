@@ -21,7 +21,6 @@ use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePoi
 use crate::providers::{I18nProvider, create_repositories};
 use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
-use log;
 use std::sync::Arc;
 use yew::prelude::*;
 #[cfg(feature = "yew-preview")]
@@ -38,7 +37,7 @@ pub fn Example() -> Html {
         Callback::from(move |challenge_config: ChallengeConfig| {
             match game.create_challenge(&challenge_config.id) {
                 Ok(c) => challenge.set(Some(c)),
-                Err(err) => log::error!("Error creating challenge: {:?}", err),
+                Err(err) => tracing::error!("Error creating challenge: {:?}", err),
             }
         })
     };
@@ -51,17 +50,17 @@ pub fn Example() -> Html {
                 let x = coords.0;
                 let y = coords.1;
                 if let Some(challenge_index) = challenge_index {
-                    log::info!("Challenge index: {}, x: {}, y: {}", challenge_index, x, y);
+                    tracing::info!("Challenge index: {}, x: {}, y: {}", challenge_index, x, y);
                     if let Some(challenge_config) =
                         game.game_paths[0].challenges.get(challenge_index)
                     {
                         match game.create_challenge(&challenge_config.id) {
                             Ok(c) => challenge.set(Some(c)),
-                            Err(_) => log::error!("Challenge creation failed"),
+                            Err(_) => tracing::error!("Challenge creation failed"),
                         }
                     }
                 } else {
-                    log::error!("Challenge not found");
+                    tracing::error!("Challenge not found");
                 }
             },
         )
@@ -237,7 +236,7 @@ pub fn App() -> Html {
     let i18n_config = create_i18n_config();
 
     #[cfg(debug_assertions)]
-    log::info!(
+    tracing::info!(
         "Initialized I18nConfig with default language: {}",
         i18n_config.default_language.native_name()
     );

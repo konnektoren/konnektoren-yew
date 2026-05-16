@@ -1,5 +1,5 @@
 #[cfg(feature = "csr")]
-use log::{debug, warn};
+use tracing::{debug, warn};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]

@@ -70,7 +70,7 @@ pub fn challenge_presence(props: &ChallengePresenceProps) -> Html {
                             }
                         }
                         _ => {
-                            log::error!("Failed to fetch presence count.");
+                            tracing::error!("Failed to fetch presence count.");
                         }
                     }
                 });

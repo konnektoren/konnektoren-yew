@@ -51,7 +51,7 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                                 }
                                 Err(e) => {
                                     let err_msg = format!("Failed to read package: {}", e);
-                                    log::error!("{}", err_msg);
+                                    tracing::error!("{}", err_msg);
                                     error.set(Some(err_msg));
                                     loading.set(false);
                                 }
@@ -61,7 +61,7 @@ pub fn custom_package_component(props: &CustomPackageComponentProps) -> Html {
                                     "Failed to download package from {}: {}",
                                     package_url, e
                                 );
-                                log::error!("{}", err_msg);
+                                tracing::error!("{}", err_msg);
                                 error.set(Some(err_msg));
                                 loading.set(false);
                             }

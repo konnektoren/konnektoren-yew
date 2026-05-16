@@ -1,11 +1,11 @@
 use env_logger::{Builder, Env};
 use konnektoren_yew::app_ssr::App;
-use log::{error, info};
 use std::collections::HashMap;
 use std::env;
 use std::error::Error;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
+use tracing::{error, info};
 use yew_router::Routable;
 use yew_router::prelude::*;
 use yew_ssg::generators::{MetaTagGenerator, OpenGraphGenerator};

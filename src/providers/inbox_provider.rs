@@ -38,7 +38,7 @@ pub fn inbox_provider(props: &InboxProviderProps) -> Html {
             spawn_local(async move {
                 if let Ok(Some(loaded_inbox)) = inbox_repository.get_inbox(INBOX_STORAGE_KEY).await
                 {
-                    log::info!("Loaded inbox: {:?}", loaded_inbox);
+                    tracing::info!("Loaded inbox: {:?}", loaded_inbox);
                     inbox.set(loaded_inbox.clone());
                     match gloo::net::http::Request::get(INBOX_FILE).send().await {
                         Ok(response) => match response.text().await {
@@ -46,15 +46,15 @@ pub fn inbox_provider(props: &InboxProviderProps) -> Html {
                                 let mut new_inbox = loaded_inbox.clone();
                                 let loaded_inbox: Inbox = serde_yaml::from_str(&text)
                                     .unwrap_or_else(|e| {
-                                        log::error!("Failed to parse inbox YAML: {:?}", e);
+                                        tracing::error!("Failed to parse inbox YAML: {:?}", e);
                                         Inbox::default()
                                     });
                                 new_inbox.merge(&loaded_inbox);
                                 inbox.set(new_inbox);
                             }
-                            Err(e) => log::error!("Failed to get response text: {:?}", e),
+                            Err(e) => tracing::error!("Failed to get response text: {:?}", e),
                         },
-                        Err(e) => log::error!("Failed to load inbox: {:?}", e),
+                        Err(e) => tracing::error!("Failed to load inbox: {:?}", e),
                     }
                 }
             });
@@ -75,7 +75,7 @@ pub fn inbox_provider(props: &InboxProviderProps) -> Html {
             spawn_local(async move {
                 let inbox = inbox.clone();
                 if let Err(e) = inbox_repository.save_inbox(INBOX_STORAGE_KEY, &inbox).await {
-                    log::error!("Failed to save inbox: {:?}", e);
+                    tracing::error!("Failed to save inbox: {:?}", e);
                 }
             });
             || ()

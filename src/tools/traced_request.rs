@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 use gloo::net::http::{RequestBuilder, Response};
 use gloo::storage::{SessionStorage, Storage};
-use log::debug;
 use serde::{Deserialize, Serialize};
+use tracing::debug;
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

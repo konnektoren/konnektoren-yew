@@ -46,7 +46,7 @@ impl GameStatePersistence for GameStatePersistenceImpl {
                 let mut session_guard = match session.write() {
                     Ok(guard) => guard,
                     Err(e) => {
-                        log::error!("Failed to acquire write lock on session: {}", e);
+                        tracing::error!("Failed to acquire write lock on session: {}", e);
                         return;
                     }
                 };
@@ -61,7 +61,7 @@ impl GameStatePersistence for GameStatePersistenceImpl {
                     );
 
                     if !is_already_saved {
-                        log::info!(
+                        tracing::info!(
                             "Adding completed challenge to history: {}",
                             state.challenge.challenge_config.id
                         );
@@ -72,7 +72,7 @@ impl GameStatePersistence for GameStatePersistenceImpl {
                             .challenge_history
                             .add_challenge(state.challenge.clone());
                     } else {
-                        log::debug!(
+                        tracing::debug!(
                             "Challenge already in history, skipping: {}",
                             state.challenge.challenge_config.id
                         );
@@ -83,7 +83,7 @@ impl GameStatePersistence for GameStatePersistenceImpl {
                     .save_session(SESSION_STORAGE_KEY, &session_guard)
                     .await
                 {
-                    log::error!("Failed to save session: {:?}", e);
+                    tracing::error!("Failed to save session: {:?}", e);
                 }
             });
         }

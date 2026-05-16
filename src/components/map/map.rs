@@ -251,7 +251,7 @@ fn on_touch_move_callback(
                         );
 
                         if dx.is_nan() || dy.is_nan() {
-                            log::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
+                            tracing::error!("Invalid touch movement delta: dx={}, dy={}", dx, dy);
                             return;
                         }
 
@@ -359,7 +359,7 @@ fn on_mouse_move_callback(
             let (dx, dy) = calculate_mouse_delta(e.client_x(), e.client_y(), &last_mouse_pos);
 
             if dx.is_nan() || dy.is_nan() {
-                log::error!("Invalid mouse movement delta: dx={}, dy={}", dx, dy);
+                tracing::error!("Invalid mouse movement delta: dx={}, dy={}", dx, dy);
                 return;
             }
 
@@ -425,7 +425,7 @@ fn clamp_position(value: i32, min: i32, max: i32, axis: &str) -> i32 {
     if min <= max {
         value.clamp(min, max)
     } else {
-        log::error!(
+        tracing::error!(
             "Invalid clamp range on {}-axis: min ({}) > max ({})",
             axis,
             min,
@@ -464,9 +464,9 @@ mod preview {
         callback::Callback::from(
             move |(challenge_index, coordinate): (Option<ChallengeIndex>, BrowserCoordinate)| {
                 if let Some(idx) = challenge_index {
-                    log::info!("Challenge selected: {}", idx);
+                    tracing::info!("Challenge selected: {}", idx);
                 } else {
-                    log::info!("Deselected at {} {}", coordinate.0, coordinate.1);
+                    tracing::info!("Deselected at {} {}", coordinate.0, coordinate.1);
                 }
             },
         )

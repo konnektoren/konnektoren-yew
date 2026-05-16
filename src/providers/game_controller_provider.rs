@@ -93,7 +93,7 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
 
     // Load game state with error handling
     if let Err(e) = controller.load_game_state() {
-        log::error!("Failed to load game state: {:?}", e);
+        tracing::error!("Failed to load game state: {:?}", e);
     }
 
     let context = GameControllerContext::new(controller.clone());
@@ -103,7 +103,7 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
         let controller = controller.clone();
         use_effect_with(session, move |_| {
             if let Err(e) = controller.load_game_state() {
-                log::error!("Failed to reload game state: {:?}", e);
+                tracing::error!("Failed to reload game state: {:?}", e);
             }
         })
     }

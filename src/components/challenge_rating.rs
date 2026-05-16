@@ -49,7 +49,7 @@ pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
                             }
                         }
                         _ => {
-                            log::error!("Failed to fetch the average rating.");
+                            tracing::error!("Failed to fetch the average rating.");
                         }
                     }
                 });
