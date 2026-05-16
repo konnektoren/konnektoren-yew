@@ -1,4 +1,3 @@
-use crate::i18n::LANGUAGE_KEY;
 use konnektoren_platform::i18n::Language;
 
 #[derive(Clone, Default, PartialEq)]
@@ -14,8 +13,9 @@ impl SelectedLanguage {
     }
 
     pub fn set(&mut self, code: &str) {
-        #[cfg(not(feature = "ssr"))]
+        #[cfg(all(not(feature = "ssr"), feature = "storage"))]
         {
+            use crate::i18n::LANGUAGE_KEY;
             use gloo::storage::{LocalStorage, Storage};
             let _ = LocalStorage::set(LANGUAGE_KEY, code);
         }
@@ -23,26 +23,6 @@ impl SelectedLanguage {
     }
 
     pub fn get(&self) -> Language {
-        // For SSR, always prioritize the LANG environment variable
-        #[cfg(feature = "ssr")]
-        {
-            if let Ok(lang) = std::env::var("LANG") {
-                let lang_code = Language::from_code(&lang);
-                return lang_code;
-            }
-        }
-
-        // For CSR (browser), use localStorage (unchanged)
-        #[cfg(not(feature = "ssr"))]
-        {
-            use gloo::storage::{LocalStorage, Storage};
-            let code: Result<String, _> = LocalStorage::get(LANGUAGE_KEY);
-            if let Ok(code) = code {
-                return Language::from_code(&code);
-            }
-        }
-
-        // Fallback to the language stored in this instance
         self.language.clone()
     }
 }
@@ -50,12 +30,12 @@ impl SelectedLanguage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(all(not(feature = "ssr"), feature = "storage"))]
     use gloo::storage::{LocalStorage, Storage};
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(all(not(feature = "ssr"), feature = "storage"))]
     use wasm_bindgen_test::*;
 
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(all(not(feature = "ssr"), feature = "storage"))]
     wasm_bindgen_test_configure!(run_in_browser);
 
     #[test]
@@ -76,7 +56,7 @@ mod tests {
         assert_eq!(selected.language.code(), "en");
     }
 
-    #[cfg(not(feature = "ssr"))]
+    #[cfg(all(not(feature = "ssr"), feature = "storage"))]
     #[wasm_bindgen_test]
     async fn test_set_and_get_language() {
         LocalStorage::clear();

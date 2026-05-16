@@ -18,7 +18,7 @@ use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent}
 
 use crate::model::DefaultSessionInitializer;
 use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
-use crate::providers::create_repositories;
+use crate::providers::{I18nProvider, create_repositories};
 use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
 use log;
@@ -297,6 +297,8 @@ pub fn App() -> Html {
     }
     #[cfg(not(feature = "yew-preview"))]
     html! {
-        <Example />
+        <I18nProvider config={i18n_config}>
+            <Example />
+        </I18nProvider>
     }
 }

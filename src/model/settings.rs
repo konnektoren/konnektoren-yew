@@ -14,7 +14,7 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             id: "".to_string(),
-            language: "en".to_string(),
+            language: "".to_string(),
             music_volume: 0.0,
             sound_volume: 0.3,
             theme: "light".to_string(),
@@ -30,7 +30,7 @@ mod tests {
     #[test]
     fn default_settings() {
         let settings = Settings::default();
-        assert_eq!(settings.language, "en");
+        assert_eq!(settings.language, "");
         assert_eq!(settings.music_volume, 0.0);
         assert_eq!(settings.sound_volume, 0.3);
         assert_eq!(settings.theme, "light");
