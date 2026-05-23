@@ -44,7 +44,23 @@ fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
     })
 }
 
-#[cfg(not(feature = "csr"))]
+#[cfg(all(not(feature = "csr"), feature = "ssr"))]
+fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
+    // In SSG/SSR, the current path is provided via the YEW_SSG_CURRENT_PATH env var.
+    // Extract the first path segment and check if it is a supported language code
+    // (e.g. "/es/404/" → "es").
+    let path = std::env::var("YEW_SSG_CURRENT_PATH").ok()?;
+    let parts: Vec<&str> = path.trim_matches('/').split('/').collect();
+    parts.first().and_then(|first_part| {
+        if supported_languages.iter().any(|l| l.code() == *first_part) {
+            Some(Language::from_code(first_part))
+        } else {
+            None
+        }
+    })
+}
+
+#[cfg(all(not(feature = "csr"), not(feature = "ssr")))]
 fn get_path_language(_supported_languages: &[Language]) -> Option<Language> {
     None
 }
@@ -77,7 +93,12 @@ fn get_env_language() -> Option<Language> {
 fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) -> Language {
     let supported_languages = config.supported_languages();
 
-    // Priority in SSR: environment variable
+    // Path language takes highest priority (explicit /es/… beats any env/settings fallback)
+    if let Some(path_lang) = get_path_language(&supported_languages) {
+        return path_lang;
+    }
+
+    // Priority in SSR: LANG environment variable
     #[cfg(feature = "ssr")]
     {
         if let Some(env_lang) = get_env_language() {
@@ -85,9 +106,8 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
         }
     }
 
-    // Priority: URL path → URL query param → settings → browser language → default
-    get_path_language(&supported_languages)
-        .or_else(|| get_url_language(&supported_languages))
+    // Priority: URL query param → settings → browser language → default
+    get_url_language(&supported_languages)
         .or_else(|| {
             if settings.language.is_empty() {
                 return None;
@@ -106,7 +126,14 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
 fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&str>) -> Language {
     let supported_languages = config.supported_languages();
 
-    // Priority in SSR: environment variable
+    // Priority: URL path language (highest — a path like /es/… is definitively Spanish)
+    // This must come before the LANG env var check so that localized SSG routes such as
+    // /es/404/ are rendered in Spanish even though LANG may be set to "en" as a fallback.
+    if let Some(path_lang) = get_path_language(&supported_languages) {
+        return path_lang;
+    }
+
+    // Priority in SSR: LANG environment variable (fallback when the path carries no lang prefix)
     #[cfg(feature = "ssr")]
     {
         if let Some(env_lang) = get_env_language() {
@@ -114,9 +141,8 @@ fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&st
         }
     }
 
-    // Priority: URL path → URL query param → browser language → caller default → config default
-    get_path_language(&supported_languages)
-        .or_else(|| get_url_language(&supported_languages))
+    // Priority: URL query param → browser language → caller default → config default
+    get_url_language(&supported_languages)
         .or_else(|| get_browser_language(&supported_languages))
         .or_else(|| {
             default_lang_code.and_then(|code| {
