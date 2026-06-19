@@ -159,7 +159,7 @@ pub fn challenge_component(props: &ChallengeComponentProps) -> Html {
             }
         }
         (Some(result), ChallengeType::Dialog(challenge)) => html! {
-            <DialogResultComponent challenge={challenge.clone()} challenge_result={result.clone()} />
+            <DialogResultComponent challenge={challenge.clone()} challenge_result={result.clone()} variant={props.variant.clone()} />
         },
         _ => html! {},
     };

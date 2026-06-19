@@ -4,19 +4,28 @@
 //! * **Quiz mode**     — shows a recap table with one row per interactive turn,
 //!   indicating whether the player's choice was correct.
 
+use crate::components::challenge::DialogObserverResultComponent;
 use crate::i18n::use_i18n;
-use konnektoren_core::challenges::{ChallengeResult, Dialog};
+use konnektoren_core::challenges::{ChallengeResult, ChallengeVariant, Dialog};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
 pub struct DialogResultComponentProps {
     pub challenge: Dialog,
     pub challenge_result: ChallengeResult,
+    #[prop_or_default]
+    pub variant: Option<ChallengeVariant>,
 }
 
 #[function_component(DialogResultComponent)]
 pub fn dialog_result_component(props: &DialogResultComponentProps) -> Html {
     let i18n = use_i18n();
+
+    if props.variant == Some(ChallengeVariant::DialogObserver) {
+        return html! {
+            <DialogObserverResultComponent challenge={props.challenge.clone()} />
+        };
+    }
 
     let answers = match &props.challenge_result {
         ChallengeResult::Dialog(a) => a.clone(),
@@ -25,7 +34,7 @@ pub fn dialog_result_component(props: &DialogResultComponentProps) -> Html {
 
     let quiz_turns: Vec<_> = props.challenge.quiz_turns().collect();
 
-    // Observer mode — nothing to grade
+    // Observer mode — nothing to grade (fallback when no variant set but no quiz turns)
     if quiz_turns.is_empty() {
         return html! {
             <div class="dialog-result">
