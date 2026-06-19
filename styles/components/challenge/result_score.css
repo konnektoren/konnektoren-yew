@@ -1,0 +1,37 @@
+.result-score {
+    @apply flex items-center gap-3;
+}
+
+.result-score__percentage {
+    @apply text-adaptive-xl font-bold;
+}
+
+.result-score__label {
+    @apply text-adaptive-md;
+}
+
+/* Score modifiers */
+.result-score--excellent {
+    @apply result-header-excellent;
+}
+
+.result-score--good {
+    @apply result-header-good;
+}
+
+.result-score--fair {
+    @apply result-header-fair;
+}
+
+.result-score--needs-improvement {
+    @apply result-header-poor;
+}
+
+/* Unscored / completed badge */
+.result-score--completed {
+    @apply flex items-center gap-2 text-success;
+}
+
+.result-score--completed .result-score__label {
+    @apply text-adaptive-lg font-semibold;
+}

@@ -121,7 +121,7 @@ pub fn dialog_result_component(props: &DialogResultComponentProps) -> Html {
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
-    use konnektoren_core::challenges::DialogAnswer;
+    use konnektoren_core::challenges::{ChallengeVariant, DialogAnswer};
     use yew_preview::prelude::*;
 
     /// All three quiz turns answered correctly.
@@ -181,12 +181,14 @@ mod preview {
         DialogResultComponentProps {
             challenge: Dialog::default(),
             challenge_result: make_all_correct(),
+            variant: None,
         },
         (
             "Mixed (incorrect answers)",
             DialogResultComponentProps {
                 challenge: Dialog::default(),
                 challenge_result: make_mixed(),
+                variant: None,
             }
         ),
         (
@@ -194,6 +196,7 @@ mod preview {
             DialogResultComponentProps {
                 challenge: Dialog::default(),
                 challenge_result: make_observer_result(),
+                variant: Some(ChallengeVariant::DialogObserver),
             }
         ),
     );

@@ -14,33 +14,8 @@
     @apply border-b border-base-200 mb-4;
 }
 
-/* Performance modifiers using template utilities */
-.result-summary__header--excellent {
-    @apply result-header-excellent;
-}
-
-.result-summary__header--good {
-    @apply result-header-good;
-}
-
-.result-summary__header--fair {
-    @apply result-header-fair;
-}
-
-.result-summary__header--needs-improvement {
-    @apply result-header-poor;
-}
-
 .result-summary__performance {
     @apply flex items-center gap-3;
-}
-
-.result-summary__score {
-    @apply text-adaptive-xl font-bold;
-}
-
-.result-summary__text {
-    @apply text-adaptive-md;
 }
 
 .result-summary__content {

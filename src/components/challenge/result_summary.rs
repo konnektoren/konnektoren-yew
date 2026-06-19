@@ -1,3 +1,4 @@
+use crate::components::challenge::ResultScoreComponent;
 use crate::components::ChallengeTimerComponent;
 use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{Challenge, ChallengeResult, Performance};
@@ -14,31 +15,16 @@ pub fn result_summary_component(props: &ResultSummaryComponentProps) -> Html {
     let i18n = use_i18n();
     let performance = props.challenge.performance(&props.challenge_result);
 
-    let performance_modifier = match performance {
-        p if p >= 90 => "excellent",
-        p if p >= 70 => "good",
-        p if p >= 50 => "fair",
-        _ => "needs-improvement",
-    };
-
-    let performance_text = match performance {
-        p if p >= 90 => i18n.t("Excellent!"),
-        p if p >= 70 => i18n.t("Good job!"),
-        p if p >= 50 => i18n.t("Fair attempt."),
-        _ => i18n.t("Keep practicing!"),
-    };
-
     html! {
         <details class="result-summary">
-            <summary class={classes!("result-summary__header", format!("result-summary__header--{}", performance_modifier))}>
-                <div class="result-summary__performance">
-                    <span class="result-summary__score">{format!("{}%", performance)}</span>
-                    <span class="result-summary__text">{performance_text}</span>
-                </div>
+            <summary class="result-summary__header">
+                <ResultScoreComponent
+                    challenge={props.challenge.clone()}
+                    challenge_result={props.challenge_result.clone()}
+                />
             </summary>
 
             <div class="result-summary__content">
-
                 <div class="result-summary__timer">
                     <ChallengeTimerComponent challenge={props.challenge.clone()} show_milliseconds={true} />
                 </div>
@@ -117,10 +103,10 @@ mod preview {
     fn create_test_result() -> ChallengeResult {
         ChallengeResult::Ordering(vec![
             OrderingResult {
-                order: vec![1, 0, 2, 3], // Incorrect order
+                order: vec![1, 0, 2, 3],
             },
             OrderingResult {
-                order: vec![0, 1, 2, 3], // Correct order
+                order: vec![0, 1, 2, 3],
             },
         ])
     }
