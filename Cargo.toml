@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.5.14"
+version = "0.5.15"
 edition = "2024"
 
 [lib]
@@ -147,10 +147,13 @@ yew-tou-rs = { git = "https://github.com/chriamue/yew-tou-rs/", branch = "main",
 ], optional = true }
 
 # Konnektoren dependencies
+konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = [
+    "content",
+    "platform",
+] }
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "js",
 ] }
-konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 
 # Solana dependencies (optional, not in default)
 wallet-adapter = { version = "1", optional = true }

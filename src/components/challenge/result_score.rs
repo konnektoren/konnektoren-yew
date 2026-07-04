@@ -74,12 +74,21 @@ mod preview {
             })
             .collect::<Vec<_>>();
         let options = vec![
-            MultipleChoiceOption { id: 0, name: "Wrong".to_string() },
-            MultipleChoiceOption { id: 1, name: "Correct".to_string() },
+            MultipleChoiceOption {
+                id: 0,
+                name: "Wrong".to_string(),
+            },
+            MultipleChoiceOption {
+                id: 1,
+                name: "Correct".to_string(),
+            },
         ];
         let answers = questions
             .iter()
-            .map(|q| MultipleChoiceOption { id: q.option, name: String::new() })
+            .map(|q| MultipleChoiceOption {
+                id: q.option,
+                name: String::new(),
+            })
             .collect();
         let challenge = Challenge {
             challenge_type: ChallengeType::MultipleChoice(MultipleChoice {
@@ -115,35 +124,38 @@ mod preview {
         ResultScoreComponent,
         {
             let (challenge, challenge_result) = scored_challenge(100);
-            ResultScoreComponentProps { challenge, challenge_result }
+            ResultScoreComponentProps {
+                challenge,
+                challenge_result,
+            }
         },
-        (
-            "Good (70%)",
-            {
-                let (challenge, challenge_result) = scored_challenge(70);
-                ResultScoreComponentProps { challenge, challenge_result }
+        ("Good (70%)", {
+            let (challenge, challenge_result) = scored_challenge(70);
+            ResultScoreComponentProps {
+                challenge,
+                challenge_result,
             }
-        ),
-        (
-            "Fair (50%)",
-            {
-                let (challenge, challenge_result) = scored_challenge(50);
-                ResultScoreComponentProps { challenge, challenge_result }
+        }),
+        ("Fair (50%)", {
+            let (challenge, challenge_result) = scored_challenge(50);
+            ResultScoreComponentProps {
+                challenge,
+                challenge_result,
             }
-        ),
-        (
-            "Needs improvement (30%)",
-            {
-                let (challenge, challenge_result) = scored_challenge(30);
-                ResultScoreComponentProps { challenge, challenge_result }
+        }),
+        ("Needs improvement (30%)", {
+            let (challenge, challenge_result) = scored_challenge(30);
+            ResultScoreComponentProps {
+                challenge,
+                challenge_result,
             }
-        ),
-        (
-            "Observer dialog (unscored)",
-            {
-                let (challenge, challenge_result) = observer_challenge();
-                ResultScoreComponentProps { challenge, challenge_result }
+        }),
+        ("Observer dialog (unscored)", {
+            let (challenge, challenge_result) = observer_challenge();
+            ResultScoreComponentProps {
+                challenge,
+                challenge_result,
             }
-        ),
+        }),
     );
 }

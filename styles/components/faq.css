@@ -1,0 +1,35 @@
+.faq-list {
+    @apply w-full max-w-3xl mx-auto;
+    @apply flex flex-col gap-4 sm:gap-3;
+}
+
+.faq-item {
+    @apply card-base;
+    @apply scroll-mt-16 rounded-lg border border-base-200;
+    @apply transition-all duration-300;
+}
+
+.faq-item--highlighted {
+    @apply border-primary bg-primary/5;
+}
+
+.faq-item__question {
+    @apply text-adaptive-md font-semibold text-base-content;
+    @apply mb-3;
+}
+
+.faq-item__answer {
+    @apply text-adaptive-base leading-relaxed text-base-content/70;
+    @apply mb-4;
+}
+
+.faq-item__tags {
+    @apply flex flex-wrap items-center gap-2;
+}
+
+.faq-tag {
+    @apply badge badge-ghost rounded-full;
+    @apply px-2 py-1 text-xs sm:text-xs;
+    @apply transition-all duration-300;
+    @apply hover:bg-base-200 hover:text-primary;
+}

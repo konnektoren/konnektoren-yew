@@ -1,5 +1,5 @@
 use crate::i18n::use_i18n;
-use konnektoren_platform::domain::DomainConfig;
+use konnektoren_rs::platform::domain::DomainConfig;
 use yew::prelude::*;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -223,7 +223,7 @@ pub fn domain_selector_component<T: DomainConfig + 'static>(
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
-    use konnektoren_platform::domain::LanguageDomainConfig;
+    use konnektoren_rs::platform::domain::LanguageDomainConfig;
     use yew_preview::prelude::*;
 
     fn domains() -> Vec<LanguageDomainConfig> {

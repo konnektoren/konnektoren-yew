@@ -1,5 +1,5 @@
-use crate::components::challenge::ResultScoreComponent;
 use crate::components::ChallengeTimerComponent;
+use crate::components::challenge::ResultScoreComponent;
 use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{Challenge, ChallengeResult, Performance};
 use yew::prelude::*;

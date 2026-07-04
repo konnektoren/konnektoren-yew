@@ -17,6 +17,7 @@ pub mod challenge_timer;
 #[cfg(feature = "chat")]
 pub mod chat;
 pub mod domain_selector;
+pub mod faq;
 pub mod feedback_popup;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
@@ -66,6 +67,7 @@ pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSelectorStyle};
+pub use faq::{FaqItem, FaqItemProps, FaqList, FaqListProps, FaqTag, FaqTagProps};
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]

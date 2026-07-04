@@ -1,5 +1,5 @@
-pub use konnektoren_platform::i18n::I18nConfig;
-use konnektoren_platform::i18n::{CombinedTranslationAsset, Language, TranslationAsset};
+pub use konnektoren_rs::platform::i18n::I18nConfig;
+use konnektoren_rs::platform::i18n::{CombinedTranslationAsset, Language, TranslationAsset};
 use rust_embed::RustEmbed;
 
 #[derive(RustEmbed)]
@@ -8,7 +8,7 @@ pub struct LocalI18nAssets;
 
 pub fn create_i18n_config() -> I18nConfig {
     let mut config = I18nConfig::with_assets(CombinedTranslationAsset::<
-        konnektoren_platform::i18n::I18nAssets,
+        konnektoren_rs::platform::i18n::I18nAssets,
     >::new("i18n.yml"));
 
     // Set default language based on environment variable in SSR mode

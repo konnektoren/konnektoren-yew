@@ -1,4 +1,4 @@
-use konnektoren_platform::i18n::Language;
+use konnektoren_rs::platform::i18n::Language;
 
 #[derive(Clone, Default, PartialEq)]
 pub struct SelectedLanguage {

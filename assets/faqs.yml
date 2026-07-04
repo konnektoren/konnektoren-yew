@@ -1,0 +1,26 @@
+faqs:
+  - id: general-what-is-konnektoren
+    timestamp: "2025-01-29T19:19:02+01:00"
+    question: "🤔 What is Konnektoren?"
+    answer: "Konnektoren is a web3-oriented platform designed to help you learn and practice German connectors (Konnektoren) in an engaging way. It runs directly in your browser using WebAssembly for high performance and privacy. 🚀💻"
+    tags: ["general", "about", "introduction", "web3"]
+    i18n:
+      "🤔 What is Konnektoren?":
+        de: "🤔 Was ist Konnektoren?"
+        uk: "🤔 Що таке Konnektoren?"
+      "Konnektoren is a web3-oriented platform designed to help you learn and practice German connectors (Konnektoren) in an engaging way. It runs directly in your browser using WebAssembly for high performance and privacy. 🚀💻":
+        de: "Konnektoren ist eine Web3-orientierte Plattform, die entwickelt wurde, um dir auf spielerische Weise beim Lernen und Üben deutscher Konnektoren zu helfen. Sie läuft direkt in deinem Browser mit WebAssembly für hohe Leistung und Privatsphäre. 🚀💻"
+        uk: "Konnektoren - це веб3-орієнтована платформа, розроблена для того, щоб допомогти вам вивчати та практикувати німецькі сполучники (Konnektoren) у захоплюючий спосіб. Вона працює безпосередньо у вашому браузері, використовуючи WebAssembly для високої продуктивності та конфіденційності. 🚀💻"
+
+  - id: general-theme-switch
+    timestamp: "2026-07-03T00:00:00+01:00"
+    question: "🌗 Can I switch between light and dark mode?"
+    answer: "Absolutely! Head to Settings and pick your preferred theme — light or dark. Your choice is saved locally and applies across the whole app instantly. Easy on the eyes, day or night! 🌙☀️"
+    tags: ["general", "settings", "theme", "dark-mode"]
+    i18n:
+      "🌗 Can I switch between light and dark mode?":
+        de: "🌗 Kann ich zwischen hellem und dunklem Modus wechseln?"
+        uk: "🌗 Чи можу я перемикатися між світлим і темним режимом?"
+      "Absolutely! Head to Settings and pick your preferred theme — light or dark. Your choice is saved locally and applies across the whole app instantly. Easy on the eyes, day or night! 🌙☀️":
+        de: "Klar! Geh zu den Einstellungen und wähle dein bevorzugtes Design — hell oder dunkel. Deine Wahl wird lokal gespeichert und gilt sofort für die gesamte App. Schonend für die Augen, Tag und Nacht! 🌙☀️"
+        uk: "Звичайно! Перейдіть до Налаштувань і виберіть бажану тему — світлу або темну. Ваш вибір зберігається локально і миттєво застосовується до всього застосунку. Приємно для очей, вдень чи вночі! 🌙☀️"

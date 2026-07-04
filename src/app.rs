@@ -218,6 +218,9 @@ pub fn preview_groups() -> ComponentList {
             SocialLinks::preview(),
             Logo::preview(),
             InboxComponent::preview(),
+            FaqList::preview(),
+            FaqItem::preview(),
+            FaqTag::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
             StatusMessage::preview(),

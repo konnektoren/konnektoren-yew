@@ -1,8 +1,8 @@
 use super::SelectedLanguage;
 use crate::model::Settings;
 use crate::providers::use_settings;
-use konnektoren_platform::i18n::I18nConfig;
-use konnektoren_platform::prelude::Language;
+use konnektoren_rs::platform::i18n::I18nConfig;
+use konnektoren_rs::platform::prelude::Language;
 use yew::prelude::*;
 
 #[cfg(feature = "csr")]
