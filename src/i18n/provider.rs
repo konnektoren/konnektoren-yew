@@ -1,9 +1,39 @@
-use super::SelectedLanguage;
+#[cfg(feature = "csr")]
+use super::supported_language_from_candidates;
+use super::{SelectedLanguage, supported_language_code};
 use crate::model::Settings;
 use crate::providers::use_settings;
 use konnektoren_rs::platform::i18n::I18nConfig;
 use konnektoren_rs::platform::prelude::Language;
 use yew::prelude::*;
+
+fn language_from_code(code: &str, supported_languages: &[Language]) -> Option<Language> {
+    let supported_codes: Vec<&str> = supported_languages
+        .iter()
+        .map(|language| language.code())
+        .collect();
+    let code = supported_language_code(Some(code), &supported_codes)?;
+    supported_languages
+        .iter()
+        .find(|language| language.code() == code)
+        .cloned()
+}
+
+#[cfg(feature = "csr")]
+fn language_from_candidates<'a>(
+    candidates: impl IntoIterator<Item = &'a str>,
+    supported_languages: &[Language],
+) -> Option<Language> {
+    let supported_codes: Vec<&str> = supported_languages
+        .iter()
+        .map(|language| language.code())
+        .collect();
+    let code = supported_language_from_candidates(candidates, &supported_codes)?;
+    supported_languages
+        .iter()
+        .find(|language| language.code() == code)
+        .cloned()
+}
 
 #[cfg(feature = "csr")]
 fn get_url_language(supported_languages: &[Language]) -> Option<Language> {
@@ -11,15 +41,11 @@ fn get_url_language(supported_languages: &[Language]) -> Option<Language> {
     use web_sys::UrlSearchParams;
 
     let window = window();
-    let search = window.location().search().unwrap();
+    let search = window.location().search().ok()?;
     let search_params = UrlSearchParams::new_with_str(&search).ok()?;
 
     let lang = search_params.get("lang")?;
-    if supported_languages.iter().any(|l| l.code() == lang) {
-        Some(Language::from_code(&lang))
-    } else {
-        None
-    }
+    language_from_code(&lang, supported_languages)
 }
 
 #[cfg(not(feature = "csr"))]
@@ -35,13 +61,9 @@ fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
     let path = window.location().pathname().unwrap_or_default();
     let parts: Vec<&str> = path.trim_matches('/').split('/').collect();
 
-    parts.first().and_then(|first_part| {
-        if supported_languages.iter().any(|l| l.code() == *first_part) {
-            Some(Language::from_code(first_part))
-        } else {
-            None
-        }
-    })
+    parts
+        .first()
+        .and_then(|first_part| language_from_code(first_part, supported_languages))
 }
 
 #[cfg(all(not(feature = "csr"), feature = "ssr"))]
@@ -51,13 +73,9 @@ fn get_path_language(supported_languages: &[Language]) -> Option<Language> {
     // (e.g. "/es/404/" → "es").
     let path = std::env::var("YEW_SSG_CURRENT_PATH").ok()?;
     let parts: Vec<&str> = path.trim_matches('/').split('/').collect();
-    parts.first().and_then(|first_part| {
-        if supported_languages.iter().any(|l| l.code() == *first_part) {
-            Some(Language::from_code(first_part))
-        } else {
-            None
-        }
-    })
+    parts
+        .first()
+        .and_then(|first_part| language_from_code(first_part, supported_languages))
 }
 
 #[cfg(all(not(feature = "csr"), not(feature = "ssr")))]
@@ -68,13 +86,20 @@ fn get_path_language(_supported_languages: &[Language]) -> Option<Language> {
 #[cfg(feature = "csr")]
 fn get_browser_language(supported_languages: &[Language]) -> Option<Language> {
     use gloo::utils::window;
+    use wasm_bindgen::JsValue;
 
-    let language = window().navigator().language().unwrap_or_default();
-    if supported_languages.iter().any(|l| l.code() == language) {
-        Some(Language::from_code(&language))
-    } else {
-        None
+    let navigator = window().navigator();
+    let mut candidates = Vec::new();
+    if let Ok(languages) = js_sys::Reflect::get(navigator.as_ref(), &JsValue::from_str("languages"))
+    {
+        let languages = js_sys::Array::from(&languages);
+        candidates.extend(languages.iter().filter_map(|lang| lang.as_string()));
     }
+    if let Some(language) = navigator.language() {
+        candidates.push(language);
+    }
+
+    language_from_candidates(candidates.iter().map(String::as_str), supported_languages)
 }
 
 #[cfg(not(feature = "csr"))]
@@ -83,10 +108,15 @@ fn get_browser_language(_supported_languages: &[Language]) -> Option<Language> {
 }
 
 #[cfg(feature = "ssr")]
-fn get_env_language() -> Option<Language> {
-    std::env::var("LANG").ok().map(|lang| {
-        tracing::debug!("🌐 Using language from environment: LANG={}", lang);
-        Language::from_code(&lang)
+fn get_env_language(supported_languages: &[Language]) -> Option<Language> {
+    std::env::var("LANG").ok().and_then(|lang| {
+        let language = language_from_code(&lang, supported_languages)?;
+        tracing::debug!(
+            "🌐 Using language from environment: LANG={} resolved to {}",
+            lang,
+            language.code()
+        );
+        Some(language)
     })
 }
 
@@ -101,7 +131,7 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
     // Priority in SSR: LANG environment variable
     #[cfg(feature = "ssr")]
     {
-        if let Some(env_lang) = get_env_language() {
+        if let Some(env_lang) = get_env_language(&supported_languages) {
             return env_lang;
         }
     }
@@ -112,17 +142,13 @@ fn determine_language(config: &I18nConfig, settings: &UseStateHandle<Settings>) 
             if settings.language.is_empty() {
                 return None;
             }
-            let settings_lang = Language::from_code(&settings.language);
-            if supported_languages.contains(&settings_lang) {
-                Some(settings_lang)
-            } else {
-                None
-            }
+            language_from_code(&settings.language, &supported_languages)
         })
         .or_else(|| get_browser_language(&supported_languages))
         .unwrap_or_else(|| config.default_language.clone())
 }
 
+#[cfg(not(feature = "csr"))]
 fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&str>) -> Language {
     let supported_languages = config.supported_languages();
 
@@ -136,7 +162,7 @@ fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&st
     // Priority in SSR: LANG environment variable (fallback when the path carries no lang prefix)
     #[cfg(feature = "ssr")]
     {
-        if let Some(env_lang) = get_env_language() {
+        if let Some(env_lang) = get_env_language(&supported_languages) {
             return env_lang;
         }
     }
@@ -145,10 +171,7 @@ fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&st
     get_url_language(&supported_languages)
         .or_else(|| get_browser_language(&supported_languages))
         .or_else(|| {
-            default_lang_code.and_then(|code| {
-                let lang = Language::from_code(code);
-                supported_languages.contains(&lang).then_some(lang)
-            })
+            default_lang_code.and_then(|code| language_from_code(code, &supported_languages))
         })
         .unwrap_or_else(|| config.default_language.clone())
 }
@@ -237,8 +260,7 @@ pub fn browser_i18n_provider(props: &I18nProviderProps) -> Html {
                     if settings_language.is_empty() {
                         return None;
                     }
-                    let lang = Language::from_code(&settings_language);
-                    supported_languages.contains(&lang).then_some(lang)
+                    language_from_code(&settings_language, &supported_languages)
                 })
                 .or_else(|| get_browser_language(&supported_languages))
                 .unwrap_or_else(|| initial_config.default_language.clone())
@@ -273,15 +295,14 @@ pub fn browser_i18n_provider(props: &I18nProviderProps) -> Html {
                 }
             };
 
-            if !lang.is_empty() && !url_overrides {
-                let lang_obj = Language::from_code(lang);
-                if supported_languages.contains(&lang_obj)
-                    && config_ctx.default_language.code() != lang_obj.code()
-                {
-                    let mut config = (*config_ctx).clone();
-                    config.default_language = lang_obj;
-                    config_ctx.set(config);
-                }
+            if !lang.is_empty()
+                && !url_overrides
+                && let Some(lang_obj) = language_from_code(lang, &supported_languages)
+                && config_ctx.default_language.code() != lang_obj.code()
+            {
+                let mut config = (*config_ctx).clone();
+                config.default_language = lang_obj;
+                config_ctx.set(config);
             }
             || ()
         });
@@ -293,6 +314,11 @@ pub fn browser_i18n_provider(props: &I18nProviderProps) -> Html {
         let initial_config = initial_config.clone();
 
         use_effect_with((), move |_| {
+            #[cfg(not(feature = "csr"))]
+            {
+                let _ = &config_ctx;
+                let _ = &initial_config;
+            }
             #[cfg(feature = "csr")]
             {
                 use gloo::events::EventListener;

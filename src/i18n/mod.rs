@@ -56,17 +56,44 @@ pub use selected_language::SelectedLanguage;
 /// let lang = supported_language(Some("en"));
 /// assert_eq!(lang, Some("en".to_string()));
 /// ```
-pub fn supported_language(lang: Option<&str>) -> Option<String> {
-    match lang {
-        Some(lang) => {
-            if LANGUAGES.contains(&lang) {
-                Some(lang.to_string())
-            } else {
-                None
-            }
-        }
-        None => None,
+pub fn normalize_language_code(lang: &str) -> Option<String> {
+    let lang = lang.trim();
+    if lang.is_empty() {
+        return None;
     }
+
+    let lang = lang
+        .split_once('.')
+        .map_or(lang, |(lang, _)| lang)
+        .split_once('@')
+        .map_or(lang, |(lang, _)| lang)
+        .replace('_', "-")
+        .to_ascii_lowercase();
+
+    let primary = lang.split('-').next()?;
+    if primary.len() == 2 {
+        Some(primary.to_string())
+    } else {
+        None
+    }
+}
+
+pub fn supported_language_code(lang: Option<&str>, supported_codes: &[&str]) -> Option<String> {
+    let lang = normalize_language_code(lang?)?;
+    supported_codes.contains(&lang.as_str()).then_some(lang)
+}
+
+pub fn supported_language_from_candidates<'a>(
+    candidates: impl IntoIterator<Item = &'a str>,
+    supported_codes: &[&str],
+) -> Option<String> {
+    candidates
+        .into_iter()
+        .find_map(|lang| supported_language_code(Some(lang), supported_codes))
+}
+
+pub fn supported_language(lang: Option<&str>) -> Option<String> {
+    supported_language_code(lang, &LANGUAGES)
 }
 
 /// Returns the flag emoji corresponding to the provided language code.
@@ -117,6 +144,9 @@ pub fn language_name(lang: &'static str) -> &'static str {
 }
 
 pub fn log_language_info(context: &str) {
+    #[cfg(not(feature = "ssr"))]
+    let _ = context;
+
     #[cfg(feature = "ssr")]
     {
         use tracing::{info, warn};
@@ -178,9 +208,19 @@ mod tests {
     /// Tests the `supported_language` function with various inputs.
     fn test_supported_language() {
         assert_eq!(supported_language(Some("en")), Some("en".to_string()));
+        assert_eq!(supported_language(Some("en-US")), Some("en".to_string()));
+        assert_eq!(supported_language(Some("de-DE")), Some("de".to_string()));
+        assert_eq!(
+            supported_language(Some("de_DE.UTF-8")),
+            Some("de".to_string())
+        );
         assert_eq!(supported_language(Some("uk")), Some("uk".to_string()));
         assert_eq!(supported_language(Some("de")), Some("de".to_string()));
         assert_eq!(supported_language(Some("zh")), Some("zh".to_string()));
+        assert_eq!(
+            supported_language(Some("zh-Hans-CN")),
+            Some("zh".to_string())
+        );
         assert_eq!(supported_language(Some("ar")), Some("ar".to_string()));
         assert_eq!(supported_language(Some("pl")), Some("pl".to_string()));
         assert_eq!(supported_language(Some("tr")), Some("tr".to_string()));
@@ -189,6 +229,15 @@ mod tests {
         assert_eq!(supported_language(Some("fr")), None);
 
         assert_eq!(supported_language(None), None);
+    }
+
+    #[test]
+    fn test_supported_language_from_candidates() {
+        let candidates = ["fr-FR", "de-CH", "en-US"];
+        assert_eq!(
+            supported_language_from_candidates(candidates, &LANGUAGES),
+            Some("de".to_string())
+        );
     }
 
     #[test]
