@@ -35,8 +35,12 @@ pub fn Example() -> Html {
         let game = game.clone();
         let challenge = challenge.clone();
         Callback::from(move |challenge_config: ChallengeConfig| {
+            tracing::trace!("Challenge requested: {}", challenge_config.id);
             match game.create_challenge(&challenge_config.id) {
-                Ok(c) => challenge.set(Some(c)),
+                Ok(c) => {
+                    tracing::debug!("Challenge created: {}", challenge_config.id);
+                    challenge.set(Some(c))
+                }
                 Err(err) => tracing::error!("Error creating challenge: {:?}", err),
             }
         })
@@ -55,7 +59,13 @@ pub fn Example() -> Html {
                         game.game_paths[0].challenges.get(challenge_index)
                     {
                         match game.create_challenge(&challenge_config.id) {
-                            Ok(c) => challenge.set(Some(c)),
+                            Ok(c) => {
+                                tracing::debug!(
+                                    "Challenge created from map: {}",
+                                    challenge_config.id
+                                );
+                                challenge.set(Some(c))
+                            }
                             Err(_) => tracing::error!("Challenge creation failed"),
                         }
                     }
@@ -233,13 +243,17 @@ pub fn preview_groups() -> ComponentList {
 
 #[function_component]
 pub fn App() -> Html {
+    tracing::trace!("App render");
+
     #[cfg(feature = "yew-preview")]
     let groups: ComponentList = preview_groups();
 
+    #[cfg(feature = "yew-preview")]
+    tracing::debug!("Preview component groups loaded: {}", groups.len());
+
     let i18n_config = create_i18n_config();
 
-    #[cfg(debug_assertions)]
-    tracing::info!(
+    tracing::debug!(
         "Initialized I18nConfig with default language: {}",
         i18n_config.default_language.native_name()
     );
@@ -247,6 +261,7 @@ pub fn App() -> Html {
     let storage = LocalStorage::new(None);
     let session_initilizer = DefaultSessionInitializer;
     let repository_config = create_repositories(storage, Arc::new(session_initilizer));
+    tracing::debug!("Repositories initialized (LocalStorage backend)");
 
     #[cfg(feature = "yew-preview")]
     html! {

@@ -28,7 +28,9 @@ pub mod theme_provider;
 pub use crate::i18n::{I18nProvider, I18nProviderProps, use_i18n, use_selected_language};
 pub use certificates_provider::{CertificatesContext, CertificatesProvider};
 pub use client_side_router::ClientSideRouter;
-pub use design_provider::{DesignContext, DesignProvider, use_design};
+pub use design_provider::{
+    DESIGN_MODE_STORAGE_KEY, DesignContext, DesignProvider, use_design, use_design_mode,
+};
 pub use game_controller_provider::{
     GameControllerContext, GameControllerProvider, GameControllerProviderProps, use_command_bus,
     use_event_bus, use_game_controller, use_game_state,

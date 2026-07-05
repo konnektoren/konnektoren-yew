@@ -19,7 +19,7 @@ mod session_initializer;
 mod settings;
 mod theme;
 
-pub use design::Design;
+pub use design::{Design, DesignMode};
 pub use inbox::Inbox;
 pub use session_initializer::{DefaultSessionInitializer, SessionInitializer};
 pub use settings::Settings;

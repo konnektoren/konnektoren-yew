@@ -10,7 +10,7 @@
 *   **Interactive Challenges:** Multiple choice, gap fill, ordering, and contextual choice exercises.
 *   **Dynamic UI:** Components for profiles, progress, achievements, and game maps.
 *   **Internationalization (i18n):** Full support for multiple languages with a flexible translation system.
-*   **Theming & Design Modes:** Switch between light/dark themes and desktop/mobile layouts.
+*   **Theming & Design Modes:** Switch between light/dark themes and desktop/mobile layouts, with automatic mobile/desktop detection.
 *   **Component Preview:** Integrated `yew-preview` for isolated component development and testing.
 *   **Component Catalog:** Auto-generated static HTML catalog of all components — browsable offline and linkable in PRs.
 *   **Progress Persistence:** Uses local storage for saving user progress and settings.
@@ -170,3 +170,124 @@ Konnektoren-Yew is designed with a layered architecture:
 *   **Infrastructure Layer (`repository/`, `tools/`):** Handles external concerns like data persistence (local storage, cloud backups), network communication, and utility functions.
 
 This separation promotes maintainability, testability, and scalability.
+
+## Design Provider
+
+`DesignProvider` exposes two related pieces of state:
+
+*   `use_design()` returns the effective `Design` used by components such as navigation.
+*   `use_design_mode()` returns the configuration: `Auto` or `Fixed(Design)`.
+
+The provider resolves the effective design in this order:
+
+1.  `forced` prop on `DesignProvider`, for app-level hard overrides.
+2.  Explicit `<body class="design-*">` from HTML or an SSG template.
+3.  Persisted user setting from `localStorage` key `konnektoren.design.mode`.
+4.  Automatic detection.
+
+Automatic detection uses the `mobile_breakpoint` prop, defaulting to `768`, and listens to media-query changes, window resize, and orientation changes. It also checks the physical screen width so mobile devices still get `Design::Mobile` if a page forgets the standard viewport meta tag.
+
+`SelectDesign` cycles through `Auto`, `Desktop`, and `Mobile` by default. In `Auto`, the label shows the current effective design, for example `Auto (Mobile Design)`. Provider-written body classes are marked as managed, so a provider remount does not accidentally turn auto detection into a fixed body configuration.
+
+Apps should include:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+```
+
+### Component Example
+
+Use `use_design()` when the component structure differs between desktop and mobile. Keep the shared root class stable, and add a BEM modifier for design-specific styling:
+
+```rust
+use crate::model::Design;
+use crate::providers::use_design;
+use yew::prelude::*;
+
+#[derive(Properties, PartialEq)]
+pub struct LessonToolbarProps {
+    pub title: String,
+    pub on_back: Callback<MouseEvent>,
+}
+
+#[function_component(LessonToolbar)]
+pub fn lesson_toolbar(props: &LessonToolbarProps) -> Html {
+    let design = use_design();
+    let is_mobile = matches!(*design, Design::Mobile);
+
+    let root_class = classes!(
+        "lesson-toolbar",
+        is_mobile.then_some("lesson-toolbar--mobile"),
+        (!is_mobile).then_some("lesson-toolbar--desktop"),
+    );
+
+    if is_mobile {
+        html! {
+            <header class={root_class}>
+                <button class="lesson-toolbar__icon-button" onclick={props.on_back.clone()}>
+                    <i class="fas fa-arrow-left lesson-toolbar__icon"></i>
+                </button>
+                <h1 class="lesson-toolbar__title">{ &props.title }</h1>
+            </header>
+        }
+    } else {
+        html! {
+            <header class={root_class}>
+                <button class="lesson-toolbar__button" onclick={props.on_back.clone()}>
+                    <i class="fas fa-arrow-left lesson-toolbar__icon"></i>
+                    <span>{ "Back" }</span>
+                </button>
+                <h1 class="lesson-toolbar__title">{ &props.title }</h1>
+                <div class="lesson-toolbar__actions"></div>
+            </header>
+        }
+    }
+}
+```
+
+```css
+.lesson-toolbar {
+    @apply flex items-center gap-3 bg-base-100 text-base-content border-b border-base-200;
+}
+
+.lesson-toolbar--desktop {
+    @apply min-h-16 px-6;
+}
+
+.lesson-toolbar--mobile {
+    @apply min-h-14 px-3;
+}
+
+.lesson-toolbar__title {
+    @apply text-adaptive-base font-semibold truncate;
+}
+
+.lesson-toolbar--desktop .lesson-toolbar__title {
+    @apply flex-1;
+}
+
+.lesson-toolbar--mobile .lesson-toolbar__title {
+    @apply flex-1 text-center;
+}
+
+.lesson-toolbar__button {
+    @apply btn btn-ghost gap-2;
+}
+
+.lesson-toolbar__icon-button {
+    @apply btn btn-ghost btn-square;
+}
+
+.lesson-toolbar__icon {
+    @apply transition-transform duration-300;
+}
+
+.lesson-toolbar__button:hover .lesson-toolbar__icon,
+.lesson-toolbar__icon-button:hover .lesson-toolbar__icon {
+    @apply scale-110;
+}
+
+.lesson-toolbar__actions {
+    @apply flex min-w-24 justify-end gap-2;
+}
+```
