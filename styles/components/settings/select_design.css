@@ -6,6 +6,18 @@
     @apply transition-transform duration-300;
 }
 
+.select-design__label {
+    @apply text-adaptive-sm;
+}
+
 .select-design__button:hover .select-design__icon {
     @apply scale-110;
+}
+
+.select-design__button:active .select-design__icon {
+    @apply scale-95;
+}
+
+.select-design__button:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
 }
