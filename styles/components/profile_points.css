@@ -1,80 +1,97 @@
 .profile-points {
-    @apply relative;
-}
-
-.profile-points__badge {
-    @apply badge bg-base-100 shadow-md;
-    @apply inline-flex flex-col items-center justify-center gap-1 p-3;
-    @apply sm:scale-90;
-    @apply transition-all duration-300;
-    min-width: min-content;
-    height: auto;
-}
-
-.profile-points__badge-top {
-    @apply flex flex-col items-center gap-0.5;
+    @apply relative inline-flex text-base-content;
 }
 
 .profile-points__icon {
-    @apply text-xl text-primary;
+    @apply text-primary transition-transform duration-300;
 }
 
-.profile-points__initial {
-    @apply text-sm font-medium text-base-content/60;
+.profile-points__avatar {
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-primary-content font-semibold;
 }
 
 .profile-points__points {
-    @apply text-sm font-bold text-base-content/60;
+    @apply font-bold tabular-nums text-base-content;
 }
 
-.profile-points__expanded {
-    @apply card bg-base-100 shadow-md p-2;
-    @apply flex items-center gap-2 whitespace-nowrap min-w-max flex-row;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
-    pointer-events: none;
+.profile-points__name {
+    @apply max-w-40 truncate font-semibold text-base-content;
 }
 
-.profile-points__expanded .profile-points__badge-top {
-    @apply flex-row gap-2;
+.profile-points__caption,
+.profile-points__detail {
+    @apply text-adaptive-sm text-base-content/60;
 }
 
-.profile-points__badge {
-    transition: opacity 0.3s ease, transform 0.3s ease;
+.profile-points--desktop .profile-points__desktop-card {
+    @apply inline-flex min-h-14 items-center gap-3 rounded-lg border border-base-200 bg-base-100 px-4 py-2 shadow-md transition-all duration-300;
 }
 
-.profile-points--expanded .profile-points__badge {
-    @apply sm:opacity-0 sm:pointer-events-none;
+.profile-points--desktop .profile-points__desktop-card:hover {
+    @apply -translate-y-0.5 shadow-lg;
 }
 
-.profile-points--expanded .profile-points__expanded {
-    @apply sm:visible sm:pointer-events-auto;
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+.profile-points--desktop .profile-points__desktop-card:hover .profile-points__icon {
+    @apply scale-110;
 }
 
-@media (hover: hover) {
-    .profile-points:hover .profile-points__badge {
-        opacity: 0;
-        transform: scale(0.8);
-        pointer-events: none;
-    }
+.profile-points--desktop .profile-points__avatar {
+    @apply h-10 w-10 text-base;
+}
 
-    .profile-points:hover .profile-points__expanded {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
-        pointer-events: auto;
-        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
-    }
+.profile-points--desktop .profile-points__identity {
+    @apply flex min-w-0 flex-col;
+}
 
-    .profile-points:hover .profile-points__points {
-        @apply text-primary;
-    }
+.profile-points--desktop .profile-points__desktop-score {
+    @apply ml-2 inline-flex items-center gap-1 rounded-full bg-base-200 px-3 py-1;
+}
+
+.profile-points--desktop .profile-points__points {
+    @apply text-adaptive-base;
+}
+
+.profile-points--mobile {
+    @apply z-10;
+}
+
+.profile-points__mobile-trigger {
+    @apply btn btn-ghost h-auto min-h-0 gap-2 rounded-full border border-base-200 bg-base-100 px-2 py-1.5 shadow-md;
+}
+
+.profile-points__mobile-trigger:hover .profile-points__icon,
+.profile-points__mobile-trigger:focus-visible .profile-points__icon {
+    @apply scale-110;
+}
+
+.profile-points__mobile-trigger:active .profile-points__icon {
+    @apply scale-95;
+}
+
+.profile-points__mobile-trigger:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+}
+
+.profile-points--mobile .profile-points__avatar {
+    @apply h-8 w-8 text-sm;
+}
+
+.profile-points__mobile-score {
+    @apply inline-flex items-center gap-1;
+}
+
+.profile-points--mobile .profile-points__points {
+    @apply text-adaptive-sm;
+}
+
+.profile-points__mobile-panel {
+    @apply invisible pointer-events-none absolute right-0 top-full mt-2 flex min-w-48 translate-y-1 flex-col gap-1 rounded-lg border border-base-200 bg-base-100 p-3 opacity-0 shadow-lg transition-all duration-200;
+}
+
+.profile-points--expanded .profile-points__mobile-panel {
+    @apply visible pointer-events-auto translate-y-0 opacity-100;
+}
+
+.profile-points__detail {
+    @apply inline-flex items-center gap-1;
 }

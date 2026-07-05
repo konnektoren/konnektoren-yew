@@ -1,3 +1,6 @@
+use crate::i18n::use_i18n;
+use crate::model::Design;
+use crate::providers::use_design;
 use konnektoren_core::prelude::PlayerProfile;
 use yew::prelude::*;
 
@@ -9,40 +12,69 @@ pub struct ProfilePointsProps {
 #[function_component(ProfilePointsComponent)]
 pub fn profile_points_component(props: &ProfilePointsProps) -> Html {
     let expanded = use_state(|| false);
+    let design = use_design();
+    let i18n = use_i18n();
     let points = props.profile.xp;
     let first_letter = props.profile.name.chars().next().unwrap_or('?');
+    let is_mobile = matches!(*design, Design::Mobile);
 
     let toggle_expanded = {
         let expanded = expanded.clone();
-        Callback::from(move |e: MouseEvent| {
-            #[cfg(feature = "csr")]
-            {
-                e.prevent_default();
-                expanded.set(!*expanded);
-            }
+        Callback::from(move |_| {
+            expanded.set(!*expanded);
         })
     };
 
     let class = classes!(
         "profile-points",
+        is_mobile.then_some("profile-points--mobile"),
+        (!is_mobile).then_some("profile-points--desktop"),
         expanded.then(|| "profile-points--expanded")
     );
 
-    html! {
-        <div {class} onclick={toggle_expanded}>
-            <div class="profile-points__badge">
-                <div class="profile-points__badge-top">
-                    <span class="profile-points__icon">{"⭐️"}</span>
-                    <span class="profile-points__initial">{ first_letter }</span>
+    if is_mobile {
+        html! {
+            <div class={class}>
+                <button
+                    class="profile-points__mobile-trigger"
+                    type="button"
+                    aria-label={format!("{}: {points}", i18n.t("XP required"))}
+                    aria-expanded={expanded.to_string()}
+                    onclick={toggle_expanded}
+                >
+                    <span class="profile-points__avatar">{ first_letter }</span>
+                    <span class="profile-points__mobile-score">
+                        <i class="fas fa-star profile-points__icon"></i>
+                        <span class="profile-points__points">{ points }</span>
+                    </span>
+                </button>
+                <div class="profile-points__mobile-panel">
+                    <span class="profile-points__name">{ &props.profile.name }</span>
+                    <span class="profile-points__detail">
+                        <i class="fas fa-star profile-points__icon"></i>
+                        <span>{ points }</span>
+                        <span>{ "XP" }</span>
+                    </span>
                 </div>
-                <div class="profile-points__points">{ points }</div>
             </div>
-            <div class="profile-points__expanded">
-                <span class="profile-points__icon">{"⭐️"}</span>
-                <span class="profile-points__points">{ points }</span>
-                <span class="profile-points__name">{ &props.profile.name }</span>
+        }
+    } else {
+        html! {
+            <div class={class}>
+                <div class="profile-points__desktop-card">
+                    <span class="profile-points__avatar">{ first_letter }</span>
+                    <span class="profile-points__identity">
+                        <span class="profile-points__name">{ &props.profile.name }</span>
+                        <span class="profile-points__caption">{ i18n.t("Player Profile") }</span>
+                    </span>
+                    <span class="profile-points__desktop-score">
+                        <i class="fas fa-star profile-points__icon"></i>
+                        <span class="profile-points__points">{ points }</span>
+                        <span class="profile-points__caption">{ "XP" }</span>
+                    </span>
+                </div>
             </div>
-        </div>
+        }
     }
 }
 
@@ -95,12 +127,11 @@ mod preview {
         ],
         tests: [
             ("Has profile-points wrapper", has_class("profile-points")),
-            ("Shows star icon", has_text("⭐️")),
             ("Shows xp points", has_text("100")),
             ("Shows first initial", has_text("T")),
             ("Shows player name", has_text("Test Player")),
-            ("Has badge element", exists("profile-points__badge")),
-            ("Has expanded element", exists("profile-points__expanded")),
+            ("Has desktop element", exists("profile-points__desktop-card")),
+            ("Has avatar element", exists("profile-points__avatar")),
         ]
     );
 }
