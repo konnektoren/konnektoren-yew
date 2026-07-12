@@ -4,6 +4,8 @@ pub mod analytics;
 #[cfg(feature = "sbom")]
 pub mod app_dependencies;
 pub mod app_version;
+#[cfg(feature = "achievements")]
+mod achievements;
 mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
@@ -54,6 +56,8 @@ pub use analytics::*;
 #[cfg(feature = "sbom")]
 pub use app_dependencies::AppDependenciesComponent;
 pub use app_version::AppVersionComponent;
+#[cfg(feature = "achievements")]
+pub use achievements::*;
 pub use badge::Badge;
 #[cfg(feature = "certificates")]
 pub use certificates::*;

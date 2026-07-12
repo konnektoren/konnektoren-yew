@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.5.16"
+version = "0.5.17"
 edition = "2024"
 
 [lib]
@@ -41,9 +41,10 @@ default = [
     "gdrive",
     "tour",
 ]
+achievements = ["konnektoren-core/achievements"]
 backup = []
 certificates = [
-    "konnektoren-core/achievements",
+    "achievements",
     "konnektoren-core/certificates",
 ]
 chat = []
