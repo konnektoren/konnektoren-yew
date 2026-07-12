@@ -1,0 +1,199 @@
+@layer utilities {
+    @keyframes achievement-unlocked-chest {
+        0%,
+        8% {
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+        }
+        14% {
+            transform: rotate(-10deg) scale(1);
+        }
+        20% {
+            transform: rotate(10deg) scale(1);
+        }
+        26% {
+            transform: rotate(-8deg) scale(1);
+        }
+        32% {
+            transform: rotate(8deg) scale(1);
+        }
+        38% {
+            transform: rotate(-4deg) scale(1.02);
+        }
+        46% {
+            transform: rotate(0deg) scale(1.1);
+            opacity: 1;
+        }
+        60%,
+        100% {
+            transform: rotate(-18deg) scale(0.6) translateY(-18px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes achievement-unlocked-icon {
+        0%,
+        44% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        58% {
+            transform: scale(1.25);
+            opacity: 1;
+        }
+        75% {
+            transform: scale(0.92);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes achievement-unlocked-burst {
+        0%,
+        44% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        55% {
+            transform: scale(0.4);
+            opacity: 0.9;
+        }
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+
+    @keyframes achievement-unlocked-sparkle {
+        0%,
+        50% {
+            transform: scale(0) translate(0, 0);
+            opacity: 0;
+        }
+        65% {
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1) translate(var(--sparkle-x, 0), var(--sparkle-y, -20px));
+            opacity: 0;
+        }
+    }
+
+    @keyframes achievement-unlocked-label {
+        0%,
+        55% {
+            transform: translateY(6px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}
+
+.achievement-unlocked {
+    @apply card bg-base-100 shadow-xl p-6 max-w-[280px];
+    @apply flex flex-col items-center text-center gap-2;
+}
+
+.achievement-unlocked__chest {
+    @apply relative w-24 h-24 flex items-center justify-center mb-2;
+    @apply border-0 bg-transparent p-0 cursor-pointer;
+}
+
+.achievement-unlocked__chest:disabled {
+    @apply cursor-default;
+}
+
+.achievement-unlocked__chest-icon {
+    @apply absolute text-5xl text-neutral/40;
+    @apply transition-transform duration-300;
+    animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.achievement-unlocked__chest:not(:disabled):hover .achievement-unlocked__chest-icon {
+    @apply scale-110;
+}
+
+.achievement-unlocked__lock {
+    @apply absolute -bottom-1 -right-1 z-10;
+    @apply w-6 h-6 flex items-center justify-center text-xs;
+    @apply bg-base-300 text-base-content rounded-full shadow;
+}
+
+.achievement-unlocked--open .achievement-unlocked__chest-icon {
+    @apply text-warning;
+    animation: achievement-unlocked-chest 1.8s ease-in-out forwards;
+}
+
+.achievement-unlocked__burst {
+    @apply absolute inset-0 rounded-full;
+    @apply bg-gradient-to-br from-warning/60 to-secondary/0;
+    animation: achievement-unlocked-burst 1.8s ease-out forwards;
+}
+
+.achievement-unlocked__sparkle {
+    @apply absolute w-1.5 h-1.5 rounded-full bg-warning;
+    animation: achievement-unlocked-sparkle 1.8s ease-out forwards;
+}
+
+.achievement-unlocked__sparkle--1 {
+    --sparkle-x: -28px;
+    --sparkle-y: -22px;
+    animation-delay: 0.05s;
+}
+
+.achievement-unlocked__sparkle--2 {
+    --sparkle-x: 26px;
+    --sparkle-y: -26px;
+    animation-delay: 0.15s;
+}
+
+.achievement-unlocked__sparkle--3 {
+    --sparkle-x: 0px;
+    --sparkle-y: -34px;
+    animation-delay: 0.25s;
+}
+
+.achievement-unlocked__icon {
+    @apply absolute w-16 h-16 flex items-center justify-center;
+    @apply text-3xl text-primary bg-primary/10 rounded-xl shadow-sm;
+    animation: achievement-unlocked-icon 1.8s ease-out forwards;
+}
+
+.achievement-unlocked__icon img {
+    @apply max-w-full max-h-full object-contain;
+}
+
+.achievement-unlocked__icon--text {
+    @apply text-xl font-bold;
+}
+
+.achievement-unlocked__content {
+    @apply flex flex-col items-center gap-1;
+}
+
+.achievement-unlocked__label {
+    @apply text-xs uppercase tracking-wide font-semibold text-neutral/50;
+}
+
+.achievement-unlocked--open .achievement-unlocked__label {
+    @apply text-warning;
+    animation: achievement-unlocked-label 1.8s ease-out forwards;
+}
+
+.achievement-unlocked__name {
+    @apply text-lg font-bold;
+}
+
+.achievement-unlocked:not(.achievement-unlocked--open) .achievement-unlocked__name,
+.achievement-unlocked:not(.achievement-unlocked--open) .achievement-unlocked__description {
+    @apply text-base-content/40 italic;
+}
+
+.achievement-unlocked__description {
+    @apply text-sm text-base-content/70;
+}

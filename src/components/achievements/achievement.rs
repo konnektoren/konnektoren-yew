@@ -1,3 +1,4 @@
+use super::render_icon;
 use crate::i18n::use_i18n;
 use konnektoren_core::achievements::AchievementDefinition;
 use yew::prelude::*;
@@ -11,21 +12,11 @@ pub struct AchievementComponentProps {
 pub fn achievement_component(props: &AchievementComponentProps) -> Html {
     let i18n = use_i18n();
 
-    let icon_html = if props.achievement.icon.starts_with("fa-") {
-        html! {
-            <i class={classes!("achievement__icon", "fas", &props.achievement.icon)} aria-hidden="true"></i>
-        }
-    } else if props.achievement.icon.starts_with("http")
-        || props.achievement.icon.starts_with("data:")
-    {
-        html! {
-            <img class="achievement__icon" src={props.achievement.icon.clone()} alt={i18n.t(&props.achievement.name)} />
-        }
-    } else {
-        html! {
-            <span class="achievement__icon achievement__icon--text">{&props.achievement.icon}</span>
-        }
-    };
+    let icon_html = render_icon(
+        &props.achievement.icon,
+        &i18n.t(&props.achievement.name),
+        "achievement__icon",
+    );
 
     html! {
         <div class="achievement">

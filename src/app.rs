@@ -193,9 +193,15 @@ pub fn preview_groups() -> ComponentList {
             AppDependenciesComponent::preview()
         ),
         create_component_group!(
-            "Certificates",
+            "Achievements",
             AchievementComponent::preview(),
+            AchievementUnlockedComponent::preview(),
+            #[cfg(feature = "certificates")]
             AchievementsComponent::preview(),
+        ),
+        #[cfg(feature = "certificates")]
+        create_component_group!(
+            "Certificates",
             CertificateComponent::preview(),
             CertificateImageComponent::preview()
         ),
