@@ -71,7 +71,9 @@ pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSelectorStyle};
-pub use faq::{FaqItem, FaqItemProps, FaqList, FaqListProps, FaqTag, FaqTagProps};
+pub use faq::{
+    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
+};
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]

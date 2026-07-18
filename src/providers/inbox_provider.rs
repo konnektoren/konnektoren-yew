@@ -1,9 +1,34 @@
 use crate::model::Inbox;
 use crate::repository::{INBOX_STORAGE_KEY, InboxRepositoryTrait};
+#[cfg(feature = "csr")]
+use konnektoren_asset_loader::AssetServer;
+#[cfg(feature = "csr")]
+use konnektoren_core::assets::{AssetFormat, DefaultAssetSource};
+#[cfg(feature = "csr")]
+use std::rc::Rc;
 use std::sync::Arc;
 use yew::prelude::*;
 
-const INBOX_FILE: &str = "/assets/inbox.yml";
+#[cfg(feature = "csr")]
+const INBOX_FILE: &str = "inbox.yml";
+
+#[cfg(feature = "csr")]
+#[derive(Clone)]
+struct InboxFormat;
+
+#[cfg(feature = "csr")]
+impl AssetFormat for InboxFormat {
+    type Asset = Inbox;
+    type Error = serde_yaml::Error;
+
+    fn extensions(&self) -> &[&str] {
+        &["yml", "yaml"]
+    }
+
+    fn parse(&self, bytes: &[u8]) -> Result<Self::Asset, Self::Error> {
+        serde_yaml::from_slice(bytes)
+    }
+}
 
 #[derive(Clone, PartialEq)]
 pub struct InboxContext {
@@ -31,31 +56,29 @@ pub fn inbox_provider(props: &InboxProviderProps) -> Html {
     {
         let inbox = inbox.clone();
         let inbox_repository = props.inbox_repository.clone();
+        let asset_server = use_state(|| AssetServer::new(Rc::new(DefaultAssetSource::default())));
 
         use_effect_with((), move |_| {
             use wasm_bindgen_futures::spawn_local;
 
             spawn_local(async move {
-                if let Ok(Some(loaded_inbox)) = inbox_repository.get_inbox(INBOX_STORAGE_KEY).await
-                {
-                    tracing::info!("Loaded inbox: {:?}", loaded_inbox);
-                    inbox.set(loaded_inbox.clone());
-                    match gloo::net::http::Request::get(INBOX_FILE).send().await {
-                        Ok(response) => match response.text().await {
-                            Ok(text) => {
-                                let mut new_inbox = loaded_inbox.clone();
-                                let loaded_inbox: Inbox = serde_yaml::from_str(&text)
-                                    .unwrap_or_else(|e| {
-                                        tracing::error!("Failed to parse inbox YAML: {:?}", e);
-                                        Inbox::default()
-                                    });
-                                new_inbox.merge(&loaded_inbox);
-                                inbox.set(new_inbox);
-                            }
-                            Err(e) => tracing::error!("Failed to get response text: {:?}", e),
-                        },
-                        Err(e) => tracing::error!("Failed to load inbox: {:?}", e),
+                let stored_inbox = match inbox_repository.get_inbox(INBOX_STORAGE_KEY).await {
+                    Ok(Some(stored_inbox)) => stored_inbox,
+                    Ok(None) => Inbox::default(),
+                    Err(error) => {
+                        tracing::error!("Failed to load stored inbox: {:?}", error);
+                        Inbox::default()
                     }
+                };
+                inbox.set(stored_inbox.clone());
+
+                match asset_server.load(InboxFormat, INBOX_FILE).await {
+                    Ok(remote_inbox) => {
+                        let mut merged_inbox = stored_inbox;
+                        merged_inbox.merge(&remote_inbox);
+                        inbox.set(merged_inbox);
+                    }
+                    Err(error) => tracing::error!("Failed to load inbox asset: {}", error),
                 }
             });
             || ()
