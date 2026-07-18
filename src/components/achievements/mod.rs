@@ -1,12 +1,12 @@
 mod achievement;
+mod achievement_unlocked;
 #[cfg(feature = "certificates")]
 mod achievements;
-mod achievement_unlocked;
 
 pub use achievement::AchievementComponent;
+pub use achievement_unlocked::AchievementUnlockedComponent;
 #[cfg(feature = "certificates")]
 pub use achievements::AchievementsComponent;
-pub use achievement_unlocked::AchievementUnlockedComponent;
 
 use yew::prelude::*;
 

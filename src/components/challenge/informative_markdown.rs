@@ -1,14 +1,32 @@
 use crate::components::challenge::informative::InformativeComponentProps;
 use crate::i18n::use_i18n;
-use konnektoren_core::asset_loader::AssetLoader;
+use konnektoren_asset_loader::AssetServer;
+use konnektoren_core::assets::{AssetFormat, DefaultAssetSource};
 use konnektoren_core::challenges::ChallengeResult;
 use konnektoren_core::commands::{ChallengeCommand, Command};
+use std::rc::Rc;
 use yew::prelude::*;
 
 pub enum LoadingState {
     Loading,
     FetchSuccess(String),
     FetchError(String),
+}
+
+#[derive(Clone)]
+struct MarkdownFormat;
+
+impl AssetFormat for MarkdownFormat {
+    type Asset = String;
+    type Error = std::string::FromUtf8Error;
+
+    fn extensions(&self) -> &[&str] {
+        &["md", "markdown"]
+    }
+
+    fn parse(&self, bytes: &[u8]) -> Result<Self::Asset, Self::Error> {
+        String::from_utf8(bytes.to_vec())
+    }
 }
 
 /// Function to load markdown content synchronously for SSG
@@ -44,7 +62,7 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
     let i18n = use_i18n();
     let loading_state = use_state(|| LoadingState::Loading);
     let language = props.language.as_deref().unwrap_or("en");
-    let asset_loader = use_state(AssetLoader::default);
+    let asset_loader = use_state(|| AssetServer::new(Rc::new(DefaultAssetSource::default())));
 
     let on_finish = {
         let on_command = props.on_command.clone();
@@ -157,16 +175,15 @@ pub fn informative_markdown_component(props: &InformativeComponentProps) -> Html
     }
 }
 
-async fn fetch_markdown_with_loader(loader: &AssetLoader, path: &str) -> Result<String, String> {
-    // Load the markdown file using the asset loader
-    let binary_data = loader
-        .load_binary(path)
+async fn fetch_markdown_with_loader(
+    loader: &AssetServer<DefaultAssetSource>,
+    path: &str,
+) -> Result<String, String> {
+    let content = loader
+        .load(MarkdownFormat, path)
         .await
         .map_err(|e| format!("Failed to load markdown content: {}", e))?;
-
-    // Convert bytes to string
-    let content = String::from_utf8(binary_data)
-        .map_err(|e| format!("Failed to convert markdown content to string: {}", e))?;
+    let content = (*content).clone();
 
     // Validate that the content is not an HTML error page (404, etc.)
     let content_lower = content.to_lowercase();

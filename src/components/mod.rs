@@ -1,11 +1,11 @@
 //! This module contains all the components that are used in the app.
+#[cfg(feature = "achievements")]
+mod achievements;
 pub mod ads;
 pub mod analytics;
 #[cfg(feature = "sbom")]
 pub mod app_dependencies;
 pub mod app_version;
-#[cfg(feature = "achievements")]
-mod achievements;
 mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
@@ -48,6 +48,8 @@ pub mod tour;
 pub mod translate;
 pub mod video;
 
+#[cfg(feature = "achievements")]
+pub use achievements::*;
 pub use ads::{
     AdNetwork, AdvertisementComponent, AdvertisementProps, BlogAdComponent, BuyMeCoffeeComponent,
     GumroadProductAdComponent, GumroadSubscribeComponent,
@@ -56,8 +58,6 @@ pub use analytics::*;
 #[cfg(feature = "sbom")]
 pub use app_dependencies::AppDependenciesComponent;
 pub use app_version::AppVersionComponent;
-#[cfg(feature = "achievements")]
-pub use achievements::*;
 pub use badge::Badge;
 #[cfg(feature = "certificates")]
 pub use certificates::*;
