@@ -1,0 +1,21 @@
+!multiple-choice
+id: multiple-choice
+name: Multiple Choice
+lang: de
+options:
+  - id: 0
+    name: Guten Morgen!
+  - id: 1
+    name: Gute Nacht!
+  - id: 2
+    name: Auf Wiedersehen!
+questions:
+  - question: Du triffst Nora morgens im Garten. Was sagst du?
+    help: Am Morgen begrüßt du deine Nachbarin.
+    option: 0
+  - question: Nora geht abends schlafen. Was wünschst du ihr?
+    help: Vor dem Schlafen wünschst du eine gute Nacht.
+    option: 1
+  - question: Du verlässt den Garten. Was sagst du zum Abschied?
+    help: Du verabschiedest dich von Nora.
+    option: 2

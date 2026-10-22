@@ -6,3 +6,5 @@ reports/
 *.cdx.json
 .DS_Store
 Cargo.lock
+
+/dist-asset-loader

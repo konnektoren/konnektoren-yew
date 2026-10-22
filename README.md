@@ -291,3 +291,38 @@ pub fn lesson_toolbar(props: &LessonToolbarProps) -> Html {
     @apply flex min-w-24 justify-end gap-2;
 }
 ```
+
+## Multiple-choice challenge preview
+
+Run `env -u NO_COLOR trunk serve --features csr,yew-preview` and open
+<http://localhost:8080>. Select **Challenge → Multiple Choice (HTTP) → Default**.
+The dataset is served from `assets/challenges/multiple_choice.yml`; it is not
+included in the WASM. Selecting the component triggers the first request.
+
+- **Load again** reuses the parsed asset cache of the mounted component.
+- **Clear cache and reload** invalidates that entry and fetches again. Edit the
+  served YAML to try new questions without rebuilding the WASM. Browser HTTP
+  caching still applies; disable cache in DevTools when testing edits.
+- **Missing file** and **Invalid dataset** demonstrate errors and retry.
+
+Use the same component in a normal CSR application beneath `I18nProvider`:
+
+```rust,ignore
+use konnektoren_yew::components::AssetChallenge;
+
+html! {
+    <AssetChallenge asset_path="challenges/multiple_choice.yml" config={challenge_config} />
+}
+```
+
+`config` selects tasks and variant and supplies challenge metadata. `base_url`
+defaults to `/assets/`; absolute HTTP(S) asset URLs also work. `on_command`,
+`on_event` and `language` are forwarded to the normal challenge renderer.
+Loading starts on mount or when the asset path/base URL changes. Unmounting
+releases this component's cache. Loader diagnostics and reload buttons appear
+only with `show_loader_controls={true}`.
+
+The Cargo patches currently select the updated sibling `../konnektoren-rs`
+checkout. Remove the patch section after its loader changes are pushed to the
+configured git branch. Trunk copies `assets/` into the served directory; keep
+that copy step in deployments using this component.
