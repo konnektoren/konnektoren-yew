@@ -1,29 +1,15 @@
-//! Fetch a challenge dataset on mount, then render the normal challenge UI.
-//! Dataset bytes are supplied over HTTP; this module embeds no challenge files.
+//! Load a challenge on mount from an injected source, or HTTP by default.
 use super::ChallengeComponent;
-use crate::i18n::use_i18n;
-use konnektoren_asset_loader::{AssetFormat, AssetServer, UrlSource};
+use crate::{i18n::use_i18n, model::GameLoaderHandle};
+use konnektoren_asset_loader::{AssetServer, AssetSource, SourceLayer, UrlSource};
 use konnektoren_core::{
     challenges::{Challenge, ChallengeConfig, ChallengeType},
     commands::Command,
     events::Event,
 };
+use konnektoren_platform::manifest::{Manifest, NoExtensions};
 use std::{cell::Cell, rc::Rc, sync::Arc};
 use yew::prelude::*;
-
-struct ChallengeYaml;
-impl AssetFormat for ChallengeYaml {
-    type Asset = ChallengeType;
-    type Error = serde_yaml::Error;
-
-    fn cache_key(&self) -> Option<String> {
-        Some(String::new())
-    }
-
-    fn parse(&self, bytes: &[u8]) -> Result<Self::Asset, Self::Error> {
-        serde_yaml::from_slice(bytes)
-    }
-}
 
 enum LoadState {
     Loading,
@@ -34,12 +20,34 @@ enum LoadState {
     Failed(String),
 }
 
+/// A source handle whose identity remains stable across Yew renders.
+#[derive(Clone)]
+pub struct ChallengeSource(Rc<dyn SourceLayer>);
+
+impl ChallengeSource {
+    pub fn new(source: impl AssetSource + 'static) -> Self {
+        Self(Rc::new(source))
+    }
+}
+
+impl PartialEq for ChallengeSource {
+    fn eq(&self, other: &Self) -> bool {
+        Rc::ptr_eq(&self.0, &other.0)
+    }
+}
+
 #[derive(Properties, PartialEq)]
 pub struct AssetChallengeProps {
     /// Relative to `base_url`, or an absolute HTTP(S) URL.
     pub asset_path: AttrValue,
     #[prop_or_else(|| "/assets/".into())]
     pub base_url: AttrValue,
+    /// Overrides the default HTTP source. Clone the handle to share its identity.
+    #[prop_or_default]
+    pub source: Option<ChallengeSource>,
+    /// Reuses a platform game loader. Takes precedence over source/base_url.
+    #[prop_or_default]
+    pub loader: Option<GameLoaderHandle>,
     #[prop_or_default]
     pub config: ChallengeConfig,
     #[prop_or_default]
@@ -52,24 +60,49 @@ pub struct AssetChallengeProps {
     pub show_loader_controls: bool,
 }
 
-/// Browser-only entry point for datasets that should be fetched on first use.
-/// A mounted instance retains its server cache between reloads. Unmounting drops
-/// that cache; no global cache or embedded fallback is used.
+/// Loads datasets on first use through the platform game loader.
+/// Uses HTTP unless a source or shared loader is supplied. Without a shared
+/// loader, unmounting drops its cache; an injected handle retains shared assets.
 #[function_component(AssetChallenge)]
 pub fn asset_challenge(props: &AssetChallengeProps) -> Html {
     let i18n = use_i18n();
     let state = use_state(|| LoadState::Loading);
     let request = use_state(|| 0usize);
-    let server = use_memo(props.base_url.clone(), |base| {
-        AssetServer::new(Rc::new(UrlSource::new(base.to_string())))
-    });
+    let loader = use_memo(
+        (
+            props.base_url.clone(),
+            props.source.clone(),
+            props.loader.clone(),
+        ),
+        |(base, source, loader)| {
+            if let Some(loader) = loader {
+                return loader.clone();
+            }
+            let source = source.as_ref().map_or_else(
+                || Rc::new(UrlSource::new(base.to_string())) as Rc<dyn SourceLayer>,
+                |source| source.0.clone(),
+            );
+            GameLoaderHandle::with_server(
+                &Manifest::<NoExtensions>::default(),
+                AssetServer::new(source),
+            )
+        },
+    );
 
     {
-        let server = server.clone();
+        let loader = loader.clone();
+        let content_id = props.config.challenge.clone();
         let state = state.clone();
         let path = props.asset_path.to_string();
         use_effect_with(
-            (props.base_url.clone(), props.asset_path.clone(), *request),
+            (
+                props.base_url.clone(),
+                props.source.clone(),
+                props.loader.clone(),
+                props.config.challenge.clone(),
+                props.asset_path.clone(),
+                *request,
+            ),
             move |_| {
                 let cancelled = Rc::new(Cell::new(false));
                 let task_cancelled = cancelled.clone();
@@ -79,7 +112,11 @@ pub fn asset_challenge(props: &AssetChallengeProps) -> Html {
                 };
                 state.set(LoadState::Loading);
                 wasm_bindgen_futures::spawn_local(async move {
-                    let result = server.load(ChallengeYaml, path).await;
+                    let loader = loader
+                        .loader()
+                        .clone()
+                        .with_challenge_path_resolver(move |_| path.clone());
+                    let result = loader.load_challenge(&content_id).await;
                     if !task_cancelled.get() {
                         state.set(match result {
                             Ok(asset) => LoadState::Ready {
@@ -103,10 +140,10 @@ pub fn asset_challenge(props: &AssetChallengeProps) -> Html {
     };
     let clear_and_reload = {
         let request = request.clone();
-        let server = server.clone();
+        let loader = loader.clone();
         let path = props.asset_path.to_string();
         Callback::from(move |_| {
-            server.invalidate(&path);
+            loader.loader().server().invalidate(&path);
             request.set(*request + 1);
         })
     };
@@ -115,7 +152,7 @@ pub fn asset_challenge(props: &AssetChallengeProps) -> Html {
     html! {
         <section class="asset-challenge flex flex-col gap-4 p-4">
             if props.show_loader_controls {
-                <p><code>{format!("{}{}", props.base_url, props.asset_path)}</code></p>
+                <p><code>{props.asset_path.clone()}</code></p>
                 <div class="flex flex-wrap gap-2">
                     <button class="btn btn-primary" onclick={reload.clone()} disabled={loading}>
                         {i18n.t("Load again")}
@@ -160,6 +197,7 @@ pub fn asset_challenge(props: &AssetChallengeProps) -> Html {
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
+    use crate::model::preview_game_assets;
     use yew_preview::prelude::*;
 
     fn config() -> ChallengeConfig {
@@ -178,6 +216,8 @@ mod preview {
         AssetChallengeProps {
             asset_path: "challenges/multiple_choice.yml".into(),
             base_url: "/assets/".into(),
+            source: None,
+            loader: preview_game_assets::loader().ok(),
             config: config(),
             language: Some("de".to_owned()),
             on_command: None,
@@ -185,10 +225,33 @@ mod preview {
             show_loader_controls: true,
         },
         (
+            "Embedded",
+            AssetChallengeProps {
+                asset_path: "challenges/konnektoren.yml".into(),
+                base_url: "/assets/".into(),
+                source: None,
+                loader: preview_game_assets::loader().ok(),
+                config: ChallengeConfig {
+                    id: "embedded-preview".to_owned(),
+                    name: "Konnektoren".to_owned(),
+                    description: String::new(),
+                    challenge: "konnektoren".to_owned(),
+                    tasks: 3.into(),
+                    ..Default::default()
+                },
+                language: Some("de".to_owned()),
+                on_command: None,
+                on_event: None,
+                show_loader_controls: true,
+            }
+        ),
+        (
             "Missing file",
             AssetChallengeProps {
                 asset_path: "challenges/missing.yml".into(),
                 base_url: "/assets/".into(),
+                source: None,
+                loader: preview_game_assets::loader().ok(),
                 config: config(),
                 language: None,
                 on_command: None,
@@ -201,6 +264,8 @@ mod preview {
             AssetChallengeProps {
                 asset_path: "inbox.yml".into(),
                 base_url: "/assets/".into(),
+                source: None,
+                loader: preview_game_assets::loader().ok(),
                 config: config(),
                 language: None,
                 on_command: None,

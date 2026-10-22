@@ -292,12 +292,43 @@ pub fn lesson_toolbar(props: &LessonToolbarProps) -> Html {
 }
 ```
 
+## Manifest-driven game loader preview
+
+Run `env -u NO_COLOR trunk serve --features csr,yew-preview`, open
+<http://localhost:8080> and select **Game → GameLoaderPreview → Default**.
+
+The preview uses `konnektoren_platform::game_loader::GameLoader` with the small
+embedded catalogue in `assets/konnektoren.manifest.yml`. Level metadata is fetched
+from `assets/challenges/level_preview.yml` on mount. Dataset loading starts only
+when you select an entry:
+
+- **Konnektoren (embedded)** uses core's existing embedded dataset.
+- **Multiple Choice (HTTP)** fetches `assets/challenges/multiple_choice.yml`.
+- **Preload game** explicitly loads all referenced content and reports level and
+  unique dataset counts. The resulting assets share the same cache as the
+  selected challenge.
+
+`GameLoaderHandle` is a stable, cloneable Yew handle for a platform loader. Pass
+`loader={handle.clone()}` to `AssetChallenge` to share its cache across components.
+The platform loader owns parsing and content-ID validation; Yew no longer has a
+separate challenge YAML parser. `config.challenge` must match the dataset's ID.
+Source paths are relative to the asset root and use `challenges/...`; the preview
+adapts core's flat embedded keys to this namespace and explicitly maps the
+`multiple-choice` ID to the existing `multiple_choice.yml` filename.
+
 ## Multiple-choice challenge preview
 
 Run `env -u NO_COLOR trunk serve --features csr,yew-preview` and open
-<http://localhost:8080>. Select **Challenge → Multiple Choice (HTTP) → Default**.
-The dataset is served from `assets/challenges/multiple_choice.yml`; it is not
-included in the WASM. Selecting the component triggers the first request.
+<http://localhost:8080>. Select **Challenge → Multiple Choice (Embedded + HTTP) → Default**.
+Both variants use one ordered source chain: `konnektoren_core::assets::DEFAULT_ASSETS`
+first, then HTTP from `/assets/` for paths missing from the embedded source.
+
+- **Default** loads `assets/challenges/multiple_choice.yml` via HTTP. This sample
+  is not embedded in WASM; selecting it triggers the first request.
+- **Embedded** loads `konnektoren.yml` from core's embedded defaults, without an
+  HTTP request. No duplicate of that file is copied into Yew's assets folder.
+
+Loader controls remain available:
 
 - **Load again** reuses the parsed asset cache of the mounted component.
 - **Clear cache and reload** invalidates that entry and fetches again. Edit the
@@ -315,11 +346,16 @@ html! {
 }
 ```
 
-`config` selects tasks and variant and supplies challenge metadata. `base_url`
-defaults to `/assets/`; absolute HTTP(S) asset URLs also work. `on_command`,
-`on_event` and `language` are forwarded to the normal challenge renderer.
-Loading starts on mount or when the asset path/base URL changes. Unmounting
-releases this component's cache. Loader diagnostics and reload buttons appear
+`config` selects tasks and variant and supplies challenge metadata. Without a
+`source` or `loader` prop, the component uses HTTP and `base_url` defaults to `/assets/`;
+absolute HTTP(S) asset URLs also work. To use a combined or custom source, pass
+`source={ChallengeSource::new(source)}`. The source defines its own paths and HTTP
+base URL; `base_url` configures only the default HTTP source. Clone an existing
+`ChallengeSource` handle when re-rendering to preserve its identity and cache.
+`on_command`, `on_event` and `language` are forwarded to the normal challenge renderer.
+A supplied `loader` takes precedence over `source` and `base_url`. Loading starts
+on mount or when the loader, source, content ID, asset path or base URL changes.
+Without a shared loader, unmounting releases the component's cache. Loader diagnostics and reload buttons appear
 only with `show_loader_controls={true}`.
 
 The Cargo patches currently select the updated sibling `../konnektoren-rs`

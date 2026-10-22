@@ -21,6 +21,8 @@ pub mod chat;
 pub mod domain_selector;
 pub mod faq;
 pub mod feedback_popup;
+#[cfg(all(feature = "csr", feature = "yew-preview"))]
+pub mod game_loader_preview;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
@@ -104,3 +106,6 @@ pub use timer::TimerComponent;
 pub use tour::*;
 pub use translate::TranslateComponent;
 pub use video::VideoComponent;
+
+#[cfg(all(feature = "csr", feature = "yew-preview"))]
+pub use game_loader_preview::GameLoaderPreview;

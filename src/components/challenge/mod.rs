@@ -71,4 +71,4 @@ pub use sort_table_result::SortTableResultComponent;
 pub use vocabulary::VocabularyComponent;
 
 #[cfg(feature = "csr")]
-pub use asset_challenge::{AssetChallenge, AssetChallengeProps};
+pub use asset_challenge::{AssetChallenge, AssetChallengeProps, ChallengeSource};
