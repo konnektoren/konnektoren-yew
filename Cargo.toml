@@ -63,6 +63,7 @@ csr = [
     "gloo",
     "konnektoren-core/csr",
     "konnektoren-asset-loader/csr",
+    "konnektoren-platform/csr",
     "web-sys",
     "js-sys",
     "wasm-bindgen",
@@ -153,14 +154,15 @@ yew-tou-rs = { git = "https://github.com/chriamue/yew-tou-rs/", branch = "main",
 ], optional = true }
 
 # Konnektoren dependencies
-konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", branch = "feature/asset-loader-2", default-features = false, features = [
+konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
+konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = [
     "content",
     "platform",
 ] }
-konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", branch = "feature/asset-loader-2", features = [
+konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "js",
 ] }
-konnektoren-asset-loader = { git = "https://github.com/konnektoren/konnektoren-rs.git", branch = "feature/asset-loader-2" }
+konnektoren-asset-loader = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 
 # Solana dependencies (optional, not in default)
 wallet-adapter = { version = "1", optional = true }
@@ -176,7 +178,7 @@ tokio = { version = "1", features = [
 ], optional = true }
 
 [dev-dependencies]
-konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git", branch = "feature/asset-loader-2", features = [
+konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "tools",
 ] }
 wasm-bindgen-test = "0.3"
