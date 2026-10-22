@@ -1,6 +1,8 @@
 //! # Challenge Components
 
 pub mod actions;
+#[cfg(feature = "csr")]
+pub mod asset_challenge;
 pub mod challenge;
 pub mod challenge_history_summary;
 pub mod challenges_summary;
@@ -67,3 +69,6 @@ pub use result_summary::ResultSummaryComponent;
 pub use sort_table::SortTableComponent;
 pub use sort_table_result::SortTableResultComponent;
 pub use vocabulary::VocabularyComponent;
+
+#[cfg(feature = "csr")]
+pub use asset_challenge::{AssetChallenge, AssetChallengeProps, ChallengeSource};

@@ -1,11 +1,11 @@
 //! This module contains all the components that are used in the app.
+#[cfg(feature = "achievements")]
+mod achievements;
 pub mod ads;
 pub mod analytics;
 #[cfg(feature = "sbom")]
 pub mod app_dependencies;
 pub mod app_version;
-#[cfg(feature = "achievements")]
-mod achievements;
 mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
@@ -21,6 +21,8 @@ pub mod chat;
 pub mod domain_selector;
 pub mod faq;
 pub mod feedback_popup;
+#[cfg(all(feature = "csr", feature = "yew-preview"))]
+pub mod game_loader_preview;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
@@ -48,6 +50,8 @@ pub mod tour;
 pub mod translate;
 pub mod video;
 
+#[cfg(feature = "achievements")]
+pub use achievements::*;
 pub use ads::{
     AdNetwork, AdvertisementComponent, AdvertisementProps, BlogAdComponent, BuyMeCoffeeComponent,
     GumroadProductAdComponent, GumroadSubscribeComponent,
@@ -56,8 +60,6 @@ pub use analytics::*;
 #[cfg(feature = "sbom")]
 pub use app_dependencies::AppDependenciesComponent;
 pub use app_version::AppVersionComponent;
-#[cfg(feature = "achievements")]
-pub use achievements::*;
 pub use badge::Badge;
 #[cfg(feature = "certificates")]
 pub use certificates::*;
@@ -71,7 +73,9 @@ pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSelectorStyle};
-pub use faq::{FaqItem, FaqItemProps, FaqList, FaqListProps, FaqTag, FaqTagProps};
+pub use faq::{
+    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
+};
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
@@ -102,3 +106,6 @@ pub use timer::TimerComponent;
 pub use tour::*;
 pub use translate::TranslateComponent;
 pub use video::VideoComponent;
+
+#[cfg(all(feature = "csr", feature = "yew-preview"))]
+pub use game_loader_preview::GameLoaderPreview;

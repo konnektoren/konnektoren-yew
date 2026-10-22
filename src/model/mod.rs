@@ -14,6 +14,8 @@
 //! These models are central to the application's data flow and state management.
 
 mod design;
+#[cfg(feature = "csr")]
+mod game_loader;
 mod inbox;
 mod session_initializer;
 mod settings;
@@ -24,3 +26,8 @@ pub use inbox::Inbox;
 pub use session_initializer::{DefaultSessionInitializer, SessionInitializer};
 pub use settings::Settings;
 pub use theme::Theme;
+
+#[cfg(feature = "csr")]
+pub use game_loader::GameLoaderHandle;
+#[cfg(all(feature = "csr", feature = "yew-preview"))]
+pub(crate) use game_loader::preview as preview_game_assets;

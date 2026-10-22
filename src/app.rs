@@ -112,9 +112,18 @@ pub fn Example() -> Html {
 
 #[cfg(feature = "yew-preview")]
 pub fn preview_groups() -> ComponentList {
+    #[cfg(feature = "csr")]
+    let loaded_multiple_choice = {
+        let mut preview = AssetChallenge::preview();
+        preview.name = "Multiple Choice (Embedded + HTTP)".to_owned();
+        preview
+    };
+
     vec![
         create_component_group!(
             "Challenge",
+            #[cfg(feature = "csr")]
+            loaded_multiple_choice,
             #[cfg(feature = "effects")]
             BlinkAnimation::preview(),
             MultipleChoiceComponent::preview(),
@@ -159,6 +168,8 @@ pub fn preview_groups() -> ComponentList {
         ),
         create_component_group!(
             "Game",
+            #[cfg(feature = "csr")]
+            GameLoaderPreview::preview(),
             MapComponent::preview(),
             GamePathComponent::preview(),
             ProgressBar::preview(),
@@ -235,6 +246,7 @@ pub fn preview_groups() -> ComponentList {
             Logo::preview(),
             InboxComponent::preview(),
             FaqList::preview(),
+            FaqLoader::preview(),
             FaqItem::preview(),
             FaqTag::preview(),
             #[cfg(feature = "chat")]

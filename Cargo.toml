@@ -62,6 +62,8 @@ csr = [
     "yew/csr",
     "gloo",
     "konnektoren-core/csr",
+    "konnektoren-asset-loader/csr",
+    "konnektoren-platform/csr",
     "web-sys",
     "js-sys",
     "wasm-bindgen",
@@ -152,6 +154,7 @@ yew-tou-rs = { git = "https://github.com/chriamue/yew-tou-rs/", branch = "main",
 ], optional = true }
 
 # Konnektoren dependencies
+konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = [
     "content",
     "platform",
@@ -159,6 +162,7 @@ konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", de
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "js",
 ] }
+konnektoren-asset-loader = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 
 # Solana dependencies (optional, not in default)
 wallet-adapter = { version = "1", optional = true }
@@ -188,3 +192,13 @@ vergen = { version = "9", features = ["build", "cargo", "rustc"] }
 cargo-cyclonedx = { version = "0.4", optional = true }
 serde = "1"
 serde_json = "1"
+
+# Exercise the uncommitted asset-loader changes in the sibling checkout.
+# Remove these patches once those changes are available on the git branch.
+[patch."https://github.com/konnektoren/konnektoren-rs.git"]
+konnektoren-rs = { path = "../konnektoren-rs" }
+konnektoren-core = { path = "../konnektoren-rs/konnektoren-core" }
+konnektoren-platform = { path = "../konnektoren-rs/konnektoren-platform" }
+konnektoren-content = { path = "../konnektoren-rs/konnektoren-content" }
+konnektoren-asset-loader = { path = "../konnektoren-rs/konnektoren-asset-loader" }
+konnektoren-asset-loader-derive = { path = "../konnektoren-rs/konnektoren-asset-loader-derive" }
