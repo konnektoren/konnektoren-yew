@@ -146,6 +146,7 @@ pub fn preview_groups() -> ComponentList {
             ChallengeReviewComponent::preview(),
             ChallengeRatingComponent::preview(),
             ChallengeTimerComponent::preview(),
+            ChallengeProgressBadge::preview(),
             ChallengesSummaryComp::preview(),
             ChallengeHistorySummaryComponent::preview(),
             ResultSummaryComponent::preview(),

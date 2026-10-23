@@ -5,6 +5,7 @@ pub mod actions;
 pub mod asset_challenge;
 pub mod challenge;
 pub mod challenge_history_summary;
+pub mod challenge_progress_badge;
 pub mod challenges_summary;
 pub mod contextual_choice;
 pub mod contextual_choice_result;
@@ -38,6 +39,9 @@ pub mod vocabulary;
 pub use actions::{ChallengeActions, ChallengeActionsComponent};
 pub use challenge::ChallengeComponent;
 pub use challenge_history_summary::ChallengeHistorySummaryComponent;
+pub use challenge_progress_badge::{
+    ChallengeProgressBadge, ChallengeProgressBadgeProps, best_performance, progress_hue,
+};
 pub use challenges_summary::{
     ChallengesSummaryComp, ChallengesSummaryConfig, ChallengesSummaryProps,
 };

@@ -1,0 +1,22 @@
+/* Hue: 0 = red (50%) ... 120 = green (100%), set via --challenge-progress-hue */
+.challenge-progress-badge {
+    --challenge-progress-hue: 0;
+    @apply inline-flex items-center gap-1;
+    @apply rounded-full px-2 py-0.5 text-xs font-bold;
+    @apply transition-colors duration-300;
+    background-color: hsl(var(--challenge-progress-hue) 75% 40%);
+    color: #fff;
+}
+
+.challenge-progress-badge--complete {
+    @apply shadow-md;
+    background-color: hsl(142 70% 35%);
+}
+
+.challenge-progress-badge__icon {
+    @apply text-sm;
+}
+
+.challenge-progress-badge__value {
+    @apply leading-none;
+}
