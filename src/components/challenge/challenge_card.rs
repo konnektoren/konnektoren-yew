@@ -58,7 +58,11 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
     });
 
     html! {
-        <div class={classes!("challenge-card", props.locked.then_some("challenge-card--locked"))} onclick={on_flip}>
+        <div class={classes!(
+            "challenge-card",
+            props.locked.then_some("challenge-card--locked"),
+            (!props.flippable).then_some("challenge-card--static")
+        )} onclick={on_flip}>
             {progress}
             <div class={classes!("challenge-card__inner", (*flipped).then_some("challenge-card__inner--flipped"))}>
                 <div class="challenge-card__face challenge-card__face--front">

@@ -30,6 +30,14 @@
     @apply text-adaptive-base text-base-content/60 leading-normal;
 }
 
+.challenge-config {
+    @apply flex flex-col gap-3;
+}
+
+.challenge-config__start {
+    @apply btn btn-primary self-start;
+}
+
 @screen md {
     .challenge-info {
         @apply min-w-[250px];

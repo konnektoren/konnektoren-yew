@@ -1,4 +1,6 @@
-use konnektoren_core::challenges::{ChallengeConfig, ChallengeHistory, Performance};
+use konnektoren_core::challenges::{
+    ChallengeConfig, ChallengeHistory, ChallengeResult, Performance,
+};
 use yew::prelude::*;
 
 /// Lowest performance (in percent) that is shown by the badge.
@@ -6,14 +8,16 @@ pub const MIN_VISIBLE_PERCENT: u32 = 50;
 
 /// Best performance (in percent) of all attempts of `config` found in `history`.
 ///
-/// Attempts that were not finished (fewer results than tasks) are ignored.
+/// Attempts that were not finished (fewer results than tasks) are ignored. Custom results carry
+/// their own performance and always count as finished.
 pub fn best_performance(config: &ChallengeConfig, history: &ChallengeHistory) -> Option<u32> {
     history
         .challenges
         .iter()
         .filter(|c| {
             c.challenge_config.id == config.id
-                && c.challenge_result.len() == c.challenge_config.tasks.len()
+                && (matches!(c.challenge_result, ChallengeResult::Custom(_))
+                    || c.challenge_result.len() == c.challenge_config.tasks.len())
         })
         .map(|c| c.performance(&c.challenge_result).min(100))
         .max()

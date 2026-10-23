@@ -1,7 +1,7 @@
 .challenge-card {
     @apply perspective-[1000px] relative;
     @apply flex flex-col w-full h-auto;
-    @apply card bg-base-100 shadow-md;
+    @apply card bg-base-100 shadow-md border border-base-300;
     @apply transition-shadow duration-300;
 }
 
@@ -12,7 +12,7 @@
 /* Element: inner */
 .challenge-card__inner {
     @apply relative w-full min-h-[300px];
-    @apply flex flex-col shadow-md;
+    @apply flex flex-col;
     @apply transition-transform duration-500 ease-in-out;
     transform-style: preserve-3d;
 }
@@ -42,13 +42,19 @@
     backface-visibility: hidden;
 }
 
-.challenge-card__face:hover {
-    @apply border-2 border-primary/50;
-}
-
 .challenge-card__face--front,
 .challenge-card__face--back {
-    @apply bg-base-100 border border-base-300;
+    @apply bg-base-100;
+}
+
+/* The card itself carries border and shadow; do not nest boxes inside it */
+.challenge-card .challenge-info {
+    @apply bg-transparent border-0 shadow-none;
+}
+
+/* Modifier: static (not flippable) */
+.challenge-card--static .challenge-card__inner {
+    @apply min-h-0;
 }
 
 .challenge-card__face--front {

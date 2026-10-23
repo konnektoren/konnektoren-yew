@@ -24,7 +24,10 @@ pub fn challenge_config_component(props: &ChallengeConfigComponentProps) -> Html
             if let Some(on_new) = on_new {
                 let on_new = on_new.clone();
                 html! {
-                    <button onclick={Callback::from(move |_| on_new.emit(challenge_config.clone()))}>
+                    <button
+                        class="challenge-config__start"
+                        onclick={Callback::from(move |_| on_new.emit(challenge_config.clone()))}
+                    >
                         { i18n.t("Start") }
                     </button>
                 }
@@ -69,7 +72,10 @@ mod tests {
         let result = if let Some(on_new) = on_new {
             let on_new = on_new.clone();
             html! {
-                <button onclick={Callback::from(move |_| on_new.emit(challenge_config.clone()))}>
+                <button
+                        class="challenge-config__start"
+                        onclick={Callback::from(move |_| on_new.emit(challenge_config.clone()))}
+                    >
                     { "Start" }
                 </button>
             }
