@@ -1,0 +1,84 @@
+.challenge-card-info {
+    @apply w-full h-full;
+}
+
+
+/* Element: container */
+.challenge-card-info__container {
+    @apply flex flex-col gap-4;
+}
+
+/* Element: icon-container */
+.challenge-card-info__icon-container {
+    @apply flex justify-center items-center;
+    @apply w-full py-6;
+    @apply transition-all duration-300;
+}
+
+.challenge-card:hover .challenge-card-info__icon-container {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* Element: icon-fa */
+.challenge-card-info__icon-fa {
+    @apply text-[5rem] text-primary;
+    @apply drop-shadow-lg;
+    @apply transition-all duration-300;
+}
+
+.challenge-card:hover .challenge-card-info__icon-fa {
+    @apply brightness-110 scale-110;
+}
+
+/* Element: icon-image */
+.challenge-card-info__icon-image {
+    @apply w-20 h-20 object-contain;
+    @apply drop-shadow-lg;
+    @apply transition-all duration-300;
+}
+
+.challenge-card:hover .challenge-card-info__icon-image {
+    @apply scale-110;
+}
+
+/* Animation */
+@keyframes iconPulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive */
+@screen sm {
+    .challenge-card-info__icon-container {
+        @apply py-4;
+    }
+
+    .challenge-card-info__icon-fa {
+        @apply text-[3rem];
+    }
+
+    .challenge-card-info__icon-image {
+        @apply w-16 h-16;
+    }
+}
+
+@screen md {
+    .challenge-card-info__icon-fa {
+        @apply text-[4rem];
+    }
+}
+
+@screen lg {
+    .challenge-card-info__icon-fa {
+        @apply text-[5rem];
+    }
+
+    .challenge-card-info__icon-image {
+        @apply w-20 h-20;
+    }
+}

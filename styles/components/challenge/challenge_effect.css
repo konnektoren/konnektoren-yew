@@ -1,0 +1,67 @@
+/* Block: challenge-effect */
+.challenge-effect {
+    @apply relative bg-base-100 rounded-xl;
+    @apply shadow-md overflow-hidden p-4;
+}
+
+/* Element: blink (feedback overlay) */
+.challenge-effect__blink {
+    @apply absolute inset-0 pointer-events-none;
+    @apply rounded-xl;
+}
+
+/* Modifier: correct */
+.challenge-effect__blink--correct {
+    @apply border-4 border-success;
+    animation: blink 0.5s ease-in-out 1;
+}
+
+/* Modifier: incorrect */
+.challenge-effect__blink--incorrect {
+    @apply border-4 border-error;
+    animation: blink 0.5s ease-in-out 3;
+}
+
+/* Vibrate effect */
+.challenge-effect--vibrate {
+    animation: vibrate 0.1s linear;
+}
+
+/* Animations */
+@keyframes blink {
+    0%,
+    100% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+@keyframes vibrate {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Responsive */
+@screen sm {
+    .challenge-effect {
+        @apply p-2;
+    }
+}

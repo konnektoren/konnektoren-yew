@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.6.0"
+version = "0.6.1"
 edition = "2024"
 
 [lib]
@@ -114,6 +114,7 @@ web-sys = { version = "0.3", optional = true, features = [
     "AudioContext",
     "HtmlSelectElement",
     "Window",
+    "Navigator",
     "DomTokenList",
     "DragEvent",
     "SpeechSynthesis",

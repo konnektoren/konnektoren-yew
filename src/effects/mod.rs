@@ -1,6 +1,6 @@
 //! This module contains effects that are used in the application.
 
-mod blink_animation;
+pub mod blink_animation;
 mod read_text;
 
 pub use blink_animation::BlinkAnimation;

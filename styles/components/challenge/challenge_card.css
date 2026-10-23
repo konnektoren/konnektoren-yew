@@ -1,0 +1,129 @@
+.challenge-card {
+    @apply perspective-[1000px] relative;
+    @apply flex flex-col w-full h-auto;
+    @apply card bg-base-100 shadow-md;
+    @apply transition-shadow duration-300;
+}
+
+.challenge-card:hover {
+    @apply shadow-lg;
+}
+
+/* Element: inner */
+.challenge-card__inner {
+    @apply relative w-full min-h-[300px];
+    @apply flex flex-col shadow-md;
+    @apply transition-transform duration-500 ease-in-out;
+    transform-style: preserve-3d;
+}
+
+/* Modifier: flipped */
+.challenge-card__inner--flipped {
+    @apply rotate-y-180;
+}
+
+/* Element: progress (best result badge) */
+.challenge-card__progress {
+    @apply absolute top-2 right-2 z-10;
+    animation: fadeInRotate 0.5s ease-out;
+}
+
+/* Modifier: locked */
+.challenge-card--locked {
+    @apply opacity-60;
+}
+
+/* Element: face (front/back) */
+.challenge-card__face {
+    @apply relative inset-0 w-full h-full;
+    @apply flex p-6 rounded-lg;
+    @apply transition-all duration-300;
+    @apply overflow-visible;
+    backface-visibility: hidden;
+}
+
+.challenge-card__face:hover {
+    @apply border-2 border-primary/50;
+}
+
+.challenge-card__face--front,
+.challenge-card__face--back {
+    @apply bg-base-100 border border-base-300;
+}
+
+.challenge-card__face--front {
+    @apply z-[2] rotate-y-0;
+}
+
+.challenge-card__face--back {
+    @apply absolute top-0 z-[1] rotate-y-180;
+    @apply overflow-hidden;
+}
+
+/* Element: preview */
+.challenge-card__preview {
+    @apply origin-top scale-75;
+}
+
+/* Element: flip-hint */
+.challenge-card__flip-hint {
+    @apply absolute bottom-2 right-2;
+    @apply badge badge-primary badge-sm;
+    @apply text-xs opacity-0 translate-y-[10px];
+    @apply transition-all duration-300;
+    @apply pointer-events-none;
+}
+
+.challenge-card:hover .challenge-card__flip-hint {
+    @apply opacity-100 translate-y-0;
+}
+
+.challenge-card:active .challenge-card__inner {
+    @apply scale-98;
+}
+
+/* Animations */
+@keyframes fadeInRotate {
+    from {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+/* Responsive */
+@screen sm {
+    .challenge-card {
+        @apply min-h-[250px];
+    }
+
+    .challenge-card__face {
+        @apply p-4;
+    }
+
+    .challenge-card__flip-hint {
+        @apply text-[0.625rem];
+    }
+}
+
+/* Custom utilities */
+@layer utilities {
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    .rotate-y-180 {
+        transform: rotateY(180deg);
+    }
+
+    .rotate-y-0 {
+        transform: rotateY(0deg);
+    }
+
+    .scale-98 {
+        transform: scale(0.98);
+    }
+}

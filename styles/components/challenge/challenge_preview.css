@@ -1,0 +1,10 @@
+.challenge-preview {
+    @apply w-full h-full;
+    @apply flex items-center justify-center;
+}
+
+@screen sm {
+    .challenge-preview .challenge-effect {
+        @apply scale-75 p-1;
+    }
+}

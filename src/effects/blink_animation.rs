@@ -42,24 +42,30 @@ pub fn blink_animation(props: &BlinkAnimationProps) -> Html {
         use wasm_bindgen::JsCast;
         use web_sys::{HtmlElement, window};
 
-        use_effect_with(target_id.clone(), move |_| {
-            if let Some(document) = window()
-                .unwrap()
-                .document()
-                .unwrap()
-                .get_element_by_id(&target_id)
-            {
-                let element = document.dyn_into::<HtmlElement>().unwrap();
-                element.class_list().add_1(&class_name).unwrap();
+        use_effect_with(
+            (target_id.clone(), duration as u32, color.clone()),
+            move |_| {
+                if let Some(document) = window()
+                    .unwrap()
+                    .document()
+                    .unwrap()
+                    .get_element_by_id(&target_id)
+                {
+                    let element = document.dyn_into::<HtmlElement>().unwrap();
+                    // Remove first and force a reflow so the animation restarts on re-run.
+                    element.class_list().remove_1(&class_name).unwrap();
+                    let _ = element.offset_width();
+                    element.class_list().add_1(&class_name).unwrap();
 
-                let cloned_element = element.clone();
-                wasm_bindgen_futures::spawn_local(async move {
-                    TimeoutFuture::new((duration) as u32).await;
-                    cloned_element.class_list().remove_1(&class_name).unwrap();
-                });
-            }
-            || ()
-        });
+                    let cloned_element = element.clone();
+                    wasm_bindgen_futures::spawn_local(async move {
+                        TimeoutFuture::new((duration) as u32).await;
+                        cloned_element.class_list().remove_1(&class_name).unwrap();
+                    });
+                }
+                || ()
+            },
+        );
     }
 
     html! {
@@ -68,34 +74,51 @@ pub fn blink_animation(props: &BlinkAnimationProps) -> Html {
 }
 
 #[cfg(feature = "yew-preview")]
-mod preview {
+pub mod preview {
     use super::*;
     use yew_preview::prelude::*;
 
+    #[derive(Properties, PartialEq)]
+    pub struct BlinkAnimationDemoProps {
+        pub duration_secs: u64,
+        pub color: String,
+    }
+
+    /// Renders the element that gets blinked, since the animation only targets existing ids.
+    #[function_component(BlinkAnimationDemo)]
+    pub fn blink_animation_demo(props: &BlinkAnimationDemoProps) -> Html {
+        html! {
+            <>
+                <div id="blink-animation-demo" style="padding: 2rem; border: 1px solid #ccc;">
+                    { "Blink target" }
+                </div>
+                <BlinkAnimation
+                    target_id="blink-animation-demo"
+                    duration={Duration::from_secs(props.duration_secs)}
+                    color={props.color.clone()}
+                />
+            </>
+        }
+    }
+
     yew_preview::create_preview!(
-        BlinkAnimation,
-        BlinkAnimationProps {
-            target_id: "blink-animation".to_string(),
-            duration: Some(Duration::from_secs(2)),
+        BlinkAnimationDemo,
+        BlinkAnimationDemoProps {
+            duration_secs: 2,
             color: "red".to_string(),
-            class_name: None
         },
         (
             "1 second",
-            BlinkAnimationProps {
-                target_id: "blink-animation".to_string(),
-                duration: Some(Duration::from_secs(1)),
+            BlinkAnimationDemoProps {
+                duration_secs: 1,
                 color: "red".to_string(),
-                class_name: None
             }
         ),
         (
             "blue",
-            BlinkAnimationProps {
-                target_id: "blink-animation".to_string(),
-                duration: Some(Duration::from_secs(2)),
+            BlinkAnimationDemoProps {
+                duration_secs: 2,
                 color: "blue".to_string(),
-                class_name: None
             }
         )
     );

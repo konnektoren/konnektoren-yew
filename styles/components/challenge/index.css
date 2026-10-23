@@ -2,6 +2,10 @@
 @import "./help.css";
 @import "./dialog.css";
 @import "./challenge.css";
+@import "./challenge_card.css";
+@import "./challenge_card_info.css";
+@import "./challenge_effect.css";
+@import "./challenge_preview.css";
 @import "./challenge_progress_badge.css";
 @import "./config.css";
 @import "./contextual_choice.css";

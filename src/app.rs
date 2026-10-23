@@ -125,7 +125,7 @@ pub fn preview_groups() -> ComponentList {
             #[cfg(feature = "csr")]
             loaded_multiple_choice,
             #[cfg(feature = "effects")]
-            BlinkAnimation::preview(),
+            crate::effects::blink_animation::preview::BlinkAnimationDemo::preview(),
             MultipleChoiceComponent::preview(),
             MultipleChoice4Component::preview(),
             MultipleChoiceCircleComponent::preview(),
@@ -147,6 +147,9 @@ pub fn preview_groups() -> ComponentList {
             ChallengeRatingComponent::preview(),
             ChallengeTimerComponent::preview(),
             ChallengeProgressBadge::preview(),
+            ChallengeCard::preview(),
+            ChallengeEffectComponent::preview(),
+            ChallengePreviewComponent::preview(),
             ChallengesSummaryComp::preview(),
             ChallengeHistorySummaryComponent::preview(),
             ResultSummaryComponent::preview(),
