@@ -47,7 +47,10 @@ pub fn challenge_card(props: &ChallengeCardProps) -> Html {
             <div class="challenge-card__face challenge-card__face--back">
                 <div class="challenge-card__preview">
                     if *flipped {
-                        <ChallengePreviewComponent challenge_config={props.challenge_config.clone()} />
+                        <ChallengePreviewComponent
+                            challenge_config={props.challenge_config.clone()}
+                            api_url={props.api_url.clone().map(AttrValue::from)}
+                        />
                     }
                 </div>
             </div>

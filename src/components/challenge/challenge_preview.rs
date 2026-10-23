@@ -7,6 +7,9 @@ use yew::prelude::*;
 #[derive(Properties, PartialEq)]
 pub struct ChallengePreviewProps {
     pub challenge_config: ChallengeConfig,
+    /// Presence API shown (read-only) on the preview. No presence if `None`.
+    #[prop_or_default]
+    pub api_url: Option<AttrValue>,
 }
 
 /// Read-only preview of a challenge, e.g. for the back of a challenge card.
@@ -32,6 +35,7 @@ pub fn challenge_preview_component(props: &ChallengePreviewProps) -> Html {
                     challenge={challenge.clone()}
                     variant={challenge_config.variant.clone()}
                     preview={true}
+                    api_url={props.api_url.clone()}
                 />
             </div>
         },
@@ -55,6 +59,7 @@ mod preview {
                 .create_challenge(id)
                 .unwrap()
                 .challenge_config,
+            api_url: None,
         }
     }
 
@@ -73,6 +78,7 @@ mod preview {
             "unknown challenge",
             ChallengePreviewProps {
                 challenge_config: ChallengeConfig::default(),
+                api_url: None,
             }
         ),
     );
