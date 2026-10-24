@@ -263,11 +263,11 @@ pub fn preview_groups() -> ComponentList {
             FaqTag::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
-            StatusMessage::preview(),
             FeedbackPopup::preview(),
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),
+        create_component_group!("Status", LoadingState::preview(), ErrorState::preview(), EmptyState::preview(), StatusMessage::preview()),
     ]
 }
 

@@ -45,6 +45,7 @@ pub mod share_page;
 #[cfg(feature = "slideshow")]
 pub mod slideshow;
 pub mod social_links;
+pub mod status;
 pub mod status_message;
 pub mod swipe;
 pub mod timer;
@@ -105,7 +106,7 @@ pub use share_page::SharePageComp;
 #[cfg(feature = "slideshow")]
 pub use slideshow::*;
 pub use social_links::SocialLinks;
-pub use status_message::{StatusMessage, StatusType};
+pub use status::*;
 pub use swipe::{SwipeComponent, SwipeDirection};
 pub use timer::TimerComponent;
 #[cfg(feature = "tour")]

@@ -1,0 +1,23 @@
+.status-panel {
+    @apply card-base flex w-full min-w-0 flex-col items-center gap-3 border border-base-300 text-center;
+}
+
+.status-panel__title {
+    @apply m-0 text-adaptive-md font-semibold text-base-content;
+}
+
+.status-panel__message {
+    @apply m-0 max-w-full break-words text-adaptive-base leading-relaxed text-base-content/70;
+}
+
+.status-panel__icon {
+    @apply text-adaptive-xl leading-none;
+}
+
+.status-panel__icon svg {
+    @apply size-8;
+}
+
+.status-panel__action {
+    @apply min-h-11;
+}

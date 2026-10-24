@@ -12,6 +12,8 @@ use crate::components::challenge_history::{
     ChallengeAttemptHistory, ChallengeHistoryList, ChallengeHistorySummaryComponent,
     ChallengeHistoryTable,
 };
+#[cfg(feature = "yew-preview")]
+use crate::components::status::{EmptyState, ErrorState, LoadingState, StatusMessage};
 use crate::model::DefaultSessionInitializer;
 #[cfg(feature = "yew-preview")]
 use crate::prelude::{
@@ -131,6 +133,13 @@ pub fn preview_groups() -> ComponentList {
             "Navigation",
             ExampleNavigation::preview(),
             ExampleMenu::preview()
+        ),
+        create_component_group!(
+            "Status",
+            LoadingState::preview(),
+            ErrorState::preview(),
+            EmptyState::preview(),
+            StatusMessage::preview()
         ),
     ]
 }

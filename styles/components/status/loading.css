@@ -1,0 +1,23 @@
+.loading-state__spinner {
+    @apply loading loading-spinner loading-md text-primary;
+}
+
+.loading-state__placeholder,
+.loading-state__skeletons {
+    @apply flex w-full flex-col gap-3;
+}
+
+.loading-state__skeleton {
+    @apply skeleton h-20 w-full rounded-xl;
+}
+
+.loading-state__skeleton:first-child {
+    @apply h-40;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loading-state__spinner,
+    .loading-state__skeleton {
+        animation: none;
+    }
+}

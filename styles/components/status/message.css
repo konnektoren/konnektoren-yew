@@ -1,0 +1,19 @@
+.status-message--info {
+    @apply border-info/40 bg-info/10;
+}
+
+.status-message--warning {
+    @apply border-warning/40 bg-warning/10;
+}
+
+.status-message--error {
+    @apply border-error/40 bg-error/10;
+}
+
+.status-message__title {
+    @apply m-0 text-adaptive-md font-semibold;
+}
+
+.status-message__content {
+    @apply m-0 max-w-full break-words text-adaptive-base leading-relaxed;
+}

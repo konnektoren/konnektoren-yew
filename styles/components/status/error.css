@@ -1,0 +1,8 @@
+.error-state {
+    @apply border-error/40 bg-error/10;
+}
+
+.error-state > .status-panel__icon,
+.error-state > .status-panel__title {
+    @apply text-error;
+}
