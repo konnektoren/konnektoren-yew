@@ -3,7 +3,8 @@
 }
 
 .slideshow__slides {
-    @apply grid w-full;
+    @apply grid min-h-0 min-w-0 w-full flex-1;
+    grid-template-rows: minmax(0, 1fr);
 }
 
 .slideshow__skip {
@@ -11,7 +12,7 @@
 }
 
 .slideshow__dots {
-    @apply mt-2 flex items-center gap-2;
+    @apply mt-auto flex shrink-0 items-center gap-2;
 }
 
 .slideshow__dot {
@@ -28,4 +29,14 @@
 
 .slideshow__button--next {
     @apply flex-1;
+}
+
+.slideshow__button {
+    min-height: 2.75rem;
+}
+
+@media (orientation: landscape) and (max-height: 50rem) {
+    .slideshow {
+        @apply gap-2 p-4 pt-14;
+    }
 }

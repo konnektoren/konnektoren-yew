@@ -1,6 +1,10 @@
 .slideshow__slide {
-    @apply invisible pointer-events-none flex flex-col items-center gap-4;
+    @apply invisible pointer-events-none flex min-h-0 min-w-0 flex-col items-center gap-4 overflow-clip;
     grid-area: 1 / 1;
+}
+
+.slideshow__slide > * {
+    @apply shrink-0;
 }
 
 .slideshow__slide--active {
@@ -25,4 +29,18 @@
 
 .slideshow__content:empty {
     @apply hidden;
+}
+
+@media (orientation: landscape) and (max-height: 50rem) {
+    .slideshow__slide {
+        @apply gap-2;
+    }
+
+    .slideshow__step-icon {
+        @apply text-4xl;
+    }
+
+    .slideshow__content {
+        @apply min-h-24;
+    }
 }
