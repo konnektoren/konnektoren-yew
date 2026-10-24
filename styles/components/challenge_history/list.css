@@ -1,0 +1,24 @@
+.challenge-history-list {
+    @apply m-0 flex min-w-0 list-none flex-col divide-y divide-base-300 p-0;
+}
+
+.challenge-history-list__item {
+    @apply flex min-w-0 items-center justify-between gap-4 py-3;
+}
+
+.challenge-history-list__attempt {
+    @apply flex min-w-0 flex-col gap-1;
+}
+
+.challenge-history-list__name {
+    @apply break-words text-adaptive-base font-medium text-base-content;
+}
+
+.challenge-history-list__date {
+    @apply text-adaptive-sm text-base-content/60;
+}
+
+.challenge-history-list__score {
+    @apply shrink-0 text-adaptive-base font-semibold text-base-content;
+    font-variant-numeric: tabular-nums;
+}

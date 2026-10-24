@@ -7,6 +7,8 @@
 @import "./badge.css";
 @import "./chat.css";
 @import "./challenge/index.css";
+@import "./challenge_history/index.css";
+@import "./challenge_presence.css";
 @import "./certificates/index.css";
 @import "./domain_selector.css";
 @import "./feedback_popup.css";

@@ -1,0 +1,23 @@
+.challenge-history-table {
+    @apply w-full min-w-0 overflow-x-auto;
+}
+
+.challenge-history-table__table {
+    @apply table w-full text-adaptive-sm;
+}
+
+.challenge-history-table__table th {
+    @apply bg-base-200 px-4 py-3 text-left font-semibold text-base-content;
+}
+
+.challenge-history-table__table td {
+    @apply border-b border-base-300 px-4 py-3 text-base-content;
+}
+
+.challenge-history-table__table tbody tr:hover {
+    @apply bg-base-200;
+}
+
+.challenge-history-table__table time {
+    @apply whitespace-nowrap text-base-content/60;
+}

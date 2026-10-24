@@ -1,0 +1,28 @@
+.challenge-history {
+    @apply card-base w-full min-w-0 border border-base-300;
+}
+
+.challenge-history__title {
+    @apply mb-4 text-adaptive-lg font-bold text-base-content;
+}
+
+.challenge-history__count,
+.challenge-history__empty {
+    @apply mb-4 text-adaptive-base text-base-content/70;
+}
+
+.challenge-history__select {
+    @apply min-h-11 max-w-full break-words text-left font-medium text-primary underline-offset-4;
+}
+
+.challenge-history__select:hover {
+    @apply underline;
+}
+
+.challenge-history__select:active {
+    @apply opacity-70;
+}
+
+.challenge-history__select:focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-primary;
+}

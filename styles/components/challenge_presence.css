@@ -1,0 +1,14 @@
+.presence-badge {
+    @apply relative inline-flex items-center justify-center;
+    @apply h-10 px-3;
+    @apply bg-base-100 rounded-full shadow-sm;
+}
+
+.presence-badge i {
+    @apply text-primary text-lg mr-2;
+}
+
+.presence-badge span {
+    @apply text-base-content text-base font-medium;
+    @apply min-w-[20px] text-center;
+}

@@ -1,0 +1,16 @@
+.challenge-attempt-history__name {
+    @apply mb-4 break-words text-adaptive-md font-semibold;
+}
+
+.challenge-attempt-history__stats {
+    @apply mb-4 grid grid-cols-2 gap-4;
+}
+
+.challenge-attempt-history__stats dt {
+    @apply text-adaptive-sm text-base-content/60;
+}
+
+.challenge-attempt-history__stats dd {
+    @apply text-adaptive-lg font-semibold text-base-content;
+    font-variant-numeric: tabular-nums;
+}

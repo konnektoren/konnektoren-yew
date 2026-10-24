@@ -7,6 +7,11 @@ use crate::components::navigation::preview::{ExampleMenu, ExampleNavigation};
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
 
+#[cfg(feature = "yew-preview")]
+use crate::components::challenge_history::{
+    ChallengeAttemptHistory, ChallengeHistoryList, ChallengeHistorySummaryComponent,
+    ChallengeHistoryTable,
+};
 use crate::model::DefaultSessionInitializer;
 #[cfg(feature = "yew-preview")]
 use crate::prelude::{
@@ -112,6 +117,13 @@ pub fn preview_groups() -> ComponentList {
             "Analytics",
             SuccessRateComponent::preview(),
             AverageTimeTakenComponent::preview(),
+        ),
+        create_component_group!(
+            "Challenge History",
+            ChallengeHistorySummaryComponent::preview(),
+            ChallengeHistoryTable::preview(),
+            ChallengeHistoryList::preview(),
+            ChallengeAttemptHistory::preview(),
         ),
         #[cfg(feature = "slideshow")]
         create_component_group!("Slideshow", Slideshow::preview(), Slide::preview()),
