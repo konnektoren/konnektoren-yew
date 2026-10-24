@@ -1,0 +1,77 @@
+.navigation-link {
+    @apply inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2 text-adaptive-sm text-base-content/70 no-underline transition-colors;
+}
+
+.navigation-link:hover {
+    @apply bg-base-200 text-base-content;
+}
+
+.navigation-link:active {
+    @apply bg-base-300;
+}
+
+.navigation-link:focus-visible,
+.navigation-menu__group:focus-visible,
+.navigation-group__trigger:focus-visible,
+.navigation-bar__trigger:focus-visible,
+.navigation-header__brand a:focus-visible,
+.navigation-bar__brand a:focus-visible {
+    @apply outline-2 outline-offset-4 outline-primary;
+}
+
+.navigation-link--active {
+    @apply bg-base-200 font-semibold text-primary;
+}
+
+.navigation-link__icon,
+.navigation-menu__icon {
+    @apply inline-flex size-5 shrink-0 items-center justify-center;
+}
+
+.navigation-link__icon svg {
+    @apply size-full;
+}
+
+.navigation-link--compact {
+    @apply w-11 px-2;
+}
+
+.navigation-link--compact .navigation-link__label {
+    @apply sr-only;
+}
+
+.navigation-component {
+    @apply flex shrink-0 items-center justify-center p-2;
+}
+
+.navigation-group {
+    @apply w-full;
+}
+
+.navigation-group__trigger {
+    @apply flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-lg px-4 py-2 text-adaptive-sm text-base-content/70;
+}
+
+.navigation-group__trigger::-webkit-details-marker {
+    display: none;
+}
+
+.navigation-group__trigger:hover {
+    @apply bg-base-200 text-base-content;
+}
+
+.navigation-group__trigger:active {
+    @apply bg-base-300;
+}
+
+.navigation-group__arrow {
+    @apply ml-auto;
+}
+
+.navigation-group[open] > .navigation-group__trigger .navigation-group__arrow {
+    transform: rotate(90deg);
+}
+
+.navigation-group__submenu {
+    @apply ml-4 flex flex-col gap-1 border-l border-base-300 pl-2;
+}

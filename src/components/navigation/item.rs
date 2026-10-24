@@ -5,14 +5,14 @@ pub enum NavItem<Route> {
     Route {
         name: &'static str,
         route: Route,
-        icon: &'static str,
+        icon: Html,
     },
     Component {
         component: Html,
     },
     Group {
         name: &'static str,
-        icon: &'static str,
+        icon: Html,
         items: Vec<NavItem<Route>>,
     },
 }

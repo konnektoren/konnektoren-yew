@@ -5,7 +5,7 @@ use crate::prelude::create_i18n_config;
 use crate::components::chat::ChatComponent;
 
 #[cfg(feature = "yew-preview")]
-use crate::components::navigation::menu::preview::ExampleMenu;
+use crate::components::navigation::preview::{ExampleMenu, ExampleNavigation};
 
 #[cfg(feature = "yew-preview")]
 use crate::prelude::*;
@@ -222,7 +222,7 @@ pub fn preview_groups() -> ComponentList {
             CertificateComponent::preview(),
             CertificateImageComponent::preview()
         ),
-        create_component_group!("Navigation", ExampleMenu::preview(),),
+        create_component_group!("Navigation", ExampleNavigation::preview(), ExampleMenu::preview()),
         #[cfg(feature = "marketplace")]
         create_component_group!(
             "Marketplace",

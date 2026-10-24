@@ -1,0 +1,80 @@
+.navigation-bar {
+    @apply flex items-center gap-3 font-sans text-base-content;
+}
+
+.navigation-bar__primary,
+.navigation-bar__actions,
+.navigation-bar__secondary {
+    @apply flex items-center gap-1;
+}
+
+.navigation-bar--inline .navigation-bar__primary {
+    @apply flex-wrap;
+}
+
+.navigation-bar--bottom {
+    @apply fixed inset-x-0 bottom-0 z-50 border-t border-base-300 bg-base-100 px-4 pt-2 md:hidden;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.navigation-bar--bottom .navigation-bar__primary {
+    @apply w-full overflow-x-auto;
+}
+
+.navigation-bar--bottom .navigation-bar__primary > .navigation-link,
+.navigation-menu__bar > .navigation-link {
+    @apply min-w-0 flex-1 flex-col gap-1 px-2 text-xs;
+}
+
+.navigation-bar--toolbar {
+    @apply fixed inset-x-0 top-0 z-40 min-h-16 border-b border-base-200 bg-base-100/95 px-4 shadow-md backdrop-blur;
+}
+
+.navigation-bar--toolbar .navigation-bar__primary {
+    @apply min-w-0 flex-1 overflow-x-auto;
+}
+
+.navigation-bar__brand {
+    @apply flex shrink-0 items-center;
+}
+
+.navigation-bar__brand a {
+    @apply flex size-12 items-center justify-center rounded-lg;
+}
+
+.navigation-bar__brand img {
+    @apply max-h-10 max-w-10;
+}
+
+.navigation-bar__actions {
+    @apply shrink-0 border-l border-base-200 pl-3;
+}
+
+.navigation-bar__overflow {
+    @apply relative shrink-0;
+}
+
+.navigation-bar__trigger {
+    @apply flex size-11 items-center justify-center rounded-lg text-adaptive-lg text-base-content/70;
+}
+
+.navigation-bar__trigger:hover,
+.navigation-bar__brand a:hover {
+    @apply bg-primary/10 text-primary;
+}
+
+.navigation-bar__trigger:active,
+.navigation-bar__brand a:active {
+    @apply bg-base-300;
+}
+
+.navigation-bar__secondary {
+    @apply absolute right-0 top-full z-[60] mt-2 flex-wrap overflow-y-auto rounded-lg border border-base-200 bg-base-100 p-2 shadow-lg;
+    width: max-content;
+    max-width: min(32rem, calc(100vw - 2rem));
+    max-height: min(32rem, calc(100svh - 6rem));
+}
+
+.navigation-bar--bottom .navigation-bar__secondary {
+    @apply top-auto bottom-full mt-0 mb-2 flex-col items-stretch;
+}

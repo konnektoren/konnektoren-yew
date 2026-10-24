@@ -1,0 +1,8 @@
+.navigation-preview {
+    @apply relative min-h-80 w-full overflow-hidden;
+    contain: layout;
+}
+
+.navigation-preview .navigation-bar--bottom {
+    @apply flex;
+}

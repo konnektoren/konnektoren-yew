@@ -2,7 +2,7 @@ use crate::components::{challenge::ChallengeComponent, game_path::GamePathCompon
 use crate::prelude::create_i18n_config;
 
 #[cfg(feature = "yew-preview")]
-use crate::components::navigation::menu::preview::ExampleMenu;
+use crate::components::navigation::preview::{ExampleMenu, ExampleNavigation};
 
 #[cfg(feature = "storage")]
 use crate::components::profile::{ProfileConfigComponent, ProfilePointsComponent};
@@ -115,6 +115,11 @@ pub fn preview_groups() -> ComponentList {
         ),
         #[cfg(feature = "slideshow")]
         create_component_group!("Slideshow", Slideshow::preview(), Slide::preview()),
+        create_component_group!(
+            "Navigation",
+            ExampleNavigation::preview(),
+            ExampleMenu::preview()
+        ),
     ]
 }
 
