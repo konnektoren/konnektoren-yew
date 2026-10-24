@@ -1,0 +1,15 @@
+.challenge-completion {
+    @apply mx-auto flex w-full min-w-0 max-w-4xl flex-col items-center gap-5;
+}
+
+.challenge-completion > .result-summary {
+    @apply w-full;
+}
+
+.challenge-completion__details {
+    @apply w-full min-w-0 overflow-x-auto;
+}
+
+.challenge-completion__actions {
+    @apply flex flex-wrap items-center justify-center gap-3;
+}

@@ -10,6 +10,7 @@ mod badge;
 #[cfg(feature = "certificates")]
 mod certificates;
 pub mod challenge;
+pub mod challenge_completion;
 pub mod challenge_config;
 pub mod challenge_history;
 pub mod challenge_info;
@@ -68,6 +69,7 @@ pub use badge::Badge;
 #[cfg(feature = "certificates")]
 pub use certificates::*;
 pub use challenge::*;
+pub use challenge_completion::*;
 pub use challenge_config::ChallengeConfigComponent;
 pub use challenge_history::*;
 pub use challenge_info::ChallengeInfoComponent;

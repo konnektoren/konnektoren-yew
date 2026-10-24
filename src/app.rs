@@ -159,6 +159,11 @@ pub fn preview_groups() -> ComponentList {
             ChallengePresenceComponent::preview(),
         ),
         create_component_group!(
+            "Challenge Completion",
+            ChallengeCompletion::preview(),
+            ChallengeResultDetails::preview(),
+        ),
+        create_component_group!(
             "Challenge History",
             ChallengeHistorySummaryComponent::preview(),
             ChallengeHistoryTable::preview(),
