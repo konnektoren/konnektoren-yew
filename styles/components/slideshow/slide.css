@@ -1,0 +1,28 @@
+.slideshow__slide {
+    @apply hidden flex-col items-center gap-4;
+    grid-area: 1 / 1;
+}
+
+.slideshow__slide--active {
+    @apply flex;
+}
+
+.slideshow__step-icon {
+    @apply text-6xl leading-none;
+}
+
+.slideshow__title {
+    @apply text-adaptive-lg mb-0 text-center font-bold text-base-content;
+}
+
+.slideshow__description {
+    @apply text-adaptive-base max-w-sm text-center leading-relaxed text-base-content/70;
+}
+
+.slideshow__content {
+    @apply mt-2 flex min-h-40 w-full items-center justify-center;
+}
+
+.slideshow__content:empty {
+    @apply hidden;
+}

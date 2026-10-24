@@ -1,0 +1,31 @@
+.slideshow {
+    @apply relative flex w-full max-w-lg flex-col items-center gap-4 rounded-2xl bg-base-100 p-6 pt-16 shadow-xl sm:p-8 sm:pt-16;
+}
+
+.slideshow__slides {
+    @apply grid w-full;
+}
+
+.slideshow__skip {
+    @apply btn btn-ghost btn-sm absolute top-4 right-4 text-base-content/60;
+}
+
+.slideshow__dots {
+    @apply mt-2 flex items-center gap-2;
+}
+
+.slideshow__dot {
+    @apply h-2 w-2 rounded-full bg-base-300 transition-all duration-300;
+}
+
+.slideshow__dot--active {
+    @apply w-6 bg-primary;
+}
+
+.slideshow__controls {
+    @apply mt-2 flex w-full items-center gap-3;
+}
+
+.slideshow__button--next {
+    @apply flex-1;
+}

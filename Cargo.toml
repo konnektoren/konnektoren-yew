@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.6.1"
+version = "0.6.2"
 edition = "2024"
 
 [lib]
@@ -40,6 +40,7 @@ default = [
     "storage",
     "gdrive",
     "tour",
+    "slideshow"
 ]
 achievements = ["konnektoren-core/achievements"]
 backup = []
@@ -51,6 +52,7 @@ chat = []
 effects = ["gloo/timers", "gloo/futures"]
 marketplace = ["konnektoren-core/marketplace"]
 music = []
+slideshow = []
 storage = ["gloo/storage"]
 yew-preview = ["dep:yew-preview"]
 catalog = ["yew-preview", "yew-preview/catalog", "ssr"]

@@ -42,6 +42,10 @@ pub mod prelude {
     #[cfg(all(feature = "ssr", not(feature = "csr")))]
     pub use crate::app_ssr::App;
     pub use crate::components::*;
+    #[cfg(feature = "slideshow")]
+    pub use crate::components::{
+        Slide, SlideProps, Slideshow, SlideshowConfig, SlideshowProps, SlideshowStep,
+    };
     #[cfg(feature = "effects")]
     pub use crate::effects::*;
     pub use crate::i18n::*;

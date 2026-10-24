@@ -15,6 +15,8 @@ use crate::prelude::{
     RepositoryProvider, SelectDesign, SelectTheme, SuccessRateComponent, ThemeProvider,
 };
 use crate::prelude::{BrowserCoordinate, ChallengeIndex, MapComponent, ProfilePointsManager};
+#[cfg(all(feature = "yew-preview", feature = "slideshow"))]
+use crate::prelude::{Slide, Slideshow};
 use crate::providers::create_repositories;
 use crate::repository::LocalStorage;
 use konnektoren_core::prelude::*;
@@ -111,6 +113,8 @@ pub fn preview_groups() -> ComponentList {
             SuccessRateComponent::preview(),
             AverageTimeTakenComponent::preview(),
         ),
+        #[cfg(feature = "slideshow")]
+        create_component_group!("Slideshow", Slideshow::preview(), Slide::preview()),
     ]
 }
 

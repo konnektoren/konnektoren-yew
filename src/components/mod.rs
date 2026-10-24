@@ -41,6 +41,8 @@ mod rating_stars;
 pub mod seo;
 mod settings;
 pub mod share_page;
+#[cfg(feature = "slideshow")]
+pub mod slideshow;
 pub mod social_links;
 pub mod status_message;
 pub mod swipe;
@@ -98,6 +100,8 @@ pub use rating_stars::RatingStarsComponent;
 pub use seo::{SeoComponent, SeoConfig};
 pub use settings::*;
 pub use share_page::SharePageComp;
+#[cfg(feature = "slideshow")]
+pub use slideshow::*;
 pub use social_links::SocialLinks;
 pub use status_message::{StatusMessage, StatusType};
 pub use swipe::{SwipeComponent, SwipeDirection};

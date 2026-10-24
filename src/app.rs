@@ -191,6 +191,8 @@ pub fn preview_groups() -> ComponentList {
             SwipeComponent::preview(),
             VideoComponent::preview()
         ),
+        #[cfg(feature = "slideshow")]
+        create_component_group!("Slideshow", Slideshow::preview(), Slide::preview()),
         create_component_group!(
             "Settings",
             DomainSelectorComponent::preview(),
