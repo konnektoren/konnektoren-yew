@@ -128,5 +128,21 @@
   "challenges": "Aufgaben",
   "Number of exercises": "Anzahl der Aufgaben",
   "XP needed to unlock": "XP zum Freischalten benötigt",
-  "Free to play": "Kostenlos spielbar"
+  "Free to play": "Kostenlos spielbar",
+  "Try again": "Erneut versuchen",
+  "Attempts": "Versuche",
+  "Date": "Datum",
+  "Best result": "Bestes Ergebnis",
+  "Main navigation": "Hauptnavigation",
+  "Skip to content": "Zum Inhalt springen",
+  "Cache hit": "Aus dem Cache geladen",
+  "Clear cache and reload": "Cache leeren und neu laden",
+  "Could not load challenge.": "Aufgabe konnte nicht geladen werden.",
+  "Datasets": "Datensätze",
+  "Game loader": "Spiellader",
+  "Levels": "Level",
+  "Load again": "Erneut laden",
+  "Loaded from source": "Aus der Quelle geladen",
+  "Preload game": "Spiel vorladen",
+  "Retry": "Erneut versuchen"
 }

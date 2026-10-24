@@ -128,5 +128,21 @@
   "challenges": "练习",
   "Number of exercises": "练习数量",
   "XP needed to unlock": "解锁所需XP",
-  "Free to play": "免费"
+  "Free to play": "免费",
+  "Try again": "再试一次",
+  "Attempts": "尝试次数",
+  "Date": "日期",
+  "Best result": "最佳成绩",
+  "Main navigation": "主导航",
+  "Skip to content": "跳到内容",
+  "Cache hit": "已从缓存加载",
+  "Clear cache and reload": "清除缓存并重新加载",
+  "Could not load challenge.": "无法加载练习。",
+  "Datasets": "数据集",
+  "Game loader": "游戏加载器",
+  "Levels": "级别",
+  "Load again": "重新加载",
+  "Loaded from source": "已从源加载",
+  "Preload game": "预加载游戏",
+  "Retry": "重试"
 }

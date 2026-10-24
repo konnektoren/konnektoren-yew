@@ -128,5 +128,21 @@
   "challenges": "تمارين",
   "Number of exercises": "عدد التمارين",
   "XP needed to unlock": "نقاط XP المطلوبة للفتح",
-  "Free to play": "مجاني"
+  "Free to play": "مجاني",
+  "Try again": "حاول مجددًا",
+  "Attempts": "المحاولات",
+  "Date": "التاريخ",
+  "Best result": "أفضل نتيجة",
+  "Main navigation": "التنقل الرئيسي",
+  "Skip to content": "انتقل إلى المحتوى",
+  "Cache hit": "تم التحميل من ذاكرة التخزين المؤقت",
+  "Clear cache and reload": "مسح ذاكرة التخزين المؤقت وإعادة التحميل",
+  "Could not load challenge.": "تعذّر تحميل التمرين.",
+  "Datasets": "مجموعات البيانات",
+  "Game loader": "محمّل اللعبة",
+  "Levels": "المستويات",
+  "Load again": "تحميل مجددًا",
+  "Loaded from source": "تم التحميل من المصدر",
+  "Preload game": "تحميل اللعبة مسبقًا",
+  "Retry": "إعادة المحاولة"
 }
