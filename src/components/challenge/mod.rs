@@ -50,6 +50,7 @@ pub use challenge_card_info::{ChallengeCardInfo, ChallengeCardInfoProps};
 pub use challenge_effect::{ChallengeEffectComponent, ChallengeEffectProps};
 pub use challenge_group::{
     ChallengeGroup, ChallengeRenderContext, ChallengeRenderer, core_challenges, render_challenge,
+    render_challenge_result,
 };
 pub use challenge_preview::{ChallengePreviewComponent, ChallengePreviewProps};
 pub use challenge_progress_badge::{
