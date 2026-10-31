@@ -1,6 +1,7 @@
 use super::repository_hooks::{use_session, use_session_repository};
 use crate::repository::GameStatePersistenceImpl;
-use konnektoren_core::commands::CommandBus;
+use konnektoren_core::challenges::{ChallengeEmbedding, ChallengeType, GameChallenge};
+use konnektoren_core::commands::{Command, CommandBus};
 use konnektoren_core::controller::{
     ChallengeFinishPlugin, GameController, GameControllerTrait, GameXpPlugin,
 };
@@ -9,13 +10,28 @@ use konnektoren_core::game::{Game, GameState};
 use std::sync::{Arc, RwLock};
 use yew::prelude::*;
 
-#[derive(Clone, PartialEq)]
-pub struct GameControllerContext {
-    pub controller: Arc<GameController>,
+/// The running game controller. Applications that extend the built-in challenges with
+/// their own type provide a `GameControllerContext<TheirType>`.
+pub struct GameControllerContext<C: GameChallenge = ChallengeType> {
+    pub controller: Arc<GameController<C>>,
 }
 
-impl GameControllerContext {
-    pub fn new(controller: Arc<GameController>) -> Self {
+impl<C: GameChallenge> Clone for GameControllerContext<C> {
+    fn clone(&self) -> Self {
+        Self {
+            controller: self.controller.clone(),
+        }
+    }
+}
+
+impl<C: GameChallenge> PartialEq for GameControllerContext<C> {
+    fn eq(&self, other: &Self) -> bool {
+        self.controller == other.controller
+    }
+}
+
+impl<C: GameChallenge> GameControllerContext<C> {
+    pub fn new(controller: Arc<GameController<C>>) -> Self {
         Self { controller }
     }
 }
@@ -23,6 +39,21 @@ impl GameControllerContext {
 #[hook]
 pub fn use_game_controller() -> GameControllerContext {
     use_context::<GameControllerContext>().expect("GameControllerContext not found")
+}
+
+/// Like [`use_game_controller`] for an application's own challenge type.
+#[hook]
+pub fn use_game_controller_of<C: GameChallenge>() -> GameControllerContext<C> {
+    use_context::<GameControllerContext<C>>().expect("GameControllerContext not found")
+}
+
+/// Turns a callback for the application's commands into one that the default components
+/// of an included challenge type can emit to. Their commands are embedded first.
+pub fn embed_command_callback<Inner: GameChallenge, Outer: GameChallenge>(
+    callback: Callback<Command<Outer>>,
+    embedding: ChallengeEmbedding<Inner, Outer>,
+) -> Callback<Command<Inner>> {
+    Callback::from(move |command: Command<Inner>| callback.emit(command.embed(&embedding)))
 }
 
 #[hook]

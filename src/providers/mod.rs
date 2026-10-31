@@ -32,8 +32,9 @@ pub use design_provider::{
     DESIGN_MODE_STORAGE_KEY, DesignContext, DesignProvider, use_design, use_design_mode,
 };
 pub use game_controller_provider::{
-    GameControllerContext, GameControllerProvider, GameControllerProviderProps, use_command_bus,
-    use_event_bus, use_game_controller, use_game_state,
+    GameControllerContext, GameControllerProvider, GameControllerProviderProps,
+    embed_command_callback, use_command_bus, use_event_bus, use_game_controller,
+    use_game_controller_of, use_game_state,
 };
 pub use inbox_provider::{InboxContext, InboxProvider};
 use profile_provider::{ProfileContext, ProfileProvider};
