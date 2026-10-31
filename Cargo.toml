@@ -1,6 +1,6 @@
 [package]
 name = "konnektoren-yew"
-version = "0.6.5"
+version = "0.7.0"
 edition = "2024"
 
 [lib]
@@ -86,7 +86,7 @@ bincode = "1"
 chrono = "0.4"
 futures = "0.3"
 hex = "0.4"
-implicit-clone = "0.4"
+implicit-clone = "0.6"
 indexmap = "2"
 tracing = "0.1"
 tracing-wasm = { version = "0.2", optional = true }
@@ -97,7 +97,7 @@ serde_yaml = "0.9"
 thiserror = "2"
 
 # WASM dependencies - aligned with konnektoren-rs
-getrandom = { version = "0.3", features = ["wasm_js"] }
+getrandom = { version = "0.4", features = ["wasm_js"] }
 gloo = { version = "0.12", features = ["net"], optional = true }
 js-sys = { version = "0.3", optional = true }
 wasm-bindgen = { version = "0.2", optional = true, features = [
@@ -132,7 +132,7 @@ web-sys = { version = "0.3", optional = true, features = [
 ] }
 
 # Common utilities
-rand = "0.8"
+rand = "0.10"
 regex = "1"
 rust-embed = { version = "8", features = [
     "interpolate-folder-path",
@@ -145,7 +145,7 @@ uuid = { version = "1", features = ["v4", "fast-rng"] }
 
 # Yew ecosystem
 yew = "0.23"
-yew-hooks = { version = "0.6.3", optional = true }
+yew-hooks = { version = "0.6.4", optional = true }
 yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
 yew-ssg = { git = "https://github.com/chriamue/yew-ssg", optional = true }
 yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true }
@@ -191,17 +191,7 @@ serde_json = "1"
 
 [build-dependencies]
 anyhow = "1"
-vergen = { version = "9", features = ["build", "cargo", "rustc"] }
+vergen = { version = "10", features = ["build", "cargo", "rustc"] }
 cargo-cyclonedx = { version = "0.4", optional = true }
 serde = "1"
 serde_json = "1"
-
-# Exercise the uncommitted asset-loader changes in the sibling checkout.
-# Remove these patches once those changes are available on the git branch.
-[patch."https://github.com/konnektoren/konnektoren-rs.git"]
-konnektoren-rs = { path = "../konnektoren-rs" }
-konnektoren-core = { path = "../konnektoren-rs/konnektoren-core" }
-konnektoren-platform = { path = "../konnektoren-rs/konnektoren-platform" }
-konnektoren-content = { path = "../konnektoren-rs/konnektoren-content" }
-konnektoren-asset-loader = { path = "../konnektoren-rs/konnektoren-asset-loader" }
-konnektoren-asset-loader-derive = { path = "../konnektoren-rs/konnektoren-asset-loader-derive" }

@@ -16,8 +16,10 @@ pub fn best_performance(config: &ChallengeConfig, history: &ChallengeHistory) ->
         .iter()
         .filter(|c| {
             c.challenge_config.id == config.id
-                && (matches!(c.challenge_result, ChallengeResult::Custom(_))
-                    || c.challenge_result.len() == c.challenge_config.tasks.len())
+                && c.challenge_result.as_ref().is_some_and(|result| {
+                    matches!(result, ChallengeResult::Custom(_))
+                        || result.len() == c.challenge_config.tasks.len()
+                })
         })
         .map(|c| c.performance(&c.challenge_result).min(100))
         .max()

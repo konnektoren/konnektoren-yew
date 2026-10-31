@@ -4,7 +4,7 @@ use crate::i18n::use_i18n;
 use konnektoren_core::challenges::{ChallengeInput, ChallengeResult, Ordering, OrderingResult};
 use konnektoren_core::commands::{ChallengeCommand, Command};
 use konnektoren_core::events::{ChallengeEvent, Event};
-use rand::prelude::{SliceRandom, thread_rng};
+use rand::prelude::SliceRandom;
 use yew::prelude::*;
 
 // Props for the OrderingElement component
@@ -135,8 +135,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
         if let Some(item) = props.challenge.items.first() {
             let mut indices: Vec<usize> = (0..item.elements.len()).collect();
             use rand::seq::SliceRandom;
-            use rand::thread_rng;
-            indices.shuffle(&mut thread_rng());
+            indices.shuffle(&mut rand::rng());
             indices
         } else {
             vec![]
@@ -377,7 +376,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                     // Initialize order for next item
                     if let Some(next_item) = challenge.items.get(next_index) {
                         let mut indices: Vec<usize> = (0..next_item.elements.len()).collect();
-                        indices.shuffle(&mut thread_rng());
+                        indices.shuffle(&mut rand::rng());
                         current_order.set(indices);
                     }
 
@@ -400,7 +399,7 @@ pub fn ordering_component(props: &OrderingComponentProps) -> Html {
                     // Initialize order for previous item
                     if let Some(prev_item) = challenge.items.get(prev_index) {
                         let mut indices: Vec<usize> = (0..prev_item.elements.len()).collect();
-                        indices.shuffle(&mut thread_rng());
+                        indices.shuffle(&mut rand::rng());
                         current_order.set(indices);
                     }
 

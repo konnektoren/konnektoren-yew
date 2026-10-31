@@ -86,9 +86,9 @@ fn main() -> Result<()> {
     generate_sbom()?;
 
     // Generate version information
-    let build = BuildBuilder::all_build()?;
-    let cargo = CargoBuilder::all_cargo()?;
-    let rustc = RustcBuilder::all_rustc()?;
+    let build = Build::all_build();
+    let cargo = Cargo::all_cargo();
+    let rustc = Rustc::all_rustc();
 
     Emitter::default()
         .add_instructions(&build)?

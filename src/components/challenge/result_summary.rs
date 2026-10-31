@@ -94,7 +94,7 @@ mod preview {
                 position: None,
                 icon: None,
             },
-            challenge_result: ChallengeResult::default(),
+            challenge_result: Some(ChallengeResult::default()),
             start_time: None,
             end_time: None,
         }

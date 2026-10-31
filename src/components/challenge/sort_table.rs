@@ -15,8 +15,7 @@ pub struct SortTableComponentProps {
 
 fn shuffle(rows: &[SortTableRow]) -> Vec<SortTableRow> {
     use rand::seq::SliceRandom;
-    use rand::thread_rng;
-    let mut rng = thread_rng();
+    let mut rng = rand::rng();
 
     let mut rows = rows.to_owned();
     let mut columns: Vec<Vec<String>> = vec![vec![]; rows[0].values.len()];

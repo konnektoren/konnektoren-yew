@@ -55,7 +55,7 @@ mod tests {
     #[test]
     fn test_render_new_button() {
         // Since we can't use hooks in tests, we test the logic directly.
-        let challenge_config = ChallengeConfig {
+        let challenge_config: ChallengeConfig = ChallengeConfig {
             id: "konnektoren".to_string(),
             name: "Konnektoren".to_string(),
             description: "Konnektoren".to_string(),

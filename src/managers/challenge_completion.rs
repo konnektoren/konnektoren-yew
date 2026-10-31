@@ -82,7 +82,7 @@ mod tests {
             },
         );
         challenge.start();
-        challenge.challenge_result = ChallengeResult::MultipleChoice(vec![answer]);
+        challenge.challenge_result = Some(ChallengeResult::MultipleChoice(vec![answer]));
         challenge.update_end_time();
         challenge
     }

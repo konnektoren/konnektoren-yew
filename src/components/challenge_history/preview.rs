@@ -47,14 +47,14 @@ fn sample_history() -> ChallengeHistory {
                 ..ChallengeConfig::default()
             },
         );
-        challenge.challenge_result = ChallengeResult::MultipleChoice(
+        challenge.challenge_result = Some(ChallengeResult::MultipleChoice(
             (0..4)
                 .map(|answer| MultipleChoiceOption {
                     id: usize::from(answer >= correct),
                     name: "Answer".into(),
                 })
                 .collect(),
-        );
+        ));
         challenge.start_time = Utc
             .with_ymd_and_hms(2026, 10, 20 + index as u32, 10, 0, 0)
             .single();

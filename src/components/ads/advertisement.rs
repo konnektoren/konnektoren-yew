@@ -4,7 +4,7 @@ use crate::components::{
 };
 use crate::i18n::use_i18n;
 use gloo::timers::callback::Interval;
-use rand::Rng;
+use rand::RngExt;
 use yew::prelude::*;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -59,9 +59,9 @@ fn select_random_ad(networks: &[AdNetwork], show_probability: u8) -> Option<AdNe
         return None;
     }
 
-    let mut rng = rand::thread_rng();
-    if rng.gen_range(0..100) < show_probability {
-        let index = rng.gen_range(0..networks.len());
+    let mut rng = rand::rng();
+    if rng.random_range(0..100) < show_probability {
+        let index = rng.random_range(0..networks.len());
         Some(networks[index].clone())
     } else {
         None

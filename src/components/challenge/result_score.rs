@@ -99,7 +99,7 @@ mod preview {
                 options,
             }),
             challenge_config: ChallengeConfig::default(),
-            challenge_result: ChallengeResult::default(),
+            challenge_result: Some(ChallengeResult::default()),
             start_time: None,
             end_time: None,
         };
@@ -113,7 +113,7 @@ mod preview {
                 variant: Some(ChallengeVariant::DialogObserver),
                 ..ChallengeConfig::default()
             },
-            challenge_result: ChallengeResult::Dialog(vec![]),
+            challenge_result: Some(ChallengeResult::Dialog(vec![])),
             start_time: None,
             end_time: None,
         };

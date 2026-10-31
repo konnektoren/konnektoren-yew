@@ -165,7 +165,7 @@ mod preview {
             },
         );
 
-        challenge.challenge_result = ChallengeResult::MultipleChoice(result_options);
+        challenge.challenge_result = Some(ChallengeResult::MultipleChoice(result_options));
         challenge.start_time = Some(Utc::now());
         challenge.end_time = Some(Utc::now());
 

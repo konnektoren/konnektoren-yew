@@ -29,14 +29,14 @@ fn sample() -> Challenge {
             ..ChallengeConfig::default()
         },
     );
-    challenge.challenge_result = ChallengeResult::MultipleChoice(vec![answer]);
+    challenge.challenge_result = Some(ChallengeResult::MultipleChoice(vec![answer]));
     challenge
 }
 
 fn props() -> ChallengeCompletionProps {
     let challenge = sample();
     ChallengeCompletionProps {
-        challenge_result: challenge.challenge_result.clone(),
+        challenge_result: challenge.challenge_result.clone().unwrap_or_default(),
         challenge,
         heading: Html::default(),
         introduction: Html::default(),
@@ -76,7 +76,7 @@ yew_preview::create_preview!(
             &ChallengeConfig::default(),
         );
         ChallengeCompletionProps {
-            challenge_result: challenge.challenge_result.clone(),
+            challenge_result: challenge.challenge_result.clone().unwrap_or_default(),
             challenge,
             custom_result: Some(html! { <p>{"An application-specific review can go here."}</p> }),
             ..props()
@@ -88,7 +88,7 @@ yew_preview::create_preview!(
     ChallengeResultDetails,
     ChallengeResultDetailsProps {
         challenge: sample(),
-        challenge_result: sample().challenge_result,
+        challenge_result: sample().challenge_result.unwrap_or_default(),
         custom_result: None,
     },
     (

@@ -130,7 +130,7 @@ mod preview {
         history.add_challenge(Challenge {
             challenge_type,
             challenge_config,
-            challenge_result: ChallengeResult::MultipleChoice(answers),
+            challenge_result: Some(ChallengeResult::MultipleChoice(answers)),
             start_time: None,
             end_time: None,
         });
