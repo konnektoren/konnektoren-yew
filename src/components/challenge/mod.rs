@@ -7,6 +7,7 @@ pub mod challenge;
 pub mod challenge_card;
 pub mod challenge_card_info;
 pub mod challenge_effect;
+pub mod challenge_group;
 pub mod challenge_preview;
 pub mod challenge_progress_badge;
 pub mod challenges_summary;
@@ -47,6 +48,9 @@ pub use challenge::ChallengeComponent;
 pub use challenge_card::{ChallengeCard, ChallengeCardProps};
 pub use challenge_card_info::{ChallengeCardInfo, ChallengeCardInfoProps};
 pub use challenge_effect::{ChallengeEffectComponent, ChallengeEffectProps};
+pub use challenge_group::{
+    ChallengeGroup, ChallengeRenderContext, ChallengeRenderer, core_challenges, render_challenge,
+};
 pub use challenge_preview::{ChallengePreviewComponent, ChallengePreviewProps};
 pub use challenge_progress_badge::{
     ChallengeProgressBadge, ChallengeProgressBadgeProps, best_performance, progress_hue,
