@@ -1,0 +1,7 @@
+package:
+  id: konnektoren-yew-preview
+  name: Konnektoren Yew Preview
+assets:
+  path: assets
+game_paths:
+  - level_preview.yml

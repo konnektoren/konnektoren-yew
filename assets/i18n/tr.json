@@ -128,5 +128,21 @@
   "challenges": "alıştırma",
   "Number of exercises": "Alıştırma sayısı",
   "XP needed to unlock": "Kilidini açmak için gereken XP",
-  "Free to play": "Ücretsiz"
+  "Free to play": "Ücretsiz",
+  "Try again": "Tekrar dene",
+  "Attempts": "Denemeler",
+  "Date": "Tarih",
+  "Best result": "En iyi sonuç",
+  "Main navigation": "Ana gezinme",
+  "Skip to content": "İçeriğe geç",
+  "Cache hit": "Önbellekten yüklendi",
+  "Clear cache and reload": "Önbelleği temizle ve yeniden yükle",
+  "Could not load challenge.": "Alıştırma yüklenemedi.",
+  "Datasets": "Veri kümeleri",
+  "Game loader": "Oyun yükleyici",
+  "Levels": "Seviyeler",
+  "Load again": "Yeniden yükle",
+  "Loaded from source": "Kaynaktan yüklendi",
+  "Preload game": "Oyunu önceden yükle",
+  "Retry": "Tekrar dene"
 }

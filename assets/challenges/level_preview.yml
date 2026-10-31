@@ -1,0 +1,15 @@
+id: preview
+name: Preview challenges
+challenges:
+  - id: embedded-konnektoren
+    name: Konnektoren (embedded)
+    description: Practice with the embedded core dataset.
+    challenge: konnektoren
+    tasks: '3'
+    unlock_points: 0
+  - id: http-multiple-choice
+    name: Multiple Choice (HTTP)
+    description: Practice with the dataset fetched from the assets folder.
+    challenge: multiple-choice
+    tasks: '3'
+    unlock_points: 0

@@ -128,5 +128,21 @@
   "challenges": "challenges",
   "Number of exercises": "Number of exercises",
   "XP needed to unlock": "XP needed to unlock",
-  "Free to play": "Free to play"
+  "Free to play": "Free to play",
+  "Try again": "Try again",
+  "Attempts": "Attempts",
+  "Date": "Date",
+  "Best result": "Best result",
+  "Main navigation": "Main navigation",
+  "Skip to content": "Skip to content",
+  "Cache hit": "Cache hit",
+  "Clear cache and reload": "Clear cache and reload",
+  "Could not load challenge.": "Could not load challenge.",
+  "Datasets": "Datasets",
+  "Game loader": "Game loader",
+  "Levels": "Levels",
+  "Load again": "Load again",
+  "Loaded from source": "Loaded from source",
+  "Preload game": "Preload game",
+  "Retry": "Retry"
 }

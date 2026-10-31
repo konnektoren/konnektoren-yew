@@ -128,5 +128,21 @@
   "challenges": "bài tập",
   "Number of exercises": "Số bài tập",
   "XP needed to unlock": "XP cần để mở khóa",
-  "Free to play": "Miễn phí"
+  "Free to play": "Miễn phí",
+  "Try again": "Thử lại",
+  "Attempts": "Lượt thử",
+  "Date": "Ngày",
+  "Best result": "Kết quả tốt nhất",
+  "Main navigation": "Điều hướng chính",
+  "Skip to content": "Chuyển đến nội dung",
+  "Cache hit": "Đã tải từ bộ nhớ đệm",
+  "Clear cache and reload": "Xóa bộ nhớ đệm và tải lại",
+  "Could not load challenge.": "Không thể tải bài tập.",
+  "Datasets": "Bộ dữ liệu",
+  "Game loader": "Trình tải trò chơi",
+  "Levels": "Cấp độ",
+  "Load again": "Tải lại",
+  "Loaded from source": "Đã tải từ nguồn",
+  "Preload game": "Tải trước trò chơi",
+  "Retry": "Thử lại"
 }

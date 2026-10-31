@@ -128,5 +128,21 @@
   "challenges": "завдань",
   "Number of exercises": "Кількість вправ",
   "XP needed to unlock": "XP для розблокування",
-  "Free to play": "Безкоштовно"
+  "Free to play": "Безкоштовно",
+  "Try again": "Спробувати ще раз",
+  "Attempts": "Спроби",
+  "Date": "Дата",
+  "Best result": "Найкращий результат",
+  "Main navigation": "Головна навігація",
+  "Skip to content": "Перейти до вмісту",
+  "Cache hit": "Завантажено з кешу",
+  "Clear cache and reload": "Очистити кеш і перезавантажити",
+  "Could not load challenge.": "Не вдалося завантажити завдання.",
+  "Datasets": "Набори даних",
+  "Game loader": "Завантажувач гри",
+  "Levels": "Рівні",
+  "Load again": "Завантажити ще раз",
+  "Loaded from source": "Завантажено з джерела",
+  "Preload game": "Попередньо завантажити гру",
+  "Retry": "Спробувати ще раз"
 }
