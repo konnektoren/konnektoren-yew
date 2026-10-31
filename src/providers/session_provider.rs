@@ -90,7 +90,6 @@ pub fn session_provider<C: SavedChallenge>(props: &SessionProviderProps<C>) -> H
                                 let err_msg = format!("Failed to initialize session: {:?}", e);
                                 tracing::error!("{}", err_msg);
                                 error.set(Some(err_msg));
-                                is_hydrated.set(true);
                             }
                         }
                     }
@@ -102,7 +101,6 @@ pub fn session_provider<C: SavedChallenge>(props: &SessionProviderProps<C>) -> H
                         let err_msg = format!("Failed to load session: {:?}", e);
                         tracing::error!("{}", err_msg);
                         error.set(Some(err_msg));
-                        is_hydrated.set(true);
                     }
                 }
             });
@@ -144,6 +142,11 @@ pub fn session_provider<C: SavedChallenge>(props: &SessionProviderProps<C>) -> H
 
     let context = SessionContext::<C> { session };
 
+    #[cfg(feature = "csr")]
+    let ready = *is_hydrated;
+    #[cfg(not(feature = "csr"))]
+    let ready = true;
+
     html! {
         <ContextProvider<SessionContext<C>> {context}>
             if let Some(err_msg) = (*error).clone() {
@@ -152,7 +155,9 @@ pub fn session_provider<C: SavedChallenge>(props: &SessionProviderProps<C>) -> H
                     <p>{err_msg}</p>
                 </div>
             }
-            { props.children.clone() }
+            if ready {
+                { props.children.clone() }
+            }
         </ContextProvider<SessionContext<C>>>
     }
 }

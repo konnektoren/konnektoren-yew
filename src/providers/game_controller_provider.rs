@@ -203,24 +203,46 @@ pub fn extended_game_controller_provider<C: SavedChallenge>(
         let session_repository = props.session_repository.clone();
         use_memo((), move |_| {
             let session = Arc::new(RwLock::new((*session).clone()));
-            let persistence = Arc::new(GameStatePersistenceImpl::new(session_repository, session));
+            let persistence = Arc::new(GameStatePersistenceImpl::new(
+                session_repository,
+                session.clone(),
+            ));
             let mut controller = GameController::new(game, persistence);
             controller.register_plugin(Arc::new(ChallengeFinishPlugin));
             controller.register_plugin(Arc::new(GameXpPlugin));
-            controller.init()
+            (controller.init(), session)
         })
     };
 
+    let last_context_state = use_mut_ref(|| None::<GameState<C>>);
     {
-        let controller = (*controller).clone();
-        use_effect_with(session, move |_| {
-            if let Err(e) = controller.load_game_state() {
+        let (controller, stored_session) = &*controller;
+        let controller = controller.clone();
+        let stored_session = stored_session.clone();
+        let last_context_state = last_context_state.clone();
+        use_effect_with(session, move |session| {
+            let context_changed = last_context_state.borrow().as_ref() != Some(&session.game_state);
+            *last_context_state.borrow_mut() = Some(session.game_state.clone());
+            match stored_session.write() {
+                Ok(mut stored) => {
+                    stored.id = session.id.clone();
+                    stored.player_profile = session.player_profile.clone();
+                    if context_changed {
+                        stored.game_state = session.game_state.clone();
+                    }
+                }
+                Err(e) => {
+                    tracing::error!("Failed to update controller session: {:?}", e);
+                    return;
+                }
+            }
+            if context_changed && let Err(e) = controller.load_game_state() {
                 tracing::error!("Failed to load game state: {:?}", e);
             }
         });
     }
 
-    let context = GameControllerContext::new((*controller).clone());
+    let context = GameControllerContext::new(controller.0.clone());
     html! {
         <ContextProvider<GameControllerContext<C>> {context}>
             { for props.children.iter() }

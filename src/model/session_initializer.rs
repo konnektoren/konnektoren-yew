@@ -10,7 +10,20 @@ pub trait SessionInitializer<C: SavedChallenge = ChallengeType> {
 pub struct DefaultSessionInitializer;
 
 impl SessionInitializer for DefaultSessionInitializer {
-    fn initialize(&self, _session: &Session) -> Result<Session, &str> {
-        Ok(Session::default())
+    fn initialize(&self, session: &Session) -> Result<Session, &str> {
+        Ok(session.clone())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn preserves_loaded_progress() {
+        let mut saved = Session::default();
+        saved.game_state.game.xp = 42;
+        let restored = DefaultSessionInitializer.initialize(&saved).unwrap();
+        assert_eq!(restored, saved);
     }
 }
