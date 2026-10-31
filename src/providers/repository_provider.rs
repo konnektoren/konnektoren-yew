@@ -8,6 +8,8 @@ use crate::repository::{
     ProfileRepository, ProfileRepositoryTrait, SessionRepository, SessionRepositoryTrait,
     SettingsRepository, SettingsRepositoryTrait, Storage,
 };
+use konnektoren_core::challenges::ChallengeType;
+use konnektoren_core::session::Session;
 use std::sync::Arc;
 use yew::prelude::*;
 
@@ -63,8 +65,9 @@ pub fn repository_provider(props: &RepositoryProviderProps) -> Html {
 
     html! {
         <ContextProvider<RepositoryContext> context={context.clone()}>
-            <SessionProvider session_repository={context.session_repository.clone()}
-                session_initializer={props.config.session_initializer.clone()}>
+            <SessionProvider<ChallengeType> session_repository={context.session_repository.clone()}
+                session_initializer={props.config.session_initializer.clone()}
+                initial_session={Session::default()}>
                 <ProfileProvider profile_repository={context.profile_repository}>
                     <SettingsProvider settings_repository={context.settings_repository}>
                         <CertificatesProvider certificates_repository={context.certificate_repository}>
@@ -74,7 +77,7 @@ pub fn repository_provider(props: &RepositoryProviderProps) -> Html {
                         </CertificatesProvider>
                     </SettingsProvider>
                 </ProfileProvider>
-            </SessionProvider>
+            </SessionProvider<ChallengeType>>
         </ContextProvider<RepositoryContext>>
     }
 }

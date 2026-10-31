@@ -2,13 +2,29 @@ use crate::{
     model::SessionInitializer,
     repository::{SESSION_STORAGE_KEY, SessionRepositoryTrait},
 };
+use konnektoren_core::challenges::{ChallengeType, SavedChallenge};
 use konnektoren_core::session::Session;
 use std::sync::Arc;
 use yew::prelude::*;
 
-#[derive(Clone, PartialEq)]
-pub struct SessionContext {
-    pub session: UseStateHandle<Session>,
+/// The player's session. Applications with their own challenge type provide a
+/// `SessionContext<TheirType>` through `SessionProvider<TheirType>`.
+pub struct SessionContext<C: SavedChallenge = ChallengeType> {
+    pub session: UseStateHandle<Session<C>>,
+}
+
+impl<C: SavedChallenge> Clone for SessionContext<C> {
+    fn clone(&self) -> Self {
+        Self {
+            session: self.session.clone(),
+        }
+    }
+}
+
+impl<C: SavedChallenge> PartialEq for SessionContext<C> {
+    fn eq(&self, other: &Self) -> bool {
+        self.session == other.session
+    }
 }
 
 #[cfg(feature = "csr")]
@@ -17,35 +33,37 @@ fn should_persist_session(is_hydrated: bool) -> bool {
 }
 
 #[derive(Properties)]
-pub struct SessionProviderProps {
+pub struct SessionProviderProps<C: SavedChallenge = ChallengeType> {
     pub children: Children,
-    pub session_repository: Arc<dyn SessionRepositoryTrait>,
-    pub session_initializer: Arc<dyn SessionInitializer>,
+    pub session_repository: Arc<dyn SessionRepositoryTrait<C>>,
+    pub session_initializer: Arc<dyn SessionInitializer<C>>,
+    /// The session to start from before a saved one is loaded, and when loading fails.
+    pub initial_session: Session<C>,
 }
 
-impl PartialEq for SessionProviderProps {
+impl<C: SavedChallenge> PartialEq for SessionProviderProps<C> {
     fn eq(&self, other: &Self) -> bool {
         Arc::ptr_eq(&self.session_repository, &other.session_repository)
             && Arc::ptr_eq(&self.session_initializer, &other.session_initializer)
+            && self.initial_session == other.initial_session
     }
 }
 
 #[function_component(SessionProvider)]
-pub fn session_provider(props: &SessionProviderProps) -> Html {
+pub fn session_provider<C: SavedChallenge>(props: &SessionProviderProps<C>) -> Html {
     let session_initializer = props.session_initializer.clone();
+    let initial_session = props.initial_session.clone();
     let error = use_state(|| None::<String>);
     #[cfg(feature = "csr")]
     let is_hydrated = use_state(|| false);
 
-    let session = use_state(
-        || match session_initializer.initialize(&Session::default()) {
-            Ok(session) => session,
-            Err(e) => {
-                tracing::error!("Failed to initialize session: {:?}", e);
-                Session::default()
-            }
-        },
-    );
+    let session = use_state(|| match session_initializer.initialize(&initial_session) {
+        Ok(session) => session,
+        Err(e) => {
+            tracing::error!("Failed to initialize session: {:?}", e);
+            initial_session.clone()
+        }
+    });
 
     // Load session (CSR only)
     #[cfg(feature = "csr")]
@@ -124,10 +142,10 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
         });
     }
 
-    let context = SessionContext { session };
+    let context = SessionContext::<C> { session };
 
     html! {
-        <ContextProvider<SessionContext> {context}>
+        <ContextProvider<SessionContext<C>> {context}>
             if let Some(err_msg) = (*error).clone() {
                 <div class="error-message" style="color: red; padding: 1em; margin: 1em; border: 1px solid red;">
                     <h3>{"Session Error"}</h3>
@@ -135,7 +153,7 @@ pub fn session_provider(props: &SessionProviderProps) -> Html {
                 </div>
             }
             { props.children.clone() }
-        </ContextProvider<SessionContext>>
+        </ContextProvider<SessionContext<C>>>
     }
 }
 

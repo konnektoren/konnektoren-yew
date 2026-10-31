@@ -8,6 +8,7 @@ use crate::repository::{
     SessionRepositoryTrait, SettingsRepositoryTrait,
 };
 use konnektoren_core::certificates::CertificateData;
+use konnektoren_core::challenges::SavedChallenge;
 use konnektoren_core::prelude::{PlayerProfile, Session};
 use std::sync::Arc;
 use yew::prelude::*;
@@ -109,6 +110,15 @@ pub fn use_session_repository() -> Arc<dyn SessionRepositoryTrait> {
 #[hook]
 pub fn use_session() -> UseStateHandle<Session> {
     use_context::<SessionContext>()
+        .expect("SessionContext not found")
+        .session
+}
+
+/// Like [`use_session`] for an application's own challenge type, inside a
+/// `SessionProvider<C>`.
+#[hook]
+pub fn use_session_of<C: SavedChallenge>() -> UseStateHandle<Session<C>> {
+    use_context::<SessionContext<C>>()
         .expect("SessionContext not found")
         .session
 }

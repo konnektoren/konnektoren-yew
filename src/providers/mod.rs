@@ -32,21 +32,21 @@ pub use design_provider::{
     DESIGN_MODE_STORAGE_KEY, DesignContext, DesignProvider, use_design, use_design_mode,
 };
 pub use game_controller_provider::{
-    GameControllerContext, GameControllerProvider, GameControllerProviderProps,
-    embed_command_callback, use_command_bus, use_event_bus, use_game_controller,
-    use_game_controller_of, use_game_state,
+    ExtendedGameControllerProvider, ExtendedGameControllerProviderProps, GameControllerContext,
+    GameControllerProvider, GameControllerProviderProps, embed_command_callback, use_command_bus,
+    use_event_bus, use_game_controller, use_game_controller_of, use_game_state, use_game_state_of,
 };
 pub use inbox_provider::{InboxContext, InboxProvider};
 use profile_provider::{ProfileContext, ProfileProvider};
 pub use repository_context::RepositoryContext;
 pub use repository_hooks::{
     use_certificate_repository, use_certificates, use_inbox, use_inbox_repository, use_profile,
-    use_profile_repository, use_session, use_session_repository, use_settings,
+    use_profile_repository, use_session, use_session_of, use_session_repository, use_settings,
     use_settings_repository,
 };
 pub use repository_provider::{
     RepositoryConfig, RepositoryProvider, RepositoryProviderProps, create_repositories,
 };
-pub use session_provider::{SessionContext, SessionProvider};
+pub use session_provider::{SessionContext, SessionProvider, SessionProviderProps};
 pub use settings_provider::{SettingsContext, SettingsProvider};
 pub use theme_provider::{ThemeContext, ThemeProvider, use_theme};

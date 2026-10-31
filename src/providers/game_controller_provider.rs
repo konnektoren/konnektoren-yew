@@ -1,6 +1,8 @@
-use super::repository_hooks::{use_session, use_session_repository};
-use crate::repository::GameStatePersistenceImpl;
-use konnektoren_core::challenges::{ChallengeEmbedding, ChallengeType, GameChallenge};
+use super::repository_hooks::{use_session, use_session_of, use_session_repository};
+use crate::repository::{GameStatePersistenceImpl, SessionRepositoryTrait};
+use konnektoren_core::challenges::{
+    ChallengeEmbedding, ChallengeType, GameChallenge, SavedChallenge,
+};
 use konnektoren_core::commands::{Command, CommandBus};
 use konnektoren_core::controller::{
     ChallengeFinishPlugin, GameController, GameControllerTrait, GameXpPlugin,
@@ -83,6 +85,33 @@ pub fn use_game_state() -> UseStateHandle<GameState> {
     game_state
 }
 
+/// Like [`use_game_state`] for an application's own challenge type.
+#[hook]
+pub fn use_game_state_of<C: SavedChallenge>() -> UseStateHandle<GameState<C>> {
+    let session = use_session_of::<C>();
+    let game_state = use_state(|| session.game_state.clone());
+
+    {
+        let session = session.clone();
+        let game_state = game_state.clone();
+        use_effect_with(session.clone(), move |session| {
+            game_state.set(session.game_state.clone());
+        });
+    }
+
+    {
+        let session = session.clone();
+        let game_state = game_state.clone();
+        use_effect_with(game_state.clone(), move |game_state| {
+            let mut new_session = (*session).clone();
+            new_session.game_state = (**game_state).clone();
+            session.set(new_session);
+        });
+    }
+
+    game_state
+}
+
 #[hook]
 pub fn use_event_bus() -> Arc<EventBus> {
     let ctx = use_game_controller();
@@ -143,5 +172,100 @@ pub fn game_controller_provider(props: &GameControllerProviderProps) -> Html {
         <ContextProvider<GameControllerContext> context={context}>
             { for props.children.iter() }
         </ContextProvider<GameControllerContext>>
+    }
+}
+
+#[derive(Properties)]
+pub struct ExtendedGameControllerProviderProps<C: SavedChallenge> {
+    pub children: Children,
+    /// The application's game, used when the saved session has no state yet.
+    pub game: Game<C>,
+    pub session_repository: Arc<dyn SessionRepositoryTrait<C>>,
+}
+
+impl<C: SavedChallenge> PartialEq for ExtendedGameControllerProviderProps<C> {
+    fn eq(&self, other: &Self) -> bool {
+        self.game == other.game && Arc::ptr_eq(&self.session_repository, &other.session_repository)
+    }
+}
+
+/// Provides a `GameControllerContext<C>` for an application's own challenge type, inside a
+/// `SessionProvider<C>`. The controller is created once and follows later session changes.
+#[function_component(ExtendedGameControllerProvider)]
+pub fn extended_game_controller_provider<C: SavedChallenge>(
+    props: &ExtendedGameControllerProviderProps<C>,
+) -> Html {
+    let session = use_session_of::<C>();
+
+    let controller = {
+        let session = session.clone();
+        let game = props.game.clone();
+        let session_repository = props.session_repository.clone();
+        use_memo((), move |_| {
+            let session = Arc::new(RwLock::new((*session).clone()));
+            let persistence = Arc::new(GameStatePersistenceImpl::new(session_repository, session));
+            let mut controller = GameController::new(game, persistence);
+            controller.register_plugin(Arc::new(ChallengeFinishPlugin));
+            controller.register_plugin(Arc::new(GameXpPlugin));
+            controller.init()
+        })
+    };
+
+    {
+        let controller = (*controller).clone();
+        use_effect_with(session, move |_| {
+            if let Err(e) = controller.load_game_state() {
+                tracing::error!("Failed to load game state: {:?}", e);
+            }
+        });
+    }
+
+    let context = GameControllerContext::new((*controller).clone());
+    html! {
+        <ContextProvider<GameControllerContext<C>> {context}>
+            { for props.children.iter() }
+        </ContextProvider<GameControllerContext<C>>>
+    }
+}
+
+#[cfg(all(test, feature = "ssr"))]
+mod tests {
+    use super::*;
+    use crate::model::DefaultSessionInitializer;
+    use crate::providers::SessionProvider;
+    use crate::repository::{MemoryStorage, SessionRepository};
+    use konnektoren_core::session::Session;
+
+    #[function_component(Consumer)]
+    fn consumer() -> Html {
+        let controller = use_game_controller_of::<ChallengeType>().controller;
+        let state = controller.game_state().lock().unwrap();
+        html! { <p class="current">{state.challenge.challenge_config.id.clone()}</p> }
+    }
+
+    #[function_component(Host)]
+    fn host() -> Html {
+        let repository: Arc<dyn SessionRepositoryTrait> =
+            Arc::new(SessionRepository::new(MemoryStorage::default()));
+        html! {
+            <SessionProvider<ChallengeType>
+                session_repository={repository.clone()}
+                session_initializer={Arc::new(DefaultSessionInitializer) as Arc<dyn crate::model::SessionInitializer>}
+                initial_session={Session::default()}>
+                <ExtendedGameControllerProvider<ChallengeType>
+                    game={Game::default()} session_repository={repository}>
+                    <Consumer />
+                </ExtendedGameControllerProvider<ChallengeType>>
+            </SessionProvider<ChallengeType>>
+        }
+    }
+
+    #[tokio::test]
+    async fn extended_providers_supply_a_controller_for_the_session() {
+        let html = yew::ServerRenderer::<Host>::new()
+            .hydratable(false)
+            .render()
+            .await;
+        assert!(html.contains("konnektoren-1"), "{html}");
     }
 }
