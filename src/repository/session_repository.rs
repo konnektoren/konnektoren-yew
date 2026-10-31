@@ -2,16 +2,19 @@ use super::repository::Repository;
 use super::repository_error::RepositoryError;
 use super::storage::Storage;
 use async_trait::async_trait;
+use konnektoren_core::challenges::{ChallengeType, SavedChallenge};
 use konnektoren_core::session::Session;
 
 pub const SESSION_STORAGE_KEY: &str = "konnektoren_session";
 
+/// Stores sessions. Applications with their own challenge type use
+/// `SessionRepositoryTrait<TheirType>`.
 #[async_trait]
-pub trait SessionRepositoryTrait: Send + Sync {
-    async fn save_session(&self, key: &str, session: &Session) -> Result<(), RepositoryError>;
-    async fn get_session(&self, key: &str) -> Result<Option<Session>, RepositoryError>;
+pub trait SessionRepositoryTrait<C: SavedChallenge = ChallengeType>: Send + Sync {
+    async fn save_session(&self, key: &str, session: &Session<C>) -> Result<(), RepositoryError>;
+    async fn get_session(&self, key: &str) -> Result<Option<Session<C>>, RepositoryError>;
     async fn delete_session(&self, key: &str) -> Result<(), RepositoryError>;
-    async fn update_session(&self, key: &str, session: &Session) -> Result<(), RepositoryError>;
+    async fn update_session(&self, key: &str, session: &Session<C>) -> Result<(), RepositoryError>;
 }
 
 #[derive(Debug, PartialEq)]
@@ -26,15 +29,15 @@ impl<S: Storage> SessionRepository<S> {
 }
 
 #[async_trait]
-impl<S: Storage + Send + Sync> Repository<Session> for SessionRepository<S> {
-    async fn save(&self, key: &str, session: &Session) -> Result<(), RepositoryError> {
+impl<S: Storage + Send + Sync, C: SavedChallenge> Repository<Session<C>> for SessionRepository<S> {
+    async fn save(&self, key: &str, session: &Session<C>) -> Result<(), RepositoryError> {
         self.storage
             .set(key, session)
             .await
             .map_err(|e| RepositoryError::StorageError(e.to_string()))
     }
 
-    async fn get(&self, key: &str) -> Result<Option<Session>, RepositoryError> {
+    async fn get(&self, key: &str) -> Result<Option<Session<C>>, RepositoryError> {
         match self.storage.get(key).await {
             Ok(Some(session)) => Ok(Some(session)),
             Ok(None) => Ok(None),
@@ -51,20 +54,22 @@ impl<S: Storage + Send + Sync> Repository<Session> for SessionRepository<S> {
 }
 
 #[async_trait]
-impl<S: Storage + Send + Sync> SessionRepositoryTrait for SessionRepository<S> {
-    async fn save_session(&self, key: &str, session: &Session) -> Result<(), RepositoryError> {
-        Repository::save(self, key, session).await
+impl<S: Storage + Send + Sync, C: SavedChallenge> SessionRepositoryTrait<C>
+    for SessionRepository<S>
+{
+    async fn save_session(&self, key: &str, session: &Session<C>) -> Result<(), RepositoryError> {
+        Repository::<Session<C>>::save(self, key, session).await
     }
 
-    async fn get_session(&self, key: &str) -> Result<Option<Session>, RepositoryError> {
-        Repository::get(self, key).await
+    async fn get_session(&self, key: &str) -> Result<Option<Session<C>>, RepositoryError> {
+        Repository::<Session<C>>::get(self, key).await
     }
 
     async fn delete_session(&self, key: &str) -> Result<(), RepositoryError> {
-        Repository::delete(self, key).await
+        Repository::<Session<C>>::delete(self, key).await
     }
 
-    async fn update_session(&self, key: &str, session: &Session) -> Result<(), RepositoryError> {
+    async fn update_session(&self, key: &str, session: &Session<C>) -> Result<(), RepositoryError> {
         self.save_session(key, session).await
     }
 }
@@ -116,8 +121,10 @@ mod tests {
         assert_eq!(updated_session, stored_updated_session);
 
         // Test deleting the session
-        repo.delete_session(key).await.unwrap();
-        let deleted_session = repo.get_session(key).await.unwrap();
+        SessionRepositoryTrait::<ChallengeType>::delete_session(&repo, key)
+            .await
+            .unwrap();
+        let deleted_session: Option<Session> = repo.get_session(key).await.unwrap();
         assert!(deleted_session.is_none());
     }
 }

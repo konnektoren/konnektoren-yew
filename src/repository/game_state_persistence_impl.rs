@@ -1,17 +1,21 @@
 use super::{SESSION_STORAGE_KEY, SessionRepositoryTrait};
+use konnektoren_core::challenges::{Attempt, ChallengeHistory, ChallengeType, SavedChallenge};
 use konnektoren_core::game::GameState;
 use konnektoren_core::persistence::{GameStatePersistence, PersistenceError, Result};
+use konnektoren_core::session::Session;
 use std::sync::{Arc, RwLock};
 
-pub struct GameStatePersistenceImpl {
-    pub session_repository: Arc<dyn SessionRepositoryTrait>,
-    pub session: Arc<RwLock<konnektoren_core::session::Session>>,
+/// Saves the controller's game state into the player's session. Applications with their own
+/// challenge type use `GameStatePersistenceImpl<TheirType>`.
+pub struct GameStatePersistenceImpl<C: SavedChallenge = ChallengeType> {
+    pub session_repository: Arc<dyn SessionRepositoryTrait<C>>,
+    pub session: Arc<RwLock<Session<C>>>,
 }
 
-impl GameStatePersistenceImpl {
+impl<C: SavedChallenge> GameStatePersistenceImpl<C> {
     pub fn new(
-        session_repository: Arc<dyn SessionRepositoryTrait>,
-        session: Arc<RwLock<konnektoren_core::session::Session>>,
+        session_repository: Arc<dyn SessionRepositoryTrait<C>>,
+        session: Arc<RwLock<Session<C>>>,
     ) -> Self {
         Self {
             session_repository,
@@ -21,8 +25,8 @@ impl GameStatePersistenceImpl {
 
     /// Check if this exact challenge instance is already in history
     fn is_challenge_in_history(
-        challenge_history: &konnektoren_core::challenges::ChallengeHistory,
-        challenge: &konnektoren_core::challenges::Challenge,
+        challenge_history: &ChallengeHistory<Attempt<C>>,
+        challenge: &Attempt<C>,
     ) -> bool {
         challenge_history.challenges.iter().any(|c| {
             c.challenge_config.id == challenge.challenge_config.id
@@ -32,8 +36,8 @@ impl GameStatePersistenceImpl {
     }
 }
 
-impl GameStatePersistence for GameStatePersistenceImpl {
-    fn save_game_state(&self, state: &GameState) -> Result<()> {
+impl<C: SavedChallenge> GameStatePersistence<C> for GameStatePersistenceImpl<C> {
+    fn save_game_state(&self, state: &GameState<C>) -> Result<()> {
         #[cfg(feature = "csr")]
         {
             use wasm_bindgen_futures::spawn_local;
@@ -90,7 +94,7 @@ impl GameStatePersistence for GameStatePersistenceImpl {
         Ok(())
     }
 
-    fn load_game_state(&self) -> Result<GameState> {
+    fn load_game_state(&self) -> Result<GameState<C>> {
         let session_guard = self.session.read().map_err(|e| {
             PersistenceError::AccessError(format!("Failed to acquire read lock on session: {}", e))
         })?;

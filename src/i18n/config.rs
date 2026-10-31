@@ -169,7 +169,7 @@ mod tests {
             de_obj["Please select a language from the dropdown."]
                 .as_str()
                 .unwrap(),
-            "Bitte wählen Sie eine Sprache aus dem Dropdown-Menü."
+            "Bitte wähle eine Sprache aus dem Dropdown-Menü."
         );
         assert_eq!(de_obj["Tasks"].as_str().unwrap(), "Aufgaben");
         assert_eq!(
