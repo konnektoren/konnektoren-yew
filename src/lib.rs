@@ -29,6 +29,9 @@ pub mod model;
 pub mod providers;
 pub mod tools;
 
+#[cfg(feature = "web-analytics")]
+pub use konnektoren_yew_web_analytics as web_analytics;
+
 #[cfg(feature = "effects")]
 pub mod effects;
 
