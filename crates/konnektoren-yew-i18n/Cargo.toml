@@ -1,0 +1,24 @@
+[package]
+name = "konnektoren-yew-i18n"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Shared internationalization context for Konnektoren applications"
+
+[features]
+default = []
+csr = ["yew/csr"]
+ssr = ["yew/ssr"]
+storage = ["dep:gloo"]
+
+[dependencies]
+konnektoren-rs.workspace = true
+yew.workspace = true
+serde = { version = "1", features = ["derive"] }
+serde_json.workspace = true
+serde_yaml = "0.9"
+tracing.workspace = true
+gloo = { workspace = true, features = ["storage"], optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"

@@ -1,0 +1,234 @@
+pub const LANGUAGES: [&str; 9] = ["en", "uk", "ar", "de", "zh", "pl", "tr", "es", "vi"];
+
+/// Checks if the provided language is supported by the application.
+///
+/// # Parameters
+///
+/// - `lang`: An optional string slice representing the language code.
+///
+/// # Returns
+///
+/// If the language is supported, it returns `Some(String)` with the language code as a `String`.
+/// Otherwise, it returns `None`.
+///
+/// # Examples
+///
+/// ```
+/// use konnektoren_yew_i18n::supported_language;
+/// let lang = supported_language(Some("en"));
+/// assert_eq!(lang, Some("en".to_string()));
+/// ```
+pub fn normalize_language_code(lang: &str) -> Option<String> {
+    let lang = lang.trim();
+    if lang.is_empty() {
+        return None;
+    }
+
+    let lang = lang
+        .split_once('.')
+        .map_or(lang, |(lang, _)| lang)
+        .split_once('@')
+        .map_or(lang, |(lang, _)| lang)
+        .replace('_', "-")
+        .to_ascii_lowercase();
+
+    let primary = lang.split('-').next()?;
+    if primary.len() == 2 {
+        Some(primary.to_string())
+    } else {
+        None
+    }
+}
+
+pub fn supported_language_code(lang: Option<&str>, supported_codes: &[&str]) -> Option<String> {
+    let lang = normalize_language_code(lang?)?;
+    supported_codes.contains(&lang.as_str()).then_some(lang)
+}
+
+pub fn supported_language_from_candidates<'a>(
+    candidates: impl IntoIterator<Item = &'a str>,
+    supported_codes: &[&str],
+) -> Option<String> {
+    candidates
+        .into_iter()
+        .find_map(|lang| supported_language_code(Some(lang), supported_codes))
+}
+
+pub fn supported_language(lang: Option<&str>) -> Option<String> {
+    supported_language_code(lang, &LANGUAGES)
+}
+
+/// Returns the flag emoji corresponding to the provided language code.
+///
+/// # Parameters
+///
+/// - `lang`: A static string slice representing the language code.
+///
+/// # Returns
+///
+/// A static string slice containing the flag emoji associated with the language code.
+///
+/// # Examples
+///
+/// ```
+/// use konnektoren_yew_i18n::flag;
+/// let flag = flag("en");
+/// assert_eq!(flag, "🇺🇸");
+/// ```
+pub fn flag(lang: &'static str) -> &'static str {
+    match lang {
+        "en" => "🇺🇸",
+        "de" => "🇩🇪",
+        "uk" => "🇺🇦",
+        "zh" => "🇨🇳",
+        "ar" => "🇸🇦",
+        "pl" => "🇵🇱",
+        "tr" => "🇹🇷",
+        "es" => "🇪🇸",
+        "vi" => "🇻🇳",
+        _ => "🌐",
+    }
+}
+
+pub fn language_name(lang: &'static str) -> &'static str {
+    match lang {
+        "en" => "English",
+        "de" => "Deutsch",
+        "uk" => "Українська",
+        "zh" => "中文",
+        "ar" => "العربية",
+        "pl" => "Polski",
+        "tr" => "Türkçe",
+        "es" => "Español",
+        "vi" => "Tiếng Việt",
+        _ => "🌐",
+    }
+}
+
+pub fn log_language_info(context: &str) {
+    #[cfg(not(feature = "ssr"))]
+    let _ = context;
+
+    #[cfg(feature = "ssr")]
+    {
+        use tracing::{info, warn};
+
+        // Get language from environment and log it along with the flag
+        if let Ok(lang) = std::env::var("LANG") {
+            let flag_emoji = match lang.as_str() {
+                "en" => "🇺🇸",
+                "de" => "🇩🇪",
+                "uk" => "🇺🇦",
+                "zh" => "🇨🇳",
+                "ar" => "🇸🇦",
+                "pl" => "🇵🇱",
+                "tr" => "🇹🇷",
+                "es" => "🇪🇸",
+                "vi" => "🇻🇳",
+                _ => "🌐",
+            };
+
+            let lang_name = match lang.as_str() {
+                "en" => "English",
+                "de" => "Deutsch",
+                "uk" => "Українська",
+                "zh" => "中文",
+                "ar" => "العربية",
+                "pl" => "Polski",
+                "tr" => "Türkçe",
+                "es" => "Español",
+                "vi" => "Tiếng Việt",
+                _ => "Unknown",
+            };
+
+            info!(
+                "🌐 LANG={}  {} {} | Context: {}",
+                lang, flag_emoji, lang_name, context
+            );
+        } else {
+            warn!(
+                "⚠️ No LANG environment variable set! | Context: {}",
+                context
+            );
+        }
+
+        // Also check all environment variables related to language
+        for (key, value) in std::env::vars() {
+            if key.contains("LANG") || key.contains("lang") || key.contains("LOCALE") {
+                info!("  ENV: {}={}", key, value);
+            }
+        }
+    }
+}
+
+/// Unit tests for the `supported_language` and `flag` functions.
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    /// Tests the `supported_language` function with various inputs.
+    fn test_supported_language() {
+        assert_eq!(supported_language(Some("en")), Some("en".to_string()));
+        assert_eq!(supported_language(Some("en-US")), Some("en".to_string()));
+        assert_eq!(supported_language(Some("de-DE")), Some("de".to_string()));
+        assert_eq!(
+            supported_language(Some("de_DE.UTF-8")),
+            Some("de".to_string())
+        );
+        assert_eq!(supported_language(Some("uk")), Some("uk".to_string()));
+        assert_eq!(supported_language(Some("de")), Some("de".to_string()));
+        assert_eq!(supported_language(Some("zh")), Some("zh".to_string()));
+        assert_eq!(
+            supported_language(Some("zh-Hans-CN")),
+            Some("zh".to_string())
+        );
+        assert_eq!(supported_language(Some("ar")), Some("ar".to_string()));
+        assert_eq!(supported_language(Some("pl")), Some("pl".to_string()));
+        assert_eq!(supported_language(Some("tr")), Some("tr".to_string()));
+        assert_eq!(supported_language(Some("es")), Some("es".to_string()));
+        assert_eq!(supported_language(Some("vi")), Some("vi".to_string()));
+        assert_eq!(supported_language(Some("fr")), None);
+
+        assert_eq!(supported_language(None), None);
+    }
+
+    #[test]
+    fn test_supported_language_from_candidates() {
+        let candidates = ["fr-FR", "de-CH", "en-US"];
+        assert_eq!(
+            supported_language_from_candidates(candidates, &LANGUAGES),
+            Some("de".to_string())
+        );
+    }
+
+    #[test]
+    /// Tests the `flag` function to ensure it returns the correct flag emoji.
+    fn test_flag() {
+        assert_eq!(flag("en"), "🇺🇸");
+        assert_eq!(flag("de"), "🇩🇪");
+        assert_eq!(flag("uk"), "🇺🇦");
+        assert_eq!(flag("zh"), "🇨🇳");
+        assert_eq!(flag("ar"), "🇸🇦");
+        assert_eq!(flag("pl"), "🇵🇱");
+        assert_eq!(flag("tr"), "🇹🇷");
+        assert_eq!(flag("es"), "🇪🇸");
+        assert_eq!(flag("vi"), "🇻🇳");
+        assert_eq!(flag("fr"), "🌐");
+    }
+
+    #[test]
+    /// Tests the `name` function to ensure it returns the correct language name.
+    fn test_language_name() {
+        assert_eq!(language_name("en"), "English");
+        assert_eq!(language_name("de"), "Deutsch");
+        assert_eq!(language_name("uk"), "Українська");
+        assert_eq!(language_name("zh"), "中文");
+        assert_eq!(language_name("ar"), "العربية");
+        assert_eq!(language_name("pl"), "Polski");
+        assert_eq!(language_name("tr"), "Türkçe");
+        assert_eq!(language_name("es"), "Español");
+        assert_eq!(language_name("vi"), "Tiếng Việt");
+        assert_eq!(language_name("fr"), "🌐");
+    }
+}
