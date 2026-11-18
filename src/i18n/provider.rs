@@ -1,6 +1,6 @@
 #[cfg(feature = "csr")]
 use super::supported_language_from_candidates;
-use super::{SelectedLanguage, supported_language_code};
+use super::{I18nContext, SelectedLanguage, supported_language_code};
 use crate::model::Settings;
 use crate::providers::use_settings;
 use konnektoren_rs::platform::i18n::I18nConfig;
@@ -174,12 +174,6 @@ fn determine_browser_language(config: &I18nConfig, default_lang_code: Option<&st
             default_lang_code.and_then(|code| language_from_code(code, &supported_languages))
         })
         .unwrap_or_else(|| config.default_language.clone())
-}
-
-#[derive(Clone, PartialEq)]
-pub struct I18nContext {
-    pub config: UseStateHandle<I18nConfig>,
-    pub selected_language: SelectedLanguage,
 }
 
 #[derive(Properties, Clone, PartialEq)]
@@ -359,19 +353,4 @@ pub fn browser_i18n_provider(props: &I18nProviderProps) -> Html {
             { for props.children.iter() }
         </ContextProvider<I18nContext>>
     }
-}
-
-#[hook]
-pub fn use_i18n() -> UseStateHandle<I18nConfig> {
-    use_context::<I18nContext>()
-        .expect("No I18n context provided")
-        .config
-}
-
-#[hook]
-pub fn use_selected_language() -> SelectedLanguage {
-    // Always use the context version which has the full translations loaded
-    use_context::<I18nContext>()
-        .expect("No I18n context provided")
-        .selected_language
 }

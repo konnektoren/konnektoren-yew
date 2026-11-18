@@ -39,6 +39,7 @@ mod map;
 pub mod marketplace;
 #[cfg(feature = "music")]
 pub mod music;
+#[cfg(feature = "navigation")]
 pub mod navigation;
 pub mod profile;
 pub mod progress_bar;
@@ -95,6 +96,8 @@ pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;
 pub use inbox::InboxComponent;
+#[cfg(feature = "review")]
+pub use konnektoren_yew_review::RatingStarsComponent;
 pub use leaderboard::LeaderboardComp;
 pub use logo::Logo;
 pub use map::*;
@@ -102,14 +105,13 @@ pub use map::*;
 pub use marketplace::*;
 #[cfg(feature = "music")]
 pub use music::MusicComponent;
+#[cfg(feature = "navigation")]
 pub use navigation::*;
 #[cfg(feature = "storage")]
 pub use profile::ProfileConfigComponent;
 #[cfg(feature = "storage")]
 pub use profile::ProfilePointsComponent;
 pub use progress_bar::ProgressBar;
-#[cfg(feature = "review")]
-pub use konnektoren_yew_review::RatingStarsComponent;
 pub use seo::{SeoComponent, SeoConfig};
 pub use settings::*;
 pub use share_page::SharePageComp;

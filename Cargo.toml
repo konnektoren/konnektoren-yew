@@ -5,7 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [workspace]
-members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review"]
+members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review", "crates/konnektoren-yew-navigation", "crates/konnektoren-yew-i18n"]
 resolver = "3"
 
 [workspace.package]
@@ -14,6 +14,14 @@ edition = "2024"
 license = "MIT"
 
 [workspace.dependencies]
+serde = "1"
+serde_yaml = "0.9"
+wasm-bindgen-test = "0.3"
+konnektoren-yew-i18n = { path = "crates/konnektoren-yew-i18n", version = "0.7.0", default-features = false }
+konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = ["content", "platform"] }
+gloo = "0.12"
+yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
+konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", version = "0.7.0", default-features = false }
 konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", version = "0.7.0", default-features = false }
 konnektoren-yew-review = { path = "crates/konnektoren-yew-review", version = "0.7.0", default-features = false }
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false }
@@ -66,8 +74,10 @@ default = [
     "gdrive",
     "tour",
     "slideshow",
-    "review"
+    "review",
+    "navigation"
 ]
+navigation = ["dep:konnektoren-yew-navigation"]
 achievements = ["konnektoren-core/achievements"]
 web-analytics = ["dep:konnektoren-yew-web-analytics", "konnektoren-yew-review?/web-analytics"]
 # Challenge reviews and ratings (ChallengeReviewComponent, ChallengeRatingComponent, FeedbackPopup).
@@ -83,16 +93,18 @@ effects = ["gloo/timers", "gloo/futures"]
 marketplace = ["konnektoren-core/marketplace"]
 music = []
 slideshow = []
-storage = ["gloo/storage"]
-yew-preview = ["dep:yew-preview", "konnektoren-yew-review?/yew-preview"]
+storage = ["gloo/storage", "konnektoren-yew-i18n/storage"]
+yew-preview = ["navigation", "dep:yew-preview", "konnektoren-yew-review?/yew-preview", "konnektoren-yew-navigation?/yew-preview"]
 catalog = ["yew-preview", "yew-preview/catalog", "ssr"]
 gdrive = ["backup"]
 tour = ["yew-tou-rs"]
 solana = ["solana-sdk", "wallet-adapter", "spl-token"]
 sbom = ["cargo-cyclonedx"]
 csr = [
+    "konnektoren-yew-i18n/csr",
     "konnektoren-yew-web-analytics?/csr",
     "konnektoren-yew-review?/csr",
+    "konnektoren-yew-navigation?/csr",
     "yew/csr",
     "gloo",
     "konnektoren-core/csr",
@@ -106,12 +118,14 @@ csr = [
     "dep:wasm-bindgen-futures",
     "dep:tracing-wasm",
 ]
-ssr = ["yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
+ssr = ["konnektoren-yew-i18n/ssr", "konnektoren-yew-navigation?/ssr", "yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
 ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio"]
 server = ["ssr", "axum", "tokio/full"]
 tools = ["konnektoren-platform/tools"]
 
 [dependencies]
+konnektoren-yew-i18n.workspace = true
+konnektoren-yew-navigation = { workspace = true, optional = true }
 konnektoren-yew-web-analytics = { workspace = true, optional = true }
 konnektoren-yew-review = { workspace = true, optional = true }
 # Core dependencies
@@ -125,14 +139,14 @@ indexmap = "2"
 tracing = "0.1"
 tracing-wasm = { version = "0.2", optional = true }
 markdown = "1"
-serde = { version = "1", features = ["derive"] }
+serde = { workspace = true, features = ["derive"] }
 serde_json = "1"
-serde_yaml = "0.9"
+serde_yaml.workspace = true
 thiserror = "2"
 
 # WASM dependencies - aligned with konnektoren-rs
 getrandom = { version = "0.4", features = ["wasm_js"] }
-gloo = { version = "0.12", features = ["net"], optional = true }
+gloo = { workspace = true, features = ["net"], optional = true }
 js-sys = { version = "0.3", optional = true }
 wasm-bindgen = { version = "0.2", optional = true, features = [
     "spans",
@@ -180,7 +194,7 @@ uuid = { version = "1", features = ["v4", "fast-rng"] }
 # Yew ecosystem
 yew = "0.23"
 yew-hooks = { version = "0.6.4", optional = true }
-yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
+yew_router.workspace = true
 yew-ssg = { git = "https://github.com/chriamue/yew-ssg", optional = true }
 yew-preview = { git = "https://github.com/chriamue/yew-preview", optional = true }
 yew-chat = { git = "https://github.com/chriamue/yew-chat", features = [
@@ -192,10 +206,7 @@ yew-tou-rs = { git = "https://github.com/chriamue/yew-tou-rs/", branch = "main",
 
 # Konnektoren dependencies
 konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
-konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = [
-    "content",
-    "platform",
-] }
+konnektoren-rs.workspace = true
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "js",
 ] }
@@ -218,7 +229,7 @@ tokio = { version = "1", features = [
 konnektoren-platform = { git = "https://github.com/konnektoren/konnektoren-rs.git", features = [
     "tools",
 ] }
-wasm-bindgen-test = "0.3"
+wasm-bindgen-test.workspace = true
 tokio = { version = "1", features = ["rt", "macros"] }
 walkdir = "2"
 serde_json = "1"
@@ -227,5 +238,5 @@ serde_json = "1"
 anyhow = "1"
 vergen = { version = "10", features = ["build", "cargo", "rustc"] }
 cargo-cyclonedx = { version = "0.4", optional = true }
-serde = "1"
+serde.workspace = true
 serde_json = "1"

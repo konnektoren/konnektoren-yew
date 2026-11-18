@@ -3,7 +3,7 @@ name = "konnektoren-yew-review"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Challenge reviews and ratings for Konnektoren Yew applications"
+description = "Challenge reviews and ratings for Konnektoren applications"
 
 [features]
 default = []
