@@ -12,11 +12,13 @@
 //! ```
 
 mod event;
-mod provider;
 #[cfg(feature = "gtm")]
 pub mod gtm;
+mod provider;
 
 pub use event::{Parameters, TrackError, TrackResult, WebAnalytics};
-pub use provider::{AnalyticsContext, WebAnalyticsProvider, WebAnalyticsProviderProps, use_web_analytics};
 #[cfg(feature = "gtm")]
 pub use gtm::{GtmAnalytics, track_event};
+pub use provider::{
+    AnalyticsContext, WebAnalyticsProvider, WebAnalyticsProviderProps, use_web_analytics,
+};

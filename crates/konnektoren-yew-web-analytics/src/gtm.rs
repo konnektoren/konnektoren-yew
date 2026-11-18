@@ -33,24 +33,35 @@ fn push_event(parameters: Parameters) -> TrackResult {
         return Err(TrackError::Unavailable);
     };
     let get = |key: &str| js_sys::Reflect::get(&window, &JsValue::from_str(key));
-    match get("konnektorenAnalyticsConsent").ok().and_then(|v| v.as_bool()) {
-        Some(true) => {},
+    match get("konnektorenAnalyticsConsent")
+        .ok()
+        .and_then(|v| v.as_bool())
+    {
+        Some(true) => {}
         Some(false) => return Err(TrackError::ConsentDenied),
         None => {
-            tracing::warn!("GTM analytics consent configuration is missing: expected window.konnektorenAnalyticsConsent");
+            tracing::warn!(
+                "GTM analytics consent configuration is missing: expected window.konnektorenAnalyticsConsent"
+            );
             return Err(TrackError::Unavailable);
         }
     }
     let Ok(layer) = get("dataLayer") else {
-        tracing::warn!("GTM data layer is unavailable; check the host page analytics configuration");
+        tracing::warn!(
+            "GTM data layer is unavailable; check the host page analytics configuration"
+        );
         return Err(TrackError::Unavailable);
     };
     let Ok(push) = js_sys::Reflect::get(&layer, &JsValue::from_str("push")) else {
-        tracing::warn!("GTM data layer is unavailable; check the host page analytics configuration");
+        tracing::warn!(
+            "GTM data layer is unavailable; check the host page analytics configuration"
+        );
         return Err(TrackError::Unavailable);
     };
     let Some(push) = push.dyn_ref::<js_sys::Function>() else {
-        tracing::warn!("GTM data layer is missing a push function; check the host page analytics configuration");
+        tracing::warn!(
+            "GTM data layer is missing a push function; check the host page analytics configuration"
+        );
         return Err(TrackError::Unavailable);
     };
     let Ok(event) = js_sys::JSON::parse(&serde_json::Value::Object(parameters).to_string()) else {
