@@ -143,8 +143,14 @@ pub fn preview_groups() -> ComponentList {
             ChallengeActionsComponent::preview(),
             ChallengeConfigComponent::preview(),
             ChallengeInfoComponent::preview(),
+            #[cfg(feature = "review")]
             ChallengeReviewComponent::preview(),
+            #[cfg(feature = "review")]
             ChallengeRatingComponent::preview(),
+            #[cfg(feature = "review")]
+            konnektoren_yew_review::ReviewForm::preview(),
+            #[cfg(feature = "review")]
+            konnektoren_yew_review::AverageRating::preview(),
             ChallengeTimerComponent::preview(),
             ChallengeProgressBadge::preview(),
             ChallengeCard::preview(),
@@ -193,6 +199,7 @@ pub fn preview_groups() -> ComponentList {
         ),
         create_component_group!(
             "UI Components",
+            #[cfg(feature = "review")]
             RatingStarsComponent::preview(),
             InformativeComponent::preview(),
             InformativeMarkdownComponent::preview(),
@@ -268,6 +275,7 @@ pub fn preview_groups() -> ComponentList {
             FaqTag::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
+            #[cfg(feature = "review")]
             FeedbackPopup::preview(),
         ),
         #[cfg(feature = "tour")]

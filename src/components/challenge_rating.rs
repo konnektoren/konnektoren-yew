@@ -1,5 +1,6 @@
+use super::review_client::TracedReviewClient;
 use crate::i18n::use_i18n;
-use gloo::net::http::Request;
+use konnektoren_yew_review::AverageRating;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -12,73 +13,22 @@ pub struct ChallengeRatingProps {
     pub default_endpoint: bool,
 }
 
-fn build_rating_url(api_url: &str, challenge_id: &str, default_endpoint: bool) -> String {
-    if !default_endpoint {
-        return api_url.to_string();
-    }
-
-    let base = api_url.trim_end_matches('/');
-    format!("{}/reviews/{}/average", base, challenge_id)
-}
-
+/// Average rating of a challenge, loaded with traced requests.
 #[function_component(ChallengeRatingComponent)]
 pub fn challenge_rating(props: &ChallengeRatingProps) -> Html {
-    #[cfg(feature = "csr")]
-    {
-        use crate::tools::TracedResponse;
-        use wasm_bindgen_futures::spawn_local;
+    let i18n = use_i18n();
+    let client = use_memo(
+        (props.api_url.clone(), props.default_endpoint),
+        |(api_url, default_endpoint)| TracedReviewClient::handle(api_url, *default_endpoint),
+    );
 
-        let i18n = use_i18n();
-        let average = use_state(|| props.default_rating);
-
-        {
-            let challenge_id = props.challenge_id.clone();
-            let api_url = props.api_url.clone();
-            let default_endpoint = props.default_endpoint;
-            let average = average.clone();
-
-            use_effect_with((), move |_| {
-                spawn_local(async move {
-                    let url = build_rating_url(&api_url, &challenge_id, default_endpoint);
-                    let response = Request::get(&url).send_traced().await;
-
-                    match response {
-                        Ok(response) if response.status() == 200 => {
-                            if let Ok(avg) = response.json::<f64>().await {
-                                average.set(Some(avg));
-                            }
-                        }
-                        _ => {
-                            tracing::error!("Failed to fetch the average rating.");
-                        }
-                    }
-                });
-
-                || ()
-            });
-        }
-
-        return html! {
-            <div class="challenge-rating">
-                <span class="challenge-rating__star">{"★"}</span>
-                if let Some(avg) = *average {
-                    <span>{format!("{:.1}", avg)}</span>
-                } else {
-                    <span>{ i18n.t("Loading...") }</span>
-                }
-            </div>
-        };
-    }
-
-    #[cfg(not(feature = "csr"))]
-    {
-        // Placeholder for SSR/SSG - API calls not available
-        html! {
-            <div class="challenge-rating">
-                <span class="challenge-rating__star">{"★"}</span>
-                <span>{"..."}</span>
-            </div>
-        }
+    html! {
+        <AverageRating
+            client={(*client).clone()}
+            challenge_id={props.challenge_id.clone()}
+            default_rating={props.default_rating}
+            loading_label={i18n.t("Loading...")}
+        />
     }
 }
 

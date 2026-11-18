@@ -122,6 +122,13 @@ DaisyUI theme definitions via `@plugin "daisyui/theme"`. Two themes ship: `light
 3. Add `@import "./<name>.css"` to `components/index.css`
 4. If the pattern is reusable across components, extract it to `molecules/`
 
+## Styles of workspace crates
+
+Crates under `crates/` keep their own styles in `crates/<crate>/styles/`:
+`<name>.css` imports `components/index.css`, which imports one file per component.
+`styles/index.css` imports the crate stylesheet after `components/index.css`,
+e.g. `crates/konnektoren-yew-review/styles/review.css`.
+
 ## Adding a new molecule
 
 1. Create `molecules/<name>.css` with `@utility` definitions

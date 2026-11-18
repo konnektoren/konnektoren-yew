@@ -1,4 +1,6 @@
-use crate::components::{ChallengePresenceComponent, ChallengeRatingComponent};
+use crate::components::ChallengePresenceComponent;
+#[cfg(feature = "review")]
+use crate::components::ChallengeRatingComponent;
 use crate::i18n::use_i18n;
 use konnektoren_core::prelude::*;
 use yew::prelude::*;
@@ -16,6 +18,7 @@ pub struct ChallengeInfoProps {
 pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
     let i18n = use_i18n();
 
+    #[cfg(feature = "review")]
     let rating_component = match props.api_url {
         Some(ref api_url) => html! {
             <div class="challenge-info__rating">
@@ -24,6 +27,8 @@ pub fn challenge_info(props: &ChallengeInfoProps) -> Html {
         },
         None => html! {},
     };
+    #[cfg(not(feature = "review"))]
+    let rating_component = html! {};
 
     let presence_component = match props.api_url {
         Some(ref api_url) => html! {

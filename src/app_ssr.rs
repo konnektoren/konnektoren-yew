@@ -111,6 +111,15 @@ pub fn Example() -> Html {
 #[cfg(feature = "yew-preview")]
 pub fn preview_groups() -> ComponentList {
     vec![
+        #[cfg(feature = "review")]
+        create_component_group!(
+            "Reviews",
+            crate::components::challenge_review::ChallengeReviewComponent::preview(),
+            crate::components::challenge_rating::ChallengeRatingComponent::preview(),
+            konnektoren_yew_review::ReviewForm::preview(),
+            konnektoren_yew_review::AverageRating::preview(),
+            konnektoren_yew_review::RatingStarsComponent::preview(),
+        ),
         create_component_group!(
             "Dialog",
             DialogComponent::preview(),

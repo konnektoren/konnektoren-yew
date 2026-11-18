@@ -32,6 +32,9 @@ pub mod tools;
 #[cfg(feature = "web-analytics")]
 pub use konnektoren_yew_web_analytics as web_analytics;
 
+#[cfg(feature = "review")]
+pub use konnektoren_yew_review as review;
+
 #[cfg(feature = "effects")]
 pub mod effects;
 

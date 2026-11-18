@@ -15,13 +15,16 @@ pub mod challenge_config;
 pub mod challenge_history;
 pub mod challenge_info;
 pub mod challenge_presence;
+#[cfg(feature = "review")]
 pub mod challenge_rating;
+#[cfg(feature = "review")]
 pub mod challenge_review;
 pub mod challenge_timer;
 #[cfg(feature = "chat")]
 pub mod chat;
 pub mod domain_selector;
 pub mod faq;
+#[cfg(feature = "review")]
 pub mod feedback_popup;
 #[cfg(all(feature = "csr", feature = "yew-preview"))]
 pub mod game_loader_preview;
@@ -39,7 +42,8 @@ pub mod music;
 pub mod navigation;
 pub mod profile;
 pub mod progress_bar;
-mod rating_stars;
+#[cfg(feature = "review")]
+mod review_client;
 pub mod seo;
 mod settings;
 pub mod share_page;
@@ -74,7 +78,9 @@ pub use challenge_config::ChallengeConfigComponent;
 pub use challenge_history::*;
 pub use challenge_info::ChallengeInfoComponent;
 pub use challenge_presence::ChallengePresenceComponent;
+#[cfg(feature = "review")]
 pub use challenge_rating::ChallengeRatingComponent;
+#[cfg(feature = "review")]
 pub use challenge_review::ChallengeReviewComponent;
 pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
@@ -83,6 +89,7 @@ pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSe
 pub use faq::{
     FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
 };
+#[cfg(feature = "review")]
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
@@ -101,7 +108,8 @@ pub use profile::ProfileConfigComponent;
 #[cfg(feature = "storage")]
 pub use profile::ProfilePointsComponent;
 pub use progress_bar::ProgressBar;
-pub use rating_stars::RatingStarsComponent;
+#[cfg(feature = "review")]
+pub use konnektoren_yew_review::RatingStarsComponent;
 pub use seo::{SeoComponent, SeoConfig};
 pub use settings::*;
 pub use share_page::SharePageComp;
