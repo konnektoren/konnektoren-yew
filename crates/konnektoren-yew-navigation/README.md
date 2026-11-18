@@ -12,3 +12,7 @@ Use the existing brand, tools, actions, and item slots for app-specific content.
 
 `ResponsiveNavigation` combines the header and bottom layouts with the same
 items and provides brand, tools, labels, active-route, and styling slots.
+
+`NavigationFavourites` renders a controlled favourites editor. Supply route
+items with stable IDs, the selected IDs, and callbacks for toggling and
+reordering. The app remains responsible for saving and restoring selections.

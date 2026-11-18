@@ -1,6 +1,7 @@
 //! Reusable navigation components and their translation context.
 mod bar;
 mod dismiss;
+mod favourites;
 mod header;
 mod item;
 mod link;
@@ -12,6 +13,7 @@ mod responsive;
 
 pub use bar::{NavigationBar, NavigationBarLayout, NavigationBarProps};
 use dismiss::use_navigation_dismiss;
+pub use favourites::{NavigationFavourites, NavigationFavouritesProps};
 pub use header::{NavigationHeader, NavigationHeaderProps};
 pub use item::NavItem;
 pub use link::{NavigationLink, NavigationLinkProps};
