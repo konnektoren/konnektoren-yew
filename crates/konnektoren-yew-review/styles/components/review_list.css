@@ -1,0 +1,59 @@
+.review-list {
+    @apply w-full table;
+    @apply border-separate [border-spacing:0_0.5rem];
+    @apply text-xs sm:text-sm;
+}
+
+.review-list__item {
+    @apply table-row;
+    @apply transition-colors duration-200;
+}
+
+.review-list__item:nth-child(even) {
+    @apply bg-base-200;
+}
+
+.review-list__item:hover {
+    @apply bg-base-300;
+}
+
+.review-list__rating {
+    @apply table-cell;
+    @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
+    @apply w-[100px] sm:w-[120px];
+}
+
+.review-list__rating .rating-stars {
+    @apply inline-flex items-center;
+}
+
+.review-list__rating .rating-stars__star {
+    @apply text-sm sm:text-base;
+}
+
+.review-list__rating .rating-stars__star--full {
+    @apply text-primary;
+}
+
+.review-list__rating .rating-stars__star--half {
+    @apply text-primary opacity-70;
+}
+
+.review-list__rating .rating-stars__star--empty {
+    @apply text-base-content/30;
+}
+
+.review-list__comment {
+    @apply table-cell;
+    @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
+    @apply text-base-content;
+    @apply text-xs sm:text-sm;
+}
+
+.review-list__challenge {
+    @apply table-cell;
+    @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
+    @apply text-base-content/60 text-[0.625rem] sm:text-xs;
+    @apply w-[120px] sm:w-[150px];
+}
+

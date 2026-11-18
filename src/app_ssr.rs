@@ -118,6 +118,7 @@ pub fn preview_groups() -> ComponentList {
             crate::components::challenge_rating::ChallengeRatingComponent::preview(),
             konnektoren_yew_review::ReviewForm::preview(),
             konnektoren_yew_review::AverageRating::preview(),
+            konnektoren_yew_review::ReviewList::preview(),
             konnektoren_yew_review::RatingStarsComponent::preview(),
         ),
         create_component_group!(

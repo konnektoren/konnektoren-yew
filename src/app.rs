@@ -143,14 +143,6 @@ pub fn preview_groups() -> ComponentList {
             ChallengeActionsComponent::preview(),
             ChallengeConfigComponent::preview(),
             ChallengeInfoComponent::preview(),
-            #[cfg(feature = "review")]
-            ChallengeReviewComponent::preview(),
-            #[cfg(feature = "review")]
-            ChallengeRatingComponent::preview(),
-            #[cfg(feature = "review")]
-            konnektoren_yew_review::ReviewForm::preview(),
-            #[cfg(feature = "review")]
-            konnektoren_yew_review::AverageRating::preview(),
             ChallengeTimerComponent::preview(),
             ChallengeProgressBadge::preview(),
             ChallengeCard::preview(),
@@ -163,6 +155,17 @@ pub fn preview_groups() -> ComponentList {
             DialogResultComponent::preview(),
             DialogObserverResultComponent::preview(),
             ChallengePresenceComponent::preview(),
+        ),
+        #[cfg(feature = "review")]
+        create_component_group!(
+            "Reviews",
+            ChallengeReviewComponent::preview(),
+            ChallengeRatingComponent::preview(),
+            konnektoren_yew_review::ReviewForm::preview(),
+            konnektoren_yew_review::AverageRating::preview(),
+            konnektoren_yew_review::ReviewList::preview(),
+            RatingStarsComponent::preview(),
+            FeedbackPopup::preview(),
         ),
         create_component_group!(
             "Challenge Completion",
@@ -199,8 +202,6 @@ pub fn preview_groups() -> ComponentList {
         ),
         create_component_group!(
             "UI Components",
-            #[cfg(feature = "review")]
-            RatingStarsComponent::preview(),
             InformativeComponent::preview(),
             InformativeMarkdownComponent::preview(),
             #[cfg(feature = "effects")]
@@ -275,8 +276,6 @@ pub fn preview_groups() -> ComponentList {
             FaqTag::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
-            #[cfg(feature = "review")]
-            FeedbackPopup::preview(),
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),

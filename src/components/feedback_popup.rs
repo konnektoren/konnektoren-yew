@@ -131,11 +131,11 @@ mod preview {
             }
         ),
         (
-            "With Timeout",
+            "Appears after 3 seconds",
             FeedbackPopupProps {
                 api_url: "https://api.konnektoren.help".to_string(),
-                timeout_seconds: 5,
-                show: true,
+                timeout_seconds: 3,
+                show: false,
                 expanded: false,
             }
         ),

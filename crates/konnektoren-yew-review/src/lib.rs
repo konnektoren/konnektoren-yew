@@ -23,7 +23,7 @@ mod analytics;
 pub use client::{ReviewClient, ReviewClientHandle, ReviewError, ReviewFuture};
 pub use components::{
     AverageRating, AverageRatingProps, RatingStarsComponent, RatingStarsProps, ReviewForm,
-    ReviewFormProps,
+    ReviewFormProps, ReviewList, ReviewListProps,
 };
 pub use endpoint::ReviewEndpoint;
 pub use konnektoren_core::challenges::Review;
