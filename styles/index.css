@@ -5,7 +5,7 @@
 @import "./templates/index.css";
 @import "./base/index.css";
 @import "./components/index.css";
-@import "../crates/konnektoren-yew-review/styles/review.css";
+@import "./crates/index.css";
 @import "./layouts/index.css";
 @import "./themes/index.css";
 @import "./vendors.css";

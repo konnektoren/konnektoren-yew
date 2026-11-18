@@ -127,7 +127,7 @@ DaisyUI theme definitions via `@plugin "daisyui/theme"`. Two themes ship: `light
 Crates under `crates/` keep their own styles in `crates/<crate>/styles/`:
 `<name>.css` imports `components/index.css`, which imports one file per component.
 `styles/index.css` imports the crate stylesheet after `components/index.css`,
-e.g. `crates/konnektoren-yew-review/styles/review.css`.
+e.g. `styles/crates/review/review.css`.
 
 ## Adding a new molecule
 

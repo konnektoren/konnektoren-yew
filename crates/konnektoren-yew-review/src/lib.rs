@@ -8,9 +8,8 @@
 //! [`REVIEW_SUBMITTED_EVENT`] and [`REVIEW_FAILED_EVENT`] to the
 //! `konnektoren-yew-web-analytics` provider. Comment text is never tracked.
 //!
-//! Styles: `styles/review.css` in this crate (Tailwind + daisyUI). Import it
-//! from the host stylesheet, e.g.
-//! `@import "../crates/konnektoren-yew-review/styles/review.css";`
+//! Styles: `styles/crates/review/review.css` in the `konnektoren-yew`
+//! repository (Tailwind + daisyUI). These are included by its `styles/index.css`.
 
 mod client;
 mod components;
