@@ -136,10 +136,8 @@ pub fn example_favourites(_props: &ExampleFavouritesProps) -> Html {
         .collect();
     html! {
         <div class="navigation-preview navigation-preview--favourites">
-            <NavigationHeader brand={html! { <a href="/">{"Konnektoren"}</a> }}>
-                <NavigationBar<Route> items={primary.clone()} secondary_items={secondary.clone()} secondary_label="Others" />
-            </NavigationHeader>
-            <NavigationBar<Route> layout={NavigationBarLayout::Bottom} items={primary} secondary_items={secondary} secondary_label="Others" />
+            <ResponsiveNavigation<Route> brand={html! { <a href="/">{"Konnektoren"}</a> }}
+                items={primary} secondary_items={secondary} secondary_label="Others" />
             <section class="navigation-preview__favourites">
                 <p>{i18n.t("Choose your favourites for your navigation.")}</p>
                 <div class="navigation-preview__selection" aria-label={i18n.t("Navigation preview")}>

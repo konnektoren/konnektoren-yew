@@ -8,6 +8,7 @@ mod links;
 pub mod menu;
 #[cfg(feature = "yew-preview")]
 pub mod preview;
+mod responsive;
 
 pub use bar::{NavigationBar, NavigationBarLayout, NavigationBarProps};
 use dismiss::use_navigation_dismiss;
@@ -16,3 +17,4 @@ pub use item::NavItem;
 pub use link::{NavigationLink, NavigationLinkProps};
 pub use links::{NavigationLinks, NavigationLinksProps};
 pub use menu::{MenuProps, NavigationMenu};
+pub use responsive::{ResponsiveNavigation, ResponsiveNavigationProps};
