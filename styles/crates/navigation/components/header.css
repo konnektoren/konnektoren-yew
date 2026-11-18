@@ -1,0 +1,96 @@
+.navigation-header {
+    @apply flex flex-col gap-4 border-b border-base-300 px-6 py-5 sm:px-10;
+}
+
+.navigation-header__topbar {
+    @apply flex flex-wrap items-center justify-between gap-4;
+}
+
+.navigation-header__brand,
+.navigation-header__brand a {
+    @apply flex items-center gap-3 font-bold text-base-content;
+}
+
+.navigation-header__brand a:hover {
+    @apply opacity-80;
+}
+
+.navigation-header__brand a:active {
+    @apply opacity-60;
+}
+
+.navigation-header__brand img {
+    @apply block size-11 shrink-0 object-contain;
+}
+
+.navigation-header__tools {
+    @apply flex w-full flex-wrap items-center gap-4 sm:w-auto;
+}
+
+.navigation-header .navigation-bar--inline {
+    @apply hidden md:flex;
+}
+
+.navigation-header__skip {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-base-100 focus:p-3;
+}
+
+@media (width < 48rem) {
+    .navigation-header {
+        @apply gap-3 px-4 py-3;
+    }
+
+    .navigation-header__topbar {
+        @apply gap-3;
+    }
+
+    .navigation-header__brand img {
+        @apply size-9;
+    }
+
+    .navigation-header__tools {
+        @apply w-full gap-2;
+    }
+
+}
+
+.navigation-header .navigation-bar__primary {
+    @apply gap-2;
+}
+
+.navigation-header .navigation-link {
+    @apply min-h-10 rounded-full border border-base-300 px-4 py-1.5 text-sm font-medium text-base-content;
+}
+
+.navigation-header .navigation-link:hover {
+    @apply border-base-content/40 bg-base-200 text-base-content;
+}
+
+.navigation-header .navigation-link--active,
+.navigation-header .navigation-link--active:hover {
+    @apply border-primary bg-primary font-semibold text-primary-content;
+}
+
+.navigation-header .navigation-bar__trigger {
+    @apply h-10 w-auto gap-2 rounded-full border border-base-300 px-4 text-sm font-medium text-base-content;
+}
+
+.navigation-header .navigation-bar__trigger::after {
+    content: attr(aria-label);
+}
+
+.navigation-header .navigation-bar__trigger[aria-expanded="true"] {
+    @apply border-base-content/40 bg-base-200 text-base-content;
+}
+
+.navigation-header .navigation-bar__secondary {
+    @apply flex-col items-stretch gap-1 rounded-2xl border-base-300 bg-base-200 p-2;
+}
+
+.navigation-header .navigation-bar__secondary .navigation-link {
+    @apply justify-start border-transparent;
+}
+
+.navigation-header .navigation-bar__secondary .navigation-link:hover {
+    @apply border-transparent bg-base-300;
+}

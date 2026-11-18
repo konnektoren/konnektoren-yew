@@ -1,0 +1,33 @@
+.navigation-menu {
+    @apply fixed inset-x-0 bottom-0 z-50 flex flex-col border-t border-base-200 bg-base-100/95 font-sans text-base-content backdrop-blur;
+}
+
+.navigation-menu__bar {
+    @apply flex w-full items-center justify-around gap-1 overflow-x-auto px-2 pt-2;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.navigation-menu__group {
+    @apply flex min-h-11 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg p-2 text-xs text-base-content/70 transition-colors;
+}
+
+.navigation-menu__group:hover {
+    @apply bg-base-200 text-base-content;
+}
+
+.navigation-menu__group:active {
+    @apply bg-base-300;
+}
+
+.navigation-menu__group--open {
+    @apply bg-base-200 text-primary;
+}
+
+.navigation-menu__dropdown {
+    @apply absolute bottom-full left-0 z-[60] flex w-4/5 max-w-xs flex-col gap-1 overflow-y-auto rounded-t-2xl bg-base-100 p-2 shadow-lg;
+    max-height: min(32rem, 70svh);
+}
+
+.navigation-menu__dropdown .navigation-link {
+    @apply justify-start;
+}
