@@ -1,0 +1,2 @@
+Example license text for the credits component preview.
+This is a placeholder, not a license for a real asset.

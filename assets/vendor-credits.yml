@@ -1,0 +1,25 @@
+# Credits for the optional CDN resources imported by styles/vendors.css.
+groups:
+  - id: yew-vendor-assets
+    name: Credits and licenses
+    credits:
+      - id: inter
+        name: Inter
+        links:
+          - name: Inter — SIL OFL 1.1
+            url: https://github.com/rsms/inter/blob/master/LICENSE.txt
+      - id: jetbrains-mono
+        name: JetBrains Mono
+        links:
+          - name: JetBrains Mono — SIL OFL 1.1
+            url: https://github.com/JetBrains/JetBrainsMono/blob/master/OFL.txt
+      - id: font-awesome
+        name: Font Awesome Free 6.5.2
+        links:
+          - name: Font Awesome Free — CC BY 4.0, SIL OFL 1.1, MIT
+            url: https://github.com/FortAwesome/Font-Awesome/blob/6.5.2/LICENSE.txt
+      - id: intro-js
+        name: Intro.js 7.2.0
+        links:
+          - name: Intro.js — AGPL-3.0 or commercial license
+            url: https://github.com/usablica/intro.js/blob/v7.2.0/license.md

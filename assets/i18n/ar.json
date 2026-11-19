@@ -144,5 +144,10 @@
   "Load again": "تحميل مجددًا",
   "Loaded from source": "تم التحميل من المصدر",
   "Preload game": "تحميل اللعبة مسبقًا",
-  "Retry": "إعادة المحاولة"
+  "Retry": "إعادة المحاولة",
+  "Loading credits…": "جارٍ تحميل معلومات المصادر…",
+  "Could not load credits.": "تعذر تحميل معلومات المصادر.",
+  "Loading license…": "جارٍ تحميل الترخيص…",
+  "Could not load license.": "تعذر تحميل الترخيص.",
+  "Open license file": "فتح ملف الترخيص"
 }

@@ -144,5 +144,10 @@
   "Load again": "重新加载",
   "Loaded from source": "已从源加载",
   "Preload game": "预加载游戏",
-  "Retry": "重试"
+  "Retry": "重试",
+  "Loading credits…": "正在加载致谢…",
+  "Could not load credits.": "无法加载致谢。",
+  "Loading license…": "正在加载许可证…",
+  "Could not load license.": "无法加载许可证。",
+  "Open license file": "打开许可证文件"
 }

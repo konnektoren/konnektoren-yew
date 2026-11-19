@@ -144,5 +144,10 @@
   "Load again": "Yeniden yükle",
   "Loaded from source": "Kaynaktan yüklendi",
   "Preload game": "Oyunu önceden yükle",
-  "Retry": "Tekrar dene"
+  "Retry": "Yeniden dene",
+  "Loading credits…": "Katkılar yükleniyor…",
+  "Could not load credits.": "Katkılar yüklenemedi.",
+  "Loading license…": "Lisans yükleniyor…",
+  "Could not load license.": "Lisans yüklenemedi.",
+  "Open license file": "Lisans dosyasını aç"
 }

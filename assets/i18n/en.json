@@ -144,5 +144,10 @@
   "Load again": "Load again",
   "Loaded from source": "Loaded from source",
   "Preload game": "Preload game",
-  "Retry": "Retry"
+  "Retry": "Retry",
+  "Loading credits…": "Loading credits…",
+  "Could not load credits.": "Could not load credits.",
+  "Loading license…": "Loading license…",
+  "Could not load license.": "Could not load license.",
+  "Open license file": "Open license file"
 }
