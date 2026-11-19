@@ -1,5 +1,5 @@
 use super::{ChallengeActions, ChallengeActionsComponent};
-use crate::components::ProgressBar;
+use crate::components::{Icon, ProgressBar};
 #[cfg(feature = "effects")]
 use crate::effects::ReadText;
 use crate::i18n::use_i18n;
@@ -122,11 +122,7 @@ fn vocabulary_card(props: &VocabularyCardProps) -> Html {
             <div class="vocabulary-card__header">
                 if let Some(icon) = &props.item.icon {
                     <div class="vocabulary-card__icon">
-                        if icon.starts_with("fa-") {
-                            <i class={classes!(icon)}></i>
-                        } else {
-                            <img src={icon.clone()} alt="" class="vocabulary-card__icon-image" />
-                        }
+                        <Icon icon={icon.clone()} alt="" class="" image_class={Some("vocabulary-card__icon-image".to_owned())} fallback_as_image={true} />
                     </div>
                 }
             </div>
@@ -263,11 +259,7 @@ pub fn vocabulary_component(props: &VocabularyComponentProps) -> Html {
                 <h2 class="vocabulary__title">{&props.challenge.name}</h2>
                 if let Some(icon) = &props.challenge.icon {
                     <div class="vocabulary__challenge-icon">
-                        if icon.starts_with("fa-") {
-                            <i class={classes!(icon)}></i>
-                        } else {
-                            <img src={icon.clone()} alt="" />
-                        }
+                        <Icon icon={icon.clone()} alt="" class="" fallback_as_image={true} />
                     </div>
                 }
                 <p class="vocabulary__description">{&props.challenge.description}</p>

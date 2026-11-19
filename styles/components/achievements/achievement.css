@@ -27,16 +27,21 @@
 }
 
 /* Icon container */
-.achievement__icon {
-    @apply w-20 h-20 flex items-center justify-center mb-4;
+.achievement__icon,
+i.achievement__icon {
+    @apply w-20 h-20 grid place-items-center mb-4;
     @apply text-4xl text-primary;
     @apply bg-primary/10 rounded-xl;
     @apply shadow-sm;
     @apply transition-transform duration-300;
 }
 
-.achievement__icon img {
-    @apply max-w-full max-h-full object-contain;
+img.achievement__icon {
+    @apply object-contain;
+}
+
+i.achievement__icon::before {
+    @apply leading-none;
 }
 
 .achievement:hover .achievement__icon {

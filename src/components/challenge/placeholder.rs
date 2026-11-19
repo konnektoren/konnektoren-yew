@@ -1,3 +1,4 @@
+use crate::components::Icon;
 use crate::i18n::use_i18n;
 use konnektoren_core::challenges::Placeholder;
 use konnektoren_core::challenges::placeholder::PlaceholderType;
@@ -56,15 +57,7 @@ pub fn placeholder_component(props: &PlaceholderComponentProps) -> Html {
                 <div class="placeholder__media">
                     {
                         if let Some(image) = challenge.image {
-                            if image.starts_with("fa-") {
-                                html! {
-                                    <i class={classes!("fa-solid", image, "placeholder__icon-image")}></i>
-                                }
-                            } else {
-                                html! {
-                                    <img src={image} class="placeholder__image" alt="" />
-                                }
-                            }
+                            html! { <Icon icon={image} alt="" class="placeholder__icon-image" image_class={Some("placeholder__image".to_owned())} fallback_as_image={true} /> }
                         } else {
                             html! {
                                 <i class="fa-solid fa-question-circle placeholder__default-icon"></i>

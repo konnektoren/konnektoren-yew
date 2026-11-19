@@ -1,4 +1,4 @@
-use crate::components::ChallengeConfigComponent;
+use crate::components::{ChallengeConfigComponent, Icon};
 use konnektoren_core::challenges::ChallengeConfig;
 use yew::prelude::*;
 
@@ -27,22 +27,12 @@ pub fn challenge_card_info(props: &ChallengeCardInfoProps) -> Html {
     };
 
     let icon = props.challenge_config.icon.as_ref().map(|icon| {
-        if icon.starts_with("fa-") {
-            html! {
-                <div class="challenge-card-info__icon-container">
-                    <i class={classes!(icon, "challenge-card-info__icon-fa")}></i>
-                </div>
-            }
-        } else {
-            html! {
-                <div class="challenge-card-info__icon-container">
-                    <img
-                        src={icon.clone()}
-                        alt={format!("{} icon", props.challenge_config.name)}
-                        class="challenge-card-info__icon-image"
-                    />
-                </div>
-            }
+        html! {
+            <div class="challenge-card-info__icon-container">
+                <Icon icon={icon.clone()} alt={format!("{} icon", props.challenge_config.name)}
+                    class="challenge-card-info__icon-fa" image_class={Some("challenge-card-info__icon-image".to_owned())}
+                    fallback_as_image={true} />
+            </div>
         }
     });
 

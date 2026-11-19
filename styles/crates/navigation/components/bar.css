@@ -65,10 +65,14 @@
 }
 
 .navigation-bar__secondary {
-    @apply absolute right-0 top-full z-[60] mt-2 flex-wrap overflow-y-auto rounded-lg border border-base-200 bg-base-100 p-2 shadow-lg;
+    @apply absolute right-0 top-full z-[60] mt-2 flex-col items-stretch overflow-y-auto rounded-lg border border-base-200 bg-base-100 p-2 shadow-lg;
     width: max-content;
-    max-width: min(32rem, calc(100vw - 2rem));
+    max-width: min(20rem, calc(100vw - 2rem));
     max-height: min(32rem, calc(100svh - 6rem));
+}
+
+.navigation-bar__secondary > .navigation-link {
+    @apply justify-start text-left;
 }
 
 .navigation-bar--bottom .navigation-bar__secondary {

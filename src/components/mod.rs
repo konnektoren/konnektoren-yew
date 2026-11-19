@@ -31,6 +31,7 @@ pub mod game_loader_preview;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
+mod icon;
 pub mod inbox;
 pub mod leaderboard;
 pub mod logo;
@@ -95,6 +96,7 @@ pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;
+pub use icon::{Icon, IconProps};
 pub use inbox::InboxComponent;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review::RatingStarsComponent;

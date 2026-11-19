@@ -158,14 +158,19 @@
     animation-delay: 0.25s;
 }
 
-.achievement-unlocked__icon {
-    @apply absolute w-16 h-16 flex items-center justify-center;
+.achievement-unlocked__icon,
+i.achievement-unlocked__icon {
+    @apply absolute w-16 h-16 grid place-items-center;
     @apply text-3xl text-primary bg-primary/10 rounded-xl shadow-sm;
     animation: achievement-unlocked-icon 1.8s ease-out forwards;
 }
 
-.achievement-unlocked__icon img {
-    @apply max-w-full max-h-full object-contain;
+img.achievement-unlocked__icon {
+    @apply object-contain;
+}
+
+i.achievement-unlocked__icon::before {
+    @apply leading-none;
 }
 
 .achievement-unlocked__icon--text {

@@ -1,4 +1,4 @@
-use super::render_icon;
+use crate::components::Icon;
 use crate::i18n::use_i18n;
 use konnektoren_core::achievements::AchievementDefinition;
 use yew::prelude::*;
@@ -49,7 +49,7 @@ pub fn achievement_unlocked_component(props: &AchievementUnlockedComponentProps)
                     <span class="achievement-unlocked__sparkle achievement-unlocked__sparkle--1"></span>
                     <span class="achievement-unlocked__sparkle achievement-unlocked__sparkle--2"></span>
                     <span class="achievement-unlocked__sparkle achievement-unlocked__sparkle--3"></span>
-                    { render_icon(&achievement.icon, &i18n.t(&achievement.name), "achievement-unlocked__icon") }
+                    <Icon icon={achievement.icon.clone()} alt={i18n.t(&achievement.name)} class="achievement-unlocked__icon" />
                 }
             </button>
             <div class="achievement-unlocked__content">

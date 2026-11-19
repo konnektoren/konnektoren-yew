@@ -231,6 +231,7 @@ pub fn preview_groups() -> ComponentList {
         create_component_group!(
             "Achievements",
             AchievementComponent::preview(),
+            AchievementRequirements::preview(),
             AchievementUnlockedComponent::preview(),
             #[cfg(feature = "certificates")]
             AchievementsComponent::preview(),
@@ -267,6 +268,7 @@ pub fn preview_groups() -> ComponentList {
             SharePageComp::preview(),
             create_component_item!("Example", Example, vec![("default", ())]),
             Badge::preview(),
+            Icon::preview(),
             SocialLinks::preview(),
             Logo::preview(),
             InboxComponent::preview(),

@@ -1,4 +1,4 @@
-use super::render_icon;
+use crate::components::Icon;
 use crate::i18n::use_i18n;
 use konnektoren_core::achievements::AchievementDefinition;
 use yew::prelude::*;
@@ -12,15 +12,9 @@ pub struct AchievementComponentProps {
 pub fn achievement_component(props: &AchievementComponentProps) -> Html {
     let i18n = use_i18n();
 
-    let icon_html = render_icon(
-        &props.achievement.icon,
-        &i18n.t(&props.achievement.name),
-        "achievement__icon",
-    );
-
     html! {
         <div class="achievement">
-            {icon_html}
+            <Icon icon={props.achievement.icon.clone()} alt={i18n.t(&props.achievement.name)} class="achievement__icon" />
             <h3 class="achievement__name">{ i18n.t(&props.achievement.name) }</h3>
             <p class="achievement__description">{ i18n.t(&props.achievement.description) }</p>
         </div>

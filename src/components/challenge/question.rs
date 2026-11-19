@@ -1,4 +1,4 @@
-use crate::components::TranslateComponent;
+use crate::components::{Icon, TranslateComponent};
 use crate::i18n::use_i18n;
 use konnektoren_core::challenges::Question;
 use yew::prelude::*;
@@ -15,15 +15,7 @@ pub fn question_component(props: &QuestionComponentProps) -> Html {
     let i18n = use_i18n();
 
     let image = if let Some(image) = &props.question.image {
-        if image.starts_with("fa-") {
-            html! {
-                <i class={classes!("question__icon", format!("fas {}", image))}></i>
-            }
-        } else {
-            html! {
-                <img src={image.to_string()} class="question__image" alt="" />
-            }
-        }
+        html! { <Icon icon={image.clone()} class="question__icon" image_class={Some("question__image".to_owned())} alt="" fallback_as_image={true} /> }
     } else {
         html! {}
     };

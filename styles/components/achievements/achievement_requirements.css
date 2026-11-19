@@ -1,0 +1,35 @@
+.achievement-requirements {
+    @apply border-t border-base-300 px-4 py-3 text-sm;
+}
+
+.achievement-requirements__heading {
+    @apply text-xs font-bold uppercase tracking-wide text-base-content/60;
+}
+
+.achievement-requirements__list {
+    @apply mt-2 flex list-none flex-col gap-2 p-0;
+}
+
+.achievement-requirements__item {
+    @apply flex items-start gap-2 leading-snug;
+}
+
+.achievement-requirements__item i {
+    @apply mt-1 text-xs text-primary;
+}
+
+.achievement-requirements__item a {
+    @apply font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary;
+}
+
+.achievement-requirements__item a:focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-primary;
+}
+
+.achievement-requirements__metric {
+    @apply flex items-baseline justify-between gap-3 text-base-content/70;
+}
+
+.achievement-requirements__metric strong {
+    @apply shrink-0 tabular-nums text-base-content;
+}
