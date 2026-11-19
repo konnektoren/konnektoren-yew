@@ -225,7 +225,6 @@ pub fn preview_groups() -> ComponentList {
             SelectDesign::preview(),
             SelectTheme::preview(),
             AppVersionComponent::preview(),
-            #[cfg(feature = "sbom")]
             AppDependenciesComponent::preview()
         ),
         create_component_group!(

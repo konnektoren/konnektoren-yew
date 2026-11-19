@@ -3,7 +3,6 @@
 mod achievements;
 pub mod ads;
 pub mod analytics;
-#[cfg(feature = "sbom")]
 pub mod app_dependencies;
 pub mod app_version;
 mod badge;
@@ -68,7 +67,6 @@ pub use ads::{
     GumroadProductAdComponent, GumroadSubscribeComponent,
 };
 pub use analytics::*;
-#[cfg(feature = "sbom")]
 pub use app_dependencies::AppDependenciesComponent;
 pub use app_version::AppVersionComponent;
 pub use badge::Badge;
