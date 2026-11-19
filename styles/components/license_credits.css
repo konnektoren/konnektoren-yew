@@ -1,0 +1,15 @@
+.license-credits { @apply min-w-0; }
+.license-credits__group { @apply border-b border-base-300; }
+.license-credits summary {
+    @apply cursor-pointer rounded-lg py-4 font-semibold hover:bg-base-200 active:bg-base-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary;
+}
+.license-credits__content { @apply ps-4 pb-4; }
+.license-credits__credit { @apply mb-6; }
+.license-credits__credit h3 { @apply mb-2 text-lg font-semibold; }
+.license-credits__credit p { @apply mb-3 leading-relaxed text-base-content/70; }
+.license-credits__links { @apply flex flex-wrap gap-x-5 gap-y-2 text-sm; }
+.license-credits a { @apply text-primary underline underline-offset-4 hover:opacity-80 active:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary; }
+.license-credits__license { @apply mt-3; }
+.license-credits__license summary { @apply py-2 text-sm text-primary; }
+.license-credits__text { @apply max-h-80 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-base-200 p-4 text-xs leading-relaxed; }
+.license-credits__file-link { @apply inline-block mt-3 text-sm; }

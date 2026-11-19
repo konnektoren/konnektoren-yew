@@ -144,5 +144,10 @@
   "Load again": "Volver a cargar",
   "Loaded from source": "Cargado desde el origen",
   "Preload game": "Precargar el juego",
-  "Retry": "Reintentar"
+  "Retry": "Reintentar",
+  "Loading credits…": "Cargando créditos…",
+  "Could not load credits.": "No se pudieron cargar los créditos.",
+  "Loading license…": "Cargando licencia…",
+  "Could not load license.": "No se pudo cargar la licencia.",
+  "Open license file": "Abrir archivo de licencia"
 }

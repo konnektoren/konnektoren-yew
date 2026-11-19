@@ -362,3 +362,67 @@ The Cargo patches currently select the updated sibling `../konnektoren-rs`
 checkout. Remove the patch section after its loader changes are pushed to the
 configured git branch. Trunk copies `assets/` into the served directory; keep
 that copy step in deployments using this component.
+
+### Application build and dependency information
+
+`AppVersionComponent` accepts a `version` and an `AppBuildInfo` through its
+`build_info` prop. Populate the fields from the application's own build script;
+without an override, the component retains the library's build metadata.
+
+`AppDependenciesComponent` accepts CycloneDX JSON through its optional `sbom_json`
+prop. This rendering API is available without the `sbom` feature. Generate the
+inventory in the consuming application with `cargo cyclonedx`, then embed it:
+
+```rust,ignore
+html! {
+    <AppDependenciesComponent
+        sbom_json={include_str!("../assets/build/dependencies.json")}
+    />
+}
+```
+
+When `sbom_json` is omitted, the component uses the existing library SBOM generated
+by the `sbom` feature, or an empty inventory when that feature is disabled.
+
+### Lazy credits and license files
+
+`LicenseCredits` loads a `CreditsCatalog` YAML manifest through the existing
+`AssetServer`. Pass a URL, embedded, filesystem or layered `SourceLayer` and the
+manifest path within that source. `base_url` supplies the matching public root for
+links that open license files directly.
+
+```rust,ignore
+use konnektoren_asset_loader::{AssetCollection, UrlSource};
+use konnektoren_yew::components::LicenseCredits;
+use std::rc::Rc;
+
+#[derive(AssetCollection)]
+#[asset(folder = "assets")]
+struct AppAssets;
+
+html! {
+    <LicenseCredits
+        source={Rc::new(UrlSource::new("/")) as Rc<dyn konnektoren_asset_loader::SourceLayer>}
+        manifest={AppAssets::asset_path("credits.yml")}
+        base_url="/"
+    />
+}
+```
+
+The manifest contains `groups`, each with an `id`, `name`, `credits` and optional
+`notes`. A credit has an `id`, `name`, optional `description` paragraphs, `links`
+(`name` and `url`) and `licenses` (`name` and `file`). See
+[`assets/credits.example.yml`](assets/credits.example.yml). Text fields are passed
+through i18n; product names can use its plain-text fallback. File paths are
+relative to the source root, even when the manifest is in a subfolder.
+
+Only the manifest loads on mount. Group contents mount on opening, and each
+license file loads only when its own disclosure is opened. Parsed files are cached
+for the component's lifetime. Failed requests offer retry and a direct-file link.
+License contents render as escaped plain text. SSR renders a loading placeholder;
+loading begins in the hydrated client. The preview uses an embedded source.
+
+The optional `styles/vendors.css` CDN imports have their own reusable catalog at
+`assets/vendor-credits.yml`. Include it when those vendor styles are used; apps
+that provide their own fonts or icon assets can omit it. The catalog links to the
+upstream license texts, so it does not fetch or redistribute those texts.

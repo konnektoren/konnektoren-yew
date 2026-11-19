@@ -33,6 +33,7 @@ pub mod gdrive_backup;
 mod icon;
 pub mod inbox;
 pub mod leaderboard;
+pub mod license_credits;
 pub mod logo;
 mod map;
 #[cfg(feature = "marketplace")]
@@ -99,6 +100,7 @@ pub use inbox::InboxComponent;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review::RatingStarsComponent;
 pub use leaderboard::LeaderboardComp;
+pub use license_credits::{LicenseCredits, LicenseCreditsProps};
 pub use logo::Logo;
 pub use map::*;
 #[cfg(feature = "marketplace")]

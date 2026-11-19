@@ -144,5 +144,10 @@
   "Load again": "Tải lại",
   "Loaded from source": "Đã tải từ nguồn",
   "Preload game": "Tải trước trò chơi",
-  "Retry": "Thử lại"
+  "Retry": "Thử lại",
+  "Loading credits…": "Đang tải thông tin ghi công…",
+  "Could not load credits.": "Không thể tải thông tin ghi công.",
+  "Loading license…": "Đang tải giấy phép…",
+  "Could not load license.": "Không thể tải giấy phép.",
+  "Open license file": "Mở tệp giấy phép"
 }

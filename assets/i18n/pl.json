@@ -144,5 +144,10 @@
   "Load again": "Wczytaj ponownie",
   "Loaded from source": "Wczytano ze źródła",
   "Preload game": "Wczytaj grę z wyprzedzeniem",
-  "Retry": "Spróbuj ponownie"
+  "Retry": "Spróbuj ponownie",
+  "Loading credits…": "Ładowanie informacji o autorach…",
+  "Could not load credits.": "Nie udało się załadować informacji o autorach.",
+  "Loading license…": "Ładowanie licencji…",
+  "Could not load license.": "Nie udało się załadować licencji.",
+  "Open license file": "Otwórz plik licencji"
 }

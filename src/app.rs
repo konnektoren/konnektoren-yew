@@ -235,6 +235,7 @@ pub fn preview_groups() -> ComponentList {
             #[cfg(feature = "certificates")]
             AchievementsComponent::preview(),
         ),
+        crate::components::license_credits::preview::group(),
         #[cfg(feature = "certificates")]
         create_component_group!(
             "Certificates",

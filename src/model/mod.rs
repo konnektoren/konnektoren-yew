@@ -13,6 +13,7 @@
 //!
 //! These models are central to the application's data flow and state management.
 
+mod credits;
 mod design;
 #[cfg(feature = "csr")]
 mod game_loader;
@@ -21,6 +22,11 @@ mod session_initializer;
 mod settings;
 mod theme;
 
+pub(crate) use credits::CreditAssetServer;
+pub use credits::{
+    CreditEntry, CreditGroup, CreditLink, CreditsCatalog, CreditsFormat, LicenseFile,
+    LicenseTextFormat,
+};
 pub use design::{Design, DesignMode};
 pub use inbox::Inbox;
 pub use session_initializer::{DefaultSessionInitializer, SessionInitializer};

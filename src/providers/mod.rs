@@ -12,6 +12,7 @@
 
 pub mod certificates_provider;
 pub mod client_side_router;
+pub(crate) mod credits_provider;
 pub mod design_provider;
 pub mod game_controller_provider;
 pub mod inbox_provider;
