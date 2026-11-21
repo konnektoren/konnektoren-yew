@@ -9,13 +9,14 @@ members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-revie
 resolver = "3"
 
 [workspace.package]
-version = "0.7.4"
+version = "0.7.5"
 edition = "2024"
 license = "MIT"
 
 [workspace.dependencies]
 serde = "1"
 serde_yaml = "0.9"
+strsim = "0.11"
 wasm-bindgen-test = "0.3"
 konnektoren-yew-i18n = { path = "crates/konnektoren-yew-i18n", version = "0.7.0", default-features = false }
 konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = ["content", "platform"] }

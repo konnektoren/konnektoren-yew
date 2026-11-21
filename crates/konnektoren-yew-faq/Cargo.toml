@@ -15,6 +15,7 @@ konnektoren-rs.workspace = true
 konnektoren-core.workspace = true
 konnektoren-asset-loader = { git = "https://github.com/konnektoren/konnektoren-rs.git" }
 serde_yaml.workspace = true
+strsim.workspace = true
 yew.workspace = true
 wasm-bindgen-futures = { workspace = true, optional = true }
 chrono = { version = "0.4", optional = true }
