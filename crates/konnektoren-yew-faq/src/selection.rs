@@ -43,6 +43,29 @@ pub fn normalized_hash(hash: &str) -> &str {
     hash.trim_start_matches('#')
 }
 
+/// The FAQ tag or id under a click inside a [`FaqList`](crate::FaqList), as hash
+/// without `#`: a tag when a `.faq-tag` was clicked, otherwise the id of the
+/// surrounding `.faq-item`.
+#[cfg(feature = "csr")]
+pub fn hash_from_click(event: &yew::MouseEvent) -> Option<String> {
+    use wasm_bindgen::JsCast;
+
+    let target = event.target()?.dyn_into::<web_sys::Element>().ok()?;
+
+    if let Ok(Some(tag)) = target.closest(".faq-tag") {
+        let tag = tag.text_content().unwrap_or_default();
+        let tag = normalized_hash(tag.trim());
+        return (!tag.is_empty()).then(|| tag.to_string());
+    }
+
+    if let Ok(Some(item)) = target.closest(".faq-item") {
+        let id = item.id();
+        return (!id.is_empty()).then_some(id);
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

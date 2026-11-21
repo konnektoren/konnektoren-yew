@@ -7,7 +7,7 @@ description = "FAQ list, search and page components for Konnektoren applications
 
 [features]
 default = []
-csr = ["yew/csr", "dep:wasm-bindgen-futures", "konnektoren-core/csr", "konnektoren-asset-loader/csr"]
+csr = ["yew/csr", "dep:wasm-bindgen-futures", "dep:wasm-bindgen", "konnektoren-core/csr", "konnektoren-asset-loader/csr"]
 yew-preview = ["dep:yew-preview", "dep:chrono"]
 
 [dependencies]
@@ -18,5 +18,7 @@ serde_yaml.workspace = true
 strsim.workspace = true
 yew.workspace = true
 wasm-bindgen-futures = { workspace = true, optional = true }
+wasm-bindgen = { workspace = true, optional = true }
+web-sys = { workspace = true, features = ["Element", "HtmlInputElement"] }
 chrono = { version = "0.4", optional = true }
 yew-preview = { workspace = true, optional = true }

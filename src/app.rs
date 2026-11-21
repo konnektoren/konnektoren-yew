@@ -172,6 +172,7 @@ pub fn preview_groups() -> ComponentList {
             "FAQ",
             konnektoren_yew_faq::FaqList::preview(),
             konnektoren_yew_faq::FaqLoader::preview(),
+            konnektoren_yew_faq::FaqSearchPanel::preview(),
             konnektoren_yew_faq::FaqItem::preview(),
             konnektoren_yew_faq::FaqTag::preview(),
         ),

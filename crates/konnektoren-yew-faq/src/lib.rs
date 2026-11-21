@@ -5,7 +5,8 @@
 //!
 //! - [`use_faq_data`] loads `faqs.yml` through the asset loader at runtime, so
 //!   apps do not embed it into their wasm.
-//! - [`LazyFaqSearch`] builds its fuzzy search index on the first search.
+//! - [`LazyFaqSearch`] builds its fuzzy search index on the first search;
+//!   [`FaqSearchPanel`] is the search UI on top of it.
 //! - [`FaqSelection`] selects FAQs by id or tag from a URL hash.
 //!
 //! Styles: `styles/crates/faq/faq.css` in the `konnektoren-yew` repository.
@@ -18,8 +19,11 @@ mod selection;
 
 pub use asset::{FAQ_ASSET_PATH, FaqDataState, FaqFormat, use_faq_data};
 pub use components::{
-    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
+    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqSearchLabels,
+    FaqSearchPanel, FaqSearchPanelProps, FaqTag, FaqTagProps,
 };
 pub use konnektoren_rs::faq::{Faq, FaqData};
 pub use search::{FaqSearch, LazyFaqSearch};
+#[cfg(feature = "csr")]
+pub use selection::hash_from_click;
 pub use selection::{FaqSelection, normalized_hash};
