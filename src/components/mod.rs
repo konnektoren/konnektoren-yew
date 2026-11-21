@@ -22,7 +22,6 @@ pub mod challenge_timer;
 #[cfg(feature = "chat")]
 pub mod chat;
 pub mod domain_selector;
-pub mod faq;
 #[cfg(feature = "review")]
 pub mod feedback_popup;
 #[cfg(all(feature = "csr", feature = "yew-preview"))]
@@ -87,7 +86,8 @@ pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSelectorStyle};
-pub use faq::{
+#[cfg(feature = "faq")]
+pub use konnektoren_yew_faq::{
     FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
 };
 #[cfg(feature = "review")]

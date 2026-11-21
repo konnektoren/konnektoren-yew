@@ -167,6 +167,14 @@ pub fn preview_groups() -> ComponentList {
             RatingStarsComponent::preview(),
             FeedbackPopup::preview(),
         ),
+        #[cfg(feature = "faq")]
+        create_component_group!(
+            "FAQ",
+            konnektoren_yew_faq::FaqList::preview(),
+            konnektoren_yew_faq::FaqLoader::preview(),
+            konnektoren_yew_faq::FaqItem::preview(),
+            konnektoren_yew_faq::FaqTag::preview(),
+        ),
         create_component_group!(
             "Challenge Completion",
             ChallengeCompletion::preview(),
@@ -272,10 +280,6 @@ pub fn preview_groups() -> ComponentList {
             SocialLinks::preview(),
             Logo::preview(),
             InboxComponent::preview(),
-            FaqList::preview(),
-            FaqLoader::preview(),
-            FaqItem::preview(),
-            FaqTag::preview(),
             #[cfg(feature = "chat")]
             ChatComponent::preview(),
         ),

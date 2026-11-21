@@ -57,7 +57,7 @@ mod preview {
     }
 
     fn preview_faq() -> Faq {
-        serde_yaml::from_str::<FaqData>(include_str!("../../../assets/faqs.yml"))
+        serde_yaml::from_str::<FaqData>(include_str!("../../../../assets/faqs.yml"))
             .ok()
             .and_then(|faq_data| faq_data.faqs.into_iter().next())
             .unwrap_or_else(fallback_faq)

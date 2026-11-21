@@ -5,3 +5,9 @@
 //!
 //! Styles: `styles/crates/faq/faq.css` in the `konnektoren-yew` repository.
 //! These are included by its `styles/index.css`.
+
+mod components;
+
+pub use components::{
+    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
+};

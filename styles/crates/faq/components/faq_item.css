@@ -1,0 +1,23 @@
+.faq-item {
+    @apply card-base;
+    @apply scroll-mt-16 rounded-lg border border-base-200;
+    @apply transition-all duration-300;
+}
+
+.faq-item--highlighted {
+    @apply border-primary bg-primary/5;
+}
+
+.faq-item__question {
+    @apply text-adaptive-md font-semibold text-base-content;
+    @apply mb-3;
+}
+
+.faq-item__answer {
+    @apply text-adaptive-base leading-relaxed text-base-content/70;
+    @apply mb-4;
+}
+
+.faq-item__tags {
+    @apply flex flex-wrap items-center gap-2;
+}

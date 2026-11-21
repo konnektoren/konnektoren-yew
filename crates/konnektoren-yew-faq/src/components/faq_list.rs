@@ -134,7 +134,7 @@ mod preview {
     use yew_preview::prelude::*;
 
     fn preview_faq_data() -> FaqData {
-        serde_yaml::from_str(include_str!("../../../assets/faqs.yml")).unwrap_or_default()
+        serde_yaml::from_str(include_str!("../../../../assets/faqs.yml")).unwrap_or_default()
     }
 
     yew_preview::create_preview!(

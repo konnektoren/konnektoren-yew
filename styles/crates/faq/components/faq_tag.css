@@ -1,0 +1,6 @@
+.faq-tag {
+    @apply badge badge-ghost rounded-full;
+    @apply px-2 py-1 text-xs sm:text-xs;
+    @apply transition-all duration-300;
+    @apply hover:bg-base-200 hover:text-primary;
+}

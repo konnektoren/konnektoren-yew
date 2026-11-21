@@ -1,0 +1,4 @@
+.faq-list {
+    @apply w-full max-w-3xl mx-auto;
+    @apply flex flex-col gap-4 sm:gap-3;
+}
