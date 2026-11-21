@@ -5,7 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [workspace]
-members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review", "crates/konnektoren-yew-navigation", "crates/konnektoren-yew-i18n"]
+members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review", "crates/konnektoren-yew-navigation", "crates/konnektoren-yew-i18n", "crates/konnektoren-yew-faq"]
 resolver = "3"
 
 [workspace.package]
@@ -24,6 +24,7 @@ yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-r
 konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", version = "0.7.0", default-features = false }
 konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", version = "0.7.0", default-features = false }
 konnektoren-yew-review = { path = "crates/konnektoren-yew-review", version = "0.7.0", default-features = false }
+konnektoren-yew-faq = { path = "crates/konnektoren-yew-faq", version = "0.7.0", default-features = false }
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false }
 serde_json = "1"
 thiserror = "2"
@@ -75,13 +76,16 @@ default = [
     "tour",
     "slideshow",
     "review",
-    "navigation"
+    "navigation",
+    "faq"
 ]
 navigation = ["dep:konnektoren-yew-navigation"]
 achievements = ["konnektoren-core/achievements"]
 web-analytics = ["dep:konnektoren-yew-web-analytics", "konnektoren-yew-review?/web-analytics"]
 # Challenge reviews and ratings (ChallengeReviewComponent, ChallengeRatingComponent, FeedbackPopup).
 review = ["dep:konnektoren-yew-review"]
+# FAQ list, search and page (konnektoren-yew-faq).
+faq = ["dep:konnektoren-yew-faq"]
 web-analytics-gtm = ["web-analytics", "konnektoren-yew-web-analytics/gtm"]
 backup = []
 certificates = [
@@ -128,6 +132,7 @@ konnektoren-yew-i18n.workspace = true
 konnektoren-yew-navigation = { workspace = true, optional = true }
 konnektoren-yew-web-analytics = { workspace = true, optional = true }
 konnektoren-yew-review = { workspace = true, optional = true }
+konnektoren-yew-faq = { workspace = true, optional = true }
 # Core dependencies
 async-trait = "0.1"
 bincode = "1"

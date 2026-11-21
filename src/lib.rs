@@ -36,6 +36,8 @@ pub use konnektoren_yew_web_analytics as web_analytics;
 pub use konnektoren_yew_navigation as navigation;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review as review;
+#[cfg(feature = "faq")]
+pub use konnektoren_yew_faq as faq;
 
 #[cfg(feature = "effects")]
 pub mod effects;
