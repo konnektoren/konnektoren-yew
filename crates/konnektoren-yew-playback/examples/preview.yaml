@@ -3,10 +3,16 @@ id: preview
 title: Preview excursion
 steps:
   - say: "Welcome to the example page."
-  - highlight: ".playback-engine-preview__header"
   - say: "This is the page heading."
-  - scroll: { x: 0, y: 260 }
-  - highlight: ".playback-engine-preview__list"
+    selector: ".playback-engine-preview__header"
+    highlight: true
   - say: "Here is the list."
-  - zoom: 1.2
-  - say: "The page is now larger."
+    selector: ".playback-engine-preview__list"
+    highlight: true
+  - say: "Type a name."
+    selector: ".playback-engine-preview__input"
+    highlight: true
+    fill: "Alex"
+  - say: "And press the button."
+    selector: ".playback-engine-preview__button-target"
+    click: true

@@ -6,3 +6,10 @@ pub struct TargetRect {
     pub width: f64,
     pub height: f64,
 }
+
+impl TargetRect {
+    /// Center in viewport pixels.
+    pub fn center(&self) -> (f64, f64) {
+        (self.x + self.width / 2.0, self.y + self.height / 2.0)
+    }
+}

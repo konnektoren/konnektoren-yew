@@ -67,9 +67,21 @@ pub fn fill_browser_target(
     let Some(element) = resolve_browser_target(selector, optional)? else {
         return Ok(false);
     };
+    fill_browser_element(&element, value).map_err(|error| match error {
+        BrowserTargetError::NotInput(_) => BrowserTargetError::NotInput(selector.into()),
+        error => error,
+    })?;
+    Ok(true)
+}
+
+/// Set a resolved input's value and dispatch a bubbling `input` event.
+pub fn fill_browser_element(
+    element: &web_sys::HtmlElement,
+    value: &str,
+) -> Result<(), BrowserTargetError> {
     let input = element
-        .dyn_into::<web_sys::HtmlInputElement>()
-        .map_err(|_| BrowserTargetError::NotInput(selector.into()))?;
+        .dyn_ref::<web_sys::HtmlInputElement>()
+        .ok_or_else(|| BrowserTargetError::NotInput(element.tag_name()))?;
     input.set_value(value);
     let options = web_sys::InputEventInit::new();
     options.set_bubbles(true);
@@ -78,7 +90,7 @@ pub fn fill_browser_target(
     input
         .dispatch_event(&event)
         .map_err(|_| BrowserTargetError::Event)?;
-    Ok(true)
+    Ok(())
 }
 
 /// Dispatch one key event to a resolved target. Keep the target for a matching
@@ -101,4 +113,28 @@ pub fn send_browser_key(
         .dispatch_event(&event)
         .map_err(|_| BrowserTargetError::Event)?;
     Ok(())
+}
+
+/// Scroll a target into view, smoothly unless the user prefers reduced motion.
+/// `center` places it mid-screen; otherwise it moves the least distance.
+pub fn scroll_to_target(element: &web_sys::Element, center: bool) {
+    let options = web_sys::ScrollIntoViewOptions::new();
+    options.set_block(if center {
+        web_sys::ScrollLogicalPosition::Center
+    } else {
+        web_sys::ScrollLogicalPosition::Nearest
+    });
+    options.set_inline(web_sys::ScrollLogicalPosition::Nearest);
+    let reduced = web_sys::window()
+        .and_then(|window| {
+            window
+                .match_media("(prefers-reduced-motion: reduce)")
+                .ok()
+                .flatten()
+        })
+        .is_some_and(|query| query.matches());
+    if !reduced {
+        options.set_behavior(web_sys::ScrollBehavior::Smooth);
+    }
+    element.scroll_into_view_with_scroll_into_view_options(&options);
 }

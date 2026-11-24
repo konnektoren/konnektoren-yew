@@ -1,10 +1,13 @@
-# The host application defines and executes this action; playback does not include MIDI.
+# `midi` is a host key: the application decodes it via `Excursion<MyStep>`.
+# Playback itself does not know about MIDI.
 version: 1
 id: midi-demo
 title: MIDI extension example
 steps:
   - say: "Listen to the notes."
-  - music.play_notes:
-      notes:
-        - { pitch: 60, duration_ms: 300, gap_ms: 100 }
-        - { pitch: 64, duration_ms: 300, gap_ms: 100 }
+  - say: "Here they come."
+    selector: "#piano"
+    highlight: true
+    midi:
+      - { pitch: 60, duration_ms: 300, gap_ms: 100 }
+      - { pitch: 64, duration_ms: 300, gap_ms: 100 }

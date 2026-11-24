@@ -1,60 +1,81 @@
 use crate::TargetRect;
 use yew::prelude::*;
 
-/// Track a selector in viewport coordinates. When `follow` is enabled, the
-/// target is periodically rechecked and scrolled into view when it moves away.
-/// Missing targets yield `None`; SSR never accesses the browser.
+/// A tracked target in viewport coordinates.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct PlaybackTarget {
+    pub rect: TargetRect,
+    /// Target center as a percentage of the viewport, for [`crate::PlaybackCursor`].
+    pub percent: (f64, f64),
+}
+
+/// Track a selector in viewport coordinates.
+///
+/// The target is scrolled to the middle of the screen once found. With `follow`
+/// it is rechecked periodically and scrolled back into view when it moves away.
+/// A vanished target yields `None`. Changing `step` re-runs the initial scroll,
+/// even for the same selector. SSR never accesses the browser.
 #[hook]
-pub fn use_playback_target(selector: Option<AttrValue>, follow: bool) -> Option<TargetRect> {
+pub fn use_playback_target(
+    selector: Option<AttrValue>,
+    follow: bool,
+    step: usize,
+) -> Option<PlaybackTarget> {
     let target = use_state_eq(|| None);
     #[cfg(feature = "csr")]
     {
         let target = target.clone();
-        use_effect_with((selector, follow), move |(selector, follow)| {
+        use_effect_with((selector, follow, step), move |(selector, follow, _)| {
             let selector = selector.clone();
             let follow = *follow;
-            target.set(None);
             let found = std::rc::Rc::new(std::cell::Cell::new(false));
             let update = std::rc::Rc::new(move || {
-                let element = web_sys::window()
-                    .and_then(|window| window.document())
-                    .and_then(|document| {
-                        selector
-                            .as_ref()
-                            .and_then(|selector| document.query_selector(selector).ok().flatten())
-                    });
+                let Some(window) = web_sys::window() else {
+                    return;
+                };
+                let element = window.document().and_then(|document| {
+                    selector
+                        .as_ref()
+                        .and_then(|selector| document.query_selector(selector).ok().flatten())
+                });
                 let Some(element) = element else {
-                    found.set(false);
+                    // Do not frame a spot where the target used to be.
                     target.set(None);
                     return;
                 };
-                let bounds = element.get_bounding_client_rect();
-                let outside = web_sys::window().is_some_and(|window| {
-                    let width = window
-                        .inner_width()
-                        .ok()
-                        .and_then(|v| v.as_f64())
-                        .unwrap_or_default();
-                    let height = window
-                        .inner_height()
-                        .ok()
-                        .and_then(|v| v.as_f64())
-                        .unwrap_or_default();
-                    width > 0.0
-                        && height > 0.0
-                        && (bounds.bottom() < 0.0
-                            || bounds.top() > height
-                            || bounds.right() < 0.0
-                            || bounds.left() > width)
-                });
-                if !found.replace(true) || (follow && outside) {
-                    element.scroll_into_view();
+                let (Some(width), Some(height)) = (
+                    window.inner_width().ok().and_then(|value| value.as_f64()),
+                    window.inner_height().ok().and_then(|value| value.as_f64()),
+                ) else {
+                    return;
+                };
+                if width <= 0.0 || height <= 0.0 {
+                    return;
                 }
-                target.set(Some(TargetRect {
+                if !found.replace(true) {
+                    super::scroll_to_target(&element, true);
+                }
+                let bounds = element.get_bounding_client_rect();
+                if follow
+                    && bounds.width() > 0.0
+                    && bounds.height() > 0.0
+                    && (bounds.bottom() < 0.0
+                        || bounds.top() > height
+                        || bounds.right() < 0.0
+                        || bounds.left() > width)
+                {
+                    super::scroll_to_target(&element, false);
+                }
+                let rect = TargetRect {
                     x: bounds.x(),
                     y: bounds.y(),
                     width: bounds.width(),
                     height: bounds.height(),
+                };
+                let (x, y) = rect.center();
+                target.set(Some(PlaybackTarget {
+                    rect,
+                    percent: (x / width * 100.0, y / height * 100.0),
                 }));
             });
             update();
@@ -75,6 +96,6 @@ pub fn use_playback_target(selector: Option<AttrValue>, follow: bool) -> Option<
         });
     }
     #[cfg(not(feature = "csr"))]
-    let _ = (selector, follow);
+    let _ = (selector, follow, step);
     *target
 }

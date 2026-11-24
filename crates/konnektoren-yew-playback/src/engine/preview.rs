@@ -1,158 +1,98 @@
-use super::{
-    PlaybackEngine, PlaybackHost, PlaybackOutcome, PlaybackState, PlaybackToken, use_playback_timer,
-};
+use super::{PlaybackOptions, PlaybackState, use_playback, use_playback_keys};
 use crate::{
-    Excursion, PlaybackElementHighlight, PlaybackNotification, PlaybackStep, PlaybackTiming,
+    Excursion, PlaybackClickWave, PlaybackCursor, PlaybackHighlight, PlaybackNotification,
+    PlaybackProgress,
 };
+use std::rc::Rc;
 use yew::prelude::*;
 use yew_preview::prelude::*;
 
-#[derive(Clone, PartialEq)]
-struct PreviewState {
-    engine: Option<PlaybackEngine>,
-    message: Option<String>,
-    highlight: Option<String>,
-    zoom: f64,
-    scroll: (f64, f64),
-    error: Option<String>,
-    autoplay: bool,
+fn preview_excursion() -> Result<Rc<Excursion>, String> {
+    serde_yaml::from_str::<Excursion>(include_str!("../../examples/preview.yaml"))
+        .map(Rc::new)
+        .map_err(|error| error.to_string())
 }
 
-impl Default for PreviewState {
-    fn default() -> Self {
-        let parsed = serde_yaml::from_str::<Excursion>(include_str!("../../examples/preview.yaml"));
-        match parsed {
-            Ok(excursion) => Self {
-                engine: Some(PlaybackEngine::new(excursion)),
-                message: None,
-                highlight: None,
-                zoom: 1.0,
-                scroll: (0.0, 0.0),
-                error: None,
-                autoplay: false,
-            },
-            Err(error) => Self {
-                engine: None,
-                message: None,
-                highlight: None,
-                zoom: 1.0,
-                scroll: (0.0, 0.0),
-                error: Some(error.to_string()),
-                autoplay: false,
-            },
-        }
-    }
+#[derive(Properties, PartialEq)]
+struct PreviewRunProps {
+    excursion: Rc<Excursion>,
 }
 
-struct PreviewHost<'a>(&'a mut PreviewState);
-
-impl PlaybackHost for PreviewHost<'_> {
-    type Error = &'static str;
-
-    fn execute(
-        &mut self,
-        step: &PlaybackStep,
-        _: PlaybackToken,
-    ) -> Result<PlaybackOutcome, Self::Error> {
-        match step {
-            PlaybackStep::Say { say } => self.0.message = Some(say.clone()),
-            PlaybackStep::Highlight { highlight } => self.0.highlight = Some(highlight.clone()),
-            PlaybackStep::Scroll { scroll } => self.0.scroll = (scroll.x, scroll.y),
-            PlaybackStep::Zoom { zoom } if zoom.is_finite() && *zoom > 0.0 => self.0.zoom = *zoom,
-            _ => return Err("This action is not supported by the preview host."),
-        }
-        Ok(PlaybackOutcome::Complete)
+#[function_component(PreviewRun)]
+fn preview_run(props: &PreviewRunProps) -> Html {
+    let playback = use_playback(
+        Some(props.excursion.clone()),
+        PlaybackOptions {
+            step_delay_ms: 2_000,
+            ..PlaybackOptions::default()
+        },
+        (),
+    );
+    use_playback_keys(playback.controls.clone());
+    let paused = playback.state == PlaybackState::Paused;
+    let toggle = {
+        let controls = playback.controls.clone();
+        Callback::from(move |_: MouseEvent| {
+            if paused {
+                controls.resume()
+            } else {
+                controls.pause()
+            }
+        })
+    };
+    let next = {
+        let controls = playback.controls.clone();
+        Callback::from(move |_: MouseEvent| controls.next())
+    };
+    let done = playback.state == PlaybackState::Finished;
+    let clicked = use_state(|| false);
+    html! {
+        <div class="playback-engine-preview">
+            <div class="playback-engine-preview__controls">
+                <button type="button" class="playback-engine-preview__button" onclick={toggle} disabled={done}>{if paused { "Play" } else { "Pause" }}</button>
+                <button type="button" class="playback-engine-preview__button" onclick={next} disabled={done}>{"Next step"}</button>
+                <PlaybackProgress step={playback.index + 1} total={playback.total} speed={playback.speed}
+                    step_label="Step" speed_label="Speed" controls_label={Some(AttrValue::from("← slower · → faster · ↑ next"))} />
+            </div>
+            if let Some(step) = playback.step() {
+                <PlaybackNotification key={playback.step_key()} message={step.say.clone()} />
+            }
+            <div class="playback-engine-preview__viewport">
+                <div class="playback-engine-preview__page">
+                    <h3 class="playback-engine-preview__header">{"Example page"}</h3>
+                    <p>{"An excursion can introduce a page, then move through its content."}</p>
+                    <ul class="playback-engine-preview__list">
+                        <li>{"First item"}</li><li>{"Second item"}</li><li>{"Third item"}</li>
+                    </ul>
+                    <input class="playback-engine-preview__input" placeholder="Name" />
+                    <button type="button" class="playback-engine-preview__button-target"
+                        onclick={let clicked = clicked.clone(); move |_| clicked.set(true)}>
+                        {if *clicked { "Clicked!" } else { "Button" }}
+                    </button>
+                </div>
+            </div>
+            if let Some(rect) = playback.highlight() { <PlaybackHighlight {rect} /> }
+            if let Some(click) = playback.click { <PlaybackClickWave key={click.id} x={click.x} y={click.y} /> }
+            if let Some((x, y)) = playback.cursor { <PlaybackCursor {x} {y} /> }
+        </div>
     }
 }
 
 #[function_component(PlaybackEnginePreview)]
 pub fn playback_engine_preview() -> Html {
-    let state = use_state(PreviewState::default);
-    let viewport = use_node_ref();
-    let advance = {
-        let state = state.clone();
-        Callback::from(move |()| {
-            let mut next = (*state).clone();
-            if let Some(mut engine) = next.engine.take() {
-                if let Err(error) = engine.advance(&mut PreviewHost(&mut next)) {
-                    next.error = Some(error.into());
-                    next.autoplay = false;
-                }
-                if engine.state() == PlaybackState::Finished {
-                    next.autoplay = false;
-                }
-                next.engine = Some(engine);
-            }
-            state.set(next);
-        })
+    let run = use_state(|| 0_u32);
+    let restart = {
+        let run = run.clone();
+        Callback::from(move |_: MouseEvent| run.set(run.wrapping_add(1)))
     };
-    let step = state.engine.as_ref().map_or(0, |engine| {
-        engine
-            .cycle()
-            .wrapping_mul(engine.total())
-            .wrapping_add(engine.index())
-    });
-    use_playback_timer(
-        state.autoplay.then_some(PlaybackTiming {
-            delay_ms: 1600,
-            speed: 1.0,
-        }),
-        step,
-        advance.clone(),
-    );
-    #[cfg(feature = "csr")]
-    {
-        let viewport = viewport.clone();
-        use_effect_with(state.scroll, move |(x, y)| {
-            if let Some(element) = viewport.cast::<web_sys::HtmlElement>() {
-                element.set_scroll_left(*x as i32);
-                element.set_scroll_top(*y as i32);
-            }
-            || ()
-        });
-    }
-    let toggle = {
-        let state = state.clone();
-        Callback::from(move |_: MouseEvent| {
-            let mut next = (*state).clone();
-            next.autoplay = !next.autoplay;
-            state.set(next);
-        })
-    };
-    let reset = {
-        let state = state.clone();
-        Callback::from(move |_: MouseEvent| state.set(PreviewState::default()))
-    };
-    let done = state
-        .engine
-        .as_ref()
-        .is_none_or(|engine| engine.state() == PlaybackState::Finished);
-    let position = state.engine.as_ref().map_or_else(
-        || "Unavailable".to_string(),
-        |engine| format!("{} / {}", engine.index(), engine.total()),
-    );
-    html! {
-        <div class="playback-engine-preview">
-            <div class="playback-engine-preview__controls">
-                <button type="button" class="playback-engine-preview__button" onclick={toggle} disabled={done}>{if state.autoplay { "Pause" } else { "Play" }}</button>
-                <button type="button" class="playback-engine-preview__button" onclick={advance.reform(|_: MouseEvent| ())} disabled={done || state.autoplay}>{"Next step"}</button>
-                <button type="button" class="playback-engine-preview__button" onclick={reset}>{"Restart"}</button>
-                <span>{format!("Step {position}")}</span>
-            </div>
-            if let Some(error) = &state.error { <p role="alert">{error}</p> }
-            if let Some(message) = &state.message { <PlaybackNotification message={message.clone()} /> }
-            <div ref={viewport} class="playback-engine-preview__viewport">
-                <div class="playback-engine-preview__page" style={format!("zoom:{}", state.zoom)}>
-                    <h3 class="playback-engine-preview__header">{"Example page"}</h3>
-                    <p>{"An excursion can introduce a page, then move through its content."}</p>
-                    <div class="playback-engine-preview__spacer" aria-hidden="true"></div>
-                    <ul class="playback-engine-preview__list">
-                        <li>{"First item"}</li><li>{"Second item"}</li><li>{"Third item"}</li>
-                    </ul>
-                </div>
-            </div>
-            if let Some(selector) = &state.highlight { <PlaybackElementHighlight selector={selector.clone()} /> }
-        </div>
+    match preview_excursion() {
+        Ok(excursion) => html! {
+            <>
+                <button type="button" class="playback-engine-preview__button" onclick={restart}>{"Restart"}</button>
+                <PreviewRun key={*run} {excursion} />
+            </>
+        },
+        Err(error) => html! { <p role="alert">{error}</p> },
     }
 }
 
@@ -163,20 +103,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn preview_excursion_runs_all_supported_actions() {
-        let mut state = PreviewState::default();
-        let mut engine = state.engine.take().expect("preview YAML should parse");
-        while engine.state() == PlaybackState::Playing {
-            engine
-                .advance(&mut PreviewHost(&mut state))
-                .expect("preview action should succeed");
-        }
-        assert_eq!(state.scroll, (0.0, 260.0));
-        assert_eq!(state.zoom, 1.2);
-        assert_eq!(
-            state.highlight.as_deref(),
-            Some(".playback-engine-preview__list")
-        );
-        assert_eq!(state.message.as_deref(), Some("The page is now larger."));
+    fn preview_excursion_parses() {
+        let excursion = preview_excursion().expect("preview YAML should parse");
+        assert!(excursion.steps.iter().any(|step| step.action.is_some()));
     }
 }

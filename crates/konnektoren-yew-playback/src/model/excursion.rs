@@ -1,10 +1,13 @@
-use super::PlaybackStep;
+use super::{NoExtension, Step};
 use serde::Deserialize;
+use serde::de::DeserializeOwned;
 
-/// A named excursion containing a sequence of playback instructions.
+/// A named excursion: a sequence of steps, optionally looping.
+///
+/// `X` is the host's step extension, see [`Step`].
 #[derive(Clone, Debug, Deserialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct Excursion {
+#[serde(deny_unknown_fields, bound(deserialize = "X: DeserializeOwned"))]
+pub struct Excursion<X = NoExtension> {
     pub version: u32,
     pub id: String,
     pub title: String,
@@ -14,7 +17,7 @@ pub struct Excursion {
     /// Optional image shown alongside the playback cursor.
     #[serde(default)]
     pub cursor: Option<CursorConfig>,
-    pub steps: Vec<PlaybackStep>,
+    pub steps: Vec<Step<X>>,
 }
 
 /// Presentation settings for an excursion's cursor.
@@ -24,119 +27,87 @@ pub struct CursorConfig {
     pub image: String,
 }
 
+impl<X> Excursion<X> {
+    /// The page in effect at `index`: the latest `page` set at or before it.
+    pub fn page_at(&self, index: usize) -> Option<&str> {
+        self.steps
+            .iter()
+            .take(index.saturating_add(1))
+            .rev()
+            .find_map(|step| step.page.as_deref())
+    }
+
+    /// Ids of excursions included directly by this one, in order.
+    pub fn includes(&self) -> impl Iterator<Item = &str> {
+        self.steps.iter().filter_map(|step| step.include.as_deref())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::TargetAction;
 
     #[test]
     fn parses_the_example_excursion() {
-        let script: Excursion =
-            serde_yaml::from_str(include_str!("../../examples/introduction.yaml"))
-                .expect("example excursion should be valid");
-        assert_eq!(script.version, 1);
-        assert_eq!(script.id, "introduction");
+        let script: Excursion = serde_yaml::from_str(include_str!("../../examples/preview.yaml"))
+            .expect("example excursion should be valid");
+        assert_eq!(script.id, "preview");
         assert!(!script.repeat);
-        assert_eq!(script.steps.len(), 11);
-        assert_eq!(
-            script.steps[0],
-            PlaybackStep::Say {
-                say: "Welcome to the demonstration.".into()
-            }
-        );
-        assert!(matches!(&script.steps[1], PlaybackStep::Goto { goto } if goto == "/challenges"));
-        assert!(matches!(&script.steps[2], PlaybackStep::Zoom { zoom } if *zoom == 1.1));
-        assert!(
-            matches!(&script.steps[3], PlaybackStep::Scroll { scroll } if scroll.x == 0.0 && scroll.y == 300.0)
-        );
-        assert!(matches!(&script.steps[6], PlaybackStep::Fill { fill } if fill.value == "grammar"));
-        assert!(
-            matches!(&script.steps[8], PlaybackStep::ScrollIntoView { scroll_into_view } if scroll_into_view.contains("challenge-card"))
-        );
+        assert_eq!(script.page_at(0), None);
+        assert!(script.steps.iter().any(|step| step.highlight));
     }
 
     #[test]
-    fn parses_repeat() {
-        let yaml = "version: 1\nid: loop\ntitle: Loop\nrepeat: true\nsteps:\n  - say: hello\n";
+    fn parses_repeat_cursor_and_pages() {
+        let yaml = "version: 1\nid: loop\ntitle: Loop\nrepeat: true\ncursor:\n  image: /m.svg\nsteps:\n  - say: a\n    page: home\n  - say: b\n    selector: a\n    tap: true\n  - say: c\n    page: duet\n";
         let excursion: Excursion = serde_yaml::from_str(yaml).expect("valid excursion");
         assert!(excursion.repeat);
-        assert!(excursion.cursor.is_none());
-    }
-
-    #[test]
-    fn parses_optional_cursor_image() {
-        let yaml =
-            "version: 1\nid: demo\ntitle: Demo\ncursor:\n  image: /assets/mascot.svg\nsteps: []\n";
-        let excursion: Excursion = serde_yaml::from_str(yaml).expect("valid cursor");
         assert_eq!(
-            excursion
-                .cursor
-                .as_ref()
-                .map(|cursor| cursor.image.as_str()),
-            Some("/assets/mascot.svg")
+            excursion.cursor.as_ref().map(|c| c.image.as_str()),
+            Some("/m.svg")
         );
-        assert!(
-            serde_yaml::from_str::<Excursion>(
-                &yaml.replace("  image:", "  unknown: true\n  image:")
-            )
-            .is_err()
-        );
+        assert_eq!(excursion.steps[1].action, Some(TargetAction::Tap));
+        assert_eq!(excursion.page_at(1), Some("home"));
+        assert_eq!(excursion.page_at(9), Some("duet"));
     }
 
     #[test]
-    fn rejects_unknown_instructions() {
+    fn rejects_unknown_keys() {
         let yaml = "version: 1\nid: demo\ntitle: Demo\nsteps:\n  - teleport: '#button'\n";
         assert!(serde_yaml::from_str::<Excursion>(yaml).is_err());
-    }
-
-    #[test]
-    fn rejects_steps_with_multiple_actions() {
-        let yaml =
-            "version: 1\nid: demo\ntitle: Demo\nsteps:\n  - say: hello\n    click: '#button'\n";
+        let yaml = "version: 1\nid: demo\ntitle: Demo\ncursor:\n  img: x\nsteps: []\n";
         assert!(serde_yaml::from_str::<Excursion>(yaml).is_err());
     }
 
     #[test]
-    fn application_can_decode_extension_parameters() {
-        #[derive(serde::Deserialize)]
-        struct MusicAction {
-            notes: Vec<Note>,
+    fn host_extensions_parse_from_the_example() {
+        #[derive(Debug, Default, Deserialize, PartialEq)]
+        #[serde(deny_unknown_fields)]
+        struct Music {
+            midi: Option<Vec<Note>>,
         }
-        #[derive(serde::Deserialize)]
+        #[derive(Debug, Deserialize, PartialEq)]
         struct Note {
             pitch: u8,
             duration_ms: u32,
             gap_ms: u32,
         }
-
-        let excursion: Excursion =
+        let excursion: Excursion<Music> =
             serde_yaml::from_str(include_str!("../../examples/extension.yaml"))
                 .expect("extension example should parse");
-        let PlaybackStep::Extension(extension) = &excursion.steps[1] else {
-            panic!("expected extension")
-        };
-        assert_eq!(extension.name, "music.play_notes");
-        let action: MusicAction =
-            serde_json::from_value(extension.params.clone()).expect("host parameters should parse");
-        assert_eq!(action.notes.len(), 2);
+        let notes = excursion.steps[1].extension.midi.as_ref().expect("notes");
         assert_eq!(
-            (
-                action.notes[0].pitch,
-                action.notes[0].duration_ms,
-                action.notes[0].gap_ms
-            ),
-            (60, 300, 100)
+            notes[0],
+            Note {
+                pitch: 60,
+                duration_ms: 300,
+                gap_ms: 100
+            }
         );
-    }
-
-    #[test]
-    fn rejects_multiple_or_malformed_extension_actions() {
-        for step in [
-            "  - music.play: {}\n    music.stop: {}",
-            "  - .play: {}",
-            "  - music.: {}",
-        ] {
-            let yaml = format!("version: 1\nid: demo\ntitle: Demo\nsteps:\n{step}\n");
-            assert!(serde_yaml::from_str::<Excursion>(&yaml).is_err());
-        }
+        assert!(
+            serde_yaml::from_str::<Excursion>(include_str!("../../examples/extension.yaml"))
+                .is_err()
+        );
     }
 }

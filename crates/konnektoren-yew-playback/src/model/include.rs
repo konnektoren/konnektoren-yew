@@ -1,4 +1,4 @@
-use super::{Excursion, PlaybackStep};
+use super::{Excursion, Step};
 use std::collections::HashMap;
 
 #[derive(Clone, Debug, PartialEq, thiserror::Error)]
@@ -17,22 +17,22 @@ pub enum IncludeError {
     },
 }
 
-impl Excursion {
+impl<X: Clone> Excursion<X> {
     /// Expand includes in order. Only the root excursion's repeat setting applies.
     /// The caller loads the referenced excursions and decides which are available.
     pub fn resolve_includes(
         &self,
-        excursions: &HashMap<String, Excursion>,
+        excursions: &HashMap<String, Excursion<X>>,
     ) -> Result<Self, IncludeError> {
-        fn expand(
-            tour: &Excursion,
-            excursions: &HashMap<String, Excursion>,
+        fn expand<X: Clone>(
+            tour: &Excursion<X>,
+            excursions: &HashMap<String, Excursion<X>>,
             stack: &mut Vec<String>,
-            steps: &mut Vec<PlaybackStep>,
+            steps: &mut Vec<Step<X>>,
         ) -> Result<(), IncludeError> {
             stack.push(tour.id.clone());
             for step in &tour.steps {
-                if let PlaybackStep::Include { include } = step {
+                if let Some(include) = &step.include {
                     if stack.contains(include) {
                         return Err(IncludeError::Cycle(include.clone()));
                     }
@@ -72,7 +72,7 @@ impl Excursion {
 mod tests {
     use super::*;
 
-    fn excursion(id: &str, steps: Vec<PlaybackStep>) -> Excursion {
+    fn excursion(id: &str, steps: Vec<Step>) -> Excursion {
         Excursion {
             version: 1,
             id: id.into(),
@@ -82,13 +82,11 @@ mod tests {
             steps,
         }
     }
-    fn say(value: &str) -> PlaybackStep {
-        PlaybackStep::Say { say: value.into() }
+    fn say(value: &str) -> Step {
+        Step::say(value)
     }
-    fn include(value: &str) -> PlaybackStep {
-        PlaybackStep::Include {
-            include: value.into(),
-        }
+    fn include(value: &str) -> Step {
+        Step::include(value)
     }
 
     #[test]
