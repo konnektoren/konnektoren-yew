@@ -1,4 +1,4 @@
-use super::{PlaybackEngine, PlaybackHost, PlaybackState};
+use super::{PlaybackEngine, PlaybackHost, PlaybackOutcome, PlaybackState, PlaybackToken};
 use crate::{Excursion, PlaybackElementHighlight, PlaybackNotification, PlaybackStep};
 use yew::prelude::*;
 use yew_preview::prelude::*;
@@ -45,7 +45,11 @@ struct PreviewHost<'a>(&'a mut PreviewState);
 impl PlaybackHost for PreviewHost<'_> {
     type Error = &'static str;
 
-    fn execute(&mut self, step: &PlaybackStep) -> Result<(), Self::Error> {
+    fn execute(
+        &mut self,
+        step: &PlaybackStep,
+        _: PlaybackToken,
+    ) -> Result<PlaybackOutcome, Self::Error> {
         match step {
             PlaybackStep::Say { say } => self.0.message = Some(say.clone()),
             PlaybackStep::Highlight { highlight } => self.0.highlight = Some(highlight.clone()),
@@ -53,7 +57,7 @@ impl PlaybackHost for PreviewHost<'_> {
             PlaybackStep::Zoom { zoom } if zoom.is_finite() && *zoom > 0.0 => self.0.zoom = *zoom,
             _ => return Err("This action is not supported by the preview host."),
         }
-        Ok(())
+        Ok(PlaybackOutcome::Complete)
     }
 }
 
