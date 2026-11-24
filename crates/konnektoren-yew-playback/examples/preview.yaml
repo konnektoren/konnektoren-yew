@@ -1,0 +1,12 @@
+version: 1
+id: preview
+title: Preview excursion
+steps:
+  - say: "Welcome to the example page."
+  - highlight: ".playback-engine-preview__header"
+  - say: "This is the page heading."
+  - scroll: { x: 0, y: 260 }
+  - highlight: ".playback-engine-preview__list"
+  - say: "Here is the list."
+  - zoom: 1.2
+  - say: "The page is now larger."
