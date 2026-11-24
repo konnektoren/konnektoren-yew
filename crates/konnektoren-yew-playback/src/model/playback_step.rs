@@ -4,6 +4,8 @@ use serde::Deserialize;
 #[derive(Clone, Debug, Deserialize, PartialEq)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum PlaybackStep {
+    /// Expand the named excursion before playback.
+    Include { include: String },
     /// Display a message, translated by the host application.
     Say { say: String },
     /// Navigate to an application path.
