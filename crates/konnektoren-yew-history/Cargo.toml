@@ -1,0 +1,27 @@
+[package]
+name = "konnektoren-yew-history"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Searchable, filterable and sortable history pages for Konnektoren applications"
+
+[features]
+default = []
+csr = ["yew/csr", "konnektoren-yew-i18n/csr", "konnektoren-yew-core/csr"]
+ssr = ["yew/ssr", "konnektoren-yew-i18n/ssr", "konnektoren-yew-core/ssr"]
+# Challenge attempts as history items, with result filter and sort orders.
+challenge = ["dep:konnektoren-core"]
+yew-preview = ["dep:yew-preview", "konnektoren-yew-core/yew-preview"]
+
+[dependencies]
+konnektoren-yew-i18n.workspace = true
+konnektoren-yew-core.workspace = true
+konnektoren-core = { workspace = true, optional = true }
+chrono = "0.4"
+web-sys = { workspace = true, features = ["HtmlInputElement", "HtmlSelectElement"] }
+yew.workspace = true
+yew-preview = { workspace = true, optional = true }
+
+[dev-dependencies]
+yew = { workspace = true, features = ["ssr"] }
+tokio = { workspace = true, features = ["rt", "macros"] }
