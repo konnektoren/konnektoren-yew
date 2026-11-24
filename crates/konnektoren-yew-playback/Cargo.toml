@@ -15,7 +15,7 @@ yew-preview = ["dep:yew-preview"]
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }
 gloo-timers = { version = "0.3", optional = true }
-web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "DomRect"] }
+web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "HtmlElement", "DomRect"] }
 
 [dev-dependencies]
 yew = { workspace = true, features = ["ssr"] }
