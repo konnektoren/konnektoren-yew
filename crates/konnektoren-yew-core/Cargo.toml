@@ -1,0 +1,23 @@
+[package]
+name = "konnektoren-yew-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Basic stateless Yew components shared by the Konnektoren crates: status panels, icons, pills, stat grids, times, filtered lists"
+
+[features]
+default = []
+csr = ["yew/csr", "konnektoren-yew-i18n/csr"]
+ssr = ["yew/ssr", "konnektoren-yew-i18n/ssr"]
+yew-preview = ["dep:yew-preview"]
+
+[dependencies]
+konnektoren-yew-i18n.workspace = true
+chrono = "0.4"
+web-sys = { workspace = true, features = ["HtmlInputElement", "HtmlSelectElement"] }
+yew.workspace = true
+yew-preview = { workspace = true, optional = true }
+
+[dev-dependencies]
+yew = { workspace = true, features = ["ssr"] }
+tokio = { workspace = true, features = ["rt", "macros"] }
