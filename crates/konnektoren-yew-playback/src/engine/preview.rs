@@ -86,7 +86,12 @@ pub fn playback_engine_preview() -> Html {
             state.set(next);
         })
     };
-    let step = state.engine.as_ref().map_or(0, PlaybackEngine::index);
+    let step = state.engine.as_ref().map_or(0, |engine| {
+        engine
+            .cycle()
+            .wrapping_mul(engine.total())
+            .wrapping_add(engine.index())
+    });
     use_playback_timer(
         state.autoplay.then_some(PlaybackTiming {
             delay_ms: 1600,

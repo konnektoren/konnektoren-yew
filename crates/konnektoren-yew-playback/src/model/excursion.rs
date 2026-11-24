@@ -8,6 +8,9 @@ pub struct Excursion {
     pub version: u32,
     pub id: String,
     pub title: String,
+    /// Restart at the first step after the last step completes.
+    #[serde(default)]
+    pub repeat: bool,
     pub steps: Vec<PlaybackStep>,
 }
 
@@ -22,6 +25,7 @@ mod tests {
                 .expect("example excursion should be valid");
         assert_eq!(script.version, 1);
         assert_eq!(script.id, "introduction");
+        assert!(!script.repeat);
         assert_eq!(script.steps.len(), 11);
         assert_eq!(
             script.steps[0],
@@ -38,6 +42,13 @@ mod tests {
         assert!(
             matches!(&script.steps[8], PlaybackStep::ScrollIntoView { scroll_into_view } if scroll_into_view.contains("challenge-card"))
         );
+    }
+
+    #[test]
+    fn parses_repeat() {
+        let yaml = "version: 1\nid: loop\ntitle: Loop\nrepeat: true\nsteps:\n  - say: hello\n";
+        let excursion: Excursion = serde_yaml::from_str(yaml).expect("valid excursion");
+        assert!(excursion.repeat);
     }
 
     #[test]

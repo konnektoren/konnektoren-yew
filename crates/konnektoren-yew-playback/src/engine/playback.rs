@@ -43,6 +43,7 @@ pub enum PlaybackState {
 pub struct PlaybackEngine {
     excursion: Excursion,
     index: usize,
+    cycle: usize,
     state: PlaybackState,
     pending: Option<PlaybackToken>,
 }
@@ -57,6 +58,7 @@ impl PlaybackEngine {
         Self {
             excursion,
             index: 0,
+            cycle: 0,
             state,
             pending: None,
         }
@@ -67,6 +69,10 @@ impl PlaybackEngine {
     }
     pub fn index(&self) -> usize {
         self.index
+    }
+    /// Number of completed loops, starting at zero.
+    pub fn cycle(&self) -> usize {
+        self.cycle
     }
     pub fn total(&self) -> usize {
         self.excursion.steps.len()
@@ -101,7 +107,12 @@ impl PlaybackEngine {
     fn finish_step(&mut self) {
         self.index += 1;
         if self.index == self.total() {
-            self.state = PlaybackState::Finished;
+            if self.excursion.repeat {
+                self.index = 0;
+                self.cycle = self.cycle.wrapping_add(1);
+            } else {
+                self.state = PlaybackState::Finished;
+            }
         }
     }
 
@@ -191,6 +202,7 @@ mod tests {
             version: 1,
             id: "demo".into(),
             title: "Demo".into(),
+            repeat: false,
             steps: vec![
                 PlaybackStep::Say { say: "Hi".into() },
                 PlaybackStep::Zoom { zoom: 1.2 },
@@ -218,6 +230,7 @@ mod tests {
             version: 1,
             id: "empty".into(),
             title: "Empty".into(),
+            repeat: false,
             steps: vec![],
         };
         assert_eq!(
@@ -228,6 +241,7 @@ mod tests {
             version: 1,
             id: "demo".into(),
             title: "Demo".into(),
+            repeat: false,
             steps: vec![PlaybackStep::Say { say: "Hi".into() }],
         };
         let mut engine = PlaybackEngine::new(excursion);
@@ -259,6 +273,7 @@ mod tests {
             version: 1,
             id: "demo".into(),
             title: "Demo".into(),
+            repeat: false,
             steps: vec![
                 PlaybackStep::Say { say: "Hi".into() },
                 PlaybackStep::Zoom { zoom: 1.0 },
@@ -288,5 +303,64 @@ mod tests {
         assert!(restarted.advance(&mut host).is_ok());
         assert!(!restarted.complete_pending(third));
         assert!(restarted.complete_pending(host.0.expect("new token")));
+    }
+
+    #[test]
+    fn repeats_completed_steps_and_keeps_empty_excursions_finished() {
+        let mut excursion = Excursion {
+            version: 1,
+            id: "loop".into(),
+            title: "Loop".into(),
+            repeat: true,
+            steps: vec![PlaybackStep::Say { say: "Hi".into() }],
+        };
+        let mut engine = PlaybackEngine::new(excursion.clone());
+        let mut host = Host::default();
+        assert!(engine.advance(&mut host).is_ok());
+        assert_eq!(
+            (engine.index(), engine.cycle(), engine.state()),
+            (0, 1, PlaybackState::Playing)
+        );
+        assert!(engine.advance(&mut host).is_ok());
+        assert_eq!(engine.cycle(), 2);
+        excursion.steps.clear();
+        assert_eq!(
+            PlaybackEngine::new(excursion).state(),
+            PlaybackState::Finished
+        );
+    }
+
+    #[test]
+    fn pending_last_step_repeats_without_resuming_a_paused_engine() {
+        struct PendingHost(Option<PlaybackToken>);
+        impl PlaybackHost for PendingHost {
+            type Error = ();
+            fn execute(
+                &mut self,
+                _: &PlaybackStep,
+                token: PlaybackToken,
+            ) -> Result<PlaybackOutcome, Self::Error> {
+                self.0 = Some(token);
+                Ok(PlaybackOutcome::Pending)
+            }
+        }
+        let excursion = Excursion {
+            version: 1,
+            id: "loop".into(),
+            title: "Loop".into(),
+            repeat: true,
+            steps: vec![PlaybackStep::Say { say: "Hi".into() }],
+        };
+        let mut engine = PlaybackEngine::new(excursion);
+        let mut host = PendingHost(None);
+        assert!(engine.advance(&mut host).is_ok());
+        engine.pause();
+        assert!(engine.complete_pending(host.0.expect("pending token")));
+        assert_eq!(
+            (engine.index(), engine.cycle(), engine.state()),
+            (0, 1, PlaybackState::Paused)
+        );
+        engine.resume();
+        assert_eq!(engine.state(), PlaybackState::Playing);
     }
 }
