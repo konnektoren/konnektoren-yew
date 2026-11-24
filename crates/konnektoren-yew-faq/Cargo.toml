@@ -7,10 +7,11 @@ description = "FAQ list, search and page components for Konnektoren applications
 
 [features]
 default = []
-csr = ["yew/csr", "dep:wasm-bindgen-futures", "dep:wasm-bindgen", "konnektoren-core/csr", "konnektoren-asset-loader/csr"]
+csr = ["konnektoren-yew-core/csr", "yew/csr", "dep:wasm-bindgen-futures", "dep:wasm-bindgen", "konnektoren-core/csr", "konnektoren-asset-loader/csr"]
 yew-preview = ["dep:yew-preview", "dep:chrono"]
 
 [dependencies]
+konnektoren-yew-core.workspace = true
 konnektoren-rs.workspace = true
 konnektoren-core.workspace = true
 konnektoren-asset-loader = { git = "https://github.com/konnektoren/konnektoren-rs.git" }

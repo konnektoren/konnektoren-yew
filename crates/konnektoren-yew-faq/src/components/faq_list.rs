@@ -1,5 +1,6 @@
 use super::FaqItem;
 use konnektoren_rs::faq::FaqData;
+use konnektoren_yew_core::{ListItem, ListRows};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
@@ -13,18 +14,23 @@ pub struct FaqListProps {
 
 #[function_component(FaqList)]
 pub fn faq_list(props: &FaqListProps) -> Html {
+    let items = props
+        .faq_data
+        .faqs
+        .iter()
+        .map(|faq| {
+            let highlighted = props.highlighted_id.as_deref() == Some(faq.id.as_str());
+            ListItem::new(
+                faq.id.clone(),
+                html! {
+                    <FaqItem faq={faq.clone()} language={props.language.clone()} {highlighted} />
+                },
+            )
+        })
+        .collect::<Vec<_>>();
     html! {
         <section class="faq-list">
-            {for props.faq_data.faqs.iter().cloned().map(|faq| {
-                let highlighted = props.highlighted_id.as_deref() == Some(faq.id.as_str());
-                html! {
-                    <FaqItem
-                        faq={faq}
-                        language={props.language.clone()}
-                        highlighted={highlighted}
-                    />
-                }
-            })}
+            <ListRows {items} class="faq-list__items" />
         </section>
     }
 }

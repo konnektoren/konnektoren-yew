@@ -1,8 +1,8 @@
-use super::FaqList;
+use super::FaqItem;
 use crate::asset::{FAQ_ASSET_PATH, use_faq_data};
 use crate::search::LazyFaqSearch;
-use konnektoren_rs::faq::FaqData;
 use konnektoren_rs::i18n::Language;
+use konnektoren_yew_core::{FilteredList, ListItem, ListLabels};
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
@@ -47,6 +47,9 @@ pub struct FaqSearchPanelProps {
     pub initial_query: AttrValue,
     #[prop_or_default]
     pub labels: FaqSearchLabels,
+    /// Translated count and empty-state messages for the shared list.
+    #[prop_or_default]
+    pub list_labels: ListLabels,
     /// A FAQ id or tag was clicked in the results.
     #[prop_or_default]
     pub on_select: Callback<String>,
@@ -130,63 +133,63 @@ pub fn faq_search_panel(props: &FaqSearchPanelProps) -> Html {
         })
     };
 
+    let total = search.all().len();
+    let matching = results.len();
+    let items: Vec<ListItem> = results
+        .into_iter()
+        .map(|faq| {
+            let highlighted = props.highlighted_id.as_deref() == Some(faq.id.as_str());
+            ListItem::new(
+                faq.id.clone(),
+                html! {
+                    <FaqItem {faq} language={props.language.clone()} {highlighted} />
+                },
+            )
+        })
+        .collect();
+    let on_clear = {
+        let search_query = search_query.clone();
+        Callback::from(move |()| search_query.set(String::new()))
+    };
     let labels = &props.labels;
     let show_button = props.on_submit.is_some() && !search_query.is_empty();
 
-    html! {
-        <div class="faq-search">
-            <div class="faq-search__container">
-                <div class="faq-search__field">
-                    <input
-                        class="faq-search__input"
-                        type="text"
-                        value={(*search_query).clone()}
-                        disabled={cfg!(not(feature = "csr"))}
-                        oninput={on_input}
-                        onkeypress={on_keypress}
-                        placeholder={labels.placeholder.clone()}
-                        aria-label={labels.search.clone()}
-                    />
-                    if show_button {
-                        <button
-                            type="button"
-                            class="faq-search__button"
-                            onclick={submit.reform(|_: MouseEvent| ())}
-                            aria-label={labels.search.clone()}
-                            title={labels.search.clone()}
-                        >
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    }
-                </div>
-                if let Some(suggestion) = suggestion {
-                    <div class="faq-search__suggestion" onclick={on_suggestion_select}>
-                        {format!("{}: {}", labels.did_you_mean, suggestion)}
-                    </div>
+    let search_control = html! {
+        <div class="faq-search__container">
+            <div class="faq-search__field">
+                <input class="faq-search__input" type="text" value={(*search_query).clone()}
+                    disabled={cfg!(not(feature = "csr"))} oninput={on_input} onkeypress={on_keypress}
+                    placeholder={labels.placeholder.clone()} aria-label={labels.search.clone()} />
+                if show_button {
+                    <button type="button" class="faq-search__button"
+                        onclick={submit.reform(|_: MouseEvent| ())}
+                        aria-label={labels.search.clone()} title={labels.search.clone()}>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 }
             </div>
-
+            if let Some(suggestion) = suggestion {
+                <button type="button" class="faq-search__suggestion" onclick={on_suggestion_select}>
+                    {format!("{}: {}", labels.did_you_mean, suggestion)}
+                </button>
+            }
+        </div>
+    };
+    let before_results = html! {
+        <>
             {props.children.clone()}
-
-            <div class="faq-search__results" onclick={on_results_click}>
-                <h2 class="faq-search__results-title">{
-                    if search_query.is_empty() {
-                        labels.all_faqs.clone()
-                    } else {
-                        labels.matching_faqs.clone()
-                    }
-                }</h2>
-                if !search_query.is_empty() {
-                    <p class="faq-search__results-count">{
-                        format!("{} {} {}", labels.found, results.len(), labels.relevant_faqs)
-                    }</p>
-                }
-                <FaqList
-                    faq_data={FaqData { faqs: results }}
-                    language={props.language.clone()}
-                    highlighted_id={props.highlighted_id.clone()}
-                />
-            </div>
+            <h2 class="faq-search__results-title">{
+                if search_query.is_empty() { labels.all_faqs.clone() } else { labels.matching_faqs.clone() }
+            }</h2>
+        </>
+    };
+    let mut list_labels = props.list_labels.clone();
+    list_labels.list = labels.all_faqs.clone();
+    html! {
+        <div class="faq-search" onclick={on_results_click}>
+            <FilteredList labels={list_labels} {items} {matching} {total}
+                search={(*search_query).clone()} active={!search_query.is_empty()} {on_clear}
+                search_control={Some(search_control)} {before_results} />
         </div>
     }
 }
@@ -203,6 +206,7 @@ mod preview {
             highlighted_id: None,
             initial_query: initial_query.to_string().into(),
             labels: FaqSearchLabels::default(),
+            list_labels: ListLabels::default(),
             on_select: Callback::noop(),
             on_submit,
             children: Html::default(),
