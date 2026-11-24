@@ -1,4 +1,5 @@
 use crate::i18n::use_i18n;
+use konnektoren_yew_core::{FilteredList, ListItem, ListLabels};
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
@@ -52,26 +53,43 @@ pub fn app_dependencies(props: &AppDependenciesProps) -> Html {
         }
     }
 
-    let filtered_components = sbom
-        .components
-        .iter()
-        .filter(|component| {
-            component
-                .name
-                .to_lowercase()
-                .contains(&filter.to_lowercase())
-        })
-        .collect::<Vec<_>>();
-
-    let onfilter = {
+    let query = filter.to_lowercase();
+    let items: Vec<ListItem> = sbom.components.iter().enumerate()
+        .filter(|(_, component)| component.name.to_lowercase().contains(&query))
+        .map(|(index, component)| ListItem::new(index.to_string(), html! {
+            <div class="app-dependencies__item">
+                <span class="app-dependencies__name">{&component.name}{" "}{&component.version}</span>
+                <span class="app-dependencies__item-licenses">
+                    {if let Some(licenses) = &component.licenses {
+                        html! { <>{for licenses.iter().map(|license| html! {
+                            <span class="license-badge license-badge--small">{&license.expression}</span>
+                        })}</> }
+                    } else {
+                        html! { <span class="license-badge license-badge--small">{i18n.t("Unknown")}</span> }
+                    }}
+                </span>
+            </div>
+        })).collect();
+    let matching = items.len();
+    let on_search = {
         let filter = filter.clone();
-        Callback::from(move |e: Event| {
-            #[cfg(feature = "csr")]
-            {
-                let input: web_sys::HtmlInputElement = e.target_unchecked_into();
-                filter.set(input.value());
-            }
-        })
+        Callback::from(move |value| filter.set(value))
+    };
+    let on_clear = {
+        let filter = filter.clone();
+        Callback::from(move |()| filter.set(String::new()))
+    };
+    let labels = ListLabels {
+        search: i18n.t("Search dependencies...").into(),
+        search_placeholder: i18n.t("Search dependencies...").into(),
+        noun: i18n.t("Dependencies").into(),
+        list: i18n.t("Dependencies").into(),
+        empty: i18n.t("Nothing here yet.").into(),
+        no_match: i18n.t("Nothing matches these filters.").into(),
+        sort_by: i18n.t("Sort by").into(),
+        show: i18n.t("Show").into(),
+        clear: i18n.t("Clear filters").into(),
+        show_more: i18n.t("Show more").into(),
     };
 
     let toggle_list = {
@@ -103,35 +121,9 @@ pub fn app_dependencies(props: &AppDependenciesProps) -> Html {
                 </div>
             </div>
             if *show_list {
-                <div class="app-dependencies__list-container">
-                    <input
-                        type="text"
-                        class="app-dependencies__search"
-                        aria-label={i18n.t("Search dependencies...")}
-                        placeholder={i18n.t("Search dependencies...")}
-                        onchange={onfilter}
-                    />
-                    <div class="app-dependencies__list">
-                        {for filtered_components.iter().map(|component| {
-                            html! {
-                                <div class="app-dependencies__item">
-                                    <span class="app-dependencies__name">
-                                        {&component.name} {" "} {&component.version}
-                                    </span>
-                                    <span class="app-dependencies__item-licenses">
-                                        {if let Some(licenses) = &component.licenses {
-                                            html! { <>{for licenses.iter().map(|license| html! {
-                                                <span class="license-badge license-badge--small">{&license.expression}</span>
-                                            })}</> }
-                                        } else {
-                                            html! { <span class="license-badge license-badge--small">{i18n.t("Unknown")}</span> }
-                                        }}
-                                    </span>
-                                </div>
-                            }
-                        })}
-                    </div>
-                </div>
+                <FilteredList class="app-dependencies__list" {labels} {items} {matching}
+                    total={sbom.components.len()} search={(*filter).clone()}
+                    active={!filter.is_empty()} {on_search} {on_clear} />
             }
         </div>
     }
@@ -144,7 +136,34 @@ mod preview {
 
     yew_preview::create_preview!(AppDependenciesComponent, AppDependenciesProps {
         sbom_json: Some(r#"{"components":[{"name":"example","version":"1.0.0","licenses":[{"expression":"MIT OR Apache-2.0"}]}]}"#.into()),
-    },);
+    },
+    ("Long dependency list", AppDependenciesProps {
+        sbom_json: Some(r#"{"components":[
+            {"name":"yew","version":"0.21.0","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"serde","version":"1.0.219","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"serde_json","version":"1.0.140","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"tokio","version":"1.44.0","licenses":[{"expression":"MIT"}]},
+            {"name":"chrono","version":"0.4.40","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"tracing","version":"0.1.41","licenses":[{"expression":"MIT"}]},
+            {"name":"gloo","version":"0.11.0","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"wasm-bindgen","version":"0.2.100","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"web-sys","version":"0.3.77","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"futures","version":"0.3.31","licenses":[{"expression":"MIT OR Apache-2.0"}]},
+            {"name":"unicode-ident","version":"1.0.18","licenses":[{"expression":"Unicode-DFS-2016"}]},
+            {"name":"internal-package","version":"2.0.0"}
+        ]}"#.into()),
+    }),
+    ("Many licenses", AppDependenciesProps {
+        sbom_json: Some(r#"{"components":[
+            {"name":"renderer","version":"3.2.1","licenses":[{"expression":"MIT"},{"expression":"Apache-2.0"}]},
+            {"name":"fonts","version":"1.4.0","licenses":[{"expression":"OFL-1.1"}]},
+            {"name":"icons","version":"6.5.2","licenses":[{"expression":"CC-BY-4.0"}]},
+            {"name":"parser","version":"0.8.0","licenses":[{"expression":"BSD-3-Clause"}]},
+            {"name":"internal-package-with-a-long-name","version":"2.0.0"}
+        ]}"#.into()),
+    }),
+    ("Empty inventory", AppDependenciesProps { sbom_json: Some("{}".into()) }),
+    );
 }
 
 #[cfg(test)]

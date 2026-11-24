@@ -38,11 +38,6 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
-/* Certificate list */
-.achievements__list {
-    @apply flex flex-col gap-4 sm:gap-2;
-}
-
 /* Certificate item - use DaisyUI collapse */
 .achievements__certificate-item {
     @apply collapse collapse-arrow bg-base-100 border border-base-300;

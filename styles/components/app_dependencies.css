@@ -18,12 +18,8 @@
     @apply flex flex-wrap gap-1 mb-4;
 }
 
-.app-dependencies__search {
-    @apply input w-full mb-4 text-sm;
-}
-
-.app-dependencies__list {
-    @apply flex flex-col gap-2 max-h-[400px] overflow-y-auto;
+.app-dependencies__list .filtered-list__list {
+    @apply max-h-[400px] overflow-y-auto;
 }
 
 .app-dependencies__item {

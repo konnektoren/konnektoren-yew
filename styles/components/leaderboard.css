@@ -2,6 +2,10 @@
     @apply card bg-base-100 w-full max-w-[800px] mx-auto;
 }
 
+.leaderboard__filters {
+    @apply flex flex-col gap-3 px-4 pt-4 sm:px-2;
+}
+
 .leaderboard__table {
     @apply table w-full table-fixed text-sm sm:text-xs;
 }
@@ -71,7 +75,11 @@
 }
 
 @media (max-width: 360px) {
-    .leaderboard__table {
+    .leaderboard__filters {
+    @apply flex flex-col gap-3 px-4 pt-4 sm:px-2;
+}
+
+.leaderboard__table {
         @apply text-sm;
     }
 

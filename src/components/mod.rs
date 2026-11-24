@@ -29,7 +29,6 @@ pub mod game_loader_preview;
 pub mod game_path;
 #[cfg(feature = "gdrive")]
 pub mod gdrive_backup;
-mod icon;
 pub mod inbox;
 pub mod leaderboard;
 pub mod license_credits;
@@ -51,7 +50,10 @@ pub mod share_page;
 #[cfg(feature = "slideshow")]
 pub mod slideshow;
 pub mod social_links;
-pub mod status;
+/// Status panels, now in `konnektoren-yew-core`; kept at this path.
+pub mod status {
+    pub use konnektoren_yew_core::components::status::*;
+}
 pub mod status_message;
 pub mod swipe;
 pub mod timer;
@@ -86,17 +88,21 @@ pub use challenge_timer::ChallengeTimerComponent;
 #[cfg(feature = "chat")]
 pub use chat::ChatComponent;
 pub use domain_selector::{DomainSelectorComponent, DomainSelectorProps, DomainSelectorStyle};
-#[cfg(feature = "faq")]
-pub use konnektoren_yew_faq::{
-    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
-};
 #[cfg(feature = "review")]
 pub use feedback_popup::FeedbackPopup;
 pub use game_path::GamePathComponent;
 #[cfg(feature = "gdrive")]
 pub use gdrive_backup::GDriveBackupComponent;
-pub use icon::{Icon, IconProps};
 pub use inbox::InboxComponent;
+pub use konnektoren_yew_core::{
+    FilteredList, FilteredListProps, Icon, IconProps, ListChoice, ListFilter, ListFilterControl,
+    ListItem, ListLabels, ListSort, Pill, PillProps, Stat, StatGrid, StatGridProps, Time,
+    TimeProps,
+};
+#[cfg(feature = "faq")]
+pub use konnektoren_yew_faq::{
+    FaqItem, FaqItemProps, FaqList, FaqListProps, FaqLoader, FaqLoaderProps, FaqTag, FaqTagProps,
+};
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review::RatingStarsComponent;
 pub use leaderboard::LeaderboardComp;

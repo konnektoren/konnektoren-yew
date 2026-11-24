@@ -8,6 +8,8 @@ pub(super) struct CreditGroupProps {
     pub(super) group: CreditGroup,
     pub(super) server: CreditAssetServer,
     pub(super) base_url: AttrValue,
+    #[prop_or_default]
+    pub(super) expanded: bool,
 }
 
 #[function_component(CreditGroupView)]
@@ -19,9 +21,9 @@ pub(super) fn credit_group_view(props: &CreditGroupProps) -> Html {
         Callback::from(move |_| requested.set(true))
     };
     html! {
-        <details class="license-credits__group">
+        <details class="license-credits__group" open={props.expanded}>
             <summary onclick={on_open}>{i18n.t(&props.group.name)}</summary>
-            if *requested {
+            if *requested || props.expanded {
                 <div class="license-credits__content">
                     {for props.group.credits.iter().map(|credit| html! {
                         <article key={credit.id.clone()} class="license-credits__credit">

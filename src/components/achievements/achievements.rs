@@ -1,6 +1,7 @@
 use crate::i18n::use_i18n;
 use crate::prelude::{AchievementComponent, CertificateComponent};
 use konnektoren_core::{certificates::CertificateData, prelude::AchievementDefinition};
+use konnektoren_yew_core::{FilteredList, ListItem, ListLabels};
 use std::rc::Rc;
 use yew::prelude::*;
 
@@ -18,8 +19,47 @@ pub struct AchievementsProps {
 pub fn achievements_component(props: &AchievementsProps) -> Html {
     let i18n = use_i18n();
     let selected_certificate = use_state(|| None);
+    let search = use_state(String::new);
     let sorted_certificates = sort_certificates(&props.certificates);
     let on_certificate_click = create_certificate_click_handler(selected_certificate.clone());
+    let query = search.to_lowercase();
+    let items: Vec<ListItem> = sorted_certificates
+        .iter()
+        .enumerate()
+        .filter(|(_, cert)| i18n.t(&cert.game_path_name).to_lowercase().contains(&query))
+        .map(|(index, cert)| {
+            ListItem::new(
+                index.to_string(),
+                render_certificate_item(
+                    cert,
+                    selected_certificate.as_ref() == Some(cert),
+                    on_certificate_click.clone(),
+                    props,
+                ),
+            )
+        })
+        .collect();
+    let matching = items.len();
+    let on_search = {
+        let search = search.clone();
+        Callback::from(move |value| search.set(value))
+    };
+    let on_clear = {
+        let search = search.clone();
+        Callback::from(move |()| search.set(String::new()))
+    };
+    let labels = ListLabels {
+        search: i18n.t("Search").into(),
+        search_placeholder: i18n.t("Name").into(),
+        noun: i18n.t("Certificates").into(),
+        list: i18n.t("Certificates").into(),
+        empty: i18n.t("Nothing here yet.").into(),
+        no_match: i18n.t("Nothing matches these filters.").into(),
+        sort_by: i18n.t("Sort by").into(),
+        show: i18n.t("Show").into(),
+        clear: i18n.t("Clear filters").into(),
+        show_more: i18n.t("Show more").into(),
+    };
 
     html! {
         <div class="achievements">
@@ -40,9 +80,8 @@ pub fn achievements_component(props: &AchievementsProps) -> Html {
                         <i class="fa-solid fa-certificate achievements__subtitle-icon"></i>
                         { i18n.t("Certificates") }
                     </h3>
-                    <ul class="achievements__list">
-                        { render_certificates(&sorted_certificates, &selected_certificate, on_certificate_click, props) }
-                    </ul>
+                    <FilteredList {labels} {items} {matching} total={sorted_certificates.len()}
+                        search={(*search).clone()} active={!search.is_empty()} {on_search} {on_clear} />
                 </div>
             </div>
         </div>
@@ -75,21 +114,6 @@ fn create_certificate_click_handler(
     })
 }
 
-fn render_certificates(
-    certificates: &[CertificateData],
-    selected_certificate: &UseStateHandle<Option<CertificateData>>,
-    on_click: Rc<dyn Fn(CertificateData)>,
-    props: &AchievementsProps,
-) -> Html {
-    certificates
-        .iter()
-        .map(|cert| {
-            let is_selected = selected_certificate.as_ref() == Some(cert);
-            render_certificate_item(cert, is_selected, on_click.clone(), props)
-        })
-        .collect()
-}
-
 fn render_certificate_item(
     cert: &CertificateData,
     is_selected: bool,
@@ -100,7 +124,7 @@ fn render_certificate_item(
     let onclick = Callback::from(move |_| on_click(cert_clone.clone()));
 
     html! {
-        <li class={classes!(
+        <div class={classes!(
             "achievements__certificate-item",
             is_selected.then_some("achievements__certificate-item--selected")
         )}>
@@ -116,7 +140,7 @@ fn render_certificate_item(
                     />
                 </div>
             }
-        </li>
+        </div>
     }
 }
 

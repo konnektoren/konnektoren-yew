@@ -181,6 +181,15 @@ pub fn preview_groups() -> ComponentList {
             ChallengeCompletion::preview(),
             ChallengeResultDetails::preview(),
         ),
+        #[cfg(feature = "history")]
+        create_component_group!(
+            "History",
+            konnektoren_yew_history::HistoryView::<konnektoren_yew_history::sample::SampleHistory>::preview(),
+            konnektoren_yew_history::HistoryPreview::<konnektoren_yew_history::sample::SampleHistory>::preview(),
+            konnektoren_yew_history::HistoryView::<konnektoren_yew_history::sample::challenge::SampleAttempts>::preview(),
+            konnektoren_yew_history::HistoryPreview::<konnektoren_yew_history::sample::challenge::SampleAttempts>::preview(),
+            konnektoren_yew_history::HistoryEntryRow::preview(),
+        ),
         create_component_group!(
             "Challenge History",
             ChallengeHistorySummaryComponent::preview(),
@@ -277,7 +286,6 @@ pub fn preview_groups() -> ComponentList {
             SharePageComp::preview(),
             create_component_item!("Example", Example, vec![("default", ())]),
             Badge::preview(),
-            Icon::preview(),
             SocialLinks::preview(),
             Logo::preview(),
             InboxComponent::preview(),
@@ -286,7 +294,18 @@ pub fn preview_groups() -> ComponentList {
         ),
         #[cfg(feature = "tour")]
         create_component_group!("Tour", crate::prelude::TourConfig::preview(), TourButton::preview()),
-        create_component_group!("Status", LoadingState::preview(), ErrorState::preview(), EmptyState::preview(), StatusMessage::preview()),
+        create_component_group!(
+            "Basics",
+            LoadingState::preview(),
+            ErrorState::preview(),
+            EmptyState::preview(),
+            StatusMessage::preview(),
+            Pill::preview(),
+            StatGrid::preview(),
+            FilteredList::preview(),
+            Time::preview(),
+            Icon::preview(),
+        ),
     ]
 }
 

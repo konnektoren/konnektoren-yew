@@ -70,6 +70,7 @@ pub(crate) fn group() -> ComponentGroup {
                 "Example",
                 CreditGroupProps {
                     group: example_group(),
+                    expanded: false,
                     server: server(),
                     base_url: "/assets".into(),
                 }

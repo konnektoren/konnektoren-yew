@@ -1,0 +1,104 @@
+/* FilteredList: search, filters and sort above a paged list, optional side panel. */
+.filtered-list {
+    @apply flex min-w-0 flex-col gap-6;
+}
+
+/* Search grows; filters, toggles and sort wrap beside it. */
+.filtered-list__filters {
+    @apply flex min-w-0 flex-wrap items-end gap-3 rounded-2xl border border-base-300 bg-base-200 p-4;
+}
+
+.filtered-list__field {
+    @apply flex min-w-0 flex-col gap-1;
+}
+
+.filtered-list__field--search {
+    @apply min-w-48 flex-1;
+}
+
+.filtered-list__label {
+    @apply text-xs font-semibold tracking-wide text-base-content/60 uppercase;
+}
+
+.filtered-list__select {
+    @apply select select-sm;
+}
+
+/* daisyUI input wrapper with the icon inside. */
+.filtered-list__search {
+    @apply input input-sm w-full;
+}
+
+.filtered-list__search-icon {
+    @apply text-base-content/50;
+}
+
+.filtered-list__search-input {
+    @apply min-w-0 grow;
+}
+
+.filtered-list__toggle {
+    @apply btn btn-sm gap-2;
+}
+
+.filtered-list__toggle--on {
+    @apply border-warning/40 bg-warning/15;
+}
+
+.filtered-list__toggle-icon {
+    @apply text-base-content/60;
+}
+
+.filtered-list__toggle--on .filtered-list__toggle-icon {
+    @apply text-warning;
+}
+
+.filtered-list__count {
+    @apply flex min-h-6 flex-wrap items-center gap-2 text-sm text-base-content/70;
+}
+
+.filtered-list__clear {
+    @apply btn btn-ghost btn-xs gap-1;
+}
+
+.filtered-list__clear-icon {
+    @apply text-base-content/60;
+}
+
+/* The list, with an optional panel beside it on wide screens. */
+.filtered-list__layout {
+    @apply grid min-w-0 gap-6;
+}
+
+.filtered-list__layout--open {
+    @apply lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start;
+}
+
+.filtered-list__aside {
+    @apply min-w-0 rounded-2xl border border-base-300 bg-base-200 p-4 lg:sticky lg:top-4 lg:order-2 lg:max-h-[calc(100dvh-2rem)] lg:overflow-y-auto;
+}
+
+.filtered-list__results {
+    @apply flex min-w-0 flex-col gap-4;
+}
+
+.filtered-list__list {
+    @apply m-0 flex list-none flex-col gap-2 p-0;
+}
+
+.filtered-list__item {
+    @apply min-w-0;
+}
+
+.filtered-list__more {
+    @apply btn btn-outline btn-sm gap-2 self-center;
+}
+
+.filtered-list__remaining {
+    @apply text-xs font-normal text-base-content/60;
+}
+
+/* "Clear filters" inside the EmptyState when nothing matches. */
+.filtered-list__reset {
+    @apply btn btn-outline btn-sm;
+}

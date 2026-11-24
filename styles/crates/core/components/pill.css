@@ -1,0 +1,24 @@
+/* Pill: small rounded label like "80%" or "You win", coloured by Tone. */
+.pill {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-base-200 px-2 py-1 text-xs font-semibold tabular-nums;
+}
+
+.pill__icon {
+    @apply leading-none;
+}
+
+.pill--good {
+    @apply bg-success/15 text-success;
+}
+
+.pill--info {
+    @apply bg-info/15 text-info;
+}
+
+.pill--warn {
+    @apply bg-warning/15 text-warning;
+}
+
+.pill--bad {
+    @apply bg-error/15 text-error;
+}

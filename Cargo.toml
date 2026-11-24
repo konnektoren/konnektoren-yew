@@ -5,11 +5,11 @@ edition.workspace = true
 license.workspace = true
 
 [workspace]
-members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review", "crates/konnektoren-yew-navigation", "crates/konnektoren-yew-i18n", "crates/konnektoren-yew-faq"]
+members = ["crates/konnektoren-yew-web-analytics", "crates/konnektoren-yew-review", "crates/konnektoren-yew-navigation", "crates/konnektoren-yew-i18n", "crates/konnektoren-yew-faq", "crates/konnektoren-yew-history", "crates/konnektoren-yew-core"]
 resolver = "3"
 
 [workspace.package]
-version = "0.7.5"
+version = "0.8.0"
 edition = "2024"
 license = "MIT"
 
@@ -26,6 +26,8 @@ konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", versi
 konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", version = "0.7.0", default-features = false }
 konnektoren-yew-review = { path = "crates/konnektoren-yew-review", version = "0.7.0", default-features = false }
 konnektoren-yew-faq = { path = "crates/konnektoren-yew-faq", version = "0.7.0", default-features = false }
+konnektoren-yew-history = { path = "crates/konnektoren-yew-history", version = "0.7.0", default-features = false }
+konnektoren-yew-core = { path = "crates/konnektoren-yew-core", version = "0.7.0", default-features = false }
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false }
 serde_json = "1"
 thiserror = "2"
@@ -78,7 +80,8 @@ default = [
     "slideshow",
     "review",
     "navigation",
-    "faq"
+    "faq",
+    "history"
 ]
 navigation = ["dep:konnektoren-yew-navigation"]
 achievements = ["konnektoren-core/achievements"]
@@ -87,6 +90,8 @@ web-analytics = ["dep:konnektoren-yew-web-analytics", "konnektoren-yew-review?/w
 review = ["dep:konnektoren-yew-review"]
 # FAQ list, search and page (konnektoren-yew-faq).
 faq = ["dep:konnektoren-yew-faq"]
+# Searchable history pages (konnektoren-yew-history).
+history = ["dep:konnektoren-yew-history"]
 web-analytics-gtm = ["web-analytics", "konnektoren-yew-web-analytics/gtm"]
 backup = []
 certificates = [
@@ -99,7 +104,7 @@ marketplace = ["konnektoren-core/marketplace"]
 music = []
 slideshow = []
 storage = ["gloo/storage", "konnektoren-yew-i18n/storage"]
-yew-preview = ["navigation", "dep:yew-preview", "konnektoren-yew-review?/yew-preview", "konnektoren-yew-navigation?/yew-preview", "konnektoren-yew-faq?/yew-preview"]
+yew-preview = ["navigation", "dep:yew-preview", "konnektoren-yew-core/yew-preview", "konnektoren-yew-review?/yew-preview", "konnektoren-yew-navigation?/yew-preview", "konnektoren-yew-faq?/yew-preview", "konnektoren-yew-history?/yew-preview"]
 catalog = ["yew-preview", "yew-preview/catalog", "ssr"]
 gdrive = ["backup"]
 tour = ["yew-tou-rs"]
@@ -107,9 +112,11 @@ solana = ["solana-sdk", "wallet-adapter", "spl-token"]
 sbom = ["cargo-cyclonedx"]
 csr = [
     "konnektoren-yew-i18n/csr",
+    "konnektoren-yew-core/csr",
     "konnektoren-yew-web-analytics?/csr",
     "konnektoren-yew-review?/csr",
     "konnektoren-yew-faq?/csr",
+    "konnektoren-yew-history?/csr",
     "konnektoren-yew-navigation?/csr",
     "yew/csr",
     "gloo",
@@ -124,17 +131,20 @@ csr = [
     "dep:wasm-bindgen-futures",
     "dep:tracing-wasm",
 ]
-ssr = ["konnektoren-yew-i18n/ssr", "konnektoren-yew-navigation?/ssr", "yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
+ssr = ["konnektoren-yew-i18n/ssr", "konnektoren-yew-core/ssr", "konnektoren-yew-navigation?/ssr", "konnektoren-yew-history?/ssr", "yew/ssr", "yew_router/ssg", "konnektoren-core/ssr"]
 ssg = ["ssr", "yew-ssg", "yew_router/ssg", "tokio"]
 server = ["ssr", "axum", "tokio/full"]
 tools = ["konnektoren-platform/tools"]
 
 [dependencies]
 konnektoren-yew-i18n.workspace = true
+# Basic stateless components shared with the sub-crates; always on.
+konnektoren-yew-core.workspace = true
 konnektoren-yew-navigation = { workspace = true, optional = true }
 konnektoren-yew-web-analytics = { workspace = true, optional = true }
 konnektoren-yew-review = { workspace = true, optional = true }
 konnektoren-yew-faq = { workspace = true, optional = true }
+konnektoren-yew-history = { workspace = true, optional = true, features = ["challenge"] }
 # Core dependencies
 async-trait = "0.1"
 bincode = "1"

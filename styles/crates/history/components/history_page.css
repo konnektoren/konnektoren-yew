@@ -1,0 +1,16 @@
+/* HistoryView: heading and summary; the list itself is a core FilteredList. */
+.history-page {
+    @apply mx-auto flex w-full max-w-6xl min-w-0 flex-col gap-6;
+}
+
+.history-page__heading {
+    @apply flex min-w-0 max-w-2xl flex-col;
+}
+
+.history-page__title {
+    @apply mt-0 mb-3 text-2xl font-bold;
+}
+
+.history-page__intro {
+    @apply m-0 max-w-xl leading-relaxed text-base-content/70;
+}

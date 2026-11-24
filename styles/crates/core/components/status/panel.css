@@ -19,5 +19,5 @@
 }
 
 .status-panel__action {
-    @apply min-h-11;
+    @apply btn btn-outline min-h-11;
 }

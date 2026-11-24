@@ -1,15 +1,14 @@
 .review-list {
-    @apply w-full table;
-    @apply border-separate [border-spacing:0_0.5rem];
+    @apply w-full;
     @apply text-xs sm:text-sm;
 }
 
 .review-list__item {
-    @apply table-row;
+    @apply grid grid-cols-[auto_minmax(0,1fr)] sm:grid-cols-[auto_minmax(0,1fr)_auto];
     @apply transition-colors duration-200;
 }
 
-.review-list__item:nth-child(even) {
+.review-list .filtered-list__item:nth-child(even) .review-list__item {
     @apply bg-base-200;
 }
 
@@ -18,7 +17,6 @@
 }
 
 .review-list__rating {
-    @apply table-cell;
     @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
     @apply w-[100px] sm:w-[120px];
 }
@@ -44,14 +42,12 @@
 }
 
 .review-list__comment {
-    @apply table-cell;
     @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
     @apply text-base-content;
     @apply text-xs sm:text-sm;
 }
 
 .review-list__challenge {
-    @apply table-cell;
     @apply p-1 px-2 sm:p-2 sm:px-6 align-top;
     @apply text-base-content/60 text-[0.625rem] sm:text-xs;
     @apply w-[120px] sm:w-[150px];

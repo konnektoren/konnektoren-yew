@@ -1,0 +1,28 @@
+/* HistoryPreview: the newest records, e.g. on a profile. */
+.history-preview {
+    @apply flex min-w-0 flex-col gap-3;
+}
+
+.history-preview__heading {
+    @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.history-preview__title {
+    @apply m-0 text-lg font-semibold;
+}
+
+.history-preview__list {
+    @apply m-0 flex list-none flex-col gap-2 p-0;
+}
+
+.history-preview__item {
+    @apply min-w-0;
+}
+
+.history-preview__empty {
+    @apply m-0 text-sm text-base-content/70;
+}
+
+.history-preview__error {
+    @apply m-0 text-sm text-error;
+}

@@ -3,7 +3,7 @@
 }
 
 .faq-search__container {
-    @apply max-w-[600px] mx-auto relative;
+    @apply w-full max-w-[600px] mx-auto relative;
 }
 
 .faq-search__field {
@@ -28,14 +28,7 @@
     @apply hover:bg-base-200 hover:text-base-content;
 }
 
-.faq-search__results {
-    @apply mt-8 sm:mt-12;
-}
-
 .faq-search__results-title {
-    @apply text-lg sm:text-xl text-base-content mb-3 sm:mb-4 font-bold;
+    @apply mt-8 sm:mt-12 text-lg sm:text-xl text-base-content mb-3 sm:mb-4 font-bold;
 }
 
-.faq-search__results-count {
-    @apply text-xs sm:text-sm text-base-content/60 mb-4 sm:mb-6;
-}

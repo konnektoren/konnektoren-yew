@@ -32,12 +32,16 @@ pub mod tools;
 #[cfg(feature = "web-analytics")]
 pub use konnektoren_yew_web_analytics as web_analytics;
 
+/// Basic stateless components shared with the sub-crates.
+pub use konnektoren_yew_core as basics;
+#[cfg(feature = "faq")]
+pub use konnektoren_yew_faq as faq;
+#[cfg(feature = "history")]
+pub use konnektoren_yew_history as history;
 #[cfg(feature = "navigation")]
 pub use konnektoren_yew_navigation as navigation;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review as review;
-#[cfg(feature = "faq")]
-pub use konnektoren_yew_faq as faq;
 
 #[cfg(feature = "effects")]
 pub mod effects;

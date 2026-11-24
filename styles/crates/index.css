@@ -1,3 +1,5 @@
+@import "./core/core.css";
 @import "./review/review.css";
 @import "./navigation/navigation.css";
 @import "./faq/faq.css";
+@import "./history/history.css";

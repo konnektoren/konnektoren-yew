@@ -1,7 +1,13 @@
+#[cfg(feature = "csr")]
 use crate::components::TimerComponent;
+#[cfg(feature = "csr")]
 use crate::i18n::use_i18n;
 use gloo::net::http::Request;
-use konnektoren_core::challenges::{PerformanceRecord, Timed};
+use konnektoren_core::challenges::PerformanceRecord;
+#[cfg(feature = "csr")]
+use konnektoren_core::challenges::Timed;
+#[cfg(feature = "csr")]
+use konnektoren_yew_core::{EmptyState, ListCount, ListSearch};
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
@@ -42,10 +48,10 @@ pub async fn fetch_all_performance_records(
 pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
     #[cfg(feature = "csr")]
     {
-        use crate::tools::TracedResponse;
         use wasm_bindgen_futures::spawn_local;
 
         let i18n = use_i18n();
+        let search = use_state(String::new);
         let leaderboard = use_state(|| match props.default_record.clone() {
             Some(record) => vec![record],
             None => vec![],
@@ -76,6 +82,20 @@ pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
             });
         }
 
+        let query = search.to_lowercase();
+        let matching = leaderboard
+            .iter()
+            .filter(|record| record.profile_name.to_lowercase().contains(&query))
+            .count();
+        let on_search = {
+            let search = search.clone();
+            Callback::from(move |value| search.set(value))
+        };
+        let on_clear = {
+            let search = search.clone();
+            Callback::from(move |()| search.set(String::new()))
+        };
+
         if leaderboard.is_empty() {
             return html! {
                 <div class="leaderboard">
@@ -85,6 +105,15 @@ pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
 
         return html! {
             <div class="leaderboard">
+                <div class="leaderboard__filters">
+                    <ListSearch label={i18n.t("Search")} placeholder={i18n.t("Name")}
+                        value={(*search).clone()} on_input={on_search} />
+                    <ListCount {matching} total={leaderboard.len()} noun={i18n.t("Players")}
+                        active={!search.is_empty()} clear_label={i18n.t("Clear filters")} {on_clear} />
+                </div>
+                if matching == 0 {
+                    <EmptyState message={i18n.t("Nothing matches these filters.")} />
+                } else {
                 <div class="leaderboard__container">
                     <table class="leaderboard__table">
                         <thead class="leaderboard__header">
@@ -96,12 +125,12 @@ pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
                             </tr>
                         </thead>
                         <tbody>
-                            { for leaderboard.iter().enumerate().map(|(i, record)| {
+                            { for leaderboard.iter().enumerate().filter(|(_, record)| record.profile_name.to_lowercase().contains(&query)).map(|(i, record)| {
                                 let elapsed_time = record.elapsed_time().unwrap_or_default().num_milliseconds();
                                 html! {
                                     <tr class={classes!(
                                         "leaderboard__row",
-                                        record.eq(props.default_record.as_ref().unwrap_or(&PerformanceRecord::default()))
+                                        (props.default_record.as_ref() == Some(record))
                                             .then_some("leaderboard__row--highlighted")
                                     )}>
                                         <td class="leaderboard__cell leaderboard__cell--rank">{i + 1}</td>
@@ -118,6 +147,7 @@ pub fn leaderboard_comp(props: &LeaderboardProps) -> Html {
                         </tbody>
                     </table>
                 </div>
+                }
             </div>
         };
     }
