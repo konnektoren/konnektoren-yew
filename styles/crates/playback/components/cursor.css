@@ -1,0 +1,28 @@
+.playback-cursor {
+    @apply pointer-events-none fixed z-50;
+    transition: left 0.8s ease-in-out, top 0.8s ease-in-out;
+}
+
+.playback-cursor__pointer {
+    @apply absolute left-0 top-0 h-8 w-6 fill-base-content stroke-base-100;
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+.playback-cursor__image {
+    @apply absolute left-4 top-5 block h-auto w-12 sm:w-16;
+}
+
+.playback-cursor--left .playback-cursor__image {
+    left: auto;
+    right: 0;
+}
+
+.playback-cursor--above .playback-cursor__image {
+    top: auto;
+    bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .playback-cursor { transition: none; }
+}
