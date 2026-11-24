@@ -26,8 +26,12 @@
     @apply mb-4 text-xl font-bold;
 }
 
-.playback-engine-preview__spacer {
-    @apply h-64;
+.playback-engine-preview__input {
+    @apply mt-4 block w-full rounded border border-base-300 bg-base-100 px-3 py-2;
+}
+
+.playback-engine-preview__button-target {
+    @apply mt-4 rounded bg-secondary px-3 py-2 text-secondary-content;
 }
 
 .playback-engine-preview__list {

@@ -9,3 +9,7 @@
 .playback-exit:active {
     @apply bg-base-300;
 }
+
+.playback-exit kbd {
+    @apply ml-1 text-xs opacity-70;
+}
