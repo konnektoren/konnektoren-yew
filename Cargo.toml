@@ -18,10 +18,10 @@ serde = "1"
 serde_yaml = "0.9"
 strsim = "0.11"
 wasm-bindgen-test = "0.3"
-konnektoren-yew-i18n = { path = "crates/konnektoren-yew-i18n", version = "0.7.0", default-features = false }
 konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = ["content", "platform"] }
 gloo = "0.12"
 yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
+konnektoren-yew-i18n = { path = "crates/konnektoren-yew-i18n", default-features = false }
 konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", default-features = false }
 konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", default-features = false }
 konnektoren-yew-review = { path = "crates/konnektoren-yew-review", default-features = false }
