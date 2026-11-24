@@ -22,12 +22,12 @@ konnektoren-yew-i18n = { path = "crates/konnektoren-yew-i18n", version = "0.7.0"
 konnektoren-rs = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false, features = ["content", "platform"] }
 gloo = "0.12"
 yew_router = { git = "https://github.com/chriamue/yew-ssg", package = "yew-ssg-router" }
-konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", version = "0.7.0", default-features = false }
-konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", version = "0.7.0", default-features = false }
-konnektoren-yew-review = { path = "crates/konnektoren-yew-review", version = "0.7.0", default-features = false }
-konnektoren-yew-faq = { path = "crates/konnektoren-yew-faq", version = "0.7.0", default-features = false }
-konnektoren-yew-history = { path = "crates/konnektoren-yew-history", version = "0.7.0", default-features = false }
-konnektoren-yew-core = { path = "crates/konnektoren-yew-core", version = "0.7.0", default-features = false }
+konnektoren-yew-navigation = { path = "crates/konnektoren-yew-navigation", default-features = false }
+konnektoren-yew-web-analytics = { path = "crates/konnektoren-yew-web-analytics", default-features = false }
+konnektoren-yew-review = { path = "crates/konnektoren-yew-review", default-features = false }
+konnektoren-yew-faq = { path = "crates/konnektoren-yew-faq", default-features = false }
+konnektoren-yew-history = { path = "crates/konnektoren-yew-history", default-features = false }
+konnektoren-yew-core = { path = "crates/konnektoren-yew-core", default-features = false }
 konnektoren-core = { git = "https://github.com/konnektoren/konnektoren-rs.git", default-features = false }
 serde_json = "1"
 thiserror = "2"
