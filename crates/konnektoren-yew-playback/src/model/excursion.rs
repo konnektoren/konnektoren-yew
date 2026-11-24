@@ -69,7 +69,7 @@ mod tests {
         let excursion: Excursion =
             serde_yaml::from_str(include_str!("../../examples/extension.yaml"))
                 .expect("extension example should parse");
-        let PlaybackStep::Extension { extension } = &excursion.steps[1] else {
+        let PlaybackStep::Extension(extension) = &excursion.steps[1] else {
             panic!("expected extension")
         };
         assert_eq!(extension.name, "music.play_notes");
@@ -84,5 +84,17 @@ mod tests {
             ),
             (60, 300, 100)
         );
+    }
+
+    #[test]
+    fn rejects_multiple_or_malformed_extension_actions() {
+        for step in [
+            "  - music.play: {}\n    music.stop: {}",
+            "  - .play: {}",
+            "  - music.: {}",
+        ] {
+            let yaml = format!("version: 1\nid: demo\ntitle: Demo\nsteps:\n{step}\n");
+            assert!(serde_yaml::from_str::<Excursion>(&yaml).is_err());
+        }
     }
 }

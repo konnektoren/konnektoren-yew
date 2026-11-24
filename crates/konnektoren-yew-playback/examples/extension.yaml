@@ -4,9 +4,7 @@ id: midi-demo
 title: MIDI extension example
 steps:
   - say: "Listen to the notes."
-  - extension:
-      name: music.play_notes
-      params:
-        notes:
-          - { pitch: 60, duration_ms: 300, gap_ms: 100 }
-          - { pitch: 64, duration_ms: 300, gap_ms: 100 }
+  - music.play_notes:
+      notes:
+        - { pitch: 60, duration_ms: 300, gap_ms: 100 }
+        - { pitch: 64, duration_ms: 300, gap_ms: 100 }
