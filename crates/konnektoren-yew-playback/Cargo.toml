@@ -7,13 +7,15 @@ description = "Scripted UI playback for Konnektoren applications"
 
 [features]
 default = []
-csr = ["yew/csr"]
+csr = ["yew/csr", "dep:gloo-timers", "dep:web-sys"]
 ssr = ["yew/ssr"]
 yew-preview = ["dep:yew-preview"]
 
 [dependencies]
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }
+gloo-timers = { version = "0.3", optional = true }
+web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "DomRect"] }
 
 [dev-dependencies]
 yew = { workspace = true, features = ["ssr"] }

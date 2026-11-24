@@ -120,7 +120,7 @@ pub fn preview_groups() -> ComponentList {
     };
 
     vec![
-        create_component_group!("Playback", konnektoren_yew_playback::PlaybackStatus::preview(), konnektoren_yew_playback::PlaybackNotification::preview()),
+        create_component_group!("Playback", konnektoren_yew_playback::PlaybackStatus::preview(), konnektoren_yew_playback::PlaybackNotification::preview(), konnektoren_yew_playback::PlaybackHighlight::preview(), konnektoren_yew_playback::PlaybackElementHighlight::preview()),
         create_component_group!(
             "Challenge",
             #[cfg(feature = "csr")]
@@ -357,7 +357,7 @@ pub fn App() -> Html {
                     justify-content: center;
                     position: relative;
                 ">
-                    <h1 style="text-align: center; margin: 0;">
+                    <h1 id="component-preview-title" style="text-align: center; margin: 0;">
                         { "Konnektoren Yew Components" }
                     </h1>
                     <a href="catalog.html"

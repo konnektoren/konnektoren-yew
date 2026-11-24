@@ -1,0 +1,4 @@
+.playback-highlight {
+    @apply pointer-events-none fixed z-40 rounded-lg border-2 border-primary bg-primary/10;
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-base-100) 80%, transparent);
+}

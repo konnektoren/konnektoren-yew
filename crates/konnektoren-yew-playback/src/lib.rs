@@ -1,7 +1,7 @@
 //! Scripted UI playback for Konnektoren applications.
 
-mod notification;
-mod status;
+pub mod components;
+pub mod model;
 
-pub use notification::{PlaybackNotification, PlaybackNotificationProps};
-pub use status::{PlaybackStatus, PlaybackStatusProps};
+pub use components::*;
+pub use model::*;
