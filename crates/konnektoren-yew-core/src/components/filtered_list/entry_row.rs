@@ -1,9 +1,9 @@
-use super::EntryParts;
-use konnektoren_yew_core::{Pill, Time};
+use crate::components::{Pill, Time};
+use crate::model::EntryParts;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
-pub struct HistoryEntryRowProps {
+pub struct EntryRowProps {
     pub parts: EntryParts,
     /// Leaves out the facts, for previews.
     #[prop_or_default]
@@ -11,40 +11,40 @@ pub struct HistoryEntryRowProps {
 }
 
 /// The standard row: icon, title, time, facts, result badge and actions.
-#[function_component(HistoryEntryRow)]
-pub fn history_entry_row(props: &HistoryEntryRowProps) -> Html {
+#[function_component(EntryRow)]
+pub fn entry_row(props: &EntryRowProps) -> Html {
     let parts = &props.parts;
     let title = parts.title.clone();
     html! {
         <div class={classes!(
-            "history-entry",
-            parts.selected.then_some("history-entry--selected"),
-            props.compact.then_some("history-entry--compact"),
+            "entry-row",
+            parts.selected.then_some("entry-row--selected"),
+            props.compact.then_some("entry-row--compact"),
         )}>
-            <div class="history-entry__main">
+            <div class="entry-row__main">
                 if let Some(icon) = &parts.icon {
-                    <span class="history-entry__icon" aria-hidden="true">{icon.clone()}</span>
+                    <span class="entry-row__icon" aria-hidden="true">{icon.clone()}</span>
                 }
-                <span class="history-entry__heading">
+                <span class="entry-row__heading">
                     if let Some(on_select) = &parts.on_select {
-                        <button type="button" class="history-entry__title history-entry__title--button"
+                        <button type="button" class="entry-row__title entry-row__title--button"
                             onclick={on_select.clone()} aria-pressed={parts.selected.to_string()}
                             title={title.clone()}>{title}</button>
                     } else {
-                        <span class="history-entry__title" title={title.clone()}>{title}</span>
+                        <span class="entry-row__title" title={title.clone()}>{title}</span>
                     }
                     if let Some(time) = &parts.time {
-                        <Time class="history-entry__time" value={time.clone()} />
+                        <Time class="entry-row__time" value={time.clone()} />
                     }
                 </span>
             </div>
             if !props.compact && !parts.meta.is_empty() {
-                <span class="history-entry__meta">
+                <span class="entry-row__meta">
                     {for parts.meta.iter().map(|meta| html! {
-                        <span class={classes!("history-entry__fact", meta.tone.modifier("history-entry__fact"))}
+                        <span class={classes!("entry-row__fact", meta.tone.modifier("entry-row__fact"))}
                             title={meta.title.clone()}>
                             if let Some(icon) = &meta.icon {
-                                <span class="history-entry__fact-icon" aria-hidden="true">{icon.clone()}</span>
+                                <span class="entry-row__fact-icon" aria-hidden="true">{icon.clone()}</span>
                             }
                             {meta.text.clone()}
                         </span>
@@ -52,21 +52,56 @@ pub fn history_entry_row(props: &HistoryEntryRowProps) -> Html {
                 </span>
             }
             if let Some(result) = &parts.result {
-                <Pill class="history-entry__result" text={result.text.clone()} tone={result.tone}
+                <Pill class="entry-row__result" text={result.text.clone()} tone={result.tone}
                     icon={result.icon.clone()} label={result.label.clone()} />
             }
             if parts.actions != Html::default() {
-                <span class="history-entry__actions">{parts.actions.clone()}</span>
+                <span class="entry-row__actions">{parts.actions.clone()}</span>
             }
         </div>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::model::EntryMeta;
+
+    #[tokio::test]
+    async fn renders_selectable_and_compact_rows() {
+        let parts = EntryParts {
+            title: "Apple".into(),
+            selected: true,
+            on_select: Some(Callback::noop()),
+            meta: vec![EntryMeta::text("Apfel")],
+            ..EntryParts::default()
+        };
+        let row = yew::LocalServerRenderer::<EntryRow>::with_props(EntryRowProps {
+            parts: parts.clone(),
+            compact: false,
+        })
+        .render()
+        .await;
+        assert!(row.contains("Apple"));
+        assert!(row.contains("Apfel"));
+        assert!(row.contains("entry-row--selected"));
+        assert!(row.contains("aria-pressed=\"true\""));
+        let compact = yew::LocalServerRenderer::<EntryRow>::with_props(EntryRowProps {
+            parts,
+            compact: true,
+        })
+        .render()
+        .await;
+        assert!(compact.contains("entry-row--compact"));
+        assert!(!compact.contains("Apfel"));
     }
 }
 
 #[cfg(feature = "yew-preview")]
 mod preview {
     use super::*;
+    use crate::model::{EntryMeta, EntryResult};
     use crate::model::{TimeValue, Tone};
-    use crate::{EntryMeta, EntryResult};
     use chrono::{TimeZone, Utc};
     use yew_preview::prelude::*;
 
@@ -92,14 +127,14 @@ mod preview {
     }
 
     yew_preview::create_preview!(
-        HistoryEntryRow,
-        HistoryEntryRowProps {
+        EntryRow,
+        EntryRowProps {
             parts: parts(),
             compact: false,
         },
         (
             "Selectable, selected",
-            HistoryEntryRowProps {
+            EntryRowProps {
                 parts: EntryParts {
                     selected: true,
                     on_select: Some(Callback::noop()),
@@ -110,7 +145,7 @@ mod preview {
         ),
         (
             "Not passed, rating loss",
-            HistoryEntryRowProps {
+            EntryRowProps {
                 parts: EntryParts {
                     title: "Silent Night".into(),
                     meta: vec![EntryMeta::rating_change(1012.0, 1003.0)],
@@ -123,7 +158,7 @@ mod preview {
         ),
         (
             "Compact",
-            HistoryEntryRowProps {
+            EntryRowProps {
                 parts: parts(),
                 compact: true,
             }

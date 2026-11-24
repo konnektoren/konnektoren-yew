@@ -7,9 +7,9 @@ pub mod status;
 mod time;
 
 pub use filtered_list::{
-    FilteredList, FilteredListProps, ListCount, ListCountProps, ListFilterField,
-    ListFilterFieldProps, ListItem, ListRows, ListRowsProps, ListSearch, ListSearchProps,
-    ListSortField, ListSortFieldProps,
+    EntryRow, EntryRowProps, FilteredList, FilteredListProps, ListCount, ListCountProps,
+    ListFilterField, ListFilterFieldProps, ListItem, ListRows, ListRowsProps, ListSearch,
+    ListSearchProps, ListSortField, ListSortFieldProps,
 };
 pub use icon::{Icon, IconProps};
 pub use pill::{Pill, PillProps};

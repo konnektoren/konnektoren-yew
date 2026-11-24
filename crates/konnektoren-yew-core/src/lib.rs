@@ -8,6 +8,8 @@
 //! - [`model`]: small value types — [`Tone`], [`TimeValue`], formatting helpers.
 //! - [`components`]: [`Icon`], [`Pill`], [`StatGrid`], [`Time`] and the status panels
 //!   [`EmptyState`], [`ErrorState`], [`LoadingState`], [`StatusMessage`].
+//! - [`EntryRow`] and [`EntryParts`]: a reusable selectable row with optional facts,
+//!   a result, time and actions.
 //!
 //! Styles: `styles/crates/core/core.css` in the `konnektoren-yew` repository, BEM, one
 //! file per block.

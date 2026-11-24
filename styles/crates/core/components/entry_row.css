@@ -1,72 +1,72 @@
-/* HistoryEntryRow: icon, title and time, facts, result badge, actions. */
-.history-entry {
+/* EntryRow: icon, title and time, facts, result badge, actions. */
+.entry-row {
     @apply flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-base-300 bg-base-100 px-4 py-3 text-sm;
 }
 
-.history-entry--selected {
+.entry-row--selected {
     @apply border-primary/40 bg-primary/5;
 }
 
-.history-entry--compact {
+.entry-row--compact {
     @apply gap-x-3 px-3 py-2;
 }
 
-.history-entry__main {
+.entry-row__main {
     @apply flex min-w-0 flex-1 basis-48 items-center gap-2;
 }
 
-.history-entry__icon {
+.entry-row__icon {
     @apply shrink-0;
 }
 
-.history-entry__heading {
+.entry-row__heading {
     @apply flex min-w-0 flex-col;
 }
 
-.history-entry__title {
+.entry-row__title {
     @apply min-w-0 truncate font-semibold;
 }
 
-.history-entry__title--button {
+.entry-row__title--button {
     @apply cursor-pointer text-left hover:text-primary hover:underline;
 }
 
-.history-entry__time {
+.entry-row__time {
     @apply text-xs tabular-nums text-base-content/60;
 }
 
-.history-entry__meta {
+.entry-row__meta {
     @apply flex flex-wrap items-center gap-3 text-xs tabular-nums text-base-content/70;
 }
 
-.history-entry__fact {
+.entry-row__fact {
     @apply inline-flex items-center gap-1 whitespace-nowrap;
 }
 
-.history-entry__fact--good {
+.entry-row__fact--good {
     @apply text-success;
 }
 
-.history-entry__fact--warn {
+.entry-row__fact--warn {
     @apply text-warning;
 }
 
-.history-entry__fact--bad {
+.entry-row__fact--bad {
     @apply text-error;
 }
 
-.history-entry__fact--info {
+.entry-row__fact--info {
     @apply text-info;
 }
 
-.history-entry__result {
+.entry-row__result {
     @apply shrink-0;
 }
 
-.history-entry__fact-icon {
+.entry-row__fact-icon {
     @apply leading-none;
 }
 
-.history-entry__actions {
+.entry-row__actions {
     @apply ml-auto flex items-center gap-1;
 }

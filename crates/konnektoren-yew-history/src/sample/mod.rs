@@ -475,7 +475,7 @@ mod tests {
             .render()
             .await;
         assert_eq!(html.matches("class=\"history-preview__item\"").count(), 3);
-        assert!(html.contains("history-entry--compact"));
+        assert!(html.contains("entry-row--compact"));
         assert!(html.contains("Full history"));
         // The newest session (day 6) comes first.
         assert!(html.find("2026-11-06").unwrap() < html.find("2026-11-05").unwrap());

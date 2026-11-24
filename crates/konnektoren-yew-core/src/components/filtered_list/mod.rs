@@ -5,10 +5,12 @@
 //! it the same way.
 //!
 //! [`FilteredList`] puts the parts together; [`ListSearch`], [`ListFilterField`],
-//! [`ListSortField`] and [`ListCount`] also work on their own. The data types
+//! [`ListSortField`] and [`ListCount`] also work on their own. [`EntryRow`] is an
+//! optional standard row for list items. The data types
 //! ([`ListFilter`](crate::model::ListFilter), [`ListSort`](crate::model::ListSort),
 //! [`ListLabels`](crate::model::ListLabels), …) are in [`model`](crate::model).
 mod count;
+mod entry_row;
 mod filter;
 mod list;
 #[cfg(feature = "yew-preview")]
@@ -17,6 +19,7 @@ mod search;
 mod sort;
 
 pub use count::{ListCount, ListCountProps};
+pub use entry_row::{EntryRow, EntryRowProps};
 pub use filter::{ListFilterField, ListFilterFieldProps};
 pub use list::{FilteredList, FilteredListProps, ListItem, ListRows, ListRowsProps};
 pub use search::{ListSearch, ListSearchProps};
