@@ -1,5 +1,9 @@
-use super::{PlaybackEngine, PlaybackHost, PlaybackOutcome, PlaybackState, PlaybackToken};
-use crate::{Excursion, PlaybackElementHighlight, PlaybackNotification, PlaybackStep};
+use super::{
+    PlaybackEngine, PlaybackHost, PlaybackOutcome, PlaybackState, PlaybackToken, use_playback_timer,
+};
+use crate::{
+    Excursion, PlaybackElementHighlight, PlaybackNotification, PlaybackStep, PlaybackTiming,
+};
 use yew::prelude::*;
 use yew_preview::prelude::*;
 
@@ -82,16 +86,15 @@ pub fn playback_engine_preview() -> Html {
             state.set(next);
         })
     };
-    #[cfg(feature = "csr")]
-    {
-        let advance = advance.clone();
-        let step = state.engine.as_ref().map(PlaybackEngine::index);
-        use_effect_with((state.autoplay, step), move |(autoplay, _)| {
-            let timer = autoplay
-                .then(|| gloo_timers::callback::Timeout::new(1600, move || advance.emit(())));
-            move || drop(timer)
-        });
-    }
+    let step = state.engine.as_ref().map_or(0, PlaybackEngine::index);
+    use_playback_timer(
+        state.autoplay.then_some(PlaybackTiming {
+            delay_ms: 1600,
+            speed: 1.0,
+        }),
+        step,
+        advance.clone(),
+    );
     #[cfg(feature = "csr")]
     {
         let viewport = viewport.clone();
