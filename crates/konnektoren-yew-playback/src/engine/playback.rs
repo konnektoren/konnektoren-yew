@@ -78,6 +78,11 @@ impl PlaybackEngine {
         self.excursion.steps.len()
     }
 
+    /// Cursor presentation configured by the root excursion.
+    pub fn cursor(&self) -> Option<&crate::model::CursorConfig> {
+        self.excursion.cursor.as_ref()
+    }
+
     pub fn current(&self) -> Option<&PlaybackStep> {
         if matches!(self.state, PlaybackState::Finished | PlaybackState::Stopped) {
             None
@@ -203,6 +208,7 @@ mod tests {
             id: "demo".into(),
             title: "Demo".into(),
             repeat: false,
+            cursor: None,
             steps: vec![
                 PlaybackStep::Say { say: "Hi".into() },
                 PlaybackStep::Zoom { zoom: 1.2 },
@@ -231,6 +237,7 @@ mod tests {
             id: "empty".into(),
             title: "Empty".into(),
             repeat: false,
+            cursor: None,
             steps: vec![],
         };
         assert_eq!(
@@ -242,6 +249,7 @@ mod tests {
             id: "demo".into(),
             title: "Demo".into(),
             repeat: false,
+            cursor: None,
             steps: vec![PlaybackStep::Say { say: "Hi".into() }],
         };
         let mut engine = PlaybackEngine::new(excursion);
@@ -274,6 +282,7 @@ mod tests {
             id: "demo".into(),
             title: "Demo".into(),
             repeat: false,
+            cursor: None,
             steps: vec![
                 PlaybackStep::Say { say: "Hi".into() },
                 PlaybackStep::Zoom { zoom: 1.0 },
@@ -312,6 +321,7 @@ mod tests {
             id: "loop".into(),
             title: "Loop".into(),
             repeat: true,
+            cursor: None,
             steps: vec![PlaybackStep::Say { say: "Hi".into() }],
         };
         let mut engine = PlaybackEngine::new(excursion.clone());
@@ -349,6 +359,7 @@ mod tests {
             id: "loop".into(),
             title: "Loop".into(),
             repeat: true,
+            cursor: None,
             steps: vec![PlaybackStep::Say { say: "Hi".into() }],
         };
         let mut engine = PlaybackEngine::new(excursion);

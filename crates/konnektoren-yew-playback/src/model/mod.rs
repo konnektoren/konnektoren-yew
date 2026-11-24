@@ -6,7 +6,7 @@ mod target_rect;
 mod timing;
 
 pub use config::PlaybackConfig;
-pub use excursion::Excursion;
+pub use excursion::{CursorConfig, Excursion};
 pub use include::IncludeError;
 pub use playback_step::{ExtensionAction, FillAction, PlaybackStep, PressAction, ScrollAction};
 pub use target_rect::TargetRect;

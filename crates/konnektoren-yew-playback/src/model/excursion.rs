@@ -11,7 +11,17 @@ pub struct Excursion {
     /// Restart at the first step after the last step completes.
     #[serde(default)]
     pub repeat: bool,
+    /// Optional image shown alongside the playback cursor.
+    #[serde(default)]
+    pub cursor: Option<CursorConfig>,
     pub steps: Vec<PlaybackStep>,
+}
+
+/// Presentation settings for an excursion's cursor.
+#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct CursorConfig {
+    pub image: String,
 }
 
 #[cfg(test)]
@@ -49,6 +59,27 @@ mod tests {
         let yaml = "version: 1\nid: loop\ntitle: Loop\nrepeat: true\nsteps:\n  - say: hello\n";
         let excursion: Excursion = serde_yaml::from_str(yaml).expect("valid excursion");
         assert!(excursion.repeat);
+        assert!(excursion.cursor.is_none());
+    }
+
+    #[test]
+    fn parses_optional_cursor_image() {
+        let yaml =
+            "version: 1\nid: demo\ntitle: Demo\ncursor:\n  image: /assets/mascot.svg\nsteps: []\n";
+        let excursion: Excursion = serde_yaml::from_str(yaml).expect("valid cursor");
+        assert_eq!(
+            excursion
+                .cursor
+                .as_ref()
+                .map(|cursor| cursor.image.as_str()),
+            Some("/assets/mascot.svg")
+        );
+        assert!(
+            serde_yaml::from_str::<Excursion>(
+                &yaml.replace("  image:", "  unknown: true\n  image:")
+            )
+            .is_err()
+        );
     }
 
     #[test]

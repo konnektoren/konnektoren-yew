@@ -78,6 +78,7 @@ mod tests {
             id: id.into(),
             title: id.into(),
             repeat: false,
+            cursor: None,
             steps,
         }
     }
@@ -92,7 +93,7 @@ mod tests {
 
     #[test]
     fn expands_nested_and_repeated_includes_in_order() {
-        let root = excursion(
+        let mut root = excursion(
             "root",
             vec![
                 say("before"),
@@ -101,8 +102,14 @@ mod tests {
                 say("after"),
             ],
         );
+        root.cursor = Some(super::super::CursorConfig {
+            image: "root.svg".into(),
+        });
         let mut child = excursion("child", vec![say("child"), include("leaf")]);
         child.repeat = true;
+        child.cursor = Some(super::super::CursorConfig {
+            image: "child.svg".into(),
+        });
         let tours = HashMap::from([
             ("child".into(), child),
             ("leaf".into(), excursion("leaf", vec![say("leaf")])),
@@ -120,6 +127,7 @@ mod tests {
             ]
         );
         assert!(!result.repeat);
+        assert_eq!(result.cursor, root.cursor);
     }
 
     #[test]
