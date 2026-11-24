@@ -1,0 +1,21 @@
+.playback-click-wave {
+    @apply pointer-events-none fixed z-50 h-10 w-10 rounded-full border-4 border-primary;
+    animation: playback-click-wave 700ms ease-out forwards;
+}
+
+@keyframes playback-click-wave {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(0.25); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .playback-click-wave {
+        animation: playback-click-wave-fade 700ms ease-out forwards;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes playback-click-wave-fade {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
