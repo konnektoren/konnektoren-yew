@@ -5,5 +5,5 @@ mod target_rect;
 
 pub use config::PlaybackConfig;
 pub use excursion::Excursion;
-pub use playback_step::{FillAction, PlaybackStep, PressAction, ScrollAction};
+pub use playback_step::{ExtensionAction, FillAction, PlaybackStep, PressAction, ScrollAction};
 pub use target_rect::TargetRect;

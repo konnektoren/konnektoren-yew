@@ -13,6 +13,7 @@ yew-preview = ["dep:yew-preview", "dep:serde_yaml"]
 
 [dependencies]
 serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
 serde_yaml = { workspace = true, optional = true }
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }

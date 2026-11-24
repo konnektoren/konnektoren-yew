@@ -1,0 +1,12 @@
+# The host application defines and executes this action; playback does not include MIDI.
+version: 1
+id: midi-demo
+title: MIDI extension example
+steps:
+  - say: "Listen to the notes."
+  - extension:
+      name: music.play_notes
+      params:
+        notes:
+          - { pitch: 60, duration_ms: 300, gap_ms: 100 }
+          - { pitch: 64, duration_ms: 300, gap_ms: 100 }

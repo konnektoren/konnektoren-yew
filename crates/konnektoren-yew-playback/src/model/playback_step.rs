@@ -24,6 +24,17 @@ pub enum PlaybackStep {
     ScrollIntoView { scroll_into_view: String },
     /// Set the application content scale (1.0 is normal), not browser zoom.
     Zoom { zoom: f64 },
+    /// An application-defined action interpreted by the playback host.
+    Extension { extension: ExtensionAction },
+}
+
+/// An extension name and JSON-compatible data owned by the host application.
+#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ExtensionAction {
+    pub name: String,
+    #[serde(default)]
+    pub params: serde_json::Value,
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq)]

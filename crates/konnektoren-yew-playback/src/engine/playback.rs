@@ -1,6 +1,9 @@
 use crate::model::{Excursion, PlaybackStep};
 
 /// Executes an instruction in the host application.
+///
+/// Hosts may deserialize `PlaybackStep::Extension` parameters into their own
+/// action types and should return an error for unknown extensions.
 pub trait PlaybackHost {
     type Error;
 
