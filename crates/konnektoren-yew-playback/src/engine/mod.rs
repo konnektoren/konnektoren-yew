@@ -14,4 +14,7 @@ pub use timer::use_playback_timer;
 #[cfg(feature = "csr")]
 mod browser;
 #[cfg(feature = "csr")]
-pub use browser::{BrowserTargetError, click_browser_target};
+pub use browser::{
+    BrowserTargetError, click_browser_target, fill_browser_target, resolve_browser_target,
+    send_browser_key,
+};

@@ -21,7 +21,7 @@ yew-preview = { workspace = true, optional = true }
 gloo-timers = { version = "0.3", optional = true }
 gloo-events = { version = "0.2", optional = true }
 wasm-bindgen = { workspace = true, optional = true }
-web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "Node", "NodeList", "HtmlElement", "DomRect", "KeyboardEvent"] }
+web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "Node", "NodeList", "HtmlElement", "HtmlInputElement", "DomRect", "KeyboardEvent", "KeyboardEventInit", "InputEvent", "InputEventInit", "EventTarget"] }
 
 [dev-dependencies]
 serde_yaml.workspace = true
