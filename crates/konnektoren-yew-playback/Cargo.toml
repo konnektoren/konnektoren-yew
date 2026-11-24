@@ -1,0 +1,16 @@
+[package]
+name = "konnektoren-yew-playback"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Scripted UI playback for Konnektoren applications"
+
+[features]
+default = []
+csr = ["yew/csr"]
+ssr = ["yew/ssr"]
+yew-preview = ["dep:yew-preview"]
+
+[dependencies]
+yew.workspace = true
+yew-preview = { workspace = true, optional = true }

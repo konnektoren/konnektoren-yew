@@ -38,8 +38,11 @@ pub use konnektoren_yew_core as basics;
 pub use konnektoren_yew_faq as faq;
 #[cfg(feature = "history")]
 pub use konnektoren_yew_history as history;
+
 #[cfg(feature = "navigation")]
 pub use konnektoren_yew_navigation as navigation;
+#[cfg(feature = "playback")]
+pub use konnektoren_yew_playback as playback;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review as review;
 
