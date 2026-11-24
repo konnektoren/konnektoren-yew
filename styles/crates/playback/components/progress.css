@@ -1,0 +1,7 @@
+.playback-progress {
+    @apply pointer-events-none inline-flex flex-wrap items-center gap-3 rounded-lg bg-base-100 px-4 py-2 text-sm text-base-content shadow-md;
+}
+
+.playback-progress__controls {
+    @apply text-base-content/70;
+}

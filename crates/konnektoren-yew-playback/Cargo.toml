@@ -7,7 +7,7 @@ description = "Scripted UI playback for Konnektoren applications"
 
 [features]
 default = []
-csr = ["yew/csr", "dep:gloo-timers", "dep:web-sys"]
+csr = ["yew/csr", "dep:gloo-events", "dep:gloo-timers", "dep:wasm-bindgen", "dep:web-sys"]
 ssr = ["yew/ssr"]
 yew-preview = ["dep:yew-preview"]
 
@@ -15,7 +15,9 @@ yew-preview = ["dep:yew-preview"]
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }
 gloo-timers = { version = "0.3", optional = true }
-web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "HtmlElement", "DomRect"] }
+gloo-events = { version = "0.2", optional = true }
+wasm-bindgen = { workspace = true, optional = true }
+web-sys = { workspace = true, optional = true, features = ["Window", "Document", "Element", "Node", "NodeList", "HtmlElement", "DomRect", "KeyboardEvent"] }
 
 [dev-dependencies]
 yew = { workspace = true, features = ["ssr"] }

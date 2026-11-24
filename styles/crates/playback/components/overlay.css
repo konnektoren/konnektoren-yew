@@ -1,4 +1,8 @@
 .playback-overlay {
+    pointer-events: none;
+}
+
+.playback-overlay--viewport {
     position: fixed;
     inset: 0;
     width: 100vw;
@@ -9,6 +13,13 @@
     padding: 0;
     border: 0;
     background: transparent;
-    pointer-events: none;
     overflow: visible;
+}
+
+.playback-overlay--viewport .playback-progress {
+    @apply fixed bottom-4 left-4 z-50;
+}
+
+.playback-overlay--viewport .playback-exit {
+    @apply fixed right-4 top-4 z-50;
 }

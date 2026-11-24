@@ -2,3 +2,19 @@
     @apply pointer-events-none fixed z-40 rounded-lg border-2 border-primary bg-primary/10;
     box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-base-100) 80%, transparent);
 }
+
+.playback-highlight-demo {
+    @apply w-full max-w-lg rounded-lg bg-base-100 p-6 text-base-content;
+}
+
+.playback-highlight-demo__header {
+    @apply mb-4 text-lg font-semibold;
+}
+
+.playback-highlight-demo__body {
+    @apply mb-4;
+}
+
+.playback-highlight-demo__list {
+    @apply list-inside list-disc space-y-2;
+}

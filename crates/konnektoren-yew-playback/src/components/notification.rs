@@ -1,3 +1,4 @@
+use crate::model::PlaybackConfig;
 use yew::prelude::*;
 
 /// Displays a playback narration message. The caller translates the message
@@ -5,12 +6,17 @@ use yew::prelude::*;
 #[derive(Properties, PartialEq)]
 pub struct PlaybackNotificationProps {
     pub message: AttrValue,
+    /// Position the message at the bottom of the viewport.
+    #[prop_or_default]
+    pub fixed: Option<bool>,
 }
 
 #[function_component(PlaybackNotification)]
 pub fn playback_notification(props: &PlaybackNotificationProps) -> Html {
+    let config = use_context::<PlaybackConfig>().unwrap_or_default();
+    let fixed = props.fixed.or(config.notification_fixed).unwrap_or(false);
     html! {
-        <div class="playback-notification" role="status" aria-live="polite">
+        <div class={classes!("playback-notification", fixed.then_some("playback-notification--fixed"))} role="status" aria-live="polite">
             <p class="playback-notification__message">{props.message.clone()}</p>
         </div>
     }
@@ -24,12 +30,21 @@ mod preview {
     yew_preview::create_preview!(
         PlaybackNotification,
         PlaybackNotificationProps {
-            message: "Welcome to the demonstration.".into()
+            message: "Welcome to the demonstration.".into(),
+            fixed: None,
         },
         (
             "Long message",
             PlaybackNotificationProps {
-                message: "Let's explore the page together and see how to get started.".into()
+                message: "Let's explore the page together and see how to get started.".into(),
+                fixed: None,
+            }
+        ),
+        (
+            "Fixed",
+            PlaybackNotificationProps {
+                message: "Playback is running.".into(),
+                fixed: Some(true)
             }
         ),
     );
@@ -44,6 +59,7 @@ mod tests {
         let rendered = yew::LocalServerRenderer::<PlaybackNotification>::with_props(
             PlaybackNotificationProps {
                 message: "Look at <this>".into(),
+                fixed: None,
             },
         )
         .render()
