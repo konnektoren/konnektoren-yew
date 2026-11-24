@@ -120,7 +120,7 @@ pub fn preview_groups() -> ComponentList {
     };
 
     vec![
-        create_component_group!("Playback", konnektoren_yew_playback::PlaybackStatus::preview()),
+        create_component_group!("Playback", konnektoren_yew_playback::PlaybackStatus::preview(), konnektoren_yew_playback::PlaybackNotification::preview()),
         create_component_group!(
             "Challenge",
             #[cfg(feature = "csr")]

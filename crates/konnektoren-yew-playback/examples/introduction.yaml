@@ -1,0 +1,7 @@
+# Example script format; loading and executing scripts is not implemented yet.
+version: 1
+id: introduction
+title: Introduction
+steps:
+  - say: "Welcome to the demonstration."
+  - say: "Let's explore the page together."

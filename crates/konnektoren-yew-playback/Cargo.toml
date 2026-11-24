@@ -14,3 +14,7 @@ yew-preview = ["dep:yew-preview"]
 [dependencies]
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }
+
+[dev-dependencies]
+yew = { workspace = true, features = ["ssr"] }
+tokio = { workspace = true, features = ["rt", "macros"] }
