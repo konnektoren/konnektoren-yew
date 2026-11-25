@@ -26,7 +26,12 @@ pub fn read_text(props: &ReadTextProps) -> Html {
             let settings = settings.clone();
 
             // Resolve speech synthesis once so both the speak and cleanup share it
-            let speech_synthesis = window().speech_synthesis().ok();
+            // web-sys returns Ok(undefined) where the API is missing (e.g. Android WebView);
+            // calling cancel() on it throws and aborts Yew's scheduler, freezing the page.
+            let speech_synthesis = window()
+                .speech_synthesis()
+                .ok()
+                .filter(|ss| !ss.is_undefined() && !ss.is_null());
             if speech_synthesis.is_none() {
                 warn!("Speech synthesis not available in this browser");
             }

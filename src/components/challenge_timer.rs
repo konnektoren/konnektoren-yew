@@ -14,8 +14,6 @@ pub struct ChallengeTimerProps {
 
 #[function_component(ChallengeTimerComponent)]
 pub fn challenge_timer_component(props: &ChallengeTimerProps) -> Html {
-    let running = props.running;
-    let challenge = props.challenge.clone();
     let show_milliseconds = props.show_milliseconds;
     let duration = use_state(|| get_duration(props.running, &props.challenge));
 
@@ -23,24 +21,22 @@ pub fn challenge_timer_component(props: &ChallengeTimerProps) -> Html {
         let duration = duration.clone();
         use_effect_with(
             (props.running, props.challenge.clone(), show_milliseconds),
-            move |_| {
-                let running = running;
-                let challenge = challenge;
-                let duration = duration.clone();
-                let show_milliseconds = show_milliseconds;
-                let timeout = match show_milliseconds {
-                    true => 142,
-                    false => 1000,
-                };
+            move |(running, challenge, show_milliseconds)| {
+                let running = *running;
+                let challenge = challenge.clone();
+                // Show the new props right away instead of after the first tick.
+                duration.set(get_duration(running, &challenge));
 
-                if running {
-                    let interval = gloo::timers::callback::Interval::new(timeout, move || {
+                let period = if *show_milliseconds { 142 } else { 1000 };
+                // Kept alive by the cleanup closure; dropping it cancels the interval when
+                // the props change or the component unmounts.
+                let interval = running.then(|| {
+                    gloo::timers::callback::Interval::new(period, move || {
                         duration.set(get_duration(running, &challenge));
-                    });
-                    interval.forget();
-                }
+                    })
+                });
 
-                || {}
+                move || drop(interval)
             },
         );
     }
