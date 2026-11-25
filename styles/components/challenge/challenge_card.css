@@ -63,12 +63,21 @@
 
 .challenge-card__face--back {
     @apply absolute top-0 z-[1] rotate-y-180;
-    @apply overflow-hidden;
+    @apply overflow-hidden p-0;
 }
 
-/* Element: preview */
+/* Element: preview
+   A miniature of the challenge: zoom shrinks its layout too (unlike scale),
+   so the page reflows to the card's width and starts at the top. */
 .challenge-card__preview {
-    @apply origin-top scale-75;
+    @apply overflow-y-auto overscroll-contain text-left;
+    zoom: 0.7;
+    width: calc(100% / 0.7);
+    height: calc(100% / 0.7);
+}
+
+.challenge-card__preview .challenge-preview {
+    @apply block h-auto;
 }
 
 /* Element: flip-hint */
