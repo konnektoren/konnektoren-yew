@@ -1,0 +1,32 @@
+@import "./advent.css";
+@import "./black-friday.css";
+
+.seasonal-event {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: var(--color-base-200);
+    color: var(--color-base-content);
+}
+
+.seasonal-event__content {
+    flex: 1 1 16rem;
+}
+
+.seasonal-event__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.seasonal-event__action {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.seasonal-event__action:hover,
+.seasonal-event__action:active {
+    text-decoration: underline;
+}

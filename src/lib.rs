@@ -45,6 +45,8 @@ pub use konnektoren_yew_navigation as navigation;
 pub use konnektoren_yew_playback as playback;
 #[cfg(feature = "review")]
 pub use konnektoren_yew_review as review;
+#[cfg(feature = "seasonal-event")]
+pub use konnektoren_yew_seasonal_event as seasonal_event;
 
 #[cfg(feature = "effects")]
 pub mod effects;

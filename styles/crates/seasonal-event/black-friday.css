@@ -1,0 +1,117 @@
+.black-friday {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    overflow: hidden;
+    max-width: 76rem;
+    margin: 2rem auto;
+    border: 0.2rem solid var(--color-base-content);
+    border-radius: 1.75rem;
+    background: var(--color-neutral);
+    color: var(--color-neutral-content);
+}
+
+.black-friday__intro {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.25rem;
+    min-height: 25rem;
+    overflow: hidden;
+    padding: clamp(1.5rem, 5vw, 4rem);
+}
+
+.black-friday__sparkles {
+    color: var(--color-accent);
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+}
+
+.black-friday__title {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(1.75rem, 2.5vw, 3rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+}
+
+.black-friday__message {
+    max-width: 28rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.5;
+}
+
+.black-friday__link {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 0.9rem 1.3rem;
+    border: 0.15rem solid currentColor;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-accent-content);
+    font-weight: 800;
+    text-decoration: none;
+    transition: transform 150ms ease;
+}
+
+.black-friday__link:hover {
+    transform: rotate(-2deg) translateY(-0.15rem);
+}
+
+.black-friday__link:active {
+    transform: scale(0.98);
+}
+
+.black-friday__link:focus-visible {
+    outline: 0.2rem solid var(--color-neutral-content);
+    outline-offset: 0.25rem;
+}
+
+.black-friday__smile {
+    position: absolute;
+    right: -0.3em;
+    bottom: -0.5em;
+    color: var(--color-accent);
+    font-size: clamp(8rem, 20vw, 16rem);
+    line-height: 1;
+    opacity: 0.4;
+    transform: rotate(15deg);
+    pointer-events: none;
+}
+
+.black-friday__product {
+    padding: clamp(1rem, 3vw, 2rem);
+    background: var(--color-accent);
+}
+
+.black-friday__embed {
+    display: block;
+    width: 100%;
+    min-height: 42rem;
+    border: 0;
+    border-radius: 1rem;
+    background: var(--color-base-100);
+}
+
+@media (max-width: 48rem) {
+    .black-friday {
+        grid-template-columns: 1fr;
+    }
+
+    .black-friday__intro {
+        min-height: 0;
+    }
+
+    .black-friday__embed {
+        min-height: 38rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .black-friday__link {
+        transition: none;
+    }
+}

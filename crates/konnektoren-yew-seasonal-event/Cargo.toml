@@ -1,0 +1,27 @@
+[package]
+name = "konnektoren-yew-seasonal-event"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Seasonal event scheduling and components"
+
+[features]
+default = []
+csr = ["yew/csr", "konnektoren-yew-core/csr", "dep:js-sys", "dep:gloo"]
+yew-preview = ["dep:yew-preview"]
+ssr = ["yew/ssr", "konnektoren-yew-core/ssr", "chrono/clock"]
+
+[dependencies]
+konnektoren-yew-core.workspace = true
+yew.workspace = true
+yew-preview = { workspace = true, optional = true }
+js-sys = { workspace = true, optional = true }
+gloo = { workspace = true, features = ["timers"], optional = true }
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.4", features = ["wasm_js"] }
+
+[dev-dependencies]
+yew = { workspace = true, features = ["ssr"] }
+tokio = { workspace = true, features = ["rt", "macros"] }

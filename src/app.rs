@@ -120,6 +120,11 @@ pub fn preview_groups() -> ComponentList {
     };
 
     vec![
+        create_component_group!(
+            "Seasonal Events",
+            konnektoren_yew_seasonal_event::BlackFriday::preview(),
+            konnektoren_yew_seasonal_event::Advent::preview(),
+        ),
         create_component_group!("Playback", konnektoren_yew_playback::PlaybackEnginePreview::preview(), konnektoren_yew_playback::PlaybackStatus::preview(), konnektoren_yew_playback::PlaybackNotification::preview(), konnektoren_yew_playback::PlaybackHighlight::preview(), konnektoren_yew_playback::PlaybackHighlightDemo::preview(), konnektoren_yew_playback::PlaybackElementHighlight::preview(), konnektoren_yew_playback::PlaybackCursor::preview(), konnektoren_yew_playback::PlaybackClickWavePreview::preview(), konnektoren_yew_playback::PlaybackOverlay::preview(), konnektoren_yew_playback::PlaybackExit::preview(), konnektoren_yew_playback::PlaybackProgress::preview()),
         create_component_group!(
             "Challenge",
