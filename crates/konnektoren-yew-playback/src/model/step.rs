@@ -20,6 +20,17 @@ pub enum TargetAction {
     Press(String),
 }
 
+/// Placement of a fixed narration message within the viewport.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum NotificationPosition {
+    Top,
+    #[default]
+    Bottom,
+    Left,
+    Right,
+}
+
 /// One scene of an excursion: a message, an optional target and what happens to it.
 ///
 /// `X` holds the host application's own keys, such as MIDI notes in a music
@@ -37,6 +48,10 @@ pub enum TargetAction {
 pub struct Step<X = NoExtension> {
     /// Message shown while the step runs, translated by the host.
     pub say: String,
+    /// Speak the translated message while this step is displayed.
+    pub speak: bool,
+    /// Optional position of the fixed notification.
+    pub position: Option<NotificationPosition>,
     /// Replace this step with another excursion's steps. Exclusive with all other keys.
     pub include: Option<String>,
     /// Host-defined view, kept for following steps until changed. See [`crate::Excursion::page_at`].
@@ -61,6 +76,8 @@ impl<X: Default> Default for Step<X> {
     fn default() -> Self {
         Self {
             say: String::new(),
+            speak: false,
+            position: None,
             include: None,
             page: None,
             selector: None,
@@ -95,6 +112,9 @@ impl<X: Default> Step<X> {
 struct CoreStep {
     #[serde(default)]
     say: String,
+    #[serde(default)]
+    speak: bool,
+    position: Option<NotificationPosition>,
     include: Option<String>,
     page: Option<String>,
     selector: Option<String>,
@@ -115,6 +135,8 @@ struct CoreStep {
 
 const CORE_KEYS: &[&str] = &[
     "say",
+    "speak",
+    "position",
     "include",
     "page",
     "selector",
@@ -163,6 +185,8 @@ impl<'de, X: DeserializeOwned> Deserialize<'de> for Step<X> {
         }
         Ok(Self {
             say: core.say,
+            speak: core.speak,
+            position: core.position,
             include: core.include,
             page: core.page,
             selector: core.selector,
@@ -195,6 +219,18 @@ mod tests {
         assert_eq!(step.action, Some(TargetAction::Fill("Alex".into())));
         assert!(step.highlight);
         assert_eq!(step.delay_ms, Some(300));
+    }
+
+    #[test]
+    fn parses_optional_narration() {
+        let step: Step = parse("say: Hello\nspeak: true\nposition: left\n").expect("valid");
+        assert!(step.speak);
+        assert_eq!(step.position, Some(NotificationPosition::Left));
+        let default: Step = parse("say: Hello\n").expect("valid");
+        assert!(!default.speak);
+        assert_eq!(default.position, None);
+        assert!(parse::<NoExtension>("say: Hello\nposition: middle\n").is_err());
+        assert!(parse::<NoExtension>("include: child\nspeak: false\n").is_err());
     }
 
     #[test]

@@ -3,6 +3,8 @@ id: preview
 title: Preview excursion
 steps:
   - say: "Welcome to the example page."
+    speak: true
+    position: top
   - say: "This is the page heading."
     selector: ".playback-engine-preview__header"
     highlight: true

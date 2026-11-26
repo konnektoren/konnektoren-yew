@@ -7,11 +7,12 @@ description = "Scripted UI playback for Konnektoren applications"
 
 [features]
 default = []
-csr = ["yew/csr", "dep:gloo-events", "dep:gloo-timers", "dep:wasm-bindgen", "dep:web-sys"]
-ssr = ["yew/ssr"]
+csr = ["konnektoren-yew-core/csr", "yew/csr", "dep:gloo-events", "dep:gloo-timers", "dep:wasm-bindgen", "dep:web-sys"]
+ssr = ["konnektoren-yew-core/ssr", "yew/ssr"]
 yew-preview = ["dep:yew-preview", "dep:serde_yaml"]
 
 [dependencies]
+konnektoren-yew-core.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 thiserror.workspace = true

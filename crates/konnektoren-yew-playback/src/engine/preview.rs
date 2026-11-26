@@ -55,7 +55,7 @@ fn preview_run(props: &PreviewRunProps) -> Html {
                     step_label="Step" speed_label="Speed" controls_label={Some(AttrValue::from("← slower · → faster · ↑ next"))} />
             </div>
             if let Some(step) = playback.step() {
-                <PlaybackNotification key={playback.step_key()} message={step.say.clone()} />
+                <PlaybackNotification key={playback.step_key()} message={step.say.clone()} speak={step.speak} position={step.position} lang="en" />
             }
             <div class="playback-engine-preview__viewport">
                 <div class="playback-engine-preview__page">

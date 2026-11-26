@@ -9,3 +9,35 @@
 .playback-notification__message {
     @apply rounded-full bg-neutral px-4 py-2 text-sm font-medium text-neutral-content shadow-lg;
 }
+
+.playback-notification--top,
+.playback-notification--bottom,
+.playback-notification--left,
+.playback-notification--right {
+    @apply fixed z-50;
+}
+
+.playback-notification--top {
+    @apply inset-x-0 top-14 bottom-auto;
+}
+
+.playback-notification--bottom {
+    @apply inset-x-0 bottom-6 top-auto;
+}
+
+.playback-notification--left,
+.playback-notification--right {
+    @apply inset-x-auto top-1/2 bottom-auto;
+    max-width: min(20rem, 70vw);
+    transform: translateY(-50%);
+}
+
+.playback-notification--left {
+    left: 0;
+    right: auto;
+}
+
+.playback-notification--right {
+    right: 0;
+    left: auto;
+}
