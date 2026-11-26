@@ -32,7 +32,7 @@ pub mod tools;
 #[cfg(feature = "web-analytics")]
 pub use konnektoren_yew_web_analytics as web_analytics;
 
-/// Basic stateless components shared with the sub-crates.
+/// Basic UI components and browser speech shared with the sub-crates.
 pub use konnektoren_yew_core as basics;
 #[cfg(feature = "faq")]
 pub use konnektoren_yew_faq as faq;

@@ -2,6 +2,7 @@
 pub mod filtered_list;
 mod icon;
 mod pill;
+mod read_text;
 mod stat_grid;
 pub mod status;
 mod time;
@@ -13,6 +14,7 @@ pub use filtered_list::{
 };
 pub use icon::{Icon, IconProps};
 pub use pill::{Pill, PillProps};
+pub use read_text::{ReadText, ReadTextProps};
 pub use stat_grid::{Stat, StatGrid, StatGridProps};
 pub use status::{
     EmptyState, EmptyStateProps, ErrorState, ErrorStateProps, LoadingState, LoadingStateProps,

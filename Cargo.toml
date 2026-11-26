@@ -192,8 +192,6 @@ web-sys = { version = "0.3", optional = true, features = [
     "Navigator",
     "DomTokenList",
     "DragEvent",
-    "SpeechSynthesis",
-    "SpeechSynthesisUtterance",
     "TouchList",
     "Touch",
     "HtmlElement",

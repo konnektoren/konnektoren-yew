@@ -7,13 +7,24 @@ description = "Basic stateless Yew components shared by the Konnektoren crates: 
 
 [features]
 default = []
-csr = ["yew/csr", "konnektoren-yew-i18n/csr"]
+csr = [
+    "yew/csr",
+    "konnektoren-yew-i18n/csr",
+    "dep:gloo-timers",
+    "dep:wasm-bindgen",
+    "web-sys/Window",
+    "web-sys/SpeechSynthesis",
+    "web-sys/SpeechSynthesisUtterance",
+    "web-sys/SpeechSynthesisVoice",
+]
 ssr = ["yew/ssr", "konnektoren-yew-i18n/ssr"]
 yew-preview = ["dep:yew-preview"]
 
 [dependencies]
 konnektoren-yew-i18n.workspace = true
 chrono = "0.4"
+gloo-timers = { version = "0.4", optional = true }
+wasm-bindgen = { workspace = true, optional = true }
 web-sys = { workspace = true, features = ["HtmlInputElement", "HtmlSelectElement"] }
 yew.workspace = true
 yew-preview = { workspace = true, optional = true }

@@ -3,6 +3,7 @@
 mod entry;
 mod filtered_list;
 mod format;
+mod speech_config;
 mod status;
 mod time;
 mod tone;
@@ -10,6 +11,7 @@ mod tone;
 pub use entry::{EntryMeta, EntryParts, EntryResult};
 pub use filtered_list::{ListChoice, ListFilter, ListFilterControl, ListLabels, ListSort};
 pub use format::{display_timestamp, format_time, signed};
+pub use speech_config::{DEFAULT_VOICE_NAME, SpeechConfig};
 pub use status::{LoadingIndicator, StatusType};
 pub use time::TimeValue;
 pub use tone::Tone;

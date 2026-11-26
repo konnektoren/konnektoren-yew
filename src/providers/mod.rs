@@ -38,6 +38,7 @@ pub use game_controller_provider::{
     use_event_bus, use_game_controller, use_game_controller_of, use_game_state, use_game_state_of,
 };
 pub use inbox_provider::{InboxContext, InboxProvider};
+pub use konnektoren_yew_core::{SpeechConfig, SpeechProvider, SpeechProviderProps};
 use profile_provider::{ProfileContext, ProfileProvider};
 pub use repository_context::RepositoryContext;
 pub use repository_hooks::{

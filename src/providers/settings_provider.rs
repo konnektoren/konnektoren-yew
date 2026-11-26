@@ -1,5 +1,6 @@
 use crate::model::Settings;
 use crate::repository::{SETTINGS_STORAGE_KEY, SettingsRepositoryTrait};
+use konnektoren_yew_core::{SpeechConfig, SpeechProvider};
 use std::sync::Arc;
 use yew::prelude::*;
 
@@ -68,11 +69,20 @@ pub fn settings_provider(props: &SettingsProviderProps) -> Html {
         });
     }
 
+    let speech_override = use_context::<SpeechConfig>();
+    let speech = SpeechConfig {
+        volume: settings.sound_volume,
+        ..SpeechConfig::default()
+    };
     let context = SettingsContext { settings };
 
     html! {
         <ContextProvider<SettingsContext> {context}>
-            {props.children.clone()}
+            if speech_override.is_some() {
+                {props.children.clone()}
+            } else {
+                <SpeechProvider config={speech}>{props.children.clone()}</SpeechProvider>
+            }
         </ContextProvider<SettingsContext>>
     }
 }
