@@ -1,3 +1,4 @@
+use crate::components::Icon;
 use crate::i18n::use_i18n;
 use konnektoren_core::prelude::GamePath;
 use yew::prelude::*;
@@ -72,9 +73,12 @@ fn native_select_level(props: &SelectLevelCompProps) -> Html {
 }
 
 fn level_icon(level: Option<&GamePath>) -> Html {
-    match level.and_then(|level| level.icon.as_deref()) {
-        Some(src) => html! {
-            <img class="select-level__icon" src={src.to_owned()} alt="" aria-hidden="true" />
+    match level.and_then(|level| level.icon.clone()) {
+        // Decorative: the level name is right beside it, so the alt text stays empty.
+        Some(icon) => html! {
+            <Icon {icon} alt="" class="select-level__icon select-level__icon--fa"
+                image_class={Some("select-level__icon".to_owned())}
+                fallback_as_image={true} />
         },
         None => html! {
             <span class="select-level__icon select-level__icon--empty" aria-hidden="true"></span>
@@ -390,6 +394,12 @@ mod preview {
                         None,
                     ),
                     level("b1", "Level B1", None, None),
+                    level(
+                        "c1",
+                        "Level C1",
+                        Some("Font Awesome icon: academic writing and complex syntax."),
+                        Some("fa-solid fa-graduation-cap"),
+                    ),
                 ],
                 on_select: Callback::noop(),
             }

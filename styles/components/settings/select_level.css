@@ -37,6 +37,12 @@
     @apply h-8 w-8 shrink-0 rounded-full object-contain;
 }
 
+/* Font Awesome icons sit centred in the same circle as image icons. */
+.select-level__icon--fa {
+    --fa-display: flex;
+    @apply flex items-center justify-center bg-base-200 text-base text-primary;
+}
+
 .select-level__icon--empty {
     @apply bg-base-300;
 }
