@@ -487,6 +487,8 @@ mod preview {
         let game_path = konnektoren_core::game::GamePath {
             id: "preview-map-bounds".to_string(),
             name: "Map Bounds Preview".to_string(),
+            description: None,
+            icon: None,
             challenges: vec![
                 ChallengeConfig {
                     id: "c1".to_string(),

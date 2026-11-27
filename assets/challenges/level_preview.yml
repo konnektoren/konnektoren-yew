@@ -1,5 +1,7 @@
 id: preview
 name: Preview challenges
+description: Embedded and fetched sample datasets.
+icon: /assets/challenges/images/level-preview.svg
 challenges:
   - id: embedded-konnektoren
     name: Konnektoren (embedded)

@@ -5,3 +5,72 @@
 .select-level__select {
     @apply select select-lg sm:select-md w-full;
 }
+
+/* Picker for levels with icons or descriptions. */
+.select-level--rich {
+    @apply flex-col items-start gap-2;
+}
+
+.select-level__control {
+    @apply relative w-full;
+}
+
+.select-level__trigger {
+    @apply select flex h-auto min-h-12 w-full items-center gap-3 py-2 text-left;
+    /* daisyUI's select draws the caret as a background; this button has its own. */
+    background-image: none;
+}
+
+.select-level__trigger .select-level__name {
+    @apply min-w-0 flex-1 truncate;
+}
+
+.select-level__caret {
+    @apply ml-auto h-2 w-2 shrink-0 rotate-45 border-b-2 border-r-2 border-current opacity-70 transition-transform;
+}
+
+.select-level--open .select-level__caret {
+    @apply -rotate-[135deg];
+}
+
+.select-level__icon {
+    @apply h-8 w-8 shrink-0 rounded-full object-contain;
+}
+
+.select-level__icon--empty {
+    @apply bg-base-300;
+}
+
+.select-level__options {
+    @apply absolute left-0 right-0 top-full z-30 mt-1 max-h-80 list-none overflow-y-auto rounded-box border border-base-300 bg-base-100 p-1 shadow-lg;
+}
+
+.select-level__options[hidden] {
+    @apply hidden;
+}
+
+.select-level__option {
+    @apply flex cursor-pointer items-center gap-3 rounded-field px-3 py-2;
+}
+
+.select-level__option--highlighted {
+    @apply bg-base-200;
+}
+
+.select-level__option--selected .select-level__name {
+    @apply font-semibold;
+}
+
+.select-level__text {
+    @apply flex min-w-0 flex-col;
+}
+
+/* The description appears under the option the pointer or keyboard highlight is on. */
+.select-level__description {
+    @apply hidden text-sm leading-snug text-base-content/70;
+}
+
+.select-level__option--highlighted .select-level__description,
+.select-level__option:hover .select-level__description {
+    @apply block;
+}
